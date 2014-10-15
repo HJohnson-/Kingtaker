@@ -7,6 +7,9 @@ abstract public class Board {
 	private pieces.ChessPiece[][] pieces;
 
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
+		if(!onBoard(pieceLocation)) {
+			return null;
+		}
 		return pieces[pieceLocation.getX()][pieceLocation.getY()];
 	}
 
@@ -39,5 +42,15 @@ abstract public class Board {
 
 	private void clearSpace(Location pieceLocation) {
 		placePiece(pieceLocation, new pieces.EmptyPiece(this));
+	}
+
+	private boolean onBoard(Location targetLocation) {
+		if(targetLocation.getX() < 0 || targetLocation.getY() < 0){
+			return false;
+		}
+		if(targetLocation.getX() >= pieces.length || targetLocation.getY() >= pieces[0].length) {
+			return false;
+		}
+		return true;
 	}
 }

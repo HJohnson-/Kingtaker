@@ -4,7 +4,7 @@ package main;
  * Created by hj1012 on 15/10/14.
  */
 abstract public class ChessVariant {
-	private Board board;
+	protected Board board;
 	private boolean isWhitesTurn;
 
 	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.

@@ -30,6 +30,23 @@
               <text value="KingTaker"/>
             </properties>
           </component>
+          <splitpane id="49db1">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <splitpane id="629f6">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </splitpane>
+            </children>
+          </splitpane>
         </children>
       </splitpane>
     </children>

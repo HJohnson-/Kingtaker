@@ -9,8 +9,8 @@ import pieces.ChessPiece;
  * Created by hj1012 on 15/10/14.
  */
 public class Knight extends ChessPiece {
-	public Knight(Board board, PieceType type) {
-		super(board, type);
+	public Knight(Board board, PieceType type, Location cords) {
+		super(board, type, cords);
 	}
 
 	public int returnValue() {

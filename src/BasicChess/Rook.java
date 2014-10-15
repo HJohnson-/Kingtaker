@@ -10,8 +10,8 @@ import main.Board;
  */
 public class Rook extends ChessPiece {
 
-	public Rook(Board board, PieceType type) {
-		super(board, type);
+	public Rook(Board board, PieceType type, Location cords) {
+		super(board, type, cords);
 	}
 
 	public int returnValue() {

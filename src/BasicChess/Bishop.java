@@ -9,8 +9,8 @@ import pieces.ChessPiece;
  * Created by hj1012 on 15/10/14.
  */
 public class Bishop extends ChessPiece {
-	public Bishop(Board board, PieceType type) {
-		super(board, type);
+	public Bishop(Board board, PieceType type, Location cords) {
+		super(board, type, cords);
 	}
 
 	public int returnValue() {

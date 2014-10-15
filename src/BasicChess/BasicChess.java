@@ -1,8 +1,10 @@
 package BasicChess;
 
+import main.Board;
 import main.ChessVariant;
 import main.Location;
 import main.PieceType;
+import pieces.ChessPiece;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +17,12 @@ import java.awt.geom.Rectangle2D;
  */
 public class BasicChess extends ChessVariant {
 
+    public ChessPiece selectedPiece = null;
+    public final int boardWidth = 8;
+    public final int boardHeight = 8;
+
 	public BasicChess(){
 		board = new BasicBoard();
-
 	}
 
 	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.
@@ -26,7 +31,7 @@ public class BasicChess extends ChessVariant {
 		// black pawns
 		for(int j = 0; j < 8; j++){
 			Location location = new Location(1,j);
-			board.placePiece(location, new Pawn(board, PieceType.BLACK));
+			board.placePiece(location, new Pawn(board, PieceType.BLACK, location));
 		}
 
 
@@ -36,21 +41,21 @@ public class BasicChess extends ChessVariant {
 			switch (i){
 				case 0:
 				case 7:
-					board.placePiece(location, new Rook(board, PieceType.BLACK));
+					board.placePiece(location, new Rook(board, PieceType.BLACK, location));
 					break;
 				case 1:
 				case 6:
-					board.placePiece(location, new Knight(board, PieceType.BLACK));
+					board.placePiece(location, new Knight(board, PieceType.BLACK, location));
 					break;
 				case 2:
 				case 5:
-					board.placePiece(location, new Bishop(board, PieceType.BLACK));
+					board.placePiece(location, new Bishop(board, PieceType.BLACK, location));
 					break;
 				case 3:
-					board.placePiece(location, new Queen(board, PieceType.BLACK));
+					board.placePiece(location, new Queen(board, PieceType.BLACK, location));
 					break;
 				case 4:
-					board.placePiece(location, new King(board, PieceType.BLACK));
+					board.placePiece(location, new King(board, PieceType.BLACK, location));
 					break;
 				default:
 
@@ -61,7 +66,7 @@ public class BasicChess extends ChessVariant {
 		// white pawns
 		for(int j = 0; j < 8; j++){
 			Location location = new Location(6,j);
-			board.placePiece(location, new Pawn(board, PieceType.WHITE));
+			board.placePiece(location, new Pawn(board, PieceType.WHITE, location));
 		}
 
 		//black pieces
@@ -70,21 +75,21 @@ public class BasicChess extends ChessVariant {
 			switch (i){
 				case 0:
 				case 7:
-					board.placePiece(location, new Rook(board, PieceType.WHITE));
+					board.placePiece(location, new Rook(board, PieceType.WHITE, location));
 					break;
 				case 1:
 				case 6:
-					board.placePiece(location, new Knight(board, PieceType.WHITE));
+					board.placePiece(location, new Knight(board, PieceType.WHITE, location));
 					break;
 				case 2:
 				case 5:
-					board.placePiece(location, new Bishop(board, PieceType.WHITE));
+					board.placePiece(location, new Bishop(board, PieceType.WHITE, location));
 					break;
 				case 3:
-					board.placePiece(location, new Queen(board, PieceType.WHITE));
+					board.placePiece(location, new Queen(board, PieceType.WHITE, location));
 					break;
 				case 4:
-					board.placePiece(location, new King(board, PieceType.WHITE));
+					board.placePiece(location, new King(board, PieceType.WHITE, location));
 					break;
 				default:
 
@@ -96,12 +101,12 @@ public class BasicChess extends ChessVariant {
 	}
 
 	//returns true if there was no errors
-	public boolean drawBoard(boolean fromWhitePerspective) {
+	public boolean drawBoard() {
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                BasicChessBoard bcb = new BasicChessBoard();
+                BasicChessBoard bcb = new BasicChessBoard(board, boardWidth, boardHeight);
                 bcb.setVisible(true);
             }
         });
@@ -112,16 +117,16 @@ public class BasicChess extends ChessVariant {
 
 class ChessBoardFrame extends JFrame {
 
-    public ChessBoardFrame() {
-        initUI();
+    public ChessBoardFrame(Board board, int width, int height) {
+        initUI(board, width, height);
     }
 
-    private void initUI() {
+    private void initUI(Board board, int width, int height) {
         JFrame frame = new JFrame();
 
         frame.setTitle("Basic Chess");
 
-        frame.add(new BasicChessBoard());
+        frame.add(new BasicChessBoard(board, width, height));
 
         frame.setSize(400, 428);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -131,14 +136,14 @@ class ChessBoardFrame extends JFrame {
 
 class BasicChessBoard extends JPanel {
 
-    public BasicChessBoard() {
-        initBoard();
+    public BasicChessBoard(Board board, int width, int height) {
+        initBoard(board, width, height);
     }
 
     private Rectangle2D rect;
 
-    private void initBoard() {
-        this.addMouseListener(new HitTestAdapter());
+    private void initBoard(Board board, int width, int height) {
+        this.addMouseListener(new HitTestAdapter(board, width, height));
 
         rect = new Rectangle2D.Float(0f, 50f, 50f, 50f);
     }
@@ -187,15 +192,31 @@ class BasicChessBoard extends JPanel {
 
     class HitTestAdapter extends MouseAdapter {
 
+        private BasicChess controller;
+
         private RectRunnable rectAnimator;
+
+        public HitTestAdapter(BasicChess controller) {
+            super();
+            this.controller = controller;
+        }
 
         @Override
         public void mousePressed(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
+            int x = e.getX() / graphics.tools.CELL_WIDTH;
+            int y = e.getY() / graphics.tools.CELL_HEIGHT;
+            Location target = new Location(x, y);
 
-            if (rect.contains(x, y)) {
-                rectAnimator = new RectRunnable();
+            if (x >= 0 && x < controller.boardWidth && y >= 0 && y < controller.boardHeight) {
+                if (controller.selectedPiece == null) {
+                    if (!controller.board.isEmptySpace(target)) {
+                        controller.selectedPiece = controller.board.getPiece(target);
+                    }
+                } else if (controller.selectedPiece.isValidMove(controller.selectedPiece.cords, target)) {
+                    controller.move(controller.selectedPiece.cords, target);
+                } else {
+                    controller.selectedPiece = null;
+                }
             }
         }
     }

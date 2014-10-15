@@ -4,6 +4,12 @@ import main.ChessVariant;
 import main.Location;
 import main.PieceType;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
+
 /**
  * Created by crix9 on 15/10/2014.
  */
@@ -90,7 +96,114 @@ public class BasicChess extends ChessVariant {
 	}
 
 	//returns true if there was no errors
-	public boolean drawBoard(boolean fromWhitePerspective){
-		return false;
+	public boolean drawBoard(boolean fromWhitePerspective) {
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                BasicChessBoard bcb = new BasicChessBoard();
+                bcb.setVisible(true);
+            }
+        });
+
+        return true;
 	}
+}
+
+class ChessBoardFrame extends JFrame {
+
+    public ChessBoardFrame() {
+        initUI();
+    }
+
+    private void initUI() {
+        JFrame frame = new JFrame();
+
+        frame.setTitle("Basic Chess");
+
+        frame.add(new BasicChessBoard());
+
+        frame.setSize(400, 428);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+    }
+}
+
+class BasicChessBoard extends JPanel {
+
+    public BasicChessBoard() {
+        initBoard();
+    }
+
+    private Rectangle2D rect;
+
+    private void initBoard() {
+        this.addMouseListener(new HitTestAdapter());
+
+        rect = new Rectangle2D.Float(0f, 50f, 50f, 50f);
+    }
+
+    private void doDrawing(Graphics g) {
+
+        Graphics2D g2 = (Graphics2D) g;
+
+        graphics.tools.drawGrid(g2, 8, 8);
+
+        g2.setColor(new Color(255, 0, 241));
+        g2.fill(rect);
+
+    }
+
+    class RectRunnable implements Runnable {
+
+        private Thread runner;
+
+        public RectRunnable() {
+            initThread();
+        }
+
+        private void initThread() {
+            runner = new Thread(this);
+            runner.start();
+        }
+
+        @Override
+        public void run() {
+            double y = rect.getY();
+            for (double c = 0; c <= 50; c++) {
+                rect.setRect(0, y + c, 50, 50);
+                repaint();
+
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    System.exit(1);
+                }
+
+            }
+        }
+
+    }
+
+    class HitTestAdapter extends MouseAdapter {
+
+        private RectRunnable rectAnimator;
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            int x = e.getX();
+            int y = e.getY();
+
+            if (rect.contains(x, y)) {
+                rectAnimator = new RectRunnable();
+            }
+        }
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        doDrawing(g);
+    }
+
 }

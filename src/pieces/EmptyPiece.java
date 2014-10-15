@@ -12,6 +12,11 @@ public class EmptyPiece extends ChessPiece {
         super(board, PieceType.EMPTY);
     }
 
+    @Override
+    public int returnValue() {
+        return 0;
+    }
+
     public boolean isValidMove(Location from, Location to) {
         return false;
     }

@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6efd9ed7-5055-45d1-89c9-bf63b24f8f9b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pieces/EmptyPiece.java" afterPath="$PROJECT_DIR$/src/pieces/EmptyPiece.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/forms/frmMainMenu.form" afterPath="$PROJECT_DIR$/src/forms/frmMainMenu.form" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/forms/frmMainMenu.java" afterPath="$PROJECT_DIR$/src/forms/frmMainMenu.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Kingtaker.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -56,8 +54,8 @@
       <file leaf-file-name="frmMainMenu.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/forms/frmMainMenu.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
-              <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="405">
+              <caret line="17" column="21" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -159,10 +157,10 @@
         <option value="$PROJECT_DIR$/src/main/Board.java" />
         <option value="$PROJECT_DIR$/src/pieces/ChessPiece.java" />
         <option value="$PROJECT_DIR$/src/BasicChess/Rook.java" />
-        <option value="$PROJECT_DIR$/src/forms/frmMainMenu.form" />
         <option value="$PROJECT_DIR$/src/forms/frmMainMenu.java" />
         <option value="$PROJECT_DIR$/src/main/KingtakerMain.java" />
         <option value="$PROJECT_DIR$/src/pieces/EmptyPiece.java" />
+        <option value="$PROJECT_DIR$/src/forms/frmMainMenu.form" />
       </list>
     </option>
   </component>
@@ -784,8 +782,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/forms/frmMainMenu.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
-          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="405">
+          <caret line="17" column="21" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
           <folding />
         </state>
       </provider>

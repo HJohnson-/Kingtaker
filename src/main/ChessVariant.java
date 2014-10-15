@@ -5,24 +5,15 @@ package main;
  */
 abstract public class ChessVariant {
 	public Board board;
-	private boolean isWhitesTurn;
 
 	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.
 	abstract public boolean initializeBoard();
 
 	//return true if move successful
+	//logic handling if the move is valid has been moved to attemptMove
 	public boolean move(Location pieceLocation, Location targetLocation) {
 		try {
-			pieces.ChessPiece beingMoved = board.getPiece(pieceLocation);
-			if(beingMoved.type == PieceType.WHITE != isWhitesTurn) {
-				throw new Error("Wrong Colour Piece exception");
-			}
-			if (beingMoved.isValidMove(pieceLocation, targetLocation)) {
-				board.executeMove(pieceLocation, targetLocation);
-				isWhitesTurn = !isWhitesTurn;
-			} else {
-				throw new Error("Piece cannot move there exception!");
-			}
+			board.attemptMove(pieceLocation, targetLocation);
 			return true;
 		} catch (Error e) {
 			System.out.println(e);

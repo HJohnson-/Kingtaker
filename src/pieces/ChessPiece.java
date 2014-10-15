@@ -24,6 +24,8 @@ abstract public class ChessPiece {
         this.cords = new Location(x, y);
     }
 
+	//Returns true if the piece could move from from location to to location on its turn. Doesn't check if move would put
+	//the piece's team's king in check or if the piece is owned by the turn player.
     abstract public boolean isValidMove(Location from, Location to);
 
 	abstract public int returnValue();

@@ -8,9 +8,11 @@ import main.PieceType;
  */
 public class EmptyPiece extends ChessPiece {
 
-    public EmptyPiece(Board board) {
-        super(board, PieceType.EMPTY);
+    public EmptyPiece(Board board, Location loc) {
+        super(board, PieceType.EMPTY, loc);
     }
+
+	public int returnValue() {return 0;}
 
     public boolean isValidMove(Location from, Location to) {
         return false;

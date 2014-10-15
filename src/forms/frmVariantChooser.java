@@ -28,6 +28,7 @@ public class frmVariantChooser {
         btnAcceptVariation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                //Close form on accept
                 frame.dispose();
             }
         });

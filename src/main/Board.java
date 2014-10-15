@@ -53,4 +53,8 @@ abstract public class Board {
 		}
 		return true;
 	}
+
+	public int numRows() {
+		return pieces.length;
+	}
 }

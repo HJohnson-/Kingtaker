@@ -21,17 +21,17 @@ public class Rook extends ChessPiece {
 
 	//In order: Check if move is orthogonal, check if there is a piece blocking, check if you are taking your own piece.
 	public boolean isValidMove(Location pieceLocation, Location targetLocation) {
-		int verticalMovement = pieceLocation.getX().compareTo(targetLocation.getX());
-		int horizontalMovement = pieceLocation.getY().compareTo(targetLocation.getY());
-		if(Math.abs(horizontalMovement) == Math.abs(verticalMovement)) {
+		int horizontalMovement = pieceLocation.getX().compareTo(targetLocation.getX());
+		int verticalMovement = pieceLocation.getY().compareTo(targetLocation.getY());
+		if(Math.abs(verticalMovement) == Math.abs(horizontalMovement)) {
 			return false;
 		}
-		for(int i = pieceLocation.getX(); i != targetLocation.getX(); i += verticalMovement) {
+		for(int i = pieceLocation.getX() + horizontalMovement; i != targetLocation.getX(); i += horizontalMovement) {
 			if(board.getPiece(new Location(i, pieceLocation.getY())).type != PieceType.EMPTY) {
 				return false;
 			}
 		}
-		for(int i = pieceLocation.getY(); i != targetLocation.getY(); i += horizontalMovement) {
+		for(int i = pieceLocation.getY() + verticalMovement; i != targetLocation.getY(); i += verticalMovement) {
 			if(board.getPiece(new Location(pieceLocation.getX(), i)).type != PieceType.EMPTY) {
 				return false;
 			}

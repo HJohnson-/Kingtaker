@@ -19,9 +19,9 @@ public class Bishop extends ChessPiece {
 
 	//In order: Check if move is diagonal, check if move is DIRECTLY diagonal, check if there is a piece blocking, check if you are taking your own piece.
 	public boolean isValidMove(Location pieceLocation, Location targetLocation) {
-		int verticalMovement = pieceLocation.getX().compareTo(targetLocation.getX());
-		int horizontalMovement = pieceLocation.getY().compareTo(targetLocation.getY());
-		if(horizontalMovement == 0 || 0 == verticalMovement) {
+		int horizontalMovement = pieceLocation.getX().compareTo(targetLocation.getX());
+		int verticalMovement = pieceLocation.getY().compareTo(targetLocation.getY());
+		if(verticalMovement == 0 || 0 == horizontalMovement) {
 			return false;
 		}
 		if(Math.abs(targetLocation.getX() - pieceLocation.getX()) != Math.abs(targetLocation.getY() - pieceLocation.getY())) {
@@ -29,7 +29,7 @@ public class Bishop extends ChessPiece {
 		}
 		for(int i = pieceLocation.getX(), j = pieceLocation.getY();
 			i != targetLocation.getX() && j != targetLocation.getY();
-			i += verticalMovement, j+= horizontalMovement) {
+			i += horizontalMovement, j+= verticalMovement) {
 			if(board.getPiece(new Location(i, j)).type != PieceType.EMPTY) {
 				return false;
 			}

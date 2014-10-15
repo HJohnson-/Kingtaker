@@ -1,6 +1,8 @@
 package forms;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by jc4512 on 15/10/14.
@@ -10,6 +12,37 @@ public class frmMainMenu {
     private JButton btnSinglePlayer;
     private JButton btnLocalMP;
     private JButton btnOnlineMP;
+    private JButton btnExit;
+
+    //Form initialisation, specifying actions for form events
+    public frmMainMenu() {
+        btnSinglePlayer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });
+        btnLocalMP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });
+        btnOnlineMP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });
+        btnExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.exit(0);
+            }
+        });
+
+    }
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("frmMainMenu");
@@ -17,5 +50,7 @@ public class frmMainMenu {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setResizable(false);
     }
+
 }

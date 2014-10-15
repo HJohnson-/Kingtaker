@@ -1,14 +1,16 @@
+package main;
+
 /**
  * Created by hj1012 on 15/10/14.
  */
 abstract public class Board {
-	private Piece[][] pieces;
+	private pieces.ChessPiece[][] pieces;
 
-	public Piece getPiece(Location pieceLocation) {
+	public pieces.ChessPiece getPiece(Location pieceLocation) {
 		return pieces[pieceLocation.getX()][pieceLocation.getY()];
 	}
 
-	public boolean placePiece(Location targetLocation, Piece toPlace) {
+	public boolean placePiece(Location targetLocation, pieces.ChessPiece toPlace) {
 		try {
 			pieces[targetLocation.getX()][targetLocation.getY()] = toPlace;
 			return true;
@@ -20,7 +22,7 @@ abstract public class Board {
 	//Assumes move is valid
 	public boolean executeMove(Location pieceLocation, Location targetLocation) {
 		try {
-			Piece beingMoved = pieces[pieceLocation.getX()][pieceLocation.getY()];
+			pieces.ChessPiece beingMoved = pieces[pieceLocation.getX()][pieceLocation.getY()];
 			clearSpace(pieceLocation);
 			placePiece(targetLocation, beingMoved);
 			return true;
@@ -32,10 +34,10 @@ abstract public class Board {
 	}
 
 	public boolean isEmptySpace(Location targetLocation) {
-		return getPiece(targetLocation).isEmpty;
+		return getPiece(targetLocation).type == PieceType.EMPTY;
 	}
 
 	private void clearSpace(Location pieceLocation) {
-		placePiece(pieceLocation, new EmptySquare(this));
+		placePiece(pieceLocation, new pieces.EmptyPiece(this));
 	}
 }

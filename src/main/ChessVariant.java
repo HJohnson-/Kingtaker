@@ -1,3 +1,5 @@
+package main;
+
 /**
  * Created by hj1012 on 15/10/14.
  */
@@ -11,11 +13,11 @@ abstract public class ChessVariant {
 	//return true if move successful
 	public boolean move(Location pieceLocation, Location targetLocation) {
 		try {
-			Piece beingMoved = board.getPiece(pieceLocation);
-			if(beingMoved.isWhite != isWhitesTurn) {
+			pieces.ChessPiece beingMoved = board.getPiece(pieceLocation);
+			if(beingMoved.type == PieceType.WHITE != isWhitesTurn) {
 				throw new Error("Wrong Colour Piece exception");
 			}
-			if (beingMoved.canYouMoveTo(pieceLocation, targetLocation)) {
+			if (beingMoved.isValidMove(pieceLocation, targetLocation)) {
 				board.executeMove(pieceLocation, targetLocation);
 				isWhitesTurn = !isWhitesTurn;
 			} else {

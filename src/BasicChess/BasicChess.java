@@ -1,5 +1,6 @@
 package BasicChess;
 
+import graphics.ChessPanel;
 import main.Board;
 import main.ChessVariant;
 import main.Location;
@@ -103,10 +104,14 @@ public class BasicChess extends ChessVariant {
 	//returns true if there was no errors
 	public boolean drawBoard() {
 
+        BasicChessBoard bcb = new BasicChessBoard();
+
+        graphics.tools.createFrame("Basic Chess", 400, 428, bcb);
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                BasicChessBoard bcb = new BasicChessBoard(board, boardWidth, boardHeight);
+                BasicChessBoard bcb = new BasicChessBoard();
                 bcb.setVisible(true);
             }
         });
@@ -115,48 +120,20 @@ public class BasicChess extends ChessVariant {
 	}
 }
 
-class ChessBoardFrame extends JFrame {
+class BasicChessBoard extends ChessPanel {
 
-    public ChessBoardFrame(Board board, int width, int height) {
-        initUI(board, width, height);
+    public BasicChessBoard() {
+        initBoard();
     }
 
-    private void initUI(Board board, int width, int height) {
-        JFrame frame = new JFrame();
-
-        frame.setTitle("Basic Chess");
-
-        frame.add(new BasicChessBoard(board, width, height));
-
-        frame.setSize(400, 428);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-    }
-}
-
-class BasicChessBoard extends JPanel {
-
-    public BasicChessBoard(Board board, int width, int height) {
-        initBoard(board, width, height);
-    }
-
-    private Rectangle2D rect;
-
-    private void initBoard(Board board, int width, int height) {
-        this.addMouseListener(new HitTestAdapter(board, width, height));
-
-        rect = new Rectangle2D.Float(0f, 50f, 50f, 50f);
+    private void initBoard() {
+        this.addMouseListener(new HitTestAdapter(null));
     }
 
     private void doDrawing(Graphics g) {
-
         Graphics2D g2 = (Graphics2D) g;
 
         graphics.tools.drawGrid(g2, 8, 8);
-
-        g2.setColor(new Color(255, 0, 241));
-        g2.fill(rect);
-
     }
 
     class RectRunnable implements Runnable {

@@ -9,8 +9,8 @@ import pieces.ChessPiece;
  * Created by hj1012 on 15/10/14.
  */
 public class Pawn extends ChessPiece{
-	public Pawn(Board board, PieceType type) {
-		super(board, type);
+	public Pawn(Board board, PieceType type, Location location) {
+		super(board, type, location);
 	}
 
 	public int returnValue() {

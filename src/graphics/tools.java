@@ -1,5 +1,6 @@
 package graphics;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -26,6 +27,18 @@ public class tools {
                 g2.fillRect(x, y + CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
             }
         }
+    }
+
+    public static void createFrame(String title, int width, int height, ChessPanel panel) {
+        JFrame frame = new JFrame();
+
+        frame.setTitle("Basic Chess");
+
+        frame.add(panel);
+
+        frame.setSize(400, 428);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
     }
 
 }

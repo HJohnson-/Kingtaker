@@ -9,8 +9,8 @@ import pieces.ChessPiece;
  * Created by hj1012 on 15/10/14.
  */
 public class Queen extends ChessPiece {
-	public Queen(Board board, PieceType type) {
-		super(board, type);
+	public Queen(Board board, PieceType type, Location location) {
+		super(board, type, location);
 	}
 
 	public int returnValue() {
@@ -19,7 +19,7 @@ public class Queen extends ChessPiece {
 
 	//In order: Check if either Bishop or Rook could do the move
 	public boolean isValidMove(Location pieceLocation, Location targetLocation) {
-		return (new Bishop(board, type).isValidMove(pieceLocation, targetLocation))
-				|| (new Rook(board, type).isValidMove(pieceLocation, targetLocation));
+		return (new Bishop(board, type, null).isValidMove(pieceLocation, targetLocation))
+				|| (new Rook(board, type, null).isValidMove(pieceLocation, targetLocation));
 	}
 }

@@ -18,6 +18,8 @@
           </grid>
         </constraints>
         <properties>
+          <dividerSize value="1"/>
+          <enabled value="false"/>
           <orientation value="0"/>
         </properties>
         <border type="none"/>

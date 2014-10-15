@@ -19,13 +19,13 @@ public class frmMainMenu {
         btnSinglePlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                showVariantChooser();
             }
         });
         btnLocalMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                showVariantChooser();
             }
         });
         btnOnlineMP.addActionListener(new ActionListener() {
@@ -43,6 +43,9 @@ public class frmMainMenu {
 
     }
 
+    private void showVariantChooser() {
+        frmVariantChooser frm = new frmVariantChooser();
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("frmMainMenu");
@@ -52,5 +55,4 @@ public class frmMainMenu {
         frame.setVisible(true);
         frame.setResizable(false);
     }
-
 }

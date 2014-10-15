@@ -17,6 +17,13 @@ public class frmVariantChooser {
 
 
     public frmVariantChooser() {
+        JFrame frame = new JFrame("frmVariantChooser");
+        frame.setContentPane(new frmVariantChooser().panel1);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setResizable(false);
+
         btnAcceptVariation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

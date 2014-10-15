@@ -8,7 +8,7 @@ import main.Board;
  */
 abstract public class ChessPiece {
 
-    private Board board;
+    protected Board board;
     public PieceType type;
 
     public ChessPiece(Board board, PieceType type) {
@@ -17,5 +17,7 @@ abstract public class ChessPiece {
     }
 
     abstract public boolean isValidMove(Location from, Location to);
+
+	abstract public int returnValue();
 
 }

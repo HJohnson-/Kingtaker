@@ -1,5 +1,6 @@
 package main;
 
+import BasicChess.King;
 import pieces.ChessPiece;
 
 import java.util.HashMap;
@@ -90,9 +91,6 @@ abstract public class Board {
 
 	public int numCols() { return pieces[0].length; }
 
-	/*TODO make a function to generate all valid moves so an AI can look over them. (low priority, but would make move validation easy)*/
-	//public Moves getAllValidMoves(){}
-
 	public Map<Location, List<Location>> getAllValidMoves() {
 		Map<Location, List<Location>> allPossibleMoves = new HashMap<Location, List<Location>>();
 		for(int x = 0; x < numCols(); x++) {
@@ -148,6 +146,10 @@ abstract public class Board {
 
 	private boolean turnPlayersPiece(ChessPiece checkedPiece) {
 		return checkedPiece.type == PieceType.WHITE != isWhitesTurn;
+	}
+
+	public boolean isKing(Location checking) {
+		return getPiece(checking) instanceof King;
 	}
 
 	//TODO This. Required to stop players putting themselves in check.

@@ -52,10 +52,14 @@ abstract public class ChessPiece {
 		} else {
 			Location from = cords;
 			ChessPiece onto = board.getPiece(to);
+			boolean takingKing = board.isKing(to);
+
 			executeMove(to);
-			if(board.isInCheck(type == PieceType.WHITE)) {
-				board.placePiece(from, this);
-				board.placePiece(to, onto);
+			boolean wouldPutMeInCheck = board.isInCheck(type == PieceType.WHITE);
+			board.placePiece(from, this);
+			board.placePiece(to, onto);
+
+			if(wouldPutMeInCheck && !takingKing) {
 				return false;
 			}
 			return true;

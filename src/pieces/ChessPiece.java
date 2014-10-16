@@ -83,4 +83,8 @@ abstract public class ChessPiece {
 
 	abstract public int returnValue();
 
+	public String toString() {
+		return "a " + (type == PieceType.WHITE ? "White " : "Black ") + this.getClass().getCanonicalName() + " at " + cords + "\n";
+	}
+
 }

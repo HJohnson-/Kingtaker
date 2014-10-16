@@ -4,21 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6efd9ed7-5055-45d1-89c9-bf63b24f8f9b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/hj1012.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/BasicChess.java" afterPath="$PROJECT_DIR$/src/BasicChess/BasicChess.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Bishop.java" afterPath="$PROJECT_DIR$/src/BasicChess/Bishop.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Board.java" afterPath="$PROJECT_DIR$/src/main/Board.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pieces/ChessPiece.java" afterPath="$PROJECT_DIR$/src/pieces/ChessPiece.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pieces/EmptyPiece.java" afterPath="$PROJECT_DIR$/src/pieces/EmptyPiece.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/King.java" afterPath="$PROJECT_DIR$/src/BasicChess/King.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Knight.java" afterPath="$PROJECT_DIR$/src/BasicChess/Knight.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Pawn.java" afterPath="$PROJECT_DIR$/src/BasicChess/Pawn.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Queen.java" afterPath="$PROJECT_DIR$/src/BasicChess/Queen.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Rook.java" afterPath="$PROJECT_DIR$/src/BasicChess/Rook.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="6efd9ed7-5055-45d1-89c9-bf63b24f8f9b" name="Default" comment="" />
     <ignored path="Kingtaker.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -55,8 +41,8 @@
       <file leaf-file-name="BasicChess.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/BasicChess/BasicChess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1257485" vertical-offset="0" max-vertical-offset="2865">
-              <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.33293414" vertical-offset="1717" max-vertical-offset="2865">
+              <caret line="153" column="16" selection-start-line="153" selection-start-column="16" selection-end-line="153" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -1019,8 +1005,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/BasicChess/BasicChess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1257485" vertical-offset="0" max-vertical-offset="2865">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.33293414" vertical-offset="1717" max-vertical-offset="2865">
+          <caret line="153" column="16" selection-start-line="153" selection-start-column="16" selection-end-line="153" selection-end-column="16" />
           <folding />
         </state>
       </provider>

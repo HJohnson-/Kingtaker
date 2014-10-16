@@ -2,7 +2,10 @@ package main;
 
 import pieces.ChessPiece;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hj1012 on 15/10/14.
@@ -89,6 +92,34 @@ abstract public class Board {
 
 	/*TODO make a function to generate all valid moves so an AI can look over them. (low priority, but would make move validation easy)*/
 	//public Moves getAllValidMoves(){}
+
+	public Map<Location, List<Location>> getAllValidMoves() {
+		Map<Location, List<Location>> allPossibleMoves = new HashMap<Location, List<Location>>();
+		for(int x = 0; x < numCols(); x++) {
+			for(int y = 0; y < numRows(); y++) {
+				Location testSpace = new Location(x, y);
+				PieceType testType = getPiece(testSpace).type;
+				if(testType != PieceType.EMPTY && (testType == PieceType.WHITE) == isWhitesTurn) {
+					allPossibleMoves.put(testSpace, movesForPiece(testSpace));
+				}
+			}
+		}
+		return allPossibleMoves;
+	}
+
+	public List<Location> movesForPiece(Location from) {
+		List<Location> possibleMoves = new LinkedList<Location>();
+		ChessPiece beingMoved = getPiece(from);
+		for(int x = 0; x < numCols(); x++) {
+			for(int y = 0; y < numRows(); y++) {
+				Location testSpace = new Location(x, y);
+				if(beingMoved.isValidMove(testSpace)) {
+					possibleMoves.add(testSpace);
+				}
+			}
+		}
+		return possibleMoves;
+	}
 
 
 	//Stores the pieces at the square moved to or from, checks the move is valid, attempts the move, If the move would

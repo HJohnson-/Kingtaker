@@ -127,10 +127,10 @@ abstract public class Board {
 		ChessPiece beingMoved = getPiece(pieceLocation);
 		ChessPiece movedOnto = getPiece(targetLocation);
 		if(!beingMoved.isValidMove(targetLocation)) {
-			throw new Error("Invalid move");
+			return false;
 		}
 		if(!turnPlayersPiece(beingMoved)) {
-			throw new Error("Wrong colour piece!");
+			return false;
 		}
 		if(beingMoved.executeMove(targetLocation)) {
 			nextPlayersTurn();

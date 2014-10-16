@@ -108,4 +108,14 @@ public class Pawn extends ChessPiece{
 			return false;
 		}
 	}
+
+	@Override
+	public boolean isValidMove(Location to) {
+		if(validEnPassant(to)) {
+			return false;
+			//panic
+		} else {
+			return super.isValidMove(to);
+		}
+	}
 }

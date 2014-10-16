@@ -18,4 +18,8 @@ public class Location {
 	public Integer getY(){
 		return y;
 	}
+
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
 }

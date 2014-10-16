@@ -17,22 +17,34 @@ public class Queen extends ChessPiece {
 		return 9;
 	}
 
-	//The queen should not use this function as it overwrites isValidMove entirely.
 	@Override
 	protected boolean invalidTarget(Location to) {
-		return true;
+		int horizontalMovement = to.getX().compareTo(cords.getX());
+		int verticalMovement = to.getY().compareTo(cords.getY());
+		if(verticalMovement == 0 && horizontalMovement == 0) {
+			return true;
+		}
+		if((Math.abs(to.getX() - cords.getX()) != Math.abs(to.getY() - cords.getY()))
+				&& (Math.abs(verticalMovement) == Math.abs(horizontalMovement))
+				) {
+			return true;
+		}
+		return false;
 	}
 
 	//The queen should not use this function as it overwrites isValidMove entirely.
 	@Override
 	protected boolean beingBlocked(Location to) {
-		return true;
+		int horizontalMovement = to.getX().compareTo(cords.getX());
+		int verticalMovement = to.getY().compareTo(cords.getY());
+		for(int i = cords.getX() + horizontalMovement, j = cords.getY() + verticalMovement;
+			i != to.getX() || j != to.getY();
+			i += horizontalMovement, j+= verticalMovement) {
+			if(board.getPiece(new Location(i, j)).type != PieceType.EMPTY) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	//In order: Check if either Bishop or Rook could do the move
-	@Override
-	public boolean isValidMove(Location targetLocation) {
-		return (new Bishop(board, type, cords).isValidMove(targetLocation))
-				|| (new Rook(board, type, cords).isValidMove(targetLocation));
-	}
 }

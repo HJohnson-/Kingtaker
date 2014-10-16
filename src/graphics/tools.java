@@ -29,16 +29,14 @@ public class tools {
         }
     }
 
-    public static void createFrame(String title, int width, int height, ChessPanel panel) {
-        JFrame frame = new JFrame();
+    public static void create(final ChessFrame frame) {
+        SwingUtilities.invokeLater(new Runnable() {
 
-        frame.setTitle("Basic Chess");
-
-        frame.add(panel);
-
-        frame.setSize(400, 428);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
+            @Override
+            public void run() {
+                frame.setVisible(true);
+            }
+        });
     }
 
 }

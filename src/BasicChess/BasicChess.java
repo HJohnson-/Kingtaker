@@ -1,7 +1,6 @@
 package BasicChess;
 
 import graphics.ChessPanel;
-import main.Board;
 import main.ChessVariant;
 import main.Location;
 import main.PieceType;
@@ -11,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Created by crix9 on 15/10/2014.
@@ -189,7 +187,7 @@ class BasicChessBoard extends ChessPanel {
                     if (!controller.board.isEmptySpace(target)) {
                         controller.selectedPiece = controller.board.getPiece(target);
                     }
-                } else if (controller.selectedPiece.isValidMove(controller.selectedPiece.cords, target)) {
+                } else if (controller.selectedPiece.isValidMove(target)) {
                     controller.move(controller.selectedPiece.cords, target);
                 } else {
                     controller.selectedPiece = null;

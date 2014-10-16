@@ -27,7 +27,7 @@ public class Pawn extends ChessPiece{
 	@Override
 	protected boolean beingBlocked(Location to) {
 		if(Math.abs(to.getX() - cords.getX()) == 2) {
-			if(board.getPiece(new Location(cords.getY(), cords.getX()+movementDirection)).type != PieceType.EMPTY) {
+			if(board.getPiece(new Location(cords.getX()+movementDirection, cords.getY())).type != PieceType.EMPTY) {
 				return true;
 			}
 		}

@@ -16,6 +16,10 @@ abstract public class Board {
 		return currentTurn;
 	}
 
+    public Board() {
+        pieces = new ChessPiece[8][8];
+    }
+
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
 		if(!onBoard(pieceLocation)) {
 			return null;
@@ -28,7 +32,7 @@ abstract public class Board {
 
         for (int i = 0; i < pieces.length; i++) {
             for (int j = 0; j < pieces[i].length; j++) {
-                if (pieces[i][j].type != PieceType.EMPTY) {
+                if (pieces[i][j] != null) {
                     pieceList.add(pieces[i][j]);
                 }
             }

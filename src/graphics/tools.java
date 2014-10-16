@@ -1,7 +1,13 @@
 package graphics;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rp1012 on 15/10/14.
@@ -10,6 +16,7 @@ public class tools {
 
     public static final int CELL_WIDTH = 50;
     public static final int CELL_HEIGHT = 50;
+    public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
     public static void drawGrid(Graphics2D g2, int num_rows, int num_cols) {
         g2.setColor(new Color(255, 255, 255));
@@ -37,6 +44,18 @@ public class tools {
                 frame.setVisible(true);
             }
         });
+    }
+
+    public static void loadPieces(String[] pieces) {
+        for (int i = 0; i < pieces.length; i++) {
+            try {
+                imageMap.put(pieces[i], ImageIO.read(new File("media/" + pieces[i] + ".tif")));
+                imageMap.put(pieces[i] + "Black", ImageIO.read(new File("media/" + pieces[i] + "Black.tif")));
+            } catch (IOException e) {
+                System.out.println(e);
+                System.exit(2);
+            }
+        }
     }
 
 }

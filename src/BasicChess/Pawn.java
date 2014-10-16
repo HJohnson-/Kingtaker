@@ -13,7 +13,7 @@ public class Pawn extends ChessPiece{
 	protected int movementDirection;
 
 	public Pawn(Board board, PieceType type, Location location) {
-		super(board, type, location);
+		super(board, type, location, "pawn");
 		justDidADoubleMove = false;
 		movementDirection = type == PieceType.WHITE ? 1 : -1;
 	}
@@ -104,9 +104,15 @@ public class Pawn extends ChessPiece{
 		} else if(validEnPassant(to)) {
 			//Panic Excessively
 			return false;
+		}
+		if(Math.abs(targetLocation.getX() - pieceLocation.getX()) == 1) {
+			if(movingOnto.type == type || movingOnto.type == PieceType.EMPTY) {
+				return false;
+			}
 		} else {
 			return false;
 		}
 
+		return true;
 	}
 }

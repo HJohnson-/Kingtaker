@@ -10,6 +10,7 @@ public class KingtakerMain extends JFrame {
 
     public static void main(String[] args) {
         BasicChess bc = new BasicChess();
+        bc.initializeBoard();
         bc.drawBoard();
     }
 

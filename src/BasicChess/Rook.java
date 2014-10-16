@@ -11,7 +11,7 @@ import main.Board;
 public class Rook extends ChessPiece {
 
 	public Rook(Board board, PieceType type, Location cords) {
-		super(board, type, cords);
+		super(board, type, cords, "rook");
 	}
 
 	public int returnValue() {

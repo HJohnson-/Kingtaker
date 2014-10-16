@@ -10,7 +10,7 @@ import pieces.ChessPiece;
  */
 public class Queen extends ChessPiece {
 	public Queen(Board board, PieceType type, Location location) {
-		super(board, type, location);
+		super(board, type, location, "queen");
 	}
 
 	public int returnValue() {

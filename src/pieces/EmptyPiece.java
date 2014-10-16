@@ -9,7 +9,7 @@ import main.PieceType;
 public class EmptyPiece extends ChessPiece {
 
     public EmptyPiece(Board board, Location loc) {
-        super(board, PieceType.EMPTY, loc);
+        super(board, PieceType.EMPTY, loc, "");
     }
 
 	public int returnValue() {return 0;}

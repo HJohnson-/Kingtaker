@@ -13,7 +13,7 @@ public class King extends ChessPiece {
 	private static int REALLY_HIGH_NUMBER = 999999;
 
 	public King(Board board, PieceType type, Location location) {
-		super(board, type, location);
+		super(board, type, location, "king");
 	}
 
 	public int returnValue() {

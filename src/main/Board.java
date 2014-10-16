@@ -2,6 +2,8 @@ package main;
 
 import pieces.ChessPiece;
 
+import java.util.LinkedList;
+
 /**
  * Created by hj1012 on 15/10/14.
  */
@@ -15,6 +17,20 @@ abstract public class Board {
 		}
 		return pieces[pieceLocation.getX()][pieceLocation.getY()];
 	}
+
+    public LinkedList<ChessPiece> allPieces() {
+        LinkedList<ChessPiece> pieceList = new LinkedList <ChessPiece>();
+
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                if (pieces[i][j].type != PieceType.EMPTY) {
+                    pieceList.add(pieces[i][j]);
+                }
+            }
+        }
+
+        return pieceList;
+    }
 
 	//Places the given piece at targetLocation -important for initializing the board where pieces must be placed without
 	//being on the board previously.

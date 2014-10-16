@@ -31,7 +31,7 @@ public class Pawn extends ChessPiece{
 				return true;
 			}
 		}
-		if(to.getY() != cords.getY()) {
+		if(to.getY() == cords.getY()) {
 			if(board.getPiece(to).type != PieceType.EMPTY) {
 				return true;
 			}

@@ -1,5 +1,7 @@
 package graphics;
 
+import BasicChess.BasicBoard;
+import BasicChess.BasicChessFrame;
 import main.Board;
 import main.Location;
 import main.PieceType;
@@ -19,7 +21,6 @@ public abstract class ChessPanel extends JPanel {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
-    protected Graphics drawer = null;
 
     protected ChessPanel() {
         this.addMouseListener(new HitTestAdapter());
@@ -28,7 +29,6 @@ public abstract class ChessPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawer = g;
         doDrawing(g);
     }
 
@@ -59,16 +59,16 @@ public abstract class ChessPanel extends JPanel {
         public void mousePressed(MouseEvent e) {
             int x = e.getX() / tools.CELL_WIDTH;
             int y = e.getY() / tools.CELL_HEIGHT;
-            System.out.println(x + ", " + y);
             Location l = new Location(x, y);
 
-            if (selectedPiece == null  && !board.isEmptySpace(l)) {
-                selectedPiece = board.getPiece(l);
-            } else if (selectedPiece.isValidMove(l)) {
-                board.movePiece(selectedPiece.cords, l);
-                paintComponent(drawer);
+            if (selectedPiece == null) {
+                if (!board.isEmptySpace(l)) {
+                    selectedPiece = board.getPiece(l);
+                }
             } else {
+                board.attemptMove(selectedPiece.cords, l);
                 selectedPiece = null;
+                revalidate();
             }
         }
     }

@@ -2,7 +2,6 @@ package main;
 
 import BasicChess.King;
 import pieces.ChessPiece;
-import pieces.EmptyPiece;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -57,6 +56,7 @@ abstract public class Board {
 	public boolean placePiece(Location targetLocation, pieces.ChessPiece toPlace) {
 		try {
 			pieces[targetLocation.getX()][targetLocation.getY()] = toPlace;
+			toPlace.cords = targetLocation;
 			toPlace.lastTurnMovedOn = currentTurn;
 			return true;
 		} catch (Error e) {
@@ -71,8 +71,7 @@ abstract public class Board {
 
 	//replaces the Piece on the location with an EmptyPiece;
 	public void clearSpace(Location pieceLocation) {
-
-		placePiece(pieceLocation, new EmptyPiece(this, pieceLocation));
+		placePiece(pieceLocation, new pieces.EmptyPiece(this, pieceLocation));
 	}
 
 	//Returns true if the targetLocation is within the confines of the board.

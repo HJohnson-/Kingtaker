@@ -44,10 +44,13 @@ abstract public class ChessPiece {
 	//need to overwrite this function to add more accurate backtracking for those cases.
     public boolean isValidMove(Location to) {
 		if(invalidTarget(to)) {
+            System.out.println("Invalid target");
 			return false;
 		} else if(beingBlocked(to)) {
+            System.out.println("Blocked");
 			return false;
 		} else if(takingOwnPiece(board.getPiece(to))) {
+            System.out.println("Taking own piece");
 			return false;
 		} else {
 			Location from = cords;

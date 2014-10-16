@@ -5,33 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6efd9ed7-5055-45d1-89c9-bf63b24f8f9b" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Bishop-Black.tif" afterPath="$PROJECT_DIR$/media/bishopBlack.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Bishop.tif" afterPath="$PROJECT_DIR$/media/bishop.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/King-black.tif" afterPath="$PROJECT_DIR$/media/kingBlack.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/King.tif" afterPath="$PROJECT_DIR$/media/king.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Knight-Black.tif" afterPath="$PROJECT_DIR$/media/knightBlack.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Knight.tif" afterPath="$PROJECT_DIR$/media/knight.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Pawn-Black.tif" afterPath="$PROJECT_DIR$/media/pawnBlack.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Pawn.tif" afterPath="$PROJECT_DIR$/media/pawn.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Queen-black.tif" afterPath="$PROJECT_DIR$/media/queenBlack.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Queen.tif" afterPath="$PROJECT_DIR$/media/queen.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Rook-Black.tif" afterPath="$PROJECT_DIR$/media/rookBlack.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/Rook.tif" afterPath="$PROJECT_DIR$/media/rook.tif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/graphic resource/eps12974.jpg" afterPath="$PROJECT_DIR$/media/eps12974.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/BasicChess.java" afterPath="$PROJECT_DIR$/src/BasicChess/BasicChess.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/BasicChessPanel.java" afterPath="$PROJECT_DIR$/src/BasicChess/BasicChessPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Bishop.java" afterPath="$PROJECT_DIR$/src/BasicChess/Bishop.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Board.java" afterPath="$PROJECT_DIR$/src/main/Board.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/graphics/ChessPanel.java" afterPath="$PROJECT_DIR$/src/graphics/ChessPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pieces/EmptyPiece.java" afterPath="$PROJECT_DIR$/src/pieces/EmptyPiece.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/King.java" afterPath="$PROJECT_DIR$/src/BasicChess/King.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/KingtakerMain.java" afterPath="$PROJECT_DIR$/src/main/KingtakerMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Knight.java" afterPath="$PROJECT_DIR$/src/BasicChess/Knight.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Pawn.java" afterPath="$PROJECT_DIR$/src/BasicChess/Pawn.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Queen.java" afterPath="$PROJECT_DIR$/src/BasicChess/Queen.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BasicChess/Rook.java" afterPath="$PROJECT_DIR$/src/BasicChess/Rook.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/graphics/tools.java" afterPath="$PROJECT_DIR$/src/graphics/tools.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Kingtaker.iws" />
@@ -85,14 +60,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ChessPanel.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ChessPanel.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/graphics/ChessPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.64356434" vertical-offset="0" max-vertical-offset="909">
-              <caret line="39" column="88" selection-start-line="39" selection-start-column="88" selection-end-line="39" selection-end-column="88" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
+              <caret line="39" column="35" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Pawn.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/BasicChess/Pawn.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.77537435" vertical-offset="1049" max-vertical-offset="1650">
+              <caret line="108" column="9" selection-start-line="108" selection-start-column="9" selection-end-line="108" selection-end-column="9" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -135,7 +120,6 @@
         <option value="$PROJECT_DIR$/src/BasicChess/King.java" />
         <option value="$PROJECT_DIR$/src/BasicChess/Bishop.java" />
         <option value="$PROJECT_DIR$/src/BasicChess/Knight.java" />
-        <option value="$PROJECT_DIR$/src/BasicChess/Pawn.java" />
         <option value="$PROJECT_DIR$/src/BasicChess/Queen.java" />
         <option value="$PROJECT_DIR$/src/BasicChess/Rook.java" />
         <option value="$PROJECT_DIR$/src/pieces/EmptyPiece.java" />
@@ -145,6 +129,7 @@
         <option value="$PROJECT_DIR$/src/BasicChess/BasicChess.java" />
         <option value="$PROJECT_DIR$/src/graphics/tools.java" />
         <option value="$PROJECT_DIR$/src/graphics/ChessPanel.java" />
+        <option value="$PROJECT_DIR$/src/BasicChess/Pawn.java" />
       </list>
     </option>
   </component>
@@ -506,12 +491,16 @@
       <created>1413457819999</created>
       <updated>1413457820000</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Made several minor changes to the graphics.">
+      <created>1413461502172</created>
+      <updated>1413461502172</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="24" width="1922" height="1033" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -523,17 +512,17 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32905984" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24947916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24947916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24964234" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -564,7 +553,8 @@
     <MESSAGE value="Added an image field into pieces.&#10;" />
     <MESSAGE value="Redid the graphics package so that it works, also still provides abstract classes for each variant." />
     <MESSAGE value="Redid the basic chess graphics implementation to make use of the new abstract classes in the graphics package." />
-    <option name="LAST_COMMIT_MESSAGE" value="Redid the basic chess graphics implementation to make use of the new abstract classes in the graphics package." />
+    <MESSAGE value="Made several minor changes to the graphics." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made several minor changes to the graphics." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -820,14 +810,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BasicChess/Pawn.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.024958402" vertical-offset="105" max-vertical-offset="795">
-          <caret line="12" column="43" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/BasicChess/Queen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.19966722" vertical-offset="0" max-vertical-offset="601">
@@ -916,11 +898,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/graphics/ChessPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.64356434" vertical-offset="0" max-vertical-offset="909">
-          <caret line="39" column="88" selection-start-line="39" selection-start-column="88" selection-end-line="39" selection-end-column="88" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
+          <caret line="39" column="35" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BasicChess/Pawn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.77537435" vertical-offset="1049" max-vertical-offset="1650">
+          <caret line="108" column="9" selection-start-line="108" selection-start-column="9" selection-end-line="108" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>

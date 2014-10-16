@@ -33,11 +33,10 @@ public abstract class ChessPanel extends JPanel {
         while (i.hasNext()) {
             ChessPiece p = i.next();
 
-            String fileName = "media/" + p.img;
-            if (p.type == PieceType.BLACK) fileName += "Black";
-            fileName += ".tif";
+            String imgName = p.img;
+            if (p.type == PieceType.BLACK) imgName += "Black";
 
-            TexturePaint texture = new TexturePaint(image, new Rectangle(0, 0, 50, 50));
+            TexturePaint texture = new TexturePaint(tools.imageMap.get(imgName), new Rectangle(0, 0, 50, 50));
             //g2.setPaint(texture);
             g2.fillRect(p.cords.getX() * tools.CELL_WIDTH, p.cords.getY() * tools.CELL_HEIGHT,
                     tools.CELL_WIDTH, tools.CELL_HEIGHT);

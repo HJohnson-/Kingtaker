@@ -19,8 +19,8 @@ public class Bishop extends ChessPiece {
 
 	@Override
 	protected boolean beingBlocked(Location to) {
-		int horizontalMovement = cords.getX().compareTo(to.getX());
-		int verticalMovement = cords.getY().compareTo(to.getY());
+		int horizontalMovement = to.getX().compareTo(cords.getX());
+		int verticalMovement = to.getY().compareTo(cords.getY());
 		for(int i = cords.getX(), j = cords.getY();
 			i != to.getX() && j != to.getY();
 			i += horizontalMovement, j+= verticalMovement) {

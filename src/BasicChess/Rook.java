@@ -20,8 +20,8 @@ public class Rook extends ChessPiece {
 
 	@Override
 	public boolean invalidTarget(Location to) {
-		int horizontalMovement = cords.getX().compareTo(to.getX());
-		int verticalMovement = cords.getY().compareTo(to.getY());
+		int horizontalMovement = to.getX().compareTo(cords.getX());
+		int verticalMovement = to.getY().compareTo(cords.getY());
 		if(Math.abs(verticalMovement) == Math.abs(horizontalMovement)) {
 			return true;
 		}
@@ -33,8 +33,8 @@ public class Rook extends ChessPiece {
 
 	@Override
 	public boolean beingBlocked(Location to) {
-		int horizontalMovement = cords.getX().compareTo(to.getX());
-		int verticalMovement = cords.getY().compareTo(to.getY());
+		int horizontalMovement = to.getX().compareTo(cords.getX());
+		int verticalMovement = to.getY().compareTo(cords.getY());
 		for(int i = cords.getX() + horizontalMovement; i != to.getX(); i += horizontalMovement) {
 			if(board.getPiece(new Location(i, cords.getY())).type != PieceType.EMPTY) {
 				return true;

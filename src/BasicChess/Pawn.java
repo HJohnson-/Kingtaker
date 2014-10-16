@@ -15,7 +15,7 @@ public class Pawn extends ChessPiece{
 	public Pawn(Board board, PieceType type, Location location) {
 		super(board, type, location, "pawn");
 		justDidADoubleMove = false;
-		movementDirection = type == PieceType.WHITE ? 1 : -1;
+		movementDirection = type == PieceType.WHITE ? -1 : 1;
 	}
 
 	public int returnValue() {
@@ -26,12 +26,12 @@ public class Pawn extends ChessPiece{
 	//Check2: On a non-taking move, there is an empty space at the target
 	@Override
 	protected boolean beingBlocked(Location to) {
-		if(Math.abs(to.getY() - cords.getY()) == 2) {
-			if(board.getPiece(new Location(cords.getX(), cords.getY()+movementDirection)).type != PieceType.EMPTY) {
+		if(Math.abs(to.getX() - cords.getX()) == 2) {
+			if(board.getPiece(new Location(cords.getY(), cords.getX()+movementDirection)).type != PieceType.EMPTY) {
 				return true;
 			}
 		}
-		if(to.getX() != cords.getX()) {
+		if(to.getY() != cords.getY()) {
 			if(board.getPiece(to).type != PieceType.EMPTY) {
 				return true;
 			}
@@ -57,10 +57,10 @@ public class Pawn extends ChessPiece{
 	}
 
 	private boolean validPawnDoubleMove(Location to) {
-		int startingRow =  type == PieceType.WHITE ? 1 : board.numRows()-2;
+		int startingCol =  type == PieceType.WHITE ? board.numRows()-2 : 1;
 
-		if(cords.getY() == startingRow) {
-			if(to.getY() == startingRow + movementDirection*2) {
+		if(cords.getX() == startingCol) {
+			if(to.getX() == startingCol + movementDirection*2) {
 				return true;
 			}
 		}
@@ -68,8 +68,8 @@ public class Pawn extends ChessPiece{
 	}
 
 	private boolean validBasicPawnTake(Location to) {
-		if(to.getY() - cords.getY() == movementDirection) {
-			if(Math.abs(to.getX() - cords.getX()) == 1) {
+		if(to.getX() - cords.getX() == movementDirection) {
+			if(Math.abs(to.getY() - cords.getY()) == 1) {
 				PieceType targetType = board.getPiece(to).type;
 				if(targetType != PieceType.EMPTY && targetType != type) {
 					return true;
@@ -80,8 +80,8 @@ public class Pawn extends ChessPiece{
 	}
 
 	private boolean validBasicPawnMove(Location to) {
-		if(to.getY() - cords.getY() == movementDirection) {
-			if(to.getX() - cords.getX() == 0) {
+		if(to.getX() - cords.getX() == movementDirection) {
+			if(to.getY() - cords.getY() == 0) {
 				return true;
 			}
 		}

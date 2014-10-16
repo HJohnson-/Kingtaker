@@ -41,6 +41,12 @@ abstract public class Board {
         return pieceList;
     }
 
+	//Ignores everything and moves a piece. For testing purposes only!!!
+	public void movePiece(Location from, Location to) {
+		placePiece(to, getPiece(from));
+		clearSpace(from);
+	}
+
 	//Places the given piece at targetLocation -important for initializing the board where pieces must be placed without
 	//being on the board previously.
 	public boolean placePiece(Location targetLocation, pieces.ChessPiece toPlace) {

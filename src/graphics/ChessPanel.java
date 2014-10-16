@@ -1,23 +1,19 @@
 package graphics;
 
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
+import java.awt.*;
 
 /**
  * Created by rp1012 on 15/10/14.
  */
 public abstract class ChessPanel extends JPanel {
 
-    public ChessPanel() {
-        initPanel();
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        doDrawing(g);
     }
 
-    private void initPanel() {
-        this.addMouseListener(new HitTestListener());
-    }
-
-}
-
-class HitTestListener extends MouseAdapter {
+    protected abstract void doDrawing(Graphics g);
 
 }

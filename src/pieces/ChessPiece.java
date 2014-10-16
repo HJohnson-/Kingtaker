@@ -3,20 +3,27 @@ import main.Location;
 import main.PieceType;
 import main.Board;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
 /**
  * Created by rp1012 on 15/10/14.
  */
 abstract public class ChessPiece {
 
     protected Board board;
+    public String img;
     public PieceType type;
     public Location cords;
 	public int lastTurnMovedOn;
 
-    public ChessPiece(Board board, PieceType type, Location cords) {
+    public ChessPiece(Board board, PieceType type, Location cords, String img) {
         this.type = type;
         this.board = board;
         this.cords = cords;
+		this.img = img;
 		lastTurnMovedOn = board.getCurrentTurn();
     }
 

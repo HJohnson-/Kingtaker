@@ -68,7 +68,7 @@ public abstract class ChessPanel extends JPanel {
             } else {
                 board.attemptMove(selectedPiece.cords, l);
                 selectedPiece = null;
-                revalidate();
+                repaint();
             }
         }
     }

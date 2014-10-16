@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6efd9ed7-5055-45d1-89c9-bf63b24f8f9b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Board.java" afterPath="$PROJECT_DIR$/src/main/Board.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/graphics/ChessPanel.java" afterPath="$PROJECT_DIR$/src/graphics/ChessPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pieces/ChessPiece.java" afterPath="$PROJECT_DIR$/src/pieces/ChessPiece.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Kingtaker.iws" />
@@ -34,8 +32,8 @@
       <file leaf-file-name="ChessPanel.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/graphics/ChessPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.54908484" vertical-offset="165" max-vertical-offset="1005">
-              <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.62562394" vertical-offset="404" max-vertical-offset="1005">
+              <caret line="66" column="17" selection-start-line="66" selection-start-column="17" selection-end-line="66" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -458,11 +456,15 @@
       <created>1413464918357</created>
       <updated>1413464918357</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Fixed various issues with the graphics.">
+      <created>1413467718485</created>
+      <updated>1413467718485</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="24" width="1922" height="1033" extended-state="6" />
+    <frame x="-1" y="24" width="1922" height="1033" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -519,7 +521,8 @@
     <MESSAGE value="Made several minor changes to the graphics." />
     <MESSAGE value="Fixed executeMove merge oddity." />
     <MESSAGE value="Replaced tif files with png versions.&#10;Further improved graphics implementation.&#10;Started to implement graphical piece movement." />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced tif files with png versions.&#10;Further improved graphics implementation.&#10;Started to implement graphical piece movement." />
+    <MESSAGE value="Fixed various issues with the graphics." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed various issues with the graphics." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -917,8 +920,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/graphics/ChessPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.54908484" vertical-offset="165" max-vertical-offset="1005">
-          <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.62562394" vertical-offset="404" max-vertical-offset="1005">
+          <caret line="66" column="17" selection-start-line="66" selection-start-column="17" selection-end-line="66" selection-end-column="17" />
           <folding />
         </state>
       </provider>

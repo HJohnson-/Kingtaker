@@ -20,19 +20,21 @@ public class King extends ChessPiece {
 		return REALLY_HIGH_NUMBER;
 	}
 
-	public boolean isValidMove(Location pieceLocation, Location targetLocation) {
-		int verticalDistance = Math.abs(pieceLocation.getY() - targetLocation.getY());
-		int horizontalDistance = Math.abs(pieceLocation.getX() - targetLocation.getX());
+	@Override
+	protected boolean invalidTarget(Location to) {
+		int verticalDistance = Math.abs(cords.getY() - to.getY());
+		int horizontalDistance = Math.abs(cords.getX() - to.getX());
 		if(verticalDistance > 1 || horizontalDistance > 1) {
-			return false;
+			return true;
 		}
 		if(verticalDistance == 0 && horizontalDistance == 0) {
-			return false;
+			return true;
 		}
-		if(board.getPiece(targetLocation).type == this.type) {
-			return false;
-		}
-		
-		return true;
+		return false;
+	}
+
+	@Override
+	protected boolean beingBlocked(Location to) {
+		return false;
 	}
 }

@@ -14,8 +14,18 @@ public class EmptyPiece extends ChessPiece {
 
 	public int returnValue() {return 0;}
 
-    public boolean isValidMove(Location from, Location to) {
+    public boolean isValidMove(Location to) {
         return false;
     }
+
+	@Override
+	protected boolean beingBlocked(Location to) {
+		return false;
+	}
+
+	@Override
+	protected boolean invalidTarget(Location to) {
+		return false;
+	}
 
 }

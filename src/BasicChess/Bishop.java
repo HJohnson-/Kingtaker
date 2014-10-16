@@ -17,26 +17,30 @@ public class Bishop extends ChessPiece {
 		return 3;
 	}
 
-	//In order: Check if move is diagonal, check if move is DIRECTLY diagonal, check if there is a piece blocking, check if you are taking your own piece.
-	public boolean isValidMove(Location pieceLocation, Location targetLocation) {
-		int horizontalMovement = pieceLocation.getX().compareTo(targetLocation.getX());
-		int verticalMovement = pieceLocation.getY().compareTo(targetLocation.getY());
-		if(verticalMovement == 0 || 0 == horizontalMovement) {
-			return false;
-		}
-		if(Math.abs(targetLocation.getX() - pieceLocation.getX()) != Math.abs(targetLocation.getY() - pieceLocation.getY())) {
-			return false;
-		}
-		for(int i = pieceLocation.getX(), j = pieceLocation.getY();
-			i != targetLocation.getX() && j != targetLocation.getY();
+	@Override
+	protected boolean beingBlocked(Location to) {
+		int horizontalMovement = cords.getX().compareTo(to.getX());
+		int verticalMovement = cords.getY().compareTo(to.getY());
+		for(int i = cords.getX(), j = cords.getY();
+			i != to.getX() && j != to.getY();
 			i += horizontalMovement, j+= verticalMovement) {
 			if(board.getPiece(new Location(i, j)).type != PieceType.EMPTY) {
-				return false;
+				return true;
 			}
 		}
-		if(this.type == board.getPiece(targetLocation).type) {
-			return false;
+		return false;
+	}
+
+	@Override
+	protected boolean invalidTarget(Location to) {
+		int horizontalMovement = cords.getX().compareTo(to.getX());
+		int verticalMovement = cords.getY().compareTo(to.getY());
+		if(verticalMovement == 0 || 0 == horizontalMovement) {
+			return true;
 		}
-		return true;
+		if(Math.abs(to.getX() - cords.getX()) != Math.abs(to.getY() - cords.getY())) {
+			return true;
+		}
+		return false;
 	}
 }

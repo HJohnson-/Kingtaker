@@ -8,6 +8,11 @@ import pieces.ChessPiece;
 abstract public class Board {
 	private pieces.ChessPiece[][] pieces;
 	private boolean isWhitesTurn;
+	private int currentTurn;
+
+	public int getCurrentTurn() {
+		return currentTurn;
+	}
 
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
 		if(!onBoard(pieceLocation)) {
@@ -21,24 +26,12 @@ abstract public class Board {
 	public boolean placePiece(Location targetLocation, pieces.ChessPiece toPlace) {
 		try {
 			pieces[targetLocation.getX()][targetLocation.getY()] = toPlace;
+			toPlace.cords = targetLocation;
+			toPlace.lastTurnMovedOn = currentTurn;
 			return true;
 		} catch (Error e) {
 			return false;
 		}
-	}
-
-	//Assumes move is valid
-	public boolean executeMove(Location pieceLocation, Location targetLocation) {
-		try {
-			pieces.ChessPiece beingMoved = pieces[pieceLocation.getX()][pieceLocation.getY()];
-			clearSpace(pieceLocation);
-			placePiece(targetLocation, beingMoved);
-			return true;
-		} catch (Error e) {
-			System.out.println(e);
-			return false;
-		}
-
 	}
 
 	//true if the space contains an EmptyPiece;
@@ -47,7 +40,7 @@ abstract public class Board {
 	}
 
 	//replaces the Piece on the location with an EmptyPiece;
-	private void clearSpace(Location pieceLocation) {
+	public void clearSpace(Location pieceLocation) {
 		placePiece(pieceLocation, new pieces.EmptyPiece(this, pieceLocation));
 	}
 
@@ -78,20 +71,17 @@ abstract public class Board {
 	public boolean attemptMove(Location pieceLocation, Location targetLocation) {
 		ChessPiece beingMoved = getPiece(pieceLocation);
 		ChessPiece movedOnto = getPiece(targetLocation);
-		if(!beingMoved.isValidMove(pieceLocation, targetLocation)) {
+		if(!beingMoved.isValidMove(targetLocation)) {
 			throw new Error("Invalid move");
 		}
 		if(!turnPlayersPiece(beingMoved)) {
 			throw new Error("Wrong colour piece!");
 		}
-		executeMove(pieceLocation, targetLocation);
-		if(isInCheck(isWhitesTurn)) {
-			placePiece(pieceLocation, beingMoved);
-			placePiece(targetLocation, movedOnto);
-			throw new Error("Cannot move self into check!");
-		} else {
+		if(beingMoved.executeMove(targetLocation)) {
 			nextPlayersTurn();
 			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -104,7 +94,7 @@ abstract public class Board {
 	}
 
 	//TODO This. Required to stop players putting themselves in check.
-	private boolean isInCheck(boolean checkingForWhite) {
+	public boolean isInCheck(boolean checkingForWhite) {
 		return false;
 	}
 }

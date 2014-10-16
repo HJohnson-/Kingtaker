@@ -17,9 +17,22 @@ public class Queen extends ChessPiece {
 		return 9;
 	}
 
+	//The queen should not use this function as it overwrites isValidMove entirely.
+	@Override
+	protected boolean invalidTarget(Location to) {
+		return true;
+	}
+
+	//The queen should not use this function as it overwrites isValidMove entirely.
+	@Override
+	protected boolean beingBlocked(Location to) {
+		return true;
+	}
+
 	//In order: Check if either Bishop or Rook could do the move
-	public boolean isValidMove(Location pieceLocation, Location targetLocation) {
-		return (new Bishop(board, type, null).isValidMove(pieceLocation, targetLocation))
-				|| (new Rook(board, type, null).isValidMove(pieceLocation, targetLocation));
+	@Override
+	public boolean isValidMove(Location targetLocation) {
+		return (new Bishop(board, type, null).isValidMove(targetLocation))
+				|| (new Rook(board, type, null).isValidMove(targetLocation));
 	}
 }

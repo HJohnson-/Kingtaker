@@ -18,27 +18,33 @@ public class Rook extends ChessPiece {
 		return 5;
 	}
 
-
-	//In order: Check if move is orthogonal, check if there is a piece blocking, check if you are taking your own piece.
-	public boolean isValidMove(Location pieceLocation, Location targetLocation) {
-		int horizontalMovement = pieceLocation.getX().compareTo(targetLocation.getX());
-		int verticalMovement = pieceLocation.getY().compareTo(targetLocation.getY());
+	@Override
+	public boolean invalidTarget(Location to) {
+		int horizontalMovement = cords.getX().compareTo(to.getX());
+		int verticalMovement = cords.getY().compareTo(to.getY());
 		if(Math.abs(verticalMovement) == Math.abs(horizontalMovement)) {
-			return false;
+			return true;
 		}
-		for(int i = pieceLocation.getX() + horizontalMovement; i != targetLocation.getX(); i += horizontalMovement) {
-			if(board.getPiece(new Location(i, pieceLocation.getY())).type != PieceType.EMPTY) {
-				return false;
+		if(verticalMovement == 0 && horizontalMovement == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean beingBlocked(Location to) {
+		int horizontalMovement = cords.getX().compareTo(to.getX());
+		int verticalMovement = cords.getY().compareTo(to.getY());
+		for(int i = cords.getX() + horizontalMovement; i != to.getX(); i += horizontalMovement) {
+			if(board.getPiece(new Location(i, cords.getY())).type != PieceType.EMPTY) {
+				return true;
 			}
 		}
-		for(int i = pieceLocation.getY() + verticalMovement; i != targetLocation.getY(); i += verticalMovement) {
-			if(board.getPiece(new Location(pieceLocation.getX(), i)).type != PieceType.EMPTY) {
-				return false;
+		for(int i = cords.getY() + verticalMovement; i != to.getY(); i += verticalMovement) {
+			if(board.getPiece(new Location(cords.getX(), i)).type != PieceType.EMPTY) {
+				return true;
 			}
 		}
-		if(this.type == board.getPiece(targetLocation).type) {
-			return false;
-		}
-		return true;
+		return false;
 	}
 }

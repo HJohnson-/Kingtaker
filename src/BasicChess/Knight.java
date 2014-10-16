@@ -17,19 +17,21 @@ public class Knight extends ChessPiece {
 		return 3;
 	}
 
-	//In order: Check if move is knightish, check if taking your own piece.
-	public boolean isValidMove(Location pieceLocation, Location targetLocation) {
-		int horizontalMovement = pieceLocation.getX() - targetLocation.getX();
-		int verticalMovement = pieceLocation.getY() -targetLocation.getY();
+	@Override
+	protected boolean beingBlocked(Location to) {
+		return false;
+	}
+
+	@Override
+	protected boolean invalidTarget(Location to) {
+		int horizontalMovement = cords.getX() - to.getX();
+		int verticalMovement = cords.getY() -to.getY();
 
 		if((Math.abs(horizontalMovement) == 1 && Math.abs(verticalMovement) == 2)
-			|| (Math.abs(verticalMovement) == 1 && Math.abs(horizontalMovement) == 2))	{
-			if(this.type == board.getPiece(targetLocation).type) {
-				return false;
-			}
-			return true;
-		} else {
+				|| (Math.abs(verticalMovement) == 1 && Math.abs(horizontalMovement) == 2)) {
 			return false;
+		} else {
+			return true;
 		}
 	}
 }

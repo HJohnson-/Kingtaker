@@ -21,7 +21,7 @@ public class Bishop extends ChessPiece {
 	protected boolean beingBlocked(Location to) {
 		int horizontalMovement = to.getX().compareTo(cords.getX());
 		int verticalMovement = to.getY().compareTo(cords.getY());
-		for(int i = cords.getX(), j = cords.getY();
+		for(int i = cords.getX() + horizontalMovement, j = cords.getY() + verticalMovement;
 			i != to.getX() && j != to.getY();
 			i += horizontalMovement, j+= verticalMovement) {
 			if(board.getPiece(new Location(i, j)).type != PieceType.EMPTY) {

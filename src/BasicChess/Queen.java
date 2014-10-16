@@ -32,7 +32,7 @@ public class Queen extends ChessPiece {
 	//In order: Check if either Bishop or Rook could do the move
 	@Override
 	public boolean isValidMove(Location targetLocation) {
-		return (new Bishop(board, type, null).isValidMove(targetLocation))
-				|| (new Rook(board, type, null).isValidMove(targetLocation));
+		return (new Bishop(board, type, cords).isValidMove(targetLocation))
+				|| (new Rook(board, type, cords).isValidMove(targetLocation));
 	}
 }

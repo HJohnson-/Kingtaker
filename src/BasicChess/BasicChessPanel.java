@@ -13,6 +13,7 @@ public class BasicChessPanel extends ChessPanel {
     private final int GRID_HEIGHT = 8;
 
     public BasicChessPanel(Board board) {
+        super();
         this.board = board;
     }
 
@@ -21,7 +22,6 @@ public class BasicChessPanel extends ChessPanel {
 
         graphics.tools.drawGrid(g2, GRID_WIDTH, GRID_HEIGHT);
 
-        g2.setPaint(new Color(255, 0, 0));
         drawPieces(g2);
     }
 

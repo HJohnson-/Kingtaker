@@ -36,7 +36,7 @@ abstract public class Board {
 
         for (int i = 0; i < pieces.length; i++) {
             for (int j = 0; j < pieces[i].length; j++) {
-                if (pieces[i][j] != null) {
+                if (pieces[i][j].type != PieceType.EMPTY) {
                     pieceList.add(pieces[i][j]);
                 }
             }

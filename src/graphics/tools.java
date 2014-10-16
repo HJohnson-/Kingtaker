@@ -19,7 +19,7 @@ public class tools {
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
     public static void drawGrid(Graphics2D g2, int num_rows, int num_cols) {
-        g2.setColor(new Color(255, 255, 255));
+        g2.setColor(new Color(255, 215, 142));
         for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
             for (int y = 0; y < num_cols * CELL_HEIGHT; y += CELL_HEIGHT * 2) {
                 g2.fillRect(x, y, CELL_WIDTH, CELL_HEIGHT);
@@ -27,7 +27,7 @@ public class tools {
             }
         }
 
-        g2.setColor(new Color(0, 0, 0));
+        g2.setColor(new Color(140, 83, 56));
         for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
             for (int y = 0; y < num_cols * CELL_HEIGHT; y += CELL_WIDTH * 2) {
                 g2.fillRect(x + CELL_WIDTH, y, CELL_WIDTH, CELL_HEIGHT);
@@ -49,8 +49,8 @@ public class tools {
     public static void loadPieces(String[] pieces) {
         for (int i = 0; i < pieces.length; i++) {
             try {
-                imageMap.put(pieces[i], ImageIO.read(new File("media/" + pieces[i] + ".tif")));
-                imageMap.put(pieces[i] + "Black", ImageIO.read(new File("media/" + pieces[i] + "Black.tif")));
+                imageMap.put(pieces[i], ImageIO.read(new File("media/" + pieces[i] + ".png")));
+                imageMap.put(pieces[i] + "Black", ImageIO.read(new File("media/" + pieces[i] + "Black.png")));
             } catch (IOException e) {
                 System.out.println(e);
                 System.exit(2);

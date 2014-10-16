@@ -7,6 +7,7 @@ import main.ChessVariant;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
+import pieces.EmptyPiece;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -104,6 +105,13 @@ public class BasicChess extends ChessVariant {
 			}
 		}
 
+        Location emptyLocation;
+        for(int i = 2; i < 6; i++){
+            for(int j = 0; j < 8; j++){
+                emptyLocation = new Location(i,j);
+                board.placePiece(emptyLocation, new EmptyPiece(board, emptyLocation));
+            }
+        }
 
 		return false;
 	}
@@ -111,7 +119,7 @@ public class BasicChess extends ChessVariant {
 	//returns true if there was no errors
 	public boolean drawBoard() {
 
-        graphics.tools.create(new BasicChessFrame("Basic Chess", boardWidth, boardHeight, (BasicBoard) board));
+        graphics.tools.create(new BasicChessFrame("Basic Chess", 400, 428, (BasicBoard) board));
         return true;
 	}
 }

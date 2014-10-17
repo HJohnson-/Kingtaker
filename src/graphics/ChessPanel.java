@@ -49,6 +49,16 @@ public abstract class ChessPanel extends JPanel {
             g2.fillRect(p.cords.getX() * tools.CELL_WIDTH, p.cords.getY() * tools.CELL_HEIGHT,
                     tools.CELL_WIDTH, tools.CELL_HEIGHT);
         }
+
+        if (selectedPiece != null) {
+            Stroke oldstroke = g2.getStroke();
+            g2.setStroke(new BasicStroke(2));
+            g2.setPaint(new Color(143, 198, 222));
+            g2.drawRect(selectedPiece.cords.getX() * 50, selectedPiece.cords.getY() * 50,
+                    tools.CELL_WIDTH, tools.CELL_HEIGHT);
+            g2.setStroke(oldstroke);
+        }
+
     }
 
     protected abstract void doDrawing(Graphics g);
@@ -64,6 +74,7 @@ public abstract class ChessPanel extends JPanel {
             if (selectedPiece == null) {
                 if (!board.isEmptySpace(l)) {
                     selectedPiece = board.getPiece(l);
+                    repaint();
                 }
             } else {
                 board.attemptMove(selectedPiece.cords, l);

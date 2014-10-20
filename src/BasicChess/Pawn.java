@@ -110,12 +110,12 @@ public class Pawn extends ChessPiece{
 	}
 
 	@Override
-	public boolean isValidMove(Location to) {
+	protected boolean testIfMoveEndsInCheck(Location to, Location from) {
 		if(validEnPassant(to)) {
+			//TODO execute an EnPassant, undo the EnPassant, return value
 			return false;
-			//panic
 		} else {
-			return super.isValidMove(to);
+			return super.testIfMoveEndsInCheck(to, from);
 		}
 	}
 }

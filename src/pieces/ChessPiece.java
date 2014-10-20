@@ -39,9 +39,8 @@ abstract public class ChessPiece {
 	}
 
 	//Returns true if the piece could move to to location on its turn. Doesn't check if
-	//the piece is owned by the turn player. After executing the move, crudely backtracks if it would put the user into
-	//check. Pieces with moves such as Castling and En Passant that can affect squares other than the To and From will
-	//need to overwrite this function to add more accurate backtracking for those cases.
+	//the piece is owned by the turn player. Uses 'testIfMoveEndsInCheck' which executes then un-does the move
+	//and returns if it put the moving player in check.
     public boolean isValidMove(Location to) {
 		if(invalidTarget(to)) {
             System.out.println("Invalid target");
@@ -54,19 +53,28 @@ abstract public class ChessPiece {
 			return false;
 		} else {
 			Location from = cords;
-			ChessPiece onto = board.getPiece(to);
+
 			boolean takingKing = board.isKing(to);
 
-			executeMove(to);
-			boolean wouldPutMeInCheck = board.isInCheck(type == PieceType.WHITE);
-			board.placePiece(from, this);
-			board.placePiece(to, onto);
+			boolean wouldPutMeInCheck = testIfMoveEndsInCheck(to, from);
 
 			if(wouldPutMeInCheck && !takingKing) {
 				return false;
 			}
 			return true;
 		}
+	}
+
+	//This makes then un-does the move, but makes the assumption that a move only affects the square the piece started
+	//in and moved towards, and affects them in a specific way. Pieces with moves such as Pawn Promotion, En Passant,
+	//and castling will need to override this function or checking validity of moves will alter the board state.
+	protected boolean testIfMoveEndsInCheck(Location to, Location from) {
+		ChessPiece onto = board.getPiece(to);
+		executeMove(to);
+		boolean wouldPutMeInCheck = board.isInCheck(type == PieceType.WHITE);
+		board.placePiece(from, this);
+		board.placePiece(to, onto);
+		return wouldPutMeInCheck;
 	}
 
 	private boolean takingOwnPiece(ChessPiece target) {

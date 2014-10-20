@@ -18,20 +18,6 @@ public class Bishop extends ChessPiece {
 	}
 
 	@Override
-	protected boolean beingBlocked(Location to) {
-		int horizontalMovement = to.getX().compareTo(cords.getX());
-		int verticalMovement = to.getY().compareTo(cords.getY());
-		for(int i = cords.getX() + horizontalMovement, j = cords.getY() + verticalMovement;
-			i != to.getX() && j != to.getY();
-			i += horizontalMovement, j+= verticalMovement) {
-			if(board.getPiece(new Location(i, j)).type != PieceType.EMPTY) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
 	protected boolean invalidTarget(Location to) {
 		int horizontalMovement = cords.getX().compareTo(to.getX());
 		int verticalMovement = cords.getY().compareTo(to.getY());
@@ -42,5 +28,10 @@ public class Bishop extends ChessPiece {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean beingBlocked(Location to) {
+		return !board.clearLine(cords, to);
 	}
 }

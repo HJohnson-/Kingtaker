@@ -156,4 +156,23 @@ abstract public class Board {
 	public boolean isInCheck(boolean checkingForWhite) {
 		return false;
 	}
+
+	public boolean isInCheck(PieceType type) {
+		return isInCheck(type == PieceType.WHITE);
+	}
+
+	//Checks if every space between from and to is empty, not including from or to. Works in the 8 directions a Queen
+	//can move.
+	public boolean clearLine(Location from, Location to) {
+		int horizontalMovement = to.getX().compareTo(from.getX());
+		int verticalMovement = to.getY().compareTo(from.getY());
+		for(int i = from.getX() + horizontalMovement, j = from.getY() + verticalMovement;
+			i != to.getX() || j != to.getY();
+			i += horizontalMovement, j+= verticalMovement) {
+			if(getPiece(new Location(i, j)).type != PieceType.EMPTY) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

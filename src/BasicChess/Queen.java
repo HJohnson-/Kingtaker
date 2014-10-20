@@ -34,17 +34,7 @@ public class Queen extends ChessPiece {
 
 	//The queen should not use this function as it overwrites isValidMove entirely.
 	@Override
-	protected boolean beingBlocked(Location to) {
-		int horizontalMovement = to.getX().compareTo(cords.getX());
-		int verticalMovement = to.getY().compareTo(cords.getY());
-		for(int i = cords.getX() + horizontalMovement, j = cords.getY() + verticalMovement;
-			i != to.getX() || j != to.getY();
-			i += horizontalMovement, j+= verticalMovement) {
-			if(board.getPiece(new Location(i, j)).type != PieceType.EMPTY) {
-				return true;
-			}
-		}
-		return false;
+	public boolean beingBlocked(Location to) {
+		return !board.clearLine(cords, to);
 	}
-
 }

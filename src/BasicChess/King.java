@@ -22,11 +22,11 @@ public class King extends ChessPiece {
 
 	@Override
 	protected boolean invalidTarget(Location to) {
-		int verticalDistance = Math.abs(cords.getY() - to.getY());
-		int horizontalDistance = Math.abs(cords.getX() - to.getX());
 		if(isAttemptingCastling(to)) {
 			return false;
 		}
+		int verticalDistance = Math.abs(cords.getY() - to.getY());
+		int horizontalDistance = Math.abs(cords.getX() - to.getX());
 		if(verticalDistance > 1 || horizontalDistance > 1) {
 			return true;
 		}
@@ -67,6 +67,7 @@ public class King extends ChessPiece {
 	that can check for it and undo a failed castle attempt correctly for the new situations
 	 */
 	private boolean isAttemptingCastling(Location to) {
+		boolean debugS = to.equals(new Location(7,2));
 		int myFirstRank = (this.type == PieceType.WHITE ? board.numCols()-1 : 0);
 		int movementDirection = to.getY().compareTo(cords.getY());
 		int rookY = (movementDirection == 1 ? board.numRows()-1 : 0 );
@@ -96,11 +97,11 @@ public class King extends ChessPiece {
 			return false;
 		}
 
-		for(int i = cords.getY(); i != to.getY(); i += movementDirection) {
+		/*for(int i = cords.getY(); i != to.getY(); i += movementDirection) {
 			if(testIfMoveEndsInCheck(cords, new Location(cords.getX(), i))) {
 				return false;
 			}
-		}
+		}*/
 
 		return true;
 	}

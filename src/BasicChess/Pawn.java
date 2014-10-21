@@ -4,6 +4,7 @@ import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
+import pieces.EmptyPiece;
 
 /**
  * Created by hj1012 on 15/10/14.
@@ -89,9 +90,27 @@ public class Pawn extends ChessPiece{
 		return false;
 	}
 
-	//TODO EnPassant
 	private boolean validEnPassant(Location to) {
-		return false;
+		if(!board.isEmptySpace(to)) {
+			return false;
+		}
+		if(cords.getX() + movementDirection != to.getX()) {
+			return false;
+		}
+		if(Math.abs(cords.getY() - to.getY()) != 1) {
+			return false;
+		}
+		ChessPiece toTake = board.getPiece(new Location(cords.getX(), to.getY()));
+		if(!(toTake instanceof Pawn)) {
+			return false;
+		}
+		if(!((Pawn) toTake).justDidADoubleMove) {
+			return false;
+		}
+		if(toTake.type == type) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -103,8 +122,8 @@ public class Pawn extends ChessPiece{
 			justDidADoubleMove = true;
 			return super.executeMove(to);
 		} else if(validEnPassant(to)) {
-			//Panic Excessively
-			return false;
+			board.placePiece(new Location(cords.getX(), to.getY()), new EmptyPiece(board, new Location(cords.getX(), to.getY())));
+			return super.executeMove(to);
 		} else {
 			return false;
 		}
@@ -113,8 +132,11 @@ public class Pawn extends ChessPiece{
 	@Override
 	protected boolean testIfMoveEndsInCheck(Location to, Location from) {
 		if(validEnPassant(to)) {
-			//TODO execute an EnPassant, undo the EnPassant, return value
-			return false;
+			Location pieceLocation = new Location(from.getX(), to.getY());
+			Pawn toTake = (Pawn) board.getPiece(pieceLocation);
+			boolean wouldPutMeInCheck = super.testIfMoveEndsInCheck(to, from);
+			board.placePiece(pieceLocation, toTake);
+			return wouldPutMeInCheck;
 		} else {
 			return super.testIfMoveEndsInCheck(to, from);
 		}

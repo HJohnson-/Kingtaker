@@ -24,7 +24,7 @@ abstract public class ChessPiece {
         this.board = board;
         this.cords = cords;
 		this.img = img;
-		lastTurnMovedOn = board.getCurrentTurn();
+		lastTurnMovedOn = 0;
     }
 
 	//Assumes move is totally valid, doesn't have to check anything, just does the move.

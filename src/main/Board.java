@@ -23,7 +23,7 @@ abstract public class Board {
 
     public Board() {
         pieces = new ChessPiece[8][8];
-		currentTurn = 1;
+		currentTurn = 0;
     }
 
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
@@ -59,7 +59,6 @@ abstract public class Board {
 		try {
 			pieces[targetLocation.getX()][targetLocation.getY()] = toPlace;
 			toPlace.cords = targetLocation;
-			toPlace.lastTurnMovedOn = currentTurn;
 			return true;
 		} catch (Error e) {
 			return false;

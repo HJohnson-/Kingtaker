@@ -59,11 +59,12 @@ public class Pawn extends ChessPiece{
 	private boolean validPawnDoubleMove(Location to) {
 		int startingCol =  type == PieceType.WHITE ? board.numRows()-2 : 1;
 
-		if(cords.getX() == startingCol) {
+		if(cords.getX() == startingCol && cords.getY() == to.getY()) {
 			if(to.getX() == startingCol + movementDirection*2) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 

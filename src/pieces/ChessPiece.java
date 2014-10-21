@@ -41,25 +41,26 @@ abstract public class ChessPiece {
 	//Returns true if the piece could move to to location on its turn. Doesn't check if
 	//the piece is owned by the turn player. Uses 'testIfMoveEndsInCheck' which executes then un-does the move
 	//and returns if it put the moving player in check.
-    public boolean isValidMove(Location to) {
+
+	public boolean isValidMove(Location to) {
+		return isValidMove(to, true);
+	}
+
+    public boolean isValidMove(Location to, boolean careAboutCheck) {
 		if(invalidTarget(to)) {
-            System.out.println("Invalid target");
 			return false;
 		} else if(beingBlocked(to)) {
-            System.out.println("Blocked");
 			return false;
 		} else if(takingOwnPiece(board.getPiece(to))) {
-            System.out.println("Taking own piece");
 			return false;
 		} else {
-			Location from = cords;
-
-			boolean takingKing = board.isKing(to);
-
-			boolean wouldPutMeInCheck = testIfMoveEndsInCheck(to, from);
-
-			if(wouldPutMeInCheck && !takingKing) {
-				return false;
+			if(careAboutCheck) {
+				Location from = cords;
+				boolean takingKing = board.isKing(to);
+				boolean wouldPutMeInCheck = testIfMoveEndsInCheck(to, from);
+				if(wouldPutMeInCheck && !takingKing) {
+					return false;
+				}
 			}
 			return true;
 		}
@@ -77,12 +78,8 @@ abstract public class ChessPiece {
 		return wouldPutMeInCheck;
 	}
 
-	private boolean takingOwnPiece(ChessPiece target) {
-		if(type == target.type) {
-			return true;
-		} else {
-			return false;
-		}
+	protected boolean takingOwnPiece(ChessPiece target) {
+		return type == target.type;
 	}
 
 	abstract protected boolean invalidTarget(Location to);

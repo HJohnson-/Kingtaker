@@ -19,6 +19,17 @@ public class Location {
 		return y;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Location that;
+		if(obj instanceof Location) {
+			that = (Location) obj;
+		} else {
+			return false;
+		}
+		return (this.x == that.x && this.y == that.y);
+	}
+
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}

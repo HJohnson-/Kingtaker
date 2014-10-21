@@ -3,10 +3,7 @@ package main;
 import BasicChess.King;
 import pieces.ChessPiece;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by hj1012 on 15/10/14.
@@ -22,6 +19,7 @@ abstract public class Board {
 
     public Board() {
         pieces = new ChessPiece[8][8];
+		currentTurn = 1;
     }
 
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
@@ -91,27 +89,28 @@ abstract public class Board {
 
 	public int numCols() { return pieces[0].length; }
 
-	public Map<Location, List<Location>> getAllValidMoves() {
-		Map<Location, List<Location>> allPossibleMoves = new HashMap<Location, List<Location>>();
-		for(int x = 0; x < numCols(); x++) {
-			for(int y = 0; y < numRows(); y++) {
-				Location testSpace = new Location(x, y);
-				PieceType testType = getPiece(testSpace).type;
-				if(testType != PieceType.EMPTY && (testType == PieceType.WHITE) == isWhitesTurn) {
-					allPossibleMoves.put(testSpace, movesForPiece(testSpace));
-				}
+	public Map<ChessPiece, List<Location>> getAllValidMoves() {
+		return getAllValidMoves(true);
+	}
+
+	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean caresAboutCheck) {
+		Map<ChessPiece, List<Location>> allPossibleMoves = new HashMap<ChessPiece, List<Location>>();
+		for(ChessPiece piece : allPieces()) {
+			PieceType testType = piece.type;
+			if(testType != PieceType.EMPTY && (testType == PieceType.WHITE) == isWhitesTurn) {
+				allPossibleMoves.put(piece, movesForPiece(piece, caresAboutCheck));
 			}
 		}
 		return allPossibleMoves;
 	}
 
-	public List<Location> movesForPiece(Location from) {
+
+	public List<Location> movesForPiece(ChessPiece piece, boolean caresAboutCheck) {
 		List<Location> possibleMoves = new LinkedList<Location>();
-		ChessPiece beingMoved = getPiece(from);
 		for(int x = 0; x < numCols(); x++) {
 			for(int y = 0; y < numRows(); y++) {
 				Location testSpace = new Location(x, y);
-				if(beingMoved.isValidMove(testSpace)) {
+				if(piece.isValidMove(testSpace, caresAboutCheck)) {
 					possibleMoves.add(testSpace);
 				}
 			}
@@ -154,7 +153,23 @@ abstract public class Board {
 
 	//TODO This. Required to stop players putting themselves in check.
 	public boolean isInCheck(boolean checkingForWhite) {
+		Location kingLocation = findKing(checkingForWhite);
+		for(List<Location> targets : getAllValidMoves(false).values()) {
+			if(targets.contains(kingLocation)) {
+				return true;
+			}
+		}
 		return false;
+	}
+
+	private Location findKing(boolean checkingForWhite) {
+		PieceType type = checkingForWhite ? PieceType.WHITE : PieceType.BLACK;
+		for(ChessPiece piece : allPieces()) {
+			if(piece instanceof King && piece.type == type) {
+				return piece.cords;
+			}
+		}
+		throw new Error("No king on board");
 	}
 
 	public boolean isInCheck(PieceType type) {

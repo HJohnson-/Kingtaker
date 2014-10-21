@@ -36,6 +36,18 @@ public class King extends ChessPiece {
 		return false;
 	}
 
+	protected boolean invalidTargetNoCastle(Location to) {
+		int verticalDistance = Math.abs(cords.getY() - to.getY());
+		int horizontalDistance = Math.abs(cords.getX() - to.getX());
+		if(verticalDistance > 1 || horizontalDistance > 1) {
+			return true;
+		}
+		if(verticalDistance == 0 && horizontalDistance == 0) {
+			return true;
+		}
+		return false;
+	}
+
 
 	/*To castle:
 	- The target space must be two squares from the King
@@ -51,6 +63,8 @@ public class King extends ChessPiece {
 	- The King cannot be in check, move through a threatened square, or end in check
 
 	In all valid castling attempts, the for loop will catch if the actual move of castling ends in check.
+	If a new piece moves in an especially unusual way, the variant might need to override the king piece with something
+	that can check for it and undo a failed castle attempt correctly for the new situations
 	 */
 	private boolean isAttemptingCastling(Location to) {
 		int myFirstRank = (this.type == PieceType.WHITE ? board.numCols()-1 : 0);
@@ -89,6 +103,27 @@ public class King extends ChessPiece {
 		}
 
 		return true;
+	}
+
+	@Override
+	public boolean isValidMove(Location to, boolean careAboutCheck) {
+		if (careAboutCheck ? invalidTarget(to) : invalidTargetNoCastle(to)) {
+			return false;
+		} else if (beingBlocked(to)) {
+			return false;
+		} else if (takingOwnPiece(board.getPiece(to))) {
+			return false;
+		} else {
+			if (careAboutCheck) {
+				Location from = cords;
+				boolean takingKing = board.isKing(to);
+				boolean wouldPutMeInCheck = testIfMoveEndsInCheck(to, from);
+				if (wouldPutMeInCheck && !takingKing) {
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 
 	@Override

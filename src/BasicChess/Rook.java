@@ -25,9 +25,6 @@ public class Rook extends ChessPiece {
 		if(Math.abs(verticalMovement) == Math.abs(horizontalMovement)) {
 			return true;
 		}
-		if(verticalMovement == 0 && horizontalMovement == 0) {
-			return true;
-		}
 		return false;
 	}
 

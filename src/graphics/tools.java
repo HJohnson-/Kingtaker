@@ -18,7 +18,7 @@ public class tools {
     public static final int CELL_HEIGHT = 50;
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
-    public static void drawGrid(Graphics2D g2, int num_rows, int num_cols) {
+    public static void drawQuadGrid(Graphics2D g2, int num_rows, int num_cols) {
         g2.setColor(new Color(255, 215, 142));
         for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
             for (int y = 0; y < num_cols * CELL_HEIGHT; y += CELL_HEIGHT * 2) {

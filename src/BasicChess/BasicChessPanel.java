@@ -17,11 +17,9 @@ public class BasicChessPanel extends ChessPanel {
         this.board = board;
     }
 
-    protected void doDrawing(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-
-        graphics.tools.drawGrid(g2, GRID_WIDTH, GRID_HEIGHT);
-
+    @Override
+    protected void doDrawing(Graphics2D g2) {
+        graphics.tools.drawQuadGrid(g2, GRID_WIDTH, GRID_HEIGHT);
         drawPieces(g2);
         drawUI(g2);
     }

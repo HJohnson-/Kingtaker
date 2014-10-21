@@ -12,6 +12,8 @@ abstract public class Board {
 	private pieces.ChessPiece[][] pieces;
 	private boolean isWhitesTurn;
 	private int currentTurn;
+    private String winner;
+    private boolean gameOver;
 
 	public int getCurrentTurn() {
 		return currentTurn;
@@ -21,9 +23,19 @@ abstract public class Board {
         return isWhitesTurn;
     }
 
+    public String getWinner() {
+        return winner;
+    }
+
+    public boolean gameOver() {
+        return gameOver;
+    }
+
     public Board() {
         pieces = new ChessPiece[8][8];
-		currentTurn = 0;
+		currentTurn = 1;
+        winner = "None";
+        gameOver = false;
     }
 
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
@@ -126,6 +138,7 @@ abstract public class Board {
 	//put the turn player in check, crudely undoes the move. Does not work for En Passant /Castling that would put the
 	//turn player in check. TODO make this use the getAllValidMoves function and not break on weird moves.
 	public boolean attemptMove(Location pieceLocation, Location targetLocation) {
+        if (gameOver) return false;
 		ChessPiece beingMoved = getPiece(pieceLocation);
 		ChessPiece movedOnto = getPiece(targetLocation);
 		if(!beingMoved.isValidMove(targetLocation)) {
@@ -135,21 +148,27 @@ abstract public class Board {
 			return false;
 		}
 		if(beingMoved.executeMove(targetLocation)) {
-			nextPlayersTurn();
+            nextPlayersTurn();
+            if (checkMate()) {
+                endGame();
+            }
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public boolean checkMate() {
-		Map<ChessPiece, List<Location>> moves = getAllValidMoves();
-		for(ChessPiece dude : moves.keySet()) {
-			if(turnPlayersPiece(dude)) {
-				if(!moves.get(dude).isEmpty()) {
-					return false;
-				}
-			}
+    protected void endGame() {
+        gameOver = true;
+        winner = isWhitesTurn ? "White" : "Black";
+    }
+
+	protected boolean checkMate() {
+		Map<?, List<Location>> moves = getAllValidMoves();
+		for (Map.Entry<?, List<Location>> entry : moves.entrySet()) {
+            if (!entry.getValue().isEmpty()) {
+                return false;
+            }
 		}
 		return true;
 	}

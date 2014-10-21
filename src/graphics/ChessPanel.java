@@ -30,7 +30,9 @@ public abstract class ChessPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        doDrawing(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setFont(new Font("Bauhaus", Font.BOLD, 16));
+        doDrawing(g2);
     }
 
     protected void drawUI(Graphics2D g2) {
@@ -40,8 +42,16 @@ public abstract class ChessPanel extends JPanel {
         g2.setPaint(c);
         g2.fillRect(x, y, tools.CELL_WIDTH * 2, tools.CELL_HEIGHT);
         g2.setPaint(new Color(255, 255, 255));
-        g2.setFont(new Font("Purisa", Font.BOLD, 16));
         g2.drawString("Turn: " + board.getCurrentTurn(), x, y + tools.CELL_HEIGHT * 2);
+
+        if (board.gameOver()) {
+            g2.fillRect(tools.CELL_WIDTH, tools.CELL_HEIGHT * 2,
+                    tools.CELL_WIDTH * (board.numRows() - 2), tools.CELL_HEIGHT * 4);
+            g2.setColor(new Color(255, 0, 0));
+            g2.setFont(new Font("Bauhaus", Font.BOLD, 50));
+            g2.drawString("Game Over", tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2));
+            g2.drawString(board.getWinner() + " Wins", tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2 + 1));
+        }
     }
 
     protected void drawPieces(Graphics2D g2) {
@@ -80,7 +90,7 @@ public abstract class ChessPanel extends JPanel {
 
     }
 
-    protected abstract void doDrawing(Graphics g);
+    protected abstract void doDrawing(Graphics2D g2);
 
     class HitTestAdapter extends MouseAdapter {
 

@@ -17,6 +17,10 @@ abstract public class Board {
 		return currentTurn;
 	}
 
+    public boolean isWhitesTurn() {
+        return isWhitesTurn;
+    }
+
     public Board() {
         pieces = new ChessPiece[8][8];
 		currentTurn = 1;
@@ -140,6 +144,7 @@ abstract public class Board {
 	}
 
 	private void nextPlayersTurn() {
+        currentTurn++;
 		isWhitesTurn = !isWhitesTurn;
 	}
 

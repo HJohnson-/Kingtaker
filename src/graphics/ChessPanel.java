@@ -1,7 +1,5 @@
 package graphics;
 
-import BasicChess.BasicBoard;
-import BasicChess.BasicChessFrame;
 import main.Board;
 import main.Location;
 import main.PieceType;
@@ -13,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by rp1012 on 15/10/14.
@@ -30,6 +29,17 @@ public abstract class ChessPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         doDrawing(g);
+    }
+
+    protected void drawUI(Graphics2D g2) {
+        int x = tools.CELL_WIDTH * (board.numCols() + 1);
+        int y = tools.CELL_HEIGHT;
+        Color c = board.isWhitesTurn() ? new Color(0, 0, 0) : new Color(255, 255, 255);
+        g2.setPaint(c);
+        g2.fillRect(x, y, tools.CELL_WIDTH * 2, tools.CELL_HEIGHT);
+        g2.setPaint(new Color(255, 255, 255));
+        g2.setFont(new Font("Purisa", Font.BOLD, 16));
+        g2.drawString("Turn: " + board.getCurrentTurn(), x, y + tools.CELL_HEIGHT * 2);
     }
 
     protected void drawPieces(Graphics2D g2) {
@@ -52,10 +62,17 @@ public abstract class ChessPanel extends JPanel {
 
         if (selectedPiece != null) {
             Stroke oldstroke = g2.getStroke();
-            g2.setStroke(new BasicStroke(2));
+            g2.setStroke(new BasicStroke(4));
             g2.setPaint(new Color(143, 198, 222));
             g2.drawRect(selectedPiece.cords.getX() * 50, selectedPiece.cords.getY() * 50,
                     tools.CELL_WIDTH, tools.CELL_HEIGHT);
+
+            List<Location> moves = board.movesForPiece(selectedPiece, true);
+            g2.setPaint(new Color(253, 8, 0));
+            for (Location l : moves) {
+                g2.drawRect(l.getX() * 50, l.getY() * 50, tools.CELL_WIDTH, tools.CELL_HEIGHT);
+            }
+
             g2.setStroke(oldstroke);
         }
 

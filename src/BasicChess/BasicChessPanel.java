@@ -23,6 +23,7 @@ public class BasicChessPanel extends ChessPanel {
         graphics.tools.drawGrid(g2, GRID_WIDTH, GRID_HEIGHT);
 
         drawPieces(g2);
+        drawUI(g2);
     }
 
 }

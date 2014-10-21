@@ -1,5 +1,7 @@
 package graphics;
 
+import BasicChess.BasicBoard;
+import BasicChess.BasicChessFrame;
 import main.Board;
 import main.Location;
 import main.PieceType;
@@ -62,7 +64,7 @@ public abstract class ChessPanel extends JPanel {
 
         if (selectedPiece != null) {
             Stroke oldstroke = g2.getStroke();
-            g2.setStroke(new BasicStroke(4));
+            g2.setStroke(new BasicStroke(2));
             g2.setPaint(new Color(143, 198, 222));
             g2.drawRect(selectedPiece.cords.getX() * 50, selectedPiece.cords.getY() * 50,
                     tools.CELL_WIDTH, tools.CELL_HEIGHT);

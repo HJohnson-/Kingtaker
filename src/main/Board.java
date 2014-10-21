@@ -139,6 +139,18 @@ abstract public class Board {
 		}
 	}
 
+	public boolean checkMate() {
+		Map<ChessPiece, List<Location>> moves = getAllValidMoves();
+		for(ChessPiece dude : moves.keySet()) {
+			if(turnPlayersPiece(dude)) {
+				if(!moves.get(dude).isEmpty()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	private void nextPlayersTurn() {
 		isWhitesTurn = !isWhitesTurn;
 	}

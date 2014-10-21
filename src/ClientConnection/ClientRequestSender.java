@@ -32,11 +32,12 @@ public class ClientRequestSender implements Serializable {
         this.requestMessage = requestMessage;
         this.connection = connection;
         this.outputStream = connection.getOutputStream();
-
+        this.inputStream = connection.getInputStream();
 
         // build up our sending Message
         StringBuilder sb = new StringBuilder();
         sb.append(requestType);
+        sb.append(",");
         sb.append(requestMessage);
         String sendingMessage = sb.toString();
 

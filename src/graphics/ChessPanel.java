@@ -103,13 +103,13 @@ public abstract class ChessPanel extends JPanel {
             if (selectedPiece == null) {
                 if (!board.isEmptySpace(l)) {
                     selectedPiece = board.getPiece(l);
-                    repaint();
                 }
             } else {
                 board.attemptMove(selectedPiece.cords, l);
                 selectedPiece = null;
-                repaint();
             }
+
+            repaint();
         }
     }
 

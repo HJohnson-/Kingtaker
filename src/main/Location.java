@@ -30,6 +30,7 @@ public class Location {
 		return (this.x == that.x && this.y == that.y);
 	}
 
+    @Override
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}

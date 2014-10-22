@@ -3,10 +3,8 @@ import main.Location;
 import main.PieceType;
 import main.Board;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by rp1012 on 15/10/14.
@@ -85,6 +83,16 @@ abstract public class ChessPiece {
 	abstract protected boolean invalidTarget(Location to);
 
 	abstract protected boolean beingBlocked(Location to);
+
+    public List<Location> allUnblockedMoves() {
+        LinkedList<Location> moves = new LinkedList<Location>();
+        for (int x = 0; x < board.numCols(); x++) {
+            for (int y = 0; y < board.numRows(); y++) {
+                moves.add(new Location(x, y));
+            }
+        }
+        return moves;
+    }
 
 	abstract public int returnValue();
 

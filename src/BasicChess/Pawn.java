@@ -6,6 +6,10 @@ import main.PieceType;
 import pieces.ChessPiece;
 import pieces.EmptyPiece;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by hj1012 on 15/10/14.
  */
@@ -141,4 +145,25 @@ public class Pawn extends ChessPiece{
 			return super.testIfMoveEndsInCheck(to, from);
 		}
 	}
+
+    @Override
+    public List<Location> allUnblockedMoves() {
+        LinkedList<Location> moves = new LinkedList<Location>();
+        int newX = cords.getX() + movementDirection;
+        if (newX >= 0 && newX < board.numCols()) {
+            moves.add(new Location(newX, cords.getY()));
+            if (cords.getY() > 0) {
+                moves.add(new Location(newX, cords.getY() - 1));
+            }
+            if (cords.getY() < board.numRows() - 2) {
+                moves.add(new Location(newX, cords.getY() + 1));
+            }
+        }
+        int startX = type == PieceType.WHITE ? 6 : 1;
+        if (cords.getX() == startX) {
+            moves.add(new Location(startX + (2 * movementDirection), cords.getY()));
+        }
+
+        return moves;
+    }
 }

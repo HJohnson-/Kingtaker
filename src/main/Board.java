@@ -2,6 +2,7 @@ package main;
 
 import BasicChess.King;
 import pieces.ChessPiece;
+import pieces.EmptyPiece;
 
 import java.util.*;
 
@@ -79,7 +80,9 @@ abstract public class Board {
 
 	//true if the space contains an EmptyPiece;
 	public boolean isEmptySpace(Location targetLocation) {
-		return getPiece(targetLocation).type == PieceType.EMPTY;
+        ChessPiece p = getPiece(targetLocation);
+        if (p == null) placePiece(targetLocation, new EmptyPiece(this, targetLocation));
+		return p.type == PieceType.EMPTY;
 	}
 
 	//replaces the Piece on the location with an EmptyPiece;
@@ -121,16 +124,14 @@ abstract public class Board {
 
 
 	public List<Location> movesForPiece(ChessPiece piece, boolean caresAboutCheck) {
-		List<Location> possibleMoves = new LinkedList<Location>();
-		for(int x = 0; x < numCols(); x++) {
-			for(int y = 0; y < numRows(); y++) {
-				Location testSpace = new Location(x, y);
-				if(piece.isValidMove(testSpace, caresAboutCheck)) {
-					possibleMoves.add(testSpace);
-				}
-			}
-		}
-		return possibleMoves;
+		List<Location> allMoves = piece.allUnblockedMoves();
+        List<Location> validMoves = new LinkedList<Location>();
+        for (Location l : allMoves) {
+            if (piece.isValidMove(l, caresAboutCheck)) {
+                validMoves.add(l);
+            }
+        }
+		return validMoves;
 	}
 
 

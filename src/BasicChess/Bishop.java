@@ -5,6 +5,13 @@ import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by hj1012 on 15/10/14.
  */
@@ -34,4 +41,30 @@ public class Bishop extends ChessPiece {
 	public boolean beingBlocked(Location to) {
 		return !board.clearLine(cords, to);
 	}
+
+    @Override
+    public List<Location> allUnblockedMoves() {
+        List<Location> moves = new LinkedList<Location>();
+
+        for (int x = cords.getX(), y = cords.getY(); inBounds(x, y); x += 1, y += 1) {
+            moves.add(new Location(x, y));
+        }
+        for (int x = cords.getX(), y = cords.getY(); inBounds(x, y); x += 1, y += -1) {
+            moves.add(new Location(x, y));
+        }
+        for (int x = cords.getX(), y = cords.getY(); inBounds(x, y); x += -1, y += 1) {
+            moves.add(new Location(x, y));
+        }
+        for (int x = cords.getX(), y = cords.getY(); inBounds(x, y); x += -1, y += -1) {
+            moves.add(new Location(x, y));
+        }
+
+        return moves;
+    }
+
+    private boolean inBounds(int x, int y) {
+        if (x < 0 || x >= board.numCols()) return false;
+        if (y < 0 || y >= board.numRows()) return false;
+        return true;
+    }
 }

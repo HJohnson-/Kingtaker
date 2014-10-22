@@ -5,6 +5,9 @@ import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by hj1012 on 15/10/14.
  */
@@ -131,4 +134,20 @@ public class King extends ChessPiece {
 	protected boolean beingBlocked(Location to) {
 		return false;
 	}
+
+    @Override
+    public List<Location> allUnblockedMoves() {
+        List<Location> moves = new LinkedList<Location>();
+        for (int i = -1; i <= -1; i++) {
+            int newX = cords.getX() + i;
+            if (newX < 0 || newX >= board.numCols()) continue;
+            for (int j = -1; j <= 1; j++) {
+                int newY = cords.getY() + j;
+                if (newY < 0 || newY >= board.numRows()) continue;
+                moves.add(new Location(newX, newY));
+            }
+        }
+
+        return moves;
+    }
 }

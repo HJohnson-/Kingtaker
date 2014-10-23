@@ -8,7 +8,7 @@ import java.sql.Connection;
  */
 
 
-public class ClientRequestSender implements Serializable {
+public class ServerMessageSender implements Serializable {
 
     public enum ClientCommandCode {
         GET_GAME_LIST,

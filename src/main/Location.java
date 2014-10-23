@@ -18,4 +18,20 @@ public class Location {
 	public Integer getY(){
 		return y;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Location that;
+		if(obj instanceof Location) {
+			that = (Location) obj;
+		} else {
+			return false;
+		}
+		return (this.x == that.x && this.y == that.y);
+	}
+
+    @Override
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
 }

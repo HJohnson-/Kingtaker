@@ -8,12 +8,24 @@ import main.PieceType;
  */
 public class EmptyPiece extends ChessPiece {
 
-    public EmptyPiece(Board board) {
-        super(board, PieceType.EMPTY);
+    public EmptyPiece(Board board, Location loc) {
+        super(board, PieceType.EMPTY, loc, "");
     }
 
-    public boolean isValidMove(Location from, Location to) {
+	public int returnValue() {return 0;}
+
+    public boolean isValidMove(Location to) {
         return false;
     }
+
+	@Override
+	protected boolean beingBlocked(Location to) {
+		return false;
+	}
+
+	@Override
+	protected boolean invalidTarget(Location to) {
+		return false;
+	}
 
 }

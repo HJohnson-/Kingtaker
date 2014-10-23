@@ -36,6 +36,12 @@ abstract public class ChessPiece {
 		return true;
 	}
 
+	//Like an execute move that stuff doesn't overwrite
+	private void doMove(Location loc) {
+		board.clearSpace(cords);
+		board.placePiece(loc, this);
+	}
+
 	//Returns true if the piece could move to to location on its turn. Doesn't check if
 	//the piece is owned by the turn player. Uses 'testIfMoveEndsInCheck' which executes then un-does the move
 	//and returns if it put the moving player in check.
@@ -69,7 +75,7 @@ abstract public class ChessPiece {
 	//and castling will need to override this function or checking validity of moves will alter the board state.
 	protected boolean testIfMoveEndsInCheck(Location to, Location from) {
 		ChessPiece onto = board.getPiece(to);
-		executeMove(to);
+		doMove(to);
 		boolean wouldPutMeInCheck = board.isInCheck(type == PieceType.WHITE);
 		board.placePiece(from, this);
 		board.placePiece(to, onto);

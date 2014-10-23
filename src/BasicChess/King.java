@@ -4,6 +4,7 @@ import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
+import pieces.EmptyPiece;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -96,7 +97,7 @@ public class King extends ChessPiece {
 			return false;
 		}
 
-		if(board.isInCheck(this.type)) {
+		if(board.getController().isInCheck(this.type)) {
 			return false;
 		}
 
@@ -110,6 +111,18 @@ public class King extends ChessPiece {
 	}
 
 	@Override
+	public boolean executeMove(Location to) {
+		if(isAttemptingCastling(to)) {
+			int movementDirection = to.getY().compareTo(cords.getY());
+			int rookY = (movementDirection == 1 ? board.numRows()-1 : 0 );
+			board.movePiece(new Location(cords.getX(), rookY), new Location(cords.getX(), cords.getY()+movementDirection));
+			return super.executeMove(to);
+		} else {
+			return super.executeMove(to);
+		}
+	}
+
+	@Override
 	public boolean isValidMove(Location to, boolean careAboutCheck) {
 		if (careAboutCheck ? invalidTarget(to) : invalidTargetNoCastle(to)) {
 			return false;
@@ -120,7 +133,7 @@ public class King extends ChessPiece {
 		} else {
 			if (careAboutCheck) {
 				Location from = cords;
-				boolean takingKing = board.isKing(to);
+				boolean takingKing = board.getController().isKing(to);
 				boolean wouldPutMeInCheck = testIfMoveEndsInCheck(to, from);
 				if (wouldPutMeInCheck && !takingKing) {
 					return false;

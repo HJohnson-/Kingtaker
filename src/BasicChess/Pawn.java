@@ -138,6 +138,7 @@ public class Pawn extends ChessPiece{
 		if(validEnPassant(to)) {
 			Location pieceLocation = new Location(from.getX(), to.getY());
 			Pawn toTake = (Pawn) board.getPiece(pieceLocation);
+			board.placePiece(pieceLocation, new EmptyPiece(board, pieceLocation));
 			boolean wouldPutMeInCheck = super.testIfMoveEndsInCheck(to, from);
 			board.placePiece(pieceLocation, toTake);
 			return wouldPutMeInCheck;

@@ -10,7 +10,7 @@ public class KingtakerMain extends JFrame {
 
     public static void main(String[] args) {
         BasicChess bc = new BasicChess();
-        bc.initializeBoard();
+        bc.game.getBoard().initializeBoard();
 		//System.out.println(bc.board.getPiece(new Location(0,0)).toString());
         bc.drawBoard();
     }

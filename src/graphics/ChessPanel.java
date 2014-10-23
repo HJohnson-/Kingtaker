@@ -38,19 +38,19 @@ public abstract class ChessPanel extends JPanel {
     protected void drawUI(Graphics2D g2) {
         int x = tools.CELL_WIDTH * (board.numCols() + 1);
         int y = tools.CELL_HEIGHT;
-        Color c = board.isWhitesTurn() ? new Color(0, 0, 0) : new Color(255, 255, 255);
+        Color c = board.getController().isWhitesTurn() ? new Color(0, 0, 0) : new Color(255, 255, 255);
         g2.setPaint(c);
         g2.fillRect(x, y, tools.CELL_WIDTH * 2, tools.CELL_HEIGHT);
         g2.setPaint(new Color(255, 255, 255));
-        g2.drawString("Turn: " + board.getCurrentTurn(), x, y + tools.CELL_HEIGHT * 2);
+        g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + tools.CELL_HEIGHT * 2);
 
-        if (board.gameOver()) {
+        if (board.getController().gameOver()) {
             g2.fillRect(tools.CELL_WIDTH, tools.CELL_HEIGHT * 2,
                     tools.CELL_WIDTH * (board.numRows() - 2), tools.CELL_HEIGHT * 4);
             g2.setColor(new Color(255, 0, 0));
             g2.setFont(new Font("Bauhaus", Font.BOLD, 50));
             g2.drawString("Game Over", tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2));
-            g2.drawString(board.getWinner() + " Wins", tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2 + 1));
+            g2.drawString(board.getController().getWinner() + " Wins", tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2 + 1));
         }
     }
 
@@ -79,7 +79,7 @@ public abstract class ChessPanel extends JPanel {
             g2.drawRect(selectedPiece.cords.getX() * 50, selectedPiece.cords.getY() * 50,
                     tools.CELL_WIDTH, tools.CELL_HEIGHT);
 
-            List<Location> moves = board.movesForPiece(selectedPiece, true);
+            List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
             g2.setPaint(new Color(253, 8, 0));
             for (Location l : moves) {
                 g2.drawRect(l.getX() * 50, l.getY() * 50, tools.CELL_WIDTH, tools.CELL_HEIGHT);
@@ -105,7 +105,7 @@ public abstract class ChessPanel extends JPanel {
                     selectedPiece = board.getPiece(l);
                 }
             } else {
-                board.attemptMove(selectedPiece.cords, l);
+                board.getController().attemptMove(selectedPiece.cords, l);
                 selectedPiece = null;
             }
 

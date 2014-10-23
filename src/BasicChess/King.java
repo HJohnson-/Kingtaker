@@ -97,7 +97,7 @@ public class King extends ChessPiece {
 			return false;
 		}
 
-		if(board.isInCheck(this.type)) {
+		if(board.getController().isInCheck(this.type)) {
 			return false;
 		}
 
@@ -133,7 +133,7 @@ public class King extends ChessPiece {
 		} else {
 			if (careAboutCheck) {
 				Location from = cords;
-				boolean takingKing = board.isKing(to);
+				boolean takingKing = board.getController().isKing(to);
 				boolean wouldPutMeInCheck = testIfMoveEndsInCheck(to, from);
 				if (wouldPutMeInCheck && !takingKing) {
 					return false;

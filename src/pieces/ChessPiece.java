@@ -60,7 +60,7 @@ abstract public class ChessPiece {
 		} else {
 			if(careAboutCheck) {
 				Location from = cords;
-				boolean takingKing = board.isKing(to);
+				boolean takingKing = board.getController().isKing(to);
 				boolean wouldPutMeInCheck = testIfMoveEndsInCheck(to, from);
 				if(wouldPutMeInCheck && !takingKing) {
 					return false;
@@ -76,7 +76,7 @@ abstract public class ChessPiece {
 	protected boolean testIfMoveEndsInCheck(Location to, Location from) {
 		ChessPiece onto = board.getPiece(to);
 		doMove(to);
-		boolean wouldPutMeInCheck = board.isInCheck(type == PieceType.WHITE);
+		boolean wouldPutMeInCheck = board.getController().isInCheck(type == PieceType.WHITE);
 		board.placePiece(from, this);
 		board.placePiece(to, onto);
 		return wouldPutMeInCheck;

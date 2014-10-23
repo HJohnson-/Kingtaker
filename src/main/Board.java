@@ -1,6 +1,5 @@
 package main;
 
-import BasicChess.King;
 import pieces.ChessPiece;
 import pieces.EmptyPiece;
 
@@ -11,34 +10,23 @@ import java.util.*;
  */
 abstract public class Board {
 	private pieces.ChessPiece[][] pieces;
-	private boolean isWhitesTurn;
-	private int currentTurn;
-    private String winner;
-    private boolean gameOver;
+	private GameController game;
 
-	public int getCurrentTurn() {
-		return currentTurn;
-	}
-
-    public boolean isWhitesTurn() {
-        return isWhitesTurn;
-    }
-
-    public String getWinner() {
-        return winner;
-    }
-
-    public boolean gameOver() {
-        return gameOver;
-    }
+	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.
+	abstract public boolean initializeBoard();
 
     public Board() {
         pieces = new ChessPiece[8][8];
-		currentTurn = 1;
-        winner = "None";
-        gameOver = false;
+		this.initializeBoard();
     }
 
+	public void setController(GameController game) {
+		this.game = game;
+	}
+
+	public GameController getController() {
+		return game;
+	}
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
 		if(!onBoard(pieceLocation)) {
 			return null;
@@ -59,6 +47,21 @@ abstract public class Board {
 
         return pieceList;
     }
+
+	//Checks if every space between from and to is empty, not including from or to. Works in the 8 directions a Queen
+	//can move.
+	public boolean clearLine(Location from, Location to) {
+		int horizontalMovement = to.getX().compareTo(from.getX());
+		int verticalMovement = to.getY().compareTo(from.getY());
+		for(int i = from.getX() + horizontalMovement, j = from.getY() + verticalMovement;
+			i != to.getX() || j != to.getY();
+			i += horizontalMovement, j+= verticalMovement) {
+			if(getPiece(new Location(i, j)).type != PieceType.EMPTY) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public void movePiece(Location from, Location to) {
 		placePiece(to, getPiece(from));
@@ -106,123 +109,11 @@ abstract public class Board {
 
 	public int numCols() { return pieces[0].length; }
 
-	public Map<ChessPiece, List<Location>> getAllValidMoves() {
-		return getAllValidMoves(true);
-	}
-
-	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean caresAboutCheck) {
-		Map<ChessPiece, List<Location>> allPossibleMoves = new HashMap<ChessPiece, List<Location>>();
-		for(ChessPiece piece : allPieces()) {
-			PieceType testType = piece.type;
-			if(testType != PieceType.EMPTY && (testType == PieceType.WHITE) == isWhitesTurn) {
-				allPossibleMoves.put(piece, movesForPiece(piece, caresAboutCheck));
-			}
-		}
-		return allPossibleMoves;
-	}
 
 
-	public List<Location> movesForPiece(ChessPiece piece, boolean caresAboutCheck) {
-		List<Location> allMoves = piece.allUnblockedMoves();
-        List<Location> validMoves = new LinkedList<Location>();
-        for (Location l : allMoves) {
-            if (piece.isValidMove(l, caresAboutCheck)) {
-                validMoves.add(l);
-            }
-        }
-		return validMoves;
-	}
 
 
-	//Stores the pieces at the square moved to or from, checks the move is valid, attempts the move, If the move would
-	//put the turn player in check, crudely undoes the move. Does not work for En Passant /Castling that would put the
-	//turn player in check. TODO make this use the getAllValidMoves function and not break on weird moves.
-	public boolean attemptMove(Location pieceLocation, Location targetLocation) {
-        if (gameOver) return false;
-		ChessPiece beingMoved = getPiece(pieceLocation);
-		ChessPiece movedOnto = getPiece(targetLocation);
-		if(!beingMoved.isValidMove(targetLocation)) {
-			return false;
-		}
-		if(!turnPlayersPiece(beingMoved)) {
-			return false;
-		}
-		if(beingMoved.executeMove(targetLocation)) {
-            nextPlayersTurn();
-            if (checkMate()) {
-                endGame();
-            }
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-    protected void endGame() {
-        gameOver = true;
-        winner = isWhitesTurn ? "White" : "Black";
-    }
 
-	protected boolean checkMate() {
-		Map<?, List<Location>> moves = getAllValidMoves();
-		for (Map.Entry<?, List<Location>> entry : moves.entrySet()) {
-            if (!entry.getValue().isEmpty()) {
-                return false;
-            }
-		}
-		return true;
-	}
-
-	private void nextPlayersTurn() {
-        currentTurn++;
-		isWhitesTurn = !isWhitesTurn;
-	}
-
-	private boolean turnPlayersPiece(ChessPiece checkedPiece) {
-		return checkedPiece.type == PieceType.WHITE != isWhitesTurn;
-	}
-
-	public boolean isKing(Location checking) {
-		return getPiece(checking) instanceof King;
-	}
-
-	//TODO This. Required to stop players putting themselves in check.
-	public boolean isInCheck(boolean checkingForWhite) {
-		Location kingLocation = findKing(checkingForWhite);
-		for(List<Location> targets : getAllValidMoves(false).values()) {
-			if(targets.contains(kingLocation)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private Location findKing(boolean checkingForWhite) {
-		PieceType type = checkingForWhite ? PieceType.WHITE : PieceType.BLACK;
-		for(ChessPiece piece : allPieces()) {
-			if(piece instanceof King && piece.type == type) {
-				return piece.cords;
-			}
-		}
-		throw new Error("No king on board");
-	}
-
-	public boolean isInCheck(PieceType type) {
-		return isInCheck(type == PieceType.WHITE);
-	}
-
-	//Checks if every space between from and to is empty, not including from or to. Works in the 8 directions a Queen
-	//can move.
-	public boolean clearLine(Location from, Location to) {
-		int horizontalMovement = to.getX().compareTo(from.getX());
-		int verticalMovement = to.getY().compareTo(from.getY());
-		for(int i = from.getX() + horizontalMovement, j = from.getY() + verticalMovement;
-			i != to.getX() || j != to.getY();
-			i += horizontalMovement, j+= verticalMovement) {
-			if(getPiece(new Location(i, j)).type != PieceType.EMPTY) {
-				return false;
-			}
-		}
-		return true;
-	}
 }
+

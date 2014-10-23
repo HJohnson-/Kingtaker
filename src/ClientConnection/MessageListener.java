@@ -13,7 +13,7 @@ import java.net.Socket;
 
 //TODO: make this a singleton
 public class MessageListener implements Runnable {
-    private static final int LISTENER_PORT = 4444;
+    private static final int LISTENER_PORT = 4445;
     private ServerSocket sktListener;
 
     @Override

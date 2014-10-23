@@ -10,18 +10,18 @@ public class RookTest {
 	@Test
 	public void testReturnValue()  {
 		BasicChess chess = new BasicChess();
-		chess.initializeBoard();
-		Rook rook = (Rook)chess.board.getPiece(new Location(7,7));
+		chess.game.getBoard().initializeBoard();
+		Rook rook = (Rook)chess.game.getBoard().getPiece(new Location(7,7));
 
 		assertEquals(5, rook.returnValue());
 
-		rook = (Rook)chess.board.getPiece(new Location(7,0));
+		rook = (Rook)chess.game.getBoard().getPiece(new Location(7,0));
 		assertEquals(5,rook.returnValue());
 
-		rook = (Rook)chess.board.getPiece(new Location(0,7));
+		rook = (Rook)chess.game.getBoard().getPiece(new Location(0,7));
 		assertEquals(5,rook.returnValue());
 
-		rook = (Rook)chess.board.getPiece(new Location(0,0));
+		rook = (Rook)chess.game.getBoard().getPiece(new Location(0,0));
 
 		assertEquals(5, rook.returnValue());
 	}
@@ -29,8 +29,8 @@ public class RookTest {
 	@Test
 	public void testPositiveInvalidTarget() throws Exception {
 		BasicChess chess = new BasicChess();
-		chess.initializeBoard();
-		Rook rook = (Rook) chess.board.getPiece(new Location(7, 7));
+		chess.game.getBoard().initializeBoard();
+		Rook rook = (Rook) chess.game.getBoard().getPiece(new Location(7, 7));
 
 		//rooks can only move horizontally or vertically
 		Location location;
@@ -50,8 +50,8 @@ public class RookTest {
 	@Test
 	public void testNegativeInvalidTarget() throws Exception {
 		BasicChess chess = new BasicChess();
-		chess.initializeBoard();
-		Rook rook = (Rook) chess.board.getPiece(new Location(7, 7));
+		chess.game.getBoard().initializeBoard();
+		Rook rook = (Rook) chess.game.getBoard().getPiece(new Location(7, 7));
 
 		//rooks can horizontally or vertically
 		Location location;
@@ -69,8 +69,8 @@ public class RookTest {
 	@Test
 	public void testPositiveBeingBlocked() throws Exception {
 		BasicChess chess = new BasicChess();
-		chess.initializeBoard();
-		Rook rook = (Rook) chess.board.getPiece(new Location(7, 7));
+		chess.game.getBoard().initializeBoard();
+		Rook rook = (Rook) chess.game.getBoard().getPiece(new Location(7, 7));
 
 
 		//cannot move through its own pieces
@@ -83,10 +83,10 @@ public class RookTest {
 	@Test
 	public void testNegativeBeingBlocked() throws Exception {
 		BasicChess chess = new BasicChess();
-		chess.initializeBoard();
-		Rook rook = (Rook) chess.board.getPiece(new Location(7, 7));
+		chess.game.getBoard().initializeBoard();
+		Rook rook = (Rook) chess.game.getBoard().getPiece(new Location(7, 7));
 
-		chess.board.movePiece(new Location(7,7), new Location(4,7));
+		chess.game.getBoard().movePiece(new Location(7,7), new Location(4,7));
 
 
 		Location to = new Location(5, 7);

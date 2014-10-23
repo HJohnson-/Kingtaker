@@ -43,28 +43,22 @@ public class Bishop extends ChessPiece {
 	}
 
     @Override
-    public List<Location> allUnblockedMoves() {
+    public List<Location> allPieceMoves() {
         List<Location> moves = new LinkedList<Location>();
 
-        for (int x = cords.getX(), y = cords.getY(); inBounds(x, y); x += 1, y += 1) {
+        for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += 1, y += 1) {
             moves.add(new Location(x, y));
         }
-        for (int x = cords.getX(), y = cords.getY(); inBounds(x, y); x += 1, y += -1) {
+        for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += 1, y += -1) {
             moves.add(new Location(x, y));
         }
-        for (int x = cords.getX(), y = cords.getY(); inBounds(x, y); x += -1, y += 1) {
+        for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += -1, y += 1) {
             moves.add(new Location(x, y));
         }
-        for (int x = cords.getX(), y = cords.getY(); inBounds(x, y); x += -1, y += -1) {
+        for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += -1, y += -1) {
             moves.add(new Location(x, y));
         }
 
         return moves;
-    }
-
-    private boolean inBounds(int x, int y) {
-        if (x < 0 || x >= board.numCols()) return false;
-        if (y < 0 || y >= board.numRows()) return false;
-        return true;
     }
 }

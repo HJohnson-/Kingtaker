@@ -94,14 +94,18 @@ abstract public class Board {
 
 	//Returns true if the targetLocation is within the confines of the board.
 	public boolean onBoard(Location targetLocation) {
-		if(targetLocation.getX() < 0 || targetLocation.getY() < 0){
-			return false;
-		}
-		if(targetLocation.getX() >= pieces.length || targetLocation.getY() >= pieces[0].length) {
-			return false;
-		}
-		return true;
+		return onBoard(targetLocation.getX(), targetLocation.getY());
 	}
+
+    public boolean onBoard(int x, int y) {
+        if(x < 0 || y < 0){
+            return false;
+        }
+        if(x >= numCols() || y >= numRows()) {
+            return false;
+        }
+        return true;
+    }
 
 	public int numRows() {
 		return pieces.length;

@@ -45,7 +45,7 @@ public class GameController {
 	}
 
 	public List<Location> movesForPiece(ChessPiece piece, boolean caresAboutCheck) {
-		List<Location> allMoves = piece.allUnblockedMoves();
+		List<Location> allMoves = piece.allPieceMoves();
 		List<Location> validMoves = new LinkedList<Location>();
 		for (Location l : allMoves) {
 			if (piece.isValidMove(l, caresAboutCheck)) {

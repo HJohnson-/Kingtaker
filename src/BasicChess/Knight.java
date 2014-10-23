@@ -39,30 +39,21 @@ public class Knight extends ChessPiece {
 	}
 
     @Override
-	public List<Location> allUnblockedMoves() {
+	public List<Location> allPieceMoves() {
 		List<Location> moves = new LinkedList<Location>();
 
-		int oldx = cords.getX();
-		int oldy = cords.getY();
+        for (int x = -2; x <= 2; x++) {
+            if (x == 0) continue;
+            if (cords.getX() + x < 0) continue;
+            if (cords.getX() + x >= board.numCols()) break;
 
-		Location loc;
-		loc = (new Location(oldx+1, oldy-2));
-		if(board.onBoard(loc)) moves.add(loc);
-		loc = (new Location(oldx+1, oldy+2));
-		if(board.onBoard(loc)) moves.add(loc);
-		loc = (new Location(oldx-1, oldy-2));
-		if(board.onBoard(loc)) moves.add(loc);
-		loc = (new Location(oldx-1, oldy+2));
-		if(board.onBoard(loc)) moves.add(loc);
+            int y = 3 - Math.abs(x);
+            Location l1 = new Location(cords.getX() + x, cords.getY() + y);
+            Location l2 = new Location(cords.getX() + x, cords.getY() - y);
 
-		loc = (new Location(oldx+2, oldy-1));
-		if(board.onBoard(loc)) moves.add(loc);
-		loc = (new Location(oldx+2, oldy+1));
-		if(board.onBoard(loc)) moves.add(loc);
-		loc = (new Location(oldx-2, oldy-1));
-		if(board.onBoard(loc)) moves.add(loc);
-		loc = (new Location(oldx-2, oldy+1));
-		if(board.onBoard(loc)) moves.add(loc);
+            if (board.onBoard(l1)) moves.add(l1);
+            if (board.onBoard(l2)) moves.add(l2);
+        }
 
 		return moves;
 	}

@@ -21,21 +21,8 @@ public class Knight extends ChessPiece {
 	}
 
 	@Override
-	protected boolean beingBlocked(Location to) {
-		return false;
-	}
-
-	@Override
-	protected boolean invalidTarget(Location to) {
-		int horizontalMovement = cords.getX() - to.getX();
-		int verticalMovement = cords.getY() -to.getY();
-
-		if((Math.abs(horizontalMovement) == 1 && Math.abs(verticalMovement) == 2)
-				|| (Math.abs(verticalMovement) == 1 && Math.abs(horizontalMovement) == 2)) {
-			return false;
-		} else {
-			return true;
-		}
+	protected boolean validInState(Location to) {
+		return true;
 	}
 
     @Override

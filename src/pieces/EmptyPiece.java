@@ -19,13 +19,7 @@ public class EmptyPiece extends ChessPiece {
     }
 
 	@Override
-	protected boolean beingBlocked(Location to) {
+	protected boolean validInState(Location to) {
 		return false;
 	}
-
-	@Override
-	protected boolean invalidTarget(Location to) {
-		return false;
-	}
-
 }

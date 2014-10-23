@@ -33,6 +33,7 @@ abstract public class ChessPiece {
 	public boolean executeMove(Location targetLocation) {
 		board.clearSpace(cords);
 		board.placePiece(targetLocation, this);
+		this.lastTurnMovedOn = board.getController().getCurrentTurn();
 		return true;
 	}
 
@@ -40,6 +41,10 @@ abstract public class ChessPiece {
 	private void doMove(Location loc) {
 		board.clearSpace(cords);
 		board.placePiece(loc, this);
+	}
+
+	public boolean isWhite() {
+		return type == PieceType.WHITE;
 	}
 
 	//Returns true if the piece could move to to location on its turn. Doesn't check if
@@ -51,9 +56,7 @@ abstract public class ChessPiece {
 	}
 
     public boolean isValidMove(Location to, boolean careAboutCheck) {
-		if(invalidTarget(to)) {
-			return false;
-		} else if(beingBlocked(to)) {
+		if(!validInState(to)) {
 			return false;
 		} else if(takingOwnPiece(board.getPiece(to))) {
 			return false;
@@ -76,7 +79,7 @@ abstract public class ChessPiece {
 	protected boolean testIfMoveEndsInCheck(Location to, Location from) {
 		ChessPiece onto = board.getPiece(to);
 		doMove(to);
-		boolean wouldPutMeInCheck = board.getController().isInCheck(type == PieceType.WHITE);
+		boolean wouldPutMeInCheck = board.getController().isInCheck(isWhite());
 		board.placePiece(from, this);
 		board.placePiece(to, onto);
 		return wouldPutMeInCheck;
@@ -86,9 +89,7 @@ abstract public class ChessPiece {
 		return type == target.type;
 	}
 
-	abstract protected boolean invalidTarget(Location to);
-
-	abstract protected boolean beingBlocked(Location to);
+	abstract protected boolean validInState(Location to);
 
     public List<Location> allPieceMoves() {
         LinkedList<Location> moves = new LinkedList<Location>();
@@ -103,7 +104,7 @@ abstract public class ChessPiece {
 	abstract public int returnValue();
 
 	public String toString() {
-		return "a " + (type == PieceType.WHITE ? "White " : "Black ") + this.getClass().getCanonicalName() + " at " + cords + "\n";
+		return "a " + (isWhite() ? "White " : "Black ") + this.getClass().getCanonicalName() + " at " + cords + "\n";
 	}
 
 }

@@ -23,9 +23,10 @@ public class King extends ChessPiece {
 		return REALLY_HIGH_NUMBER;
 	}
 
+	/*
 	@Override
 	protected boolean invalidTarget(Location to) {
-		if(isAttemptingCastling(to)) {
+		if(validCastleAttempt(to)) {
 			return false;
 		}
 		int verticalDistance = Math.abs(cords.getY() - to.getY());
@@ -44,6 +45,7 @@ public class King extends ChessPiece {
 		}
 		return (verticalDistance == 0 && horizontalDistance == 0);
 	}
+	*/
 
 
 	/*To castle:
@@ -63,7 +65,7 @@ public class King extends ChessPiece {
 	If a new piece moves in an especially unusual way, the variant might need to override the king piece with something
 	that can check for it and undo a failed castle attempt correctly for the new situations
 	 */
-	private boolean isAttemptingCastling(Location to) {
+	private boolean validCastleAttempt(Location to) {
 		boolean debugS = to.equals(new Location(7,2));
 		int myFirstRank = (this.type == PieceType.WHITE ? board.numCols()-1 : 0);
 		int movementDirection = to.getY().compareTo(cords.getY());
@@ -105,7 +107,7 @@ public class King extends ChessPiece {
 
 	@Override
 	public boolean executeMove(Location to) {
-		if(isAttemptingCastling(to)) {
+		if(validCastleAttempt(to)) {
 			int movementDirection = to.getY().compareTo(cords.getY());
 			int rookY = (movementDirection == 1 ? board.numRows()-1 : 0 );
 			board.movePiece(new Location(cords.getX(), rookY), new Location(cords.getX(), cords.getY()+movementDirection));
@@ -117,9 +119,7 @@ public class King extends ChessPiece {
 
 	@Override
 	public boolean isValidMove(Location to, boolean careAboutCheck) {
-		if (careAboutCheck ? invalidTarget(to) : invalidTargetNoCastle(to)) {
-			return false;
-		} else if (beingBlocked(to)) {
+		if (careAboutCheck ? validInState(to) : validInStateNoCastle(to)) {
 			return false;
 		} else if (takingOwnPiece(board.getPiece(to))) {
 			return false;
@@ -136,9 +136,21 @@ public class King extends ChessPiece {
 		}
 	}
 
+	protected boolean validInStateNoCastle(Location to) {
+		return adjacent(to);
+	}
+
 	@Override
-	protected boolean beingBlocked(Location to) {
-		return false;
+	protected boolean validInState(Location to) {
+		if(validCastleAttempt(to)) {
+			return true;
+		} else {
+			return adjacent(to);
+		}
+	}
+
+	private boolean adjacent(Location to) {
+		return Math.abs(cords.getX() - to.getX()) < 2 && Math.abs(cords.getY() - to.getY()) < 2;
 	}
 
     @Override

@@ -22,18 +22,8 @@ public class Rook extends ChessPiece {
 	}
 
 	@Override
-	public boolean invalidTarget(Location to) {
-		int horizontalMovement = to.getX().compareTo(cords.getX());
-		int verticalMovement = to.getY().compareTo(cords.getY());
-		if(Math.abs(verticalMovement) == Math.abs(horizontalMovement)) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean beingBlocked(Location to) {
-		return !board.clearLine(cords, to);
+	public boolean validInState(Location to) {
+		return board.clearLine(cords, to);
 	}
 
     @Override

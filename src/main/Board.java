@@ -27,6 +27,7 @@ abstract public class Board {
 	public GameController getController() {
 		return game;
 	}
+
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
 		if(!onBoard(pieceLocation)) {
 			return null;
@@ -112,12 +113,6 @@ abstract public class Board {
 	}
 
 	public int numCols() { return pieces[0].length; }
-
-
-
-
-
-
 
 }
 

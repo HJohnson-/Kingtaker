@@ -25,21 +25,8 @@ public class Bishop extends ChessPiece {
 	}
 
 	@Override
-	protected boolean invalidTarget(Location to) {
-		int horizontalMovement = cords.getX().compareTo(to.getX());
-		int verticalMovement = cords.getY().compareTo(to.getY());
-		if(verticalMovement == 0 || 0 == horizontalMovement) {
-			return true;
-		}
-		if(Math.abs(to.getX() - cords.getX()) != Math.abs(to.getY() - cords.getY())) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean beingBlocked(Location to) {
-		return !board.clearLine(cords, to);
+	public boolean validInState(Location to) {
+		return board.clearLine(cords, to);
 	}
 
     @Override

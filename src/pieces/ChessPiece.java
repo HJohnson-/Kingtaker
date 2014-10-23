@@ -90,7 +90,7 @@ abstract public class ChessPiece {
 
 	abstract protected boolean beingBlocked(Location to);
 
-    public List<Location> allUnblockedMoves() {
+    public List<Location> allPieceMoves() {
         LinkedList<Location> moves = new LinkedList<Location>();
         for (int x = 0; x < board.numCols(); x++) {
             for (int y = 0; y < board.numRows(); y++) {

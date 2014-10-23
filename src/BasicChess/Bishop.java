@@ -43,7 +43,7 @@ public class Bishop extends ChessPiece {
 	}
 
     @Override
-    public List<Location> allUnblockedMoves() {
+    public List<Location> allPieceMoves() {
         List<Location> moves = new LinkedList<Location>();
 
         for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += 1, y += 1) {

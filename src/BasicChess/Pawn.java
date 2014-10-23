@@ -148,7 +148,7 @@ public class Pawn extends ChessPiece{
 	}
 
     @Override
-    public List<Location> allUnblockedMoves() {
+    public List<Location> allPieceMoves() {
         LinkedList<Location> moves = new LinkedList<Location>();
         int newX = cords.getX() + movementDirection;
         if (newX >= 0 && newX < board.numCols()) {

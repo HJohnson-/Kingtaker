@@ -142,7 +142,7 @@ public class King extends ChessPiece {
 	}
 
     @Override
-    public List<Location> allUnblockedMoves() {
+    public List<Location> allPieceMoves() {
         List<Location> moves = new LinkedList<Location>();
         for (int i = -1; i <= 1; i++) {
             int newX = cords.getX() + i;

@@ -5,7 +5,6 @@ import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -42,12 +41,12 @@ public class Queen extends ChessPiece {
 	}
 
     @Override
-    public List<Location> allUnblockedMoves() {
+    public List<Location> allPieceMoves() {
         ChessPiece rook = new Rook(board, type, cords);
         ChessPiece bishop = new Bishop(board, type, cords);
 
-        List<Location> moves = rook.allUnblockedMoves();
-        moves.addAll(bishop.allUnblockedMoves());
+        List<Location> moves = rook.allPieceMoves();
+        moves.addAll(bishop.allPieceMoves());
 
         return moves;
     }

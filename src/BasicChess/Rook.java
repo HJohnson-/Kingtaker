@@ -37,7 +37,7 @@ public class Rook extends ChessPiece {
 	}
 
     @Override
-    public List<Location> allUnblockedMoves() {
+    public List<Location> allPieceMoves() {
         List<Location> moves = new LinkedList<Location>();
         for (int x = 0; x < board.numCols(); x++) {
             moves.add(new Location(x, cords.getY()));

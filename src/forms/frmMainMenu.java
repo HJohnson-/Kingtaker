@@ -14,6 +14,8 @@ public class frmMainMenu {
     private JButton btnOnlineMP;
     private JButton btnExit;
 
+    private static JFrame frame = new JFrame("frmMainMenu");
+
     //Form initialisation, specifying actions for form events
     public frmMainMenu() {
         btnSinglePlayer.addActionListener(new ActionListener() {
@@ -44,11 +46,11 @@ public class frmMainMenu {
     }
 
     private void showVariantChooser() {
-        frmVariantChooser frm = new frmVariantChooser();
+        frmVariantChooser frm = new frmVariantChooser(frame);
+        frame.setVisible(false);
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("frmMainMenu");
         frame.setContentPane(new frmMainMenu().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

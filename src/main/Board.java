@@ -90,7 +90,7 @@ abstract public class Board {
 	}
 
 	//Returns true if the targetLocation is within the confines of the board.
-	private boolean onBoard(Location targetLocation) {
+	public boolean onBoard(Location targetLocation) {
 		if(targetLocation.getX() < 0 || targetLocation.getY() < 0){
 			return false;
 		}

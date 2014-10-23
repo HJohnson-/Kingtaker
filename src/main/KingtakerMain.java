@@ -15,20 +15,6 @@ import java.net.UnknownHostException;
 public class KingtakerMain extends JFrame {
 
     public static void main(String[] args) {
-        MessageListener messageListener = new MessageListener();
-        Thread messageListenerThread = new Thread(messageListener);
-        messageListenerThread.start();
-
-        InetAddress ip = null;
-        try {
-            ip = InetAddress.getByName("146.169.53.2");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        OpponentMessageSender opponentMessageSender = new OpponentMessageSender(ip);
-        for (int i = 0; i < 1000; i++) {
-            opponentMessageSender.sendMessage("test " + i);
-        }
 
         BasicChess bc = new BasicChess();
         bc.game.getBoard().initializeBoard();

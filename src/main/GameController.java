@@ -36,8 +36,7 @@ public class GameController {
 	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean caresAboutCheck) {
 		Map<ChessPiece, List<Location>> allPossibleMoves = new HashMap<ChessPiece, List<Location>>();
 		for(ChessPiece piece : board.allPieces()) {
-			PieceType testType = piece.type;
-			if(testType != PieceType.EMPTY && (testType == PieceType.WHITE) == isWhitesTurn) {
+			if(piece.type != PieceType.EMPTY && piece.isWhite() == isWhitesTurn) {
 				allPossibleMoves.put(piece, movesForPiece(piece, caresAboutCheck));
 			}
 		}
@@ -69,10 +68,11 @@ public class GameController {
 			return false;
 		}
 		if(beingMoved.executeMove(targetLocation)) {
-			nextPlayersTurn();
 			if (checkMate()) {
 				endGame();
-			}
+			} else {
+                nextPlayersTurn();
+            }
 			return true;
 		} else {
 			return false;
@@ -81,12 +81,12 @@ public class GameController {
 
 	protected void endGame() {
 		gameOver = true;
-		winner = isWhitesTurn ? "White" : "Black";
+		winner = isWhitesTurn ? "Black" : "White";
 	}
 
 	protected boolean checkMate() {
-		Map<?, List<Location>> moves = getAllValidMoves();
-		for (Map.Entry<?, List<Location>> entry : moves.entrySet()) {
+		Map<ChessPiece, List<Location>> moves = getAllValidMoves();
+		for (Map.Entry<ChessPiece, List<Location>> entry : moves.entrySet()) {
 			if (!entry.getValue().isEmpty()) {
 				return false;
 			}
@@ -104,11 +104,15 @@ public class GameController {
 
 	public boolean isInCheck(boolean checkingForWhite) {
 		Location kingLocation = findKing(checkingForWhite);
+        Boolean oldVal = isWhitesTurn;
+        isWhitesTurn = !checkingForWhite;
 		for(List<Location> targets : getAllValidMoves(false).values()) {
 			if(targets.contains(kingLocation)) {
+                isWhitesTurn = oldVal;
 				return true;
 			}
 		}
+        isWhitesTurn = oldVal;
 		return false;
 	}
 

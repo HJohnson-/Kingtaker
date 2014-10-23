@@ -1,8 +1,7 @@
 package ClientConnection;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
+import java.sql.Connection;
 
 /**
  * Created by daniel on 14/10/20.
@@ -22,8 +21,8 @@ public class ClientRequestSender implements Serializable {
     String requestType = "-1";
     String requestMessage = "Message Missing !!";
     ConnectionToServer connection;
-    ObjectOutputStream outputStream;
-    ObjectInputStream inputStream;
+    private BufferedReader input;
+    private PrintWriter output;
 
     public void send(String requestType, String requestMessage, ConnectionToServer connection) throws Exception {
 
@@ -31,8 +30,12 @@ public class ClientRequestSender implements Serializable {
         this.requestType = requestType;
         this.requestMessage = requestMessage;
         this.connection = connection;
-        this.outputStream = connection.getOutputStream();
-        this.inputStream = connection.getInputStream();
+
+        // set output writer
+        this.output =  new PrintWriter(connection.getSocket().getOutputStream(), true);
+
+        // set input reader
+        this.input = new BufferedReader(new InputStreamReader(connection.getSocket().getInputStream()));
 
         // build up our sending Message
         StringBuilder sb = new StringBuilder();
@@ -42,18 +45,14 @@ public class ClientRequestSender implements Serializable {
         String sendingMessage = sb.toString();
 
         //write to output stream
-        outputStream.writeObject(sendingMessage);
         System.out.println("Sending Message" + sendingMessage);
-
-        // flush
-        outputStream.flush();
-
+        output.write(sendingMessage);
         System.out.println("Message sent");
 
         //Message receive from server response
-        String input = (String) inputStream.readObject();
+        String response = input.readLine();
 
-        System.out.println("Reaction to Server Reply :" + input);
+        System.out.println("Reaction to Server Reply :" + response);
 
     }
 

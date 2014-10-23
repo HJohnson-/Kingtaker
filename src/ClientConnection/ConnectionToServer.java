@@ -9,24 +9,16 @@ import java.net.Socket;
 
 public class ConnectionToServer {
     // ip not set yet
-    private String serverIP = "146.169.46.133";
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
+    private String serverIP = "localhost";
     private Socket socket;
     private int attempt = 0;
     private int serverPort = 4444;
     private int clientPort = 3333;
     private String messageFromServer = "NULL";
     private static final char MESSAGE_DELIMINATOR = ',';
+    private BufferedReader input;
+    private PrintWriter output;
 
-
-    public ObjectInputStream getInputStream() {
-        return input;
-    }
-
-    public ObjectOutputStream getOutputStream() {
-        return output;
-    }
 
     public Socket getSocket() {
         return socket;
@@ -43,15 +35,14 @@ public class ConnectionToServer {
                 System.out.println("Attempting : " + attempt);
 
                 // set up socket which is connecting to the server
-                socket = new Socket();
+                this.socket = new Socket();
                 socket.connect(new InetSocketAddress(serverIP, serverPort), clientPort);
 
                 // set output stream
-                this.output = new ObjectOutputStream(socket.getOutputStream());
-                output.flush();
+                this.output =  new PrintWriter(socket.getOutputStream(), true);
 
                 // set input stream
-                this.input = new ObjectInputStream(socket.getInputStream());
+                this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
                 // testing if socket is null
                 if (socket == null) {

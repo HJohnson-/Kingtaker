@@ -4,7 +4,6 @@ import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
-import pieces.EmptyPiece;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,10 +33,7 @@ public class King extends ChessPiece {
 		if(verticalDistance > 1 || horizontalDistance > 1) {
 			return true;
 		}
-		if(verticalDistance == 0 && horizontalDistance == 0) {
-			return true;
-		}
-		return false;
+		return (verticalDistance == 0 && horizontalDistance == 0);
 	}
 
 	protected boolean invalidTargetNoCastle(Location to) {
@@ -46,10 +42,7 @@ public class King extends ChessPiece {
 		if(verticalDistance > 1 || horizontalDistance > 1) {
 			return true;
 		}
-		if(verticalDistance == 0 && horizontalDistance == 0) {
-			return true;
-		}
-		return false;
+		return (verticalDistance == 0 && horizontalDistance == 0);
 	}
 
 
@@ -151,7 +144,7 @@ public class King extends ChessPiece {
     @Override
     public List<Location> allUnblockedMoves() {
         List<Location> moves = new LinkedList<Location>();
-        for (int i = -1; i <= -1; i++) {
+        for (int i = -1; i <= 1; i++) {
             int newX = cords.getX() + i;
             if (newX < 0 || newX >= board.numCols()) continue;
             for (int j = -1; j <= 1; j++) {

@@ -1,7 +1,7 @@
 package main;
 
 /**
- * Created by rp1012 on 15/10/14.
+ * A type to identify what type of piece is located on a given square on the chess board.
  */
 public enum PieceType {
     WHITE, BLACK, EMPTY

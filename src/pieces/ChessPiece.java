@@ -25,11 +25,12 @@ abstract public class ChessPiece {
 		lastTurnMovedOn = 0;
     }
 
-	//Assumes move is totally valid, doesn't have to check anything, just does the move.
-	//Returns true if nothing goes around throwing errors at it
-	//By default, just puts the piece at the target location and leaves nothing where the piece used to be
-	//Some variant pieces will override that. And the King when it's castling. So will pawns.
-	//Pawns make everything difficult.
+	/**
+	 * Assumes move is valid. Behaviour undefined and can be freely overwritten by a piece.
+	 * @param targetLocation location that represents the move the piece is going to make. Usually the space it will
+	 *                          end up on.
+	 * @return if move was successful.
+	 */
 	public boolean executeMove(Location targetLocation) {
 		board.clearSpace(cords);
 		board.placePiece(targetLocation, this);
@@ -37,7 +38,10 @@ abstract public class ChessPiece {
 		return true;
 	}
 
-	//Like an execute move that stuff doesn't overwrite
+	/**
+	 * same behaviour as executeMove on a generic chess piece, but will not be overwritten by side-effects.
+	 * @param loc where to put a piece
+	 */
 	private void doMove(Location loc) {
 		board.clearSpace(cords);
 		board.placePiece(loc, this);
@@ -47,14 +51,15 @@ abstract public class ChessPiece {
 		return type == PieceType.WHITE;
 	}
 
-	//Returns true if the piece could move to to location on its turn. Doesn't check if
-	//the piece is owned by the turn player. Uses 'testIfMoveEndsInCheck' which executes then un-does the move
-	//and returns if it put the moving player in check.
-
 	public boolean isValidMove(Location to) {
 		return isValidMove(to, true);
 	}
 
+	/**
+	 * @param to Check if a move to this location is valid. What a piece defines as valid is to be defined by the piece.
+	 * @param careAboutCheck  If the function will test on putting its own king in check.
+	 * @return if it's valid.
+	 */
     public boolean isValidMove(Location to, boolean careAboutCheck) {
 		if(!validInState(to)) {
 			return false;
@@ -73,9 +78,12 @@ abstract public class ChessPiece {
 		}
 	}
 
-	//This makes then un-does the move, but makes the assumption that a move only affects the square the piece started
-	//in and moved towards, and affects them in a specific way. Pieces with moves such as Pawn Promotion, En Passant,
-	//and castling will need to override this function or checking validity of moves will alter the board state.
+
+	/**
+	 * @param to position the move is from, which is just cords. Used to un-do the move when cords changes.
+	 * @param from location moving to, which can have any effect depending on the pieces that overwrite this.
+	 * @return if the move puts the turn player in check
+	 */
 	protected boolean testIfMoveEndsInCheck(Location to, Location from) {
 		ChessPiece onto = board.getPiece(to);
 		doMove(to);
@@ -91,8 +99,8 @@ abstract public class ChessPiece {
 
 	abstract protected boolean validInState(Location to);
 
-    /*
-     *  @return A list of all moves this piece could make from this location on an empty board.
+    /**
+     * @return A list of all moves this piece could make from this location on an empty board.
      */
     public List<Location> allPieceMoves() {
         LinkedList<Location> moves = new LinkedList<Location>();
@@ -104,6 +112,9 @@ abstract public class ChessPiece {
         return moves;
     }
 
+	/**
+	 * @return The value of the piece, typically in pawns. Used to evaluate moves for AIs.
+	 */
 	abstract public int returnValue();
 
 	public String toString() {

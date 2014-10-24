@@ -1,7 +1,7 @@
 package main;
 
 /**
- * Created by hj1012 on 15/10/14.
+ * A basic coordinate system for finding a location on a chess board
  */
 public class Location {
 	private int x;

@@ -85,14 +85,6 @@ public class BasicBoard extends Board {
 			}
 		}
 
-		Location emptyLocation;
-		for(int i = 2; i < 6; i++){
-			for(int j = 0; j < 8; j++){
-				emptyLocation = new Location(i,j);
-				this.placePiece(emptyLocation, new EmptyPiece(this, emptyLocation));
-			}
-		}
-
 		return false;
 	}
 }

@@ -19,6 +19,9 @@ abstract public class Board {
 
     public Board() {
         pieces = new ChessPiece[8][8];
+        for (ChessPiece[] row : pieces) {
+            Arrays.fill(row, new EmptyPiece(this, null));
+        }
 		this.initializeBoard();
     }
 

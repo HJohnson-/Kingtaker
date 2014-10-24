@@ -91,6 +91,9 @@ abstract public class ChessPiece {
 
 	abstract protected boolean validInState(Location to);
 
+    /*
+     *  @return A list of all moves this piece could make from this location on an empty board.
+     */
     public List<Location> allPieceMoves() {
         LinkedList<Location> moves = new LinkedList<Location>();
         for (int x = 0; x < board.numCols(); x++) {
@@ -104,7 +107,7 @@ abstract public class ChessPiece {
 	abstract public int returnValue();
 
 	public String toString() {
-		return "a " + (isWhite() ? "White " : "Black ") + this.getClass().getCanonicalName() + " at " + cords + "\n";
+		return "a " + (isWhite() ? "White " : "Black ") + this.getClass().getCanonicalName() + " at " + cords;
 	}
 
 }

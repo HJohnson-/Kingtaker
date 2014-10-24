@@ -33,16 +33,16 @@ public class Bishop extends ChessPiece {
     public List<Location> allPieceMoves() {
         List<Location> moves = new LinkedList<Location>();
 
-        for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += 1, y += 1) {
+        for (int x = cords.getX(), y = cords.getY(); board.onBoard(new Location(x, y)); x += 1, y += 1) {
             moves.add(new Location(x, y));
         }
-        for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += 1, y += -1) {
+        for (int x = cords.getX(), y = cords.getY(); board.onBoard(new Location(x, y)); x += 1, y += -1) {
             moves.add(new Location(x, y));
         }
-        for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += -1, y += 1) {
+        for (int x = cords.getX(), y = cords.getY(); board.onBoard(new Location(x, y)); x += -1, y += 1) {
             moves.add(new Location(x, y));
         }
-        for (int x = cords.getX(), y = cords.getY(); board.onBoard(x, y); x += -1, y += -1) {
+        for (int x = cords.getX(), y = cords.getY(); board.onBoard(new Location(x, y)); x += -1, y += -1) {
             moves.add(new Location(x, y));
         }
 

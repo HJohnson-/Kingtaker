@@ -66,17 +66,23 @@ public abstract class ChessPanel extends JPanel {
 
             if (tools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
 
-            TexturePaint texture = new TexturePaint(tools.imageMap.get(imgName), new Rectangle(0, 0, 50, 50));
+
+            TexturePaint texture;
+            if (p.animation.animating) {
+                texture = new TexturePaint(tools.imageMap.get(imgName),
+                        new Rectangle(p.animation.curCords.getX(), p.animation.curCords.getY(), 50, 50));
+            } else {
+                texture = new TexturePaint(tools.imageMap.get(imgName), new Rectangle(0, 0, 50, 50));
+            }
             g2.setPaint(texture);
-            g2.fillRect(p.cords.getX() * tools.CELL_WIDTH, p.cords.getY() * tools.CELL_HEIGHT,
-                    tools.CELL_WIDTH, tools.CELL_HEIGHT);
+            g2.fillRect(p.animation.curCords.getX(), p.animation.curCords.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT);
         }
 
         if (selectedPiece != null) {
             Stroke oldstroke = g2.getStroke();
             g2.setStroke(new BasicStroke(2));
             g2.setPaint(new Color(143, 198, 222));
-            g2.drawRect(selectedPiece.cords.getX() * 50, selectedPiece.cords.getY() * 50,
+            g2.drawRect(selectedPiece.animation.curCords.getX(), selectedPiece.animation.curCords.getY(),
                     tools.CELL_WIDTH, tools.CELL_HEIGHT);
 
             List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
@@ -108,7 +114,14 @@ public abstract class ChessPanel extends JPanel {
                 }
             } else {
                 if (selectedPiece.allPieceMoves().contains(l)) {
-                    board.getController().attemptMove(selectedPiece.cords, l);
+                    selectedPiece.animation.endCords =
+                            new Location(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT);
+                    selectedPiece.panel = ChessPanel.this;
+                    if (board.getController().attemptMove(selectedPiece.cords, l)) {
+                        Thread t = new Thread(selectedPiece);
+                        selectedPiece = null;
+                        t.start();
+                    }
                 }
                 selectedPiece = null;
             }

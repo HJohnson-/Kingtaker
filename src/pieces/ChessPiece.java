@@ -1,5 +1,5 @@
 package pieces;
-import graphics.AnimationControl;
+import graphics.GraphicsControl;
 import graphics.tools;
 import main.Location;
 import main.PieceType;
@@ -12,15 +12,14 @@ import java.util.List;
 /**
  * Created by rp1012 on 15/10/14.
  */
-abstract public class ChessPiece implements Runnable {
+abstract public class ChessPiece {
 
     protected Board board;
     public String img;
     public PieceType type;
     public Location cords;
 	public int lastTurnMovedOn;
-    public AnimationControl animation;
-    public JPanel panel;
+    public GraphicsControl graphics;
 
     public ChessPiece(Board board, PieceType type, Location cords, String img) {
         this.type = type;
@@ -28,10 +27,9 @@ abstract public class ChessPiece implements Runnable {
         this.cords = cords;
 		this.img = img;
 		lastTurnMovedOn = 0;
-        animation = new AnimationControl();
+
         if (cords != null) {
-            animation.curCords = animation.endCords =
-                    new Location(cords.getX() * tools.CELL_WIDTH, cords.getY() * tools.CELL_HEIGHT);
+            graphics = new GraphicsControl(cords, cords);
         }
     }
 
@@ -130,29 +128,5 @@ abstract public class ChessPiece implements Runnable {
 	public String toString() {
 		return "a " + (isWhite() ? "White " : "Black ") + this.getClass().getCanonicalName() + " at " + cords;
 	}
-
-    @Override
-    public void run() {
-
-        int animationXStep = (animation.endCords.getX() - animation.curCords.getX()) / animation.totalSteps;
-        int animationYStep = (animation.endCords.getY() - animation.curCords.getY()) / animation.totalSteps;
-        animation.animating = true;
-
-        while (!animation.curCords.equals(animation.endCords)) {
-
-            animation.curCords.incrX(animationXStep);
-            animation.curCords.incrY(animationYStep);
-            panel.repaint();
-
-            try {
-                Thread.sleep(animation.animationTime);
-            } catch (InterruptedException e) {
-                System.err.println(e);
-            }
-
-        }
-
-        animation.animating = false;
-    }
 
 }

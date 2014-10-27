@@ -68,21 +68,21 @@ public abstract class ChessPanel extends JPanel {
 
 
             TexturePaint texture;
-            if (p.animation.animating) {
+            if (p.graphics.isAnimating()) {
                 texture = new TexturePaint(tools.imageMap.get(imgName),
-                        new Rectangle(p.animation.curCords.getX(), p.animation.curCords.getY(), 50, 50));
+                        new Rectangle(p.graphics.getX(), p.graphics.getY(), 50, 50));
             } else {
                 texture = new TexturePaint(tools.imageMap.get(imgName), new Rectangle(0, 0, 50, 50));
             }
             g2.setPaint(texture);
-            g2.fillRect(p.animation.curCords.getX(), p.animation.curCords.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT);
+            g2.fillRect(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT);
         }
 
         if (selectedPiece != null) {
             Stroke oldstroke = g2.getStroke();
             g2.setStroke(new BasicStroke(2));
             g2.setPaint(new Color(143, 198, 222));
-            g2.drawRect(selectedPiece.animation.curCords.getX(), selectedPiece.animation.curCords.getY(),
+            g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
                     tools.CELL_WIDTH, tools.CELL_HEIGHT);
 
             List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
@@ -114,11 +114,10 @@ public abstract class ChessPanel extends JPanel {
                 }
             } else {
                 if (selectedPiece.allPieceMoves().contains(l)) {
-                    selectedPiece.animation.endCords =
-                            new Location(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT);
-                    selectedPiece.panel = ChessPanel.this;
+                    selectedPiece.graphics.setGoal(l);
+                    selectedPiece.graphics.givePanel(ChessPanel.this);
                     if (board.getController().attemptMove(selectedPiece.cords, l)) {
-                        Thread t = new Thread(selectedPiece);
+                        Thread t = new Thread(selectedPiece.graphics);
                         selectedPiece = null;
                         t.start();
                     }

@@ -1,21 +1,26 @@
 package pieces;
+import graphics.AnimationControl;
+import graphics.tools;
 import main.Location;
 import main.PieceType;
 import main.Board;
 
+import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by rp1012 on 15/10/14.
  */
-abstract public class ChessPiece {
+abstract public class ChessPiece implements Runnable {
 
     protected Board board;
     public String img;
     public PieceType type;
     public Location cords;
 	public int lastTurnMovedOn;
+    public AnimationControl animation;
+    public JPanel panel;
 
     public ChessPiece(Board board, PieceType type, Location cords, String img) {
         this.type = type;
@@ -23,6 +28,11 @@ abstract public class ChessPiece {
         this.cords = cords;
 		this.img = img;
 		lastTurnMovedOn = 0;
+        animation = new AnimationControl();
+        if (cords != null) {
+            animation.curCords = animation.endCords =
+                    new Location(cords.getX() * tools.CELL_WIDTH, cords.getY() * tools.CELL_HEIGHT);
+        }
     }
 
 	/**
@@ -120,5 +130,29 @@ abstract public class ChessPiece {
 	public String toString() {
 		return "a " + (isWhite() ? "White " : "Black ") + this.getClass().getCanonicalName() + " at " + cords;
 	}
+
+    @Override
+    public void run() {
+
+        int animationXStep = (animation.endCords.getX() - animation.curCords.getX()) / animation.totalSteps;
+        int animationYStep = (animation.endCords.getY() - animation.curCords.getY()) / animation.totalSteps;
+        animation.animating = true;
+
+        while (!animation.curCords.equals(animation.endCords)) {
+
+            animation.curCords.incrX(animationXStep);
+            animation.curCords.incrY(animationYStep);
+            panel.repaint();
+
+            try {
+                Thread.sleep(animation.animationTime);
+            } catch (InterruptedException e) {
+                System.err.println(e);
+            }
+
+        }
+
+        animation.animating = false;
+    }
 
 }

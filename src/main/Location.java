@@ -19,6 +19,14 @@ public class Location {
 		return y;
 	}
 
+    public void incrX(int increment) {
+        this.x += increment;
+    }
+
+    public void incrY(int increment) {
+        this.y += increment;
+    }
+
 	@Override
 	public boolean equals(Object obj) {
 		Location that;

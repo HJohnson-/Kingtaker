@@ -129,7 +129,7 @@ abstract public class Board {
 	}
 
 	/**
-	 * param targetLocation possibly valid location
+	 * @param targetLocation possibly valid location
 	 * @return if the location is valid
 	 */
 	public boolean onBoard(Location targetLocation) {

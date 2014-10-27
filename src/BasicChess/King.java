@@ -142,11 +142,7 @@ public class King extends ChessPiece {
 
 	@Override
 	protected boolean validInState(Location to) {
-		if(validCastleAttempt(to)) {
-			return true;
-		} else {
-			return adjacent(to);
-		}
+		return validCastleAttempt(to) || adjacent(to);
 	}
 
 	private boolean adjacent(Location to) {

@@ -45,10 +45,9 @@ public abstract class ChessPanel extends JPanel {
         g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + tools.CELL_HEIGHT * 2);
 
         if (board.getController().gameOver()) {
-            g2.fillRect(0, 0, tools.CELL_WIDTH * board.numRows(), tools.CELL_HEIGHT * board.numCols());
             g2.setColor(new Color(255, 0, 0));
             g2.setFont(new Font("Bauhaus", Font.BOLD, 50));
-            g2.drawString("Game Over", tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2));
+            g2.drawString("Game Over", tools.CELL_WIDTH, tools.CELL_HEIGHT * board.numRows());
             g2.drawString(board.getController().getWinner() + " Wins",
                     tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2 + 1));
         }

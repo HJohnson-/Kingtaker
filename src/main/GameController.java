@@ -22,6 +22,9 @@ public class GameController {
 		return board;
 	}
 
+	/**
+	 * @param board board
+	 */
 	public GameController(Board board) {
 		currentTurn = 1;
 		this.board = board;
@@ -33,6 +36,10 @@ public class GameController {
 		return getAllValidMoves(true);
 	}
 
+	/**
+	 * @param caresAboutCheck false if we want to get moves that leave the mover in check, useful for seeing if any of those moves take the opposing king
+	 * @return Map of pieces to the locations representing the moves they can attempt
+	 */
 	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean caresAboutCheck) {
 		Map<ChessPiece, List<Location>> allPossibleMoves = new HashMap<ChessPiece, List<Location>>();
 		for(ChessPiece piece : board.allPieces()) {
@@ -43,6 +50,11 @@ public class GameController {
 		return allPossibleMoves;
 	}
 
+	/**
+	 * @param piece a piece to get moves for
+	 * @param caresAboutCheck false if we want to get moves that leave the mover in check
+	 * @return list of locations given piece can move to
+	 */
 	public List<Location> movesForPiece(ChessPiece piece, boolean caresAboutCheck) {
 		List<Location> allMoves = piece.allPieceMoves();
 		List<Location> validMoves = new LinkedList<Location>();
@@ -54,9 +66,11 @@ public class GameController {
 		return validMoves;
 	}
 
-	//Stores the pieces at the square moved to or from, checks the move is valid, attempts the move, If the move would
-	//put the turn player in check, crudely undoes the move. Does not work for En Passant /Castling that would put the
-	//turn player in check.
+	/**
+	 * @param pieceLocation location of the piece you are attempting to move
+	 * @param targetLocation location representing the move
+	 * @return if the move was successful and the game-state modified
+	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation) {
 		if (gameOver) return false;
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
@@ -79,11 +93,17 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * set the game state to over
+	 */
 	protected void endGame() {
 		gameOver = true;
 		winner = isWhitesTurn ? "Black" : "White";
 	}
 
+	/**
+	 * @return true if turn player is in checkmate
+	 */
 	protected boolean checkMate() {
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves();
 		for (Map.Entry<ChessPiece, List<Location>> entry : moves.entrySet()) {
@@ -94,14 +114,26 @@ public class GameController {
 		return true;
 	}
 
+	/**
+	 * @param checkedPiece piece to check
+	 * @return if the piece belongs to the turn player
+	 */
 	private boolean turnPlayersPiece(ChessPiece checkedPiece) {
 		return checkedPiece.type == PieceType.WHITE != isWhitesTurn;
 	}
 
+	/**
+	 * @param checking a location
+	 * @return if there's a king on the location
+	 */
 	public boolean isKing(Location checking) {
 		return board.getPiece(checking) instanceof King;
 	}
 
+	/**
+	 * @param checkingForWhite true if we're checking that White is in check, false if checking for Black
+	 * @return if that player's in check
+	 */
 	public boolean isInCheck(boolean checkingForWhite) {
 		Location kingLocation = findKing(checkingForWhite);
         Boolean oldVal = isWhitesTurn;
@@ -116,6 +148,14 @@ public class GameController {
 		return false;
 	}
 
+	public boolean isInCheck(PieceType type) {
+		return isInCheck(type == PieceType.WHITE);
+	}
+
+	/**
+	 * @param checkingForWhite if we're looking for white's king, otherwise looking for black
+	 * @return the location of a king of that player. Multiple kings not handled
+	 */
 	private Location findKing(boolean checkingForWhite) {
 		PieceType type = checkingForWhite ? PieceType.WHITE : PieceType.BLACK;
 		for(ChessPiece piece : board.allPieces()) {
@@ -126,9 +166,6 @@ public class GameController {
 		throw new Error("No king on board");
 	}
 
-	public boolean isInCheck(PieceType type) {
-		return isInCheck(type == PieceType.WHITE);
-	}
 
 	public int getCurrentTurn() {
 		return currentTurn;
@@ -142,6 +179,9 @@ public class GameController {
 		return winner;
 	}
 
+	/**
+	 * advances the turn,changes the turn player
+	 */
 	private void nextPlayersTurn() {
 		currentTurn++;
 		isWhitesTurn = !isWhitesTurn;

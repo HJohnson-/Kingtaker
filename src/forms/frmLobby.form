@@ -11,7 +11,8 @@
       <splitpane id="48a28">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
+            <minimum-size width="600" height="600"/>
+            <preferred-size width="600" height="600"/>
           </grid>
         </constraints>
         <properties>
@@ -106,6 +107,14 @@
               </splitpane>
             </children>
           </splitpane>
+          <component id="7a4c5" class="javax.swing.JTable" binding="tblLobby">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties>
+              <font size="14"/>
+            </properties>
+          </component>
         </children>
       </splitpane>
     </children>

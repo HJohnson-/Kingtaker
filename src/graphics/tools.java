@@ -21,7 +21,8 @@ public class tools {
     public static final Color BOARD_BLACK = new Color(140, 83, 56);
     public static final Color BOARD_WHITE = new Color(255, 215, 142);
     public static final Color CUR_PIECE = new Color(143, 198, 222);
-    public static final Color CUR_MOVES = new Color(253, 8, 0);
+    public static final Color CUR_MOVES = new Color(8, 253, 0);
+    public static final Color CHECK = new Color(255, 0, 0);
     public static final Color TEXT = new Color(93, 195, 101);
 
     public static final int CELL_WIDTH = 50;

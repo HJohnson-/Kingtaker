@@ -2,6 +2,7 @@ package graphics;
 
 import BasicChess.BasicBoard;
 import BasicChess.BasicChessFrame;
+import BasicChess.King;
 import main.Board;
 import main.Location;
 import main.PieceType;
@@ -96,8 +97,21 @@ public abstract class ChessPanel extends JPanel {
             g2.fillRect(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT);
         }
 
+        g2.setPaint(tools.CHECK);
+        Stroke oldstroke = g2.getStroke();
+        g2.setStroke(new BasicStroke(4));
+
+        if (board.getController().isInCheck(true)) {
+            Location l = board.getController().findKing(true);
+            g2.drawOval(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT, tools.CELL_WIDTH, tools.CELL_HEIGHT);
+        }
+
+        if (board.getController().isInCheck(false)) {
+            Location l = board.getController().findKing(false);
+            g2.drawOval(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT, tools.CELL_WIDTH, tools.CELL_HEIGHT);
+        }
+
         if (selectedPiece != null) {
-            Stroke oldstroke = g2.getStroke();
             g2.setStroke(new BasicStroke(2));
             g2.setPaint(tools.CUR_PIECE);
             g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
@@ -109,9 +123,9 @@ public abstract class ChessPanel extends JPanel {
                 g2.drawRect(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT,
                         tools.CELL_WIDTH, tools.CELL_HEIGHT);
             }
-
-            g2.setStroke(oldstroke);
         }
+
+        g2.setStroke(oldstroke);
 
     }
 

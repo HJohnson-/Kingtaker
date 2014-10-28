@@ -156,7 +156,7 @@ public class GameController {
 	 * @param checkingForWhite if we're looking for white's king, otherwise looking for black
 	 * @return the location of a king of that player. Multiple kings not handled
 	 */
-	private Location findKing(boolean checkingForWhite) {
+	public Location findKing(boolean checkingForWhite) {
 		PieceType type = checkingForWhite ? PieceType.WHITE : PieceType.BLACK;
 		for(ChessPiece piece : board.allPieces()) {
 			if(piece instanceof King && piece.type == type) {

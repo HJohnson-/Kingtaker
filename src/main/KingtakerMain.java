@@ -10,7 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Created by hj1012 on 15/10/14.
+ * Primitive main function for running tests until a menu is added
  */
 public class KingtakerMain extends JFrame {
 

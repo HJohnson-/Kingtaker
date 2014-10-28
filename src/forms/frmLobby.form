@@ -37,7 +37,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="d6888" class="javax.swing.JTextField" binding="txtUsername">
+                  <component id="d6888" class="javax.swing.JTextField" binding="txtUsername" custom-create="true">
                     <constraints>
                       <splitpane position="left"/>
                     </constraints>
@@ -64,14 +64,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="d4ecd" class="javax.swing.JButton" binding="btnLogin">
-                    <constraints>
-                      <splitpane position="left"/>
-                    </constraints>
-                    <properties>
-                      <text value="LOG IN"/>
-                    </properties>
-                  </component>
                   <splitpane id="41d35">
                     <constraints>
                       <splitpane position="right"/>
@@ -99,6 +91,35 @@
                           <horizontalAlignment value="0"/>
                           <horizontalTextPosition value="0"/>
                           <text value="NOT LOGGED IN"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </splitpane>
+                  <splitpane id="906c9">
+                    <constraints>
+                      <splitpane position="left"/>
+                    </constraints>
+                    <properties>
+                      <dividerSize value="0"/>
+                      <orientation value="0"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <component id="78a49" class="javax.swing.JButton" binding="btnLogin">
+                        <constraints>
+                          <splitpane position="left"/>
+                        </constraints>
+                        <properties>
+                          <font/>
+                          <text value="LOG IN"/>
+                        </properties>
+                      </component>
+                      <component id="16ec8" class="javax.swing.JButton" binding="btnRegister">
+                        <constraints>
+                          <splitpane position="right"/>
+                        </constraints>
+                        <properties>
+                          <text value="REGISTER"/>
                         </properties>
                       </component>
                     </children>

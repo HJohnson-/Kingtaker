@@ -38,14 +38,13 @@ public abstract class ChessPanel extends JPanel {
     protected void drawUI(Graphics2D g2) {
         int x = tools.CELL_WIDTH * (board.numCols() + 1);
         int y = tools.CELL_HEIGHT;
-        Color c = board.getController().isWhitesTurn() ? new Color(0, 0, 0) : new Color(255, 255, 255);
+        Color c = board.getController().isWhitesTurn() ? tools.BLACK : tools.WHITE;
         g2.setPaint(c);
         g2.fillRect(x, y, tools.CELL_WIDTH * 2, tools.CELL_HEIGHT);
-        g2.setPaint(new Color(255, 255, 255));
+        g2.setPaint(tools.TEXT);
         g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + tools.CELL_HEIGHT * 2);
 
         if (board.getController().gameOver()) {
-            g2.setColor(new Color(255, 0, 0));
             g2.setFont(new Font("Bauhaus", Font.BOLD, 50));
             g2.drawString("Game Over", tools.CELL_WIDTH, tools.CELL_HEIGHT * board.numRows());
             g2.drawString(board.getController().getWinner() + " Wins",
@@ -69,9 +68,9 @@ public abstract class ChessPanel extends JPanel {
             TexturePaint texture;
             if (p.graphics.isAnimating()) {
                 texture = new TexturePaint(tools.imageMap.get(imgName),
-                        new Rectangle(p.graphics.getX(), p.graphics.getY(), 50, 50));
+                        new Rectangle(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT));
             } else {
-                texture = new TexturePaint(tools.imageMap.get(imgName), new Rectangle(0, 0, 50, 50));
+                texture = new TexturePaint(tools.imageMap.get(imgName), new Rectangle(0, 0, tools.CELL_WIDTH, tools.CELL_HEIGHT));
             }
             g2.setPaint(texture);
             g2.fillRect(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT);
@@ -80,14 +79,15 @@ public abstract class ChessPanel extends JPanel {
         if (selectedPiece != null) {
             Stroke oldstroke = g2.getStroke();
             g2.setStroke(new BasicStroke(2));
-            g2.setPaint(new Color(143, 198, 222));
+            g2.setPaint(tools.CUR_PIECE);
             g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
                     tools.CELL_WIDTH, tools.CELL_HEIGHT);
 
             List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
-            g2.setPaint(new Color(253, 8, 0));
+            g2.setPaint(tools.CUR_MOVES);
             for (Location l : moves) {
-                g2.drawRect(l.getX() * 50, l.getY() * 50, tools.CELL_WIDTH, tools.CELL_HEIGHT);
+                g2.drawRect(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT,
+                        tools.CELL_WIDTH, tools.CELL_HEIGHT);
             }
 
             g2.setStroke(oldstroke);

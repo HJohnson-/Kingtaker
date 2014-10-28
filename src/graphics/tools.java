@@ -14,12 +14,20 @@ import java.util.Map;
  */
 public class tools {
 
+    public static final Color WHITE = new Color(255, 255, 255);
+    public static final Color BLACK = new Color(0, 0, 0);
+    public static final Color BOARD_BLACK = new Color(140, 83, 56);
+    public static final Color BOARD_WHITE = new Color(255, 215, 142);
+    public static final Color CUR_PIECE = new Color(143, 198, 222);
+    public static final Color CUR_MOVES = new Color(253, 8, 0);
+    public static final Color TEXT = new Color(93, 195, 101);
+
     public static final int CELL_WIDTH = 50;
     public static final int CELL_HEIGHT = 50;
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
     public static void drawQuadGrid(Graphics2D g2, int num_rows, int num_cols) {
-        g2.setColor(new Color(140, 83, 56));
+        g2.setColor(BOARD_BLACK);
         for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
             for (int y = 0; y < num_cols * CELL_HEIGHT; y += CELL_HEIGHT * 2) {
                 g2.fillRect(x, y, CELL_WIDTH, CELL_HEIGHT);
@@ -27,7 +35,7 @@ public class tools {
             }
         }
 
-        g2.setColor(new Color(255, 215, 142));
+        g2.setColor(BOARD_WHITE);
         for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
             for (int y = 0; y < num_cols * CELL_HEIGHT; y += CELL_WIDTH * 2) {
                 g2.fillRect(x + CELL_WIDTH, y, CELL_WIDTH, CELL_HEIGHT);

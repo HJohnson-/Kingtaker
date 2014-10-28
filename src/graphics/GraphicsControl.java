@@ -9,11 +9,11 @@ import javax.swing.*;
  */
 public class GraphicsControl implements Runnable {
 
-    private Location curCords, endCords;
-    private boolean animating = false;
-    private JPanel panel;
-    private int totalSteps = 25;
-    private int animationTime = 50;
+    protected Location curCords, endCords;
+    protected boolean animating = false;
+    protected JPanel panel;
+    protected int totalSteps = 25;
+    protected int animationTime = 50;
 
     public GraphicsControl(Location cur, Location end) {
         this.curCords = new Location(cur.getX() * tools.CELL_WIDTH, cur.getY() * tools.CELL_HEIGHT);

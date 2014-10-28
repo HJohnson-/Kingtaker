@@ -119,7 +119,7 @@ public class King extends ChessPiece {
 
 	@Override
 	public boolean isValidMove(Location to, boolean careAboutCheck) {
-		if (careAboutCheck ? validInState(to) : validInStateNoCastle(to)) {
+		if (careAboutCheck ? !validInState(to) : !validInStateNoCastle(to)) {
 			return false;
 		} else if (takingOwnPiece(board.getPiece(to))) {
 			return false;
@@ -142,11 +142,7 @@ public class King extends ChessPiece {
 
 	@Override
 	protected boolean validInState(Location to) {
-		if(validCastleAttempt(to)) {
-			return true;
-		} else {
-			return adjacent(to);
-		}
+		return validCastleAttempt(to) || adjacent(to);
 	}
 
 	private boolean adjacent(Location to) {

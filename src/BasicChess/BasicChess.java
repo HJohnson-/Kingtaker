@@ -1,15 +1,14 @@
 package BasicChess;
 
 import main.*;
-import pieces.ChessPiece;
 
 /**
- * Created by crix9 on 15/10/2014.
+ * The Chess we all know and love.
  */
 public class BasicChess extends ChessVariant {
 
 	public BasicChess(){
-		game = new GameController(new BasicBoard());
+		game = new GameController(new BasicBoard(), "Basic");
 		game.getBoard().setController(game);
 	}
 

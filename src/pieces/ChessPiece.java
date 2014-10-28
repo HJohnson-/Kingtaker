@@ -40,6 +40,7 @@ abstract public class ChessPiece {
 	 * @return if move was successful.
 	 */
 	public boolean executeMove(Location targetLocation) {
+		System.out.println(this.toCode());
 		board.clearSpace(cords);
 		board.placePiece(targetLocation, this);
 		this.lastTurnMovedOn = board.getController().getCurrentTurn();
@@ -133,4 +134,45 @@ abstract public class ChessPiece {
 		return "a " + (isWhite() ? "White " : "Black ") + this.getClass().getCanonicalName() + " at " + cords;
 	}
 
+	abstract public String getName();
+
+	protected String getMisc() {
+		return "";
+	}
+
+	/**
+	 * @return a string from which the piece can be reconstructed, given a board. Form is:
+	 * string begins and ends with a '|'
+	 * fields are separated with a '~'
+	 * fields begin with 'X:' where X is a single character used for human-readability
+	 * fields are, in order:
+	 *  - N, for name such as 'Pawn',
+	 *  - L, for last turn moved on
+	 *  - X, for x coordinate
+	 *  - Y, for y coordinate
+	 *  - T, for type, 'White' or 'Black'
+	 *  - M, for misc. This can contain anything including '~' and is only ended by '|'
+	 */
+	public String toCode() {
+		StringBuilder code = new StringBuilder();
+		code.append("|");
+		code.append("N:" + this.getName());
+		code.append("~");
+		code.append("L:" + this.lastTurnMovedOn);
+		code.append("~");
+		code.append("X:" + cords.getX());
+		code.append("~");
+		code.append("Y:" + cords.getY());
+		code.append("~");
+		code.append("T:" + this.type.string());
+		code.append("~");
+		code.append("M:" + this.getMisc());
+		code.append("|");
+		return code.toString();
+	}
+
+	public void finishGen(int lastMovedOn, String miscFields) {
+		this.lastTurnMovedOn = lastMovedOn;
+		//ignore substring
+	}
 }

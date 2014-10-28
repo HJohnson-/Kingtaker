@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by hj1012 on 23/10/14.
+ * Handles game logic
  */
 public class GameController {
 	private boolean isWhitesTurn;
@@ -17,6 +17,7 @@ public class GameController {
 	private String winner;
 	private boolean gameOver;
 	private Board board;
+	private String gameType;
 
 	public Board getBoard() {
 		return board;
@@ -25,11 +26,12 @@ public class GameController {
 	/**
 	 * @param board board
 	 */
-	public GameController(Board board) {
+	public GameController(Board board, String gameType) {
 		currentTurn = 1;
 		this.board = board;
 		winner = "None";
 		gameOver = false;
+		this.gameType = gameType;
 	}
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves() {
@@ -74,7 +76,6 @@ public class GameController {
 	public boolean attemptMove(Location pieceLocation, Location targetLocation) {
 		if (gameOver) return false;
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
-		ChessPiece movedOnto = board.getPiece(targetLocation);
 		if(!beingMoved.isValidMove(targetLocation)) {
 			return false;
 		}

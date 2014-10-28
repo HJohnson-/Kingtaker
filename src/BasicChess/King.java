@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by hj1012 on 15/10/14.
+ * Default King
  */
 public class King extends ChessPiece {
 
@@ -22,31 +22,6 @@ public class King extends ChessPiece {
 	public int returnValue() {
 		return REALLY_HIGH_NUMBER;
 	}
-
-	/*
-	@Override
-	protected boolean invalidTarget(Location to) {
-		if(validCastleAttempt(to)) {
-			return false;
-		}
-		int verticalDistance = Math.abs(cords.getY() - to.getY());
-		int horizontalDistance = Math.abs(cords.getX() - to.getX());
-		if(verticalDistance > 1 || horizontalDistance > 1) {
-			return true;
-		}
-		return (verticalDistance == 0 && horizontalDistance == 0);
-	}
-
-	protected boolean invalidTargetNoCastle(Location to) {
-		int verticalDistance = Math.abs(cords.getY() - to.getY());
-		int horizontalDistance = Math.abs(cords.getX() - to.getX());
-		if(verticalDistance > 1 || horizontalDistance > 1) {
-			return true;
-		}
-		return (verticalDistance == 0 && horizontalDistance == 0);
-	}
-	*/
-
 
 	/*To castle:
 	- The target space must be two squares from the King
@@ -164,4 +139,9 @@ public class King extends ChessPiece {
 
         return moves;
     }
+
+	@Override
+	public String getName() {
+		return "King";
+	}
 }

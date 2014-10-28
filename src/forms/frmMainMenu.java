@@ -33,7 +33,7 @@ public class frmMainMenu {
         btnOnlineMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                showLobby();
             }
         });
         btnExit.addActionListener(new ActionListener() {
@@ -47,6 +47,11 @@ public class frmMainMenu {
 
     private void showVariantChooser() {
         frmVariantChooser frm = new frmVariantChooser(frame);
+        frame.setVisible(false);
+    }
+
+    private void showLobby() {
+        frmLobby frm = new frmLobby(frame);
         frame.setVisible(false);
     }
 

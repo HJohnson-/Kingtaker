@@ -2,6 +2,7 @@ package graphics;
 
 import main.Board;
 import main.Location;
+import main.Move;
 import main.PieceType;
 import pieces.ChessPiece;
 
@@ -61,6 +62,13 @@ public abstract class ChessPanel extends JPanel {
             g2.drawString("Game Over", tools.CELL_WIDTH, tools.CELL_HEIGHT * board.numRows());
             g2.drawString(board.getController().getWinner() + " Wins",
                     tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2 + 1));
+        }
+
+        int movesY = tools.CELL_HEIGHT * board.numRows() / 2;
+        g2.setFont(new Font("Bauhaus", Font.PLAIN, 10));
+        for (Move move : board.getController().getMoves()) {
+            g2.drawString(move.toString(), tools.CELL_WIDTH * board.numCols() + 10, movesY);
+            movesY += 12;
         }
     }
 

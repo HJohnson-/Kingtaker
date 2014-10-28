@@ -25,8 +25,10 @@ public abstract class ChessPanel extends JPanel {
 
     /**
      * This constructor sets up a listener to handle the user clicking on the screen.
+     * @param board The board which information will be obtained from.
      */
-    protected ChessPanel() {
+    protected ChessPanel(Board board) {
+        this.board = board;
         this.addMouseListener(new HitTestAdapter());
     }
 
@@ -114,10 +116,13 @@ public abstract class ChessPanel extends JPanel {
     }
 
     /**
-     * A function to be extended which each variant will have to implement in order to draw correctly.
+     * This handles drawing the pieces and UI, which all chess variants will need (although it can be overridden).
      * @param g2 This is the graphics object which is being drawn to.
      */
-    protected abstract void doDrawing(Graphics2D g2);
+    protected void doDrawing(Graphics2D g2) {
+        drawPieces(g2);
+        drawUI(g2);
+    }
 
     class HitTestAdapter extends MouseAdapter {
 

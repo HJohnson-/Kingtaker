@@ -14,23 +14,19 @@ public class BasicChessPanel extends ChessPanel {
 
     /**
      * For basic chess, the default constructor will be fine.
-     * @param board The basic chess board, used by the ChessPanel class.
      */
     public BasicChessPanel(Board board) {
-        super();
-        this.board = board;
+        super(board);
     }
 
     /**
-     * This function could potentially be abstracted, it draws a grid of the specified size,
-     * then the pieces, then the UI.
+     * This draws the specified grid, then calls the default doDrawing function.
      * @param g2 This is the graphics object which is being drawn to.
      */
     @Override
     protected void doDrawing(Graphics2D g2) {
         graphics.tools.drawQuadGrid(g2, GRID_WIDTH, GRID_HEIGHT);
-        drawPieces(g2);
-        drawUI(g2);
+        super.doDrawing(g2);
     }
 
 }

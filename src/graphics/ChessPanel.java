@@ -23,10 +23,18 @@ public abstract class ChessPanel extends JPanel {
     protected Board board;
     protected ChessPiece selectedPiece = null;
 
+    /**
+     * This constructor sets up a listener to handle the user clicking on the screen.
+     */
     protected ChessPanel() {
         this.addMouseListener(new HitTestAdapter());
     }
 
+    /**
+     * This is the main JPanel function for drawing the panel, which is extended so that we can tell it to also draw
+     * the chess board.
+     * @param g A graphics object, responsible for handling everything drawn to the screen.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -35,6 +43,11 @@ public abstract class ChessPanel extends JPanel {
         doDrawing(g2);
     }
 
+    /**
+     * This function draws all the UI elements which are not part of the board, such as the current turn and
+     * turn counter.
+     * @param g2 This is the graphics object which is being drawn to.
+     */
     protected void drawUI(Graphics2D g2) {
         int x = tools.CELL_WIDTH * (board.numCols() + 1);
         int y = tools.CELL_HEIGHT;
@@ -52,6 +65,11 @@ public abstract class ChessPanel extends JPanel {
         }
     }
 
+    /**
+     * This function takes all the pieces on the board and draws them onto the board in the correct place.
+     * If a piece is currently selected, it highlights that piece and also all the squares that piece can move to.
+     * @param g2 This is the graphics object which is being drawn to.
+     */
     protected void drawPieces(Graphics2D g2) {
         LinkedList<ChessPiece> pieces = board.allPieces();
 
@@ -95,10 +113,20 @@ public abstract class ChessPanel extends JPanel {
 
     }
 
+    /**
+     * A function to be extended which each variant will have to implement in order to draw correctly.
+     * @param g2 This is the graphics object which is being drawn to.
+     */
     protected abstract void doDrawing(Graphics2D g2);
 
     class HitTestAdapter extends MouseAdapter {
 
+        /**
+         * This function handles what actions are taken when the user clicks on the board.
+         * It has several cases to handle a click off the board, on an invalid move, a valid move, and when there
+         * is not a currently selected piece.
+         * @param e This holds the co-ordinates of where the mouse was clicked.
+         */
         @Override
         public void mousePressed(MouseEvent e) {
             int x = e.getX() / tools.CELL_WIDTH;

@@ -14,6 +14,8 @@ import java.util.Map;
  */
 public class tools {
 
+    //These are all the colours used by the program. The idea is that by declaring them as variables it will be easier
+    //to implement some sort of settings menu.
     public static final Color WHITE = new Color(255, 255, 255);
     public static final Color BLACK = new Color(0, 0, 0);
     public static final Color BOARD_BLACK = new Color(140, 83, 56);
@@ -26,6 +28,12 @@ public class tools {
     public static final int CELL_HEIGHT = 50;
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
+    /**
+     * This will draw a quadrilateral grid onto the screen, of the given size.
+     * @param g2 This is the graphics object to draw the grid onto.
+     * @param num_rows The number of rows to draw.
+     * @param num_cols The number of columns to draw.
+     */
     public static void drawQuadGrid(Graphics2D g2, int num_rows, int num_cols) {
         g2.setColor(BOARD_BLACK);
         for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
@@ -44,6 +52,10 @@ public class tools {
         }
     }
 
+    /**
+     * This is a function to abstract the process of first creating the screen.
+     * @param frame This is a frame object associated with the specific variant.
+     */
     public static void create(final ChessFrame frame) {
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -54,6 +66,10 @@ public class tools {
         });
     }
 
+    /**
+     * This will load all of the images specified into the imageMap, used to draw pieces later.
+     * @param pieces An array of all the pieces which need to be loaded.
+     */
     public static void loadPieces(String[] pieces) {
         for (int i = 0; i < pieces.length; i++) {
             try {

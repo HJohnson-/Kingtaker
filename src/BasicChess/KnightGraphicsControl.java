@@ -12,6 +12,10 @@ public class KnightGraphicsControl extends GraphicsControl {
         super(cur, end);
     }
 
+    /**
+     * Custom animation for knights, this makes them complete their x-direction move before moving in the y-direction.
+     * This gives a more natural look for knight animations, rather than some strange diagonal move.
+     */
     @Override
     public void run() {
         int animationXStep = (endCords.getX() - curCords.getX()) / totalSteps;

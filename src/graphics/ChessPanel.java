@@ -86,13 +86,8 @@ public abstract class ChessPanel extends JPanel {
             if (tools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
 
 
-            TexturePaint texture;
-            if (p.graphics.isAnimating()) {
-                texture = new TexturePaint(tools.imageMap.get(imgName),
-                        new Rectangle(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT));
-            } else {
-                texture = new TexturePaint(tools.imageMap.get(imgName), new Rectangle(0, 0, tools.CELL_WIDTH, tools.CELL_HEIGHT));
-            }
+            TexturePaint texture = new TexturePaint(tools.imageMap.get(imgName),
+                    new Rectangle(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT));
             g2.setPaint(texture);
             g2.fillRect(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT);
         }

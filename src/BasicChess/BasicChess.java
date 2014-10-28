@@ -1,5 +1,6 @@
 package BasicChess;
 
+import graphics.tools;
 import main.*;
 
 /**
@@ -8,8 +9,18 @@ import main.*;
 public class BasicChess extends ChessVariant {
 
 	public BasicChess(){
-		game = new GameController(new BasicBoard(), "Basic");
+		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn"};
+		tools.loadPieces(pieces);
+		game = new GameController(new BasicBoard(), "Basic", new BasicDecoder());
 		game.getBoard().setController(game);
+		game.getBoard().initializeBoard();
+	}
+
+	public BasicChess(GameController game) {
+		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn"};
+		tools.loadPieces(pieces);
+		this.game = game;
+		this.game.getBoard().setController(game);
 	}
 
 	//returns true if there was no errors

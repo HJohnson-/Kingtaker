@@ -21,13 +21,13 @@ abstract public class PieceDecoder {
 
 		startOfValue = nextVal(endOfValue);
 		endOfValue = code.indexOf(delimiter, startOfValue);
-		int lastMovedOn = Integer.getInteger(code.substring(startOfValue, endOfValue));
+		int lastMovedOn = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = nextVal(endOfValue);
 		endOfValue = code.indexOf(delimiter, startOfValue);
-		int x = Integer.getInteger(code.substring(startOfValue, endOfValue));
+		int x = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = nextVal(endOfValue);
 		endOfValue = code.indexOf(delimiter, startOfValue);
-		int y = Integer.getInteger(code.substring(startOfValue, endOfValue));
+		int y = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = nextVal(endOfValue);
 		endOfValue = code.indexOf(delimiter, startOfValue);
 		PieceType type = code.substring(startOfValue, endOfValue).equals("White") ? PieceType.WHITE : PieceType.BLACK;

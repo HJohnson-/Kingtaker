@@ -8,6 +8,10 @@ import graphics.ChessPanel;
  */
 public class BasicChessFrame extends ChessFrame {
 
+    /**
+     * As a basic chess board doesn't have any special requirements, we just call the default constructor with the
+     * given parameters.
+     */
     public BasicChessFrame(String title, int width, int height, BasicBoard board) {
         super(title, width, height, new BasicChessPanel(board));
     }

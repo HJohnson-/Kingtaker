@@ -17,6 +17,7 @@ public class GameController {
 	private String winner;
 	private boolean gameOver;
 	private Board board;
+    private List<Move> moves;
 
 	public Board getBoard() {
 		return board;
@@ -30,6 +31,7 @@ public class GameController {
 		this.board = board;
 		winner = "None";
 		gameOver = false;
+        moves = new LinkedList<Move>();
 	}
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves() {
@@ -86,6 +88,16 @@ public class GameController {
 				endGame();
 			} else {
                 nextPlayersTurn();
+            }
+
+            String col = beingMoved.isWhite() ? "White" : "Black";
+            String otherCol = col.equals("White") ? "Black" : "White";
+
+            if (movedOnto.type != PieceType.EMPTY) {
+                moves.add(new Move(pieceLocation, targetLocation, col + " " + beingMoved.getClass().getSimpleName(),
+                        otherCol + " " + movedOnto.getClass().getSimpleName()));
+            } else {
+                moves.add(new Move(pieceLocation, targetLocation, col + " " + beingMoved.getClass().getSimpleName()));
             }
 			return true;
 		} else {
@@ -190,4 +202,8 @@ public class GameController {
 	public boolean gameOver() {
 		return gameOver;
 	}
+
+    public List<Move> getMoves() {
+        return moves;
+    }
 }

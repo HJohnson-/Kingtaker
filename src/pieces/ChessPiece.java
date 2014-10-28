@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by rp1012 on 15/10/14.
+ * Represents a square on the board: With a chess piece that understands what moves it can make, or as an empty square.
  */
 abstract public class ChessPiece {
 
@@ -97,6 +97,10 @@ abstract public class ChessPiece {
 		return type == target.type;
 	}
 
+	/**
+	 * @param to space to test if the piece can move to
+	 * @return if the move is valid considering other pieces - the piece is not blocked, ect
+	 */
 	abstract protected boolean validInState(Location to);
 
     /**

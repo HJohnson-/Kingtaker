@@ -4,7 +4,7 @@ import main.Location;
 import main.PieceType;
 
 /**
- * Created by rp1012 on 15/10/14.
+ * A null pattern of a ChessPiece that emulates what an empty square can do: Nothing.
  */
 public class EmptyPiece extends ChessPiece {
 

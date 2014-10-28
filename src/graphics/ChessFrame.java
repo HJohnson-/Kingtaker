@@ -5,20 +5,13 @@ import BasicChess.BasicChessPanel;
 import javax.swing.*;
 
 /**
- * Created by rp1012 on 16/10/14.
+ * A basic JFrame implementation, which handles displaying the window on the screen.
  */
 public abstract class ChessFrame extends JFrame {
 
     protected String title = "Basic Chess";
     protected int width = 600, height = 600;
     protected ChessPanel panel = new BasicChessPanel(null);
-
-    /**
-     * Sets up the chess frame with default parameters.
-     */
-    public ChessFrame() {
-        initUI();
-    }
 
     /**
      * Sets up all the parameters of the ChessFrame.
@@ -40,7 +33,7 @@ public abstract class ChessFrame extends JFrame {
      */
     protected void initUI() {
         setTitle(title);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         add(panel);
 

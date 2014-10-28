@@ -1,8 +1,5 @@
 package graphics;
 
-import BasicChess.BasicBoard;
-import BasicChess.BasicChessFrame;
-import BasicChess.King;
 import main.Board;
 import main.Location;
 import main.PieceType;
@@ -12,12 +9,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by rp1012 on 15/10/14.
+ * An abstract JPanel extension, which contains lots of graphics tools which are identical across variants.
  */
 public abstract class ChessPanel extends JPanel {
 
@@ -76,9 +72,7 @@ public abstract class ChessPanel extends JPanel {
     protected void drawPieces(Graphics2D g2) {
         LinkedList<ChessPiece> pieces = board.allPieces();
 
-        Iterator<ChessPiece> i = pieces.iterator();
-        while (i.hasNext()) {
-            ChessPiece p = i.next();
+        for (ChessPiece p : pieces) {
 
             String imgName = p.img;
             if (p.type == PieceType.BLACK) imgName += "Black";

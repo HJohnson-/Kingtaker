@@ -4,7 +4,7 @@ import graphics.GraphicsControl;
 import main.Location;
 
 /**
- * Created by rp1012 on 28/10/14.
+ * Custom animation for knights, so they look better while moving.
  */
 public class KnightGraphicsControl extends GraphicsControl {
 
@@ -28,7 +28,7 @@ public class KnightGraphicsControl extends GraphicsControl {
             try {
                 Thread.sleep(animationTime);
             } catch (InterruptedException e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
         }
 
@@ -38,7 +38,7 @@ public class KnightGraphicsControl extends GraphicsControl {
             try {
                 Thread.sleep(animationTime);
             } catch (InterruptedException e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
         }
 

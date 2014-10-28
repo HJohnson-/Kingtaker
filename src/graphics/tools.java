@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by rp1012 on 15/10/14.
+ * A collection of various static graphics tools, which are re-used in multiple scenarios.
  */
 public class tools {
 
@@ -72,12 +72,12 @@ public class tools {
      * @param pieces An array of all the pieces which need to be loaded.
      */
     public static void loadPieces(String[] pieces) {
-        for (int i = 0; i < pieces.length; i++) {
+        for (String name : pieces) {
             try {
-                imageMap.put(pieces[i], ImageIO.read(new File("media/" + pieces[i] + ".png")));
-                imageMap.put(pieces[i] + "Black", ImageIO.read(new File("media/" + pieces[i] + "Black.png")));
+                imageMap.put(name, ImageIO.read(new File("media/" + name + ".png")));
+                imageMap.put(name + "Black", ImageIO.read(new File("media/" + name + "Black.png")));
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
                 System.exit(2);
             }
         }

@@ -5,7 +5,7 @@ import main.Location;
 import javax.swing.*;
 
 /**
- * Created by Rob on 26/10/2014.
+ * Handles the animation and display of chess pieces, rather than having this in the ChessPiece class.
  */
 public class GraphicsControl implements Runnable {
 
@@ -50,10 +50,6 @@ public class GraphicsControl implements Runnable {
         endCords = new Location(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT);
     }
 
-    public boolean isAnimating() {
-        return animating;
-    }
-
     /**
      * A default animator for pieces, which makes them move in a straight line (possibly diagonal) from their start
      * position to their end position. It will take totalSteps * animationTime milliseconds to complete the animation.
@@ -74,7 +70,7 @@ public class GraphicsControl implements Runnable {
             try {
                 Thread.sleep(animationTime);
             } catch (InterruptedException e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
 
         }

@@ -1,10 +1,11 @@
 package pawnPromotion;
 
 import graphics.GraphicsControl;
-import main.PieceType;
 import pieces.ChessPiece;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -13,16 +14,20 @@ import javax.swing.*;
 /**
  * Created by daniel on 14/10/28.
  */
+
 public class pawnPromotion implements  Runnable{
 
     private ChessPiece promotedPiece;
+    private ChessPiece pawn;
 
-    public boolean promote(ChessPiece pawn, PieceType promoteType, String promoteImg) {
+
+    public  pawnPromotion (ChessPiece pawn){
+        this.pawn = pawn;
+    }
+
+    public void promote(ChessPiece pawn, String promoteName) {
 
         this.promotedPiece = pawn;
-
-        promotedPiece.type = promoteType;
-        promotedPiece.img = promoteImg;
 
 
         promotedPiece.board.clearSpace(promotedPiece.cords);
@@ -30,10 +35,10 @@ public class pawnPromotion implements  Runnable{
 
         promotedPiece.graphics = new GraphicsControl(promotedPiece.cords, promotedPiece.cords);
 
-        return true;
     }
 
 
+    //   A board GUI for choosing a promotion piece
 
         public  void addComponentsToPane(Container pane) {
             pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
@@ -43,41 +48,55 @@ public class pawnPromotion implements  Runnable{
             addAButton("knight", pane);
         }
 
-        private  void addAButton(String image, Container container) {
+        private  void addAButton(final String name, Container container) {
+            // new button and set size
             JButton button = new JButton();
             button.setPreferredSize(new Dimension(150, 150));
 
+            // load button icon image
             try {
-                Image buttonImg = ImageIO.read(new File("media/" + image + "Black.png"));
+                Image buttonImg = ImageIO.read(new File("media/" + name + "Black.png"));
                 button.setIcon(new ImageIcon(buttonImg));
             } catch (IOException ex) {
             }
-            System.out.println(
-                    "Loading button image failed!!!!!!!!!!!!!!!!!!!!!s");
+
+            // set button alignment
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            // set button response
+            button.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    promote(pawn,name);
+                System.out.println("pawn :" + pawn + "     " + name);
+                }
+            });
+
+            // add button to container
             container.add(button);
         }
 
-        /**
-         * Create the GUI and show it.  For thread safety,
-         * this method should be invoked from the
-         * event-dispatching thread.
-         */
+
+
+    // create the frame GUI to contain the buttons
+
         private void createAndShowGUI() {
-            //Create and set up the window.
+            //Create and set up the window
             JFrame frame = new JFrame(" Pawn Promotion ");
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 
-            //Set up the content pane.
+            //Set up the content pane
             addComponentsToPane(frame.getContentPane());
 
             //Set JFrame Size
             frame.setSize(1000,1000);
 
+            // set Frame Location relative
             frame.setLocationRelativeTo(null);
 
-            //Display the window.
+            //Display the window
             frame.pack();
             frame.setVisible(true);
         }

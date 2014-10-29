@@ -3,6 +3,7 @@ package graphics;
 import BasicChess.BasicChessPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * A basic JFrame implementation, which handles displaying the window on the screen.
@@ -37,7 +38,8 @@ public abstract class ChessFrame extends JFrame {
 
         add(panel);
 
-        setSize(width, height);
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         setLocationRelativeTo(null);
     }
 

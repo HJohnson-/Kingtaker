@@ -1,5 +1,6 @@
 package graphics;
 
+import main.Board;
 import main.Location;
 
 import javax.swing.*;
@@ -21,7 +22,8 @@ public class GraphicsControl implements Runnable {
      * @param end The position the piece will be in at the end of the animation. NB this will equal current piece
      *            when a piece is first created or when a piece is not moving.
      */
-    public GraphicsControl(Location cur, Location end) {
+    public GraphicsControl(Location cur, Location end, Board board) {
+        tools.recalculateCellSize(board.numRows(), board.numCols());
         this.curCords = new Location(cur.getX() * tools.CELL_WIDTH, cur.getY() * tools.CELL_HEIGHT);
         this.endCords = new Location(end.getX() * tools.CELL_WIDTH, end.getY() * tools.CELL_HEIGHT);
     }

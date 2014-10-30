@@ -41,7 +41,7 @@ public class ServerMessageSender {
                 socket.close();
                 return response;
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
         return response;

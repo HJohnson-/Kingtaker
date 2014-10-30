@@ -37,7 +37,7 @@ public class OpponentMessageSender {
                 socket.close();
                 return true;
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
         return false;

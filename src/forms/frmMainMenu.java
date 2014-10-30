@@ -1,5 +1,7 @@
 package forms;
 
+import networking.GameLobby;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,7 +53,7 @@ public class frmMainMenu {
     }
 
     private void showLobby() {
-        frmLobby frm = new frmLobby(frame);
+        GameLobby lobby = new GameLobby(frame);
         frame.setVisible(false);
     }
 

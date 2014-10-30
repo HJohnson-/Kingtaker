@@ -1,6 +1,7 @@
 package networking;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Created by jc4512 on 29/10/14.
@@ -11,8 +12,12 @@ public class RemoteGame {
     public int hostRating;
     public int variantId;
 
-    public RemoteGame(InetAddress ip, String hostUsername, int hostRating, int variantId) {
-        this.ip = ip;
+    public RemoteGame(String ipString, String hostUsername, int hostRating, int variantId) {
+        try {
+            this.ip = InetAddress.getByName(ipString);
+        } catch (UnknownHostException e) {
+        }
+
         this.hostUsername = hostUsername;
         this.hostRating = hostRating;
         this.variantId = variantId;

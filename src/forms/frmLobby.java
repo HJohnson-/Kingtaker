@@ -1,9 +1,11 @@
 package forms;
 
 import networking.GameLobby;
+import networking.RemoteGame;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.List;
 
 /**
  * Created by jc4512 on 28/10/14.
@@ -74,6 +76,10 @@ public class frmLobby {
 
     private boolean isAllowableUsernameField(String username) {
         return username.length() > 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
+    }
+
+    public void displayOpenGames(List<RemoteGame> list) {
+
     }
 
     private void createUIComponents() {

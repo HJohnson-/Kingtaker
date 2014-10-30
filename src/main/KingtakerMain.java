@@ -2,12 +2,6 @@ package main;
 
 import javax.swing.*;
 import BasicChess.BasicChess;
-import ClientConnection.MessageListener;
-import ClientConnection.OpponentMessageSender;
-
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * Primitive main function for running tests until a menu is added

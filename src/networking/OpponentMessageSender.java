@@ -1,11 +1,10 @@
-package ClientConnection;
+package networking;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 
 /**
  * Created by jc4512 on 23/10/14.

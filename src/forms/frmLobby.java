@@ -1,5 +1,7 @@
 package forms;
 
+import networking.GameLobby;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -21,6 +23,9 @@ public class frmLobby {
 
     private final String TXT_USERNAME_SUGGESTION_TEXT = "username";
     private final String TXT_PASSWORD_SUGGESTION_TEXT = "password";
+
+    private GameLobby gameLobby;
+
 
     public frmLobby(final JFrame parentFrame) {
         this.parentFrame = parentFrame;
@@ -48,7 +53,7 @@ public class frmLobby {
             }
             @Override
             public void focusLost(FocusEvent e) {
-                if (!isAllowableUsername(txtUsername.getText())) {
+                if (!isAllowableUsernameField(txtUsername.getText())) {
                     txtUsername.setText(TXT_USERNAME_SUGGESTION_TEXT);
                 }
             }
@@ -59,7 +64,7 @@ public class frmLobby {
                 txtPassword.setText("");
             }
             public void focusLost(FocusEvent e) {
-                if (!isAllowableUsername(txtUsername.getText())) {
+                if (!isAllowableUsernameField(txtUsername.getText())) {
                     txtPassword.setText(TXT_PASSWORD_SUGGESTION_TEXT);
                 }
             }
@@ -67,8 +72,7 @@ public class frmLobby {
 
     }
 
-    //First tier
-    private boolean isAllowableUsername(String username) {
+    private boolean isAllowableUsernameField(String username) {
         return username.length() > 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
     }
 

@@ -13,6 +13,7 @@ public abstract class ChessFrame extends JFrame {
     protected String title = "Basic Chess";
     protected int width = 600, height = 600;
     protected ChessPanel panel = new BasicChessPanel(null);
+    private boolean fullscreen = false;
 
     /**
      * Sets up all the parameters of the ChessFrame.
@@ -38,8 +39,14 @@ public abstract class ChessFrame extends JFrame {
 
         add(panel);
 
-        setExtendedState(Frame.MAXIMIZED_BOTH);
-        setUndecorated(true);
+        if (fullscreen) {
+            setExtendedState(Frame.MAXIMIZED_BOTH);
+            setUndecorated(true);
+        } else {
+            Dimension minimumDimensions = new Dimension(width, height);
+            setSize(minimumDimensions);
+            setMinimumSize(minimumDimensions);
+        }
         setLocationRelativeTo(null);
     }
 

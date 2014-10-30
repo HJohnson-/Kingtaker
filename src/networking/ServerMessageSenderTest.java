@@ -1,6 +1,8 @@
 package networking;
 
 import junit.framework.TestCase;
+import networking.NetworkingCodes.ClientCommandCode;
+import networking.NetworkingCodes.ResponseCode;
 
 public class ServerMessageSenderTest extends TestCase {
 
@@ -10,13 +12,13 @@ public class ServerMessageSenderTest extends TestCase {
         ServerMessageSender sms = new ServerMessageSender();
         String response = sms.sendMessage(ClientCommandCode.AUTHENTICATE_USER + "," +
                 "***TESTUSER***" + "," + 0, true);
-        assertEquals(response, "0");
+        assertEquals(ResponseCode.OK + ",2000",response);
     }
     public void testSendMessage2() throws Exception {
         ServerMessageSender sms = new ServerMessageSender();
         String response = sms.sendMessage(ClientCommandCode.AUTHENTICATE_USER + "," +
                 "***NOTATESTUSER***" + "," + 0, true);
-        assertEquals(response, "4");
+        assertEquals(ResponseCode.BAD_LOGIN + "", response);
     }
     public void testSendMessageNoResponse() throws Exception {
         ServerMessageSender sms = new ServerMessageSender();

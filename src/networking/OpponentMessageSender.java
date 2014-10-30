@@ -31,7 +31,7 @@ public class OpponentMessageSender {
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
                 clientWriter.writeBytes(msg);
-                System.out.println("[localhost] sent to [" + socket.getInetAddress().getAddress() + "]: " + msg);
+                System.out.println("[localhost] sent to [" + socket.getInetAddress().getHostAddress() + "]: " + msg);
 
                 clientWriter.close();
                 socket.close();

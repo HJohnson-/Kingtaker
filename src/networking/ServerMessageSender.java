@@ -27,8 +27,8 @@ public class ServerMessageSender {
                 socket.connect(new InetSocketAddress(InetAddress.getByName(IP), PORT), TIMEOUT_MS);
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                clientWriter.writeBytes(msg);
-                System.out.println("[localhost] sent to [" + socket.getInetAddress().getAddress() + "]: " + msg);
+                clientWriter.writeBytes(msg + "\n");
+                System.out.println("[localhost] sent to [" + socket.getInetAddress().getHostAddress() + "]: " + msg);
 
                 if (waitForResponse) {
                     BufferedReader clientReader =

@@ -27,6 +27,8 @@ public class tools {
 
     public static int CELL_WIDTH = 50;
     public static int CELL_HEIGHT = 50;
+    public static int WINDOW_WIDTH = 700;
+    public static int WINDOW_HEIGHT = 600;
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
     /**
@@ -60,14 +62,11 @@ public class tools {
      * @param num_cols The number of columns that the board needs to have.
      */
     public static void recalculateCellSize(int num_rows, int num_cols) {
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        int width = (int) Math.floor(tk.getScreenSize().getWidth());
-        int height = (int) Math.floor(tk.getScreenSize().getHeight());
-        if (height < width) {
-            CELL_HEIGHT = (int) Math.floor((height / num_rows) / 25) * 25;
+        if (WINDOW_HEIGHT < WINDOW_WIDTH) {
+            CELL_HEIGHT = (int) Math.floor((WINDOW_HEIGHT / num_rows) / 25) * 25;
             CELL_WIDTH = CELL_HEIGHT;
         } else {
-            CELL_WIDTH = (int) Math.floor((width / num_cols) / 25) * 25;
+            CELL_WIDTH = (int) Math.floor((WINDOW_WIDTH / num_cols) / 25) * 25;
             CELL_HEIGHT = CELL_WIDTH;
         }
     }

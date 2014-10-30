@@ -11,7 +11,7 @@ import java.awt.*;
 public abstract class ChessFrame extends JFrame {
 
     protected String title = "Basic Chess";
-    protected int width = 600, height = 600;
+    protected int width = 700, height = 620;
     protected ChessPanel panel = new BasicChessPanel(null);
     private boolean fullscreen = false;
 
@@ -38,6 +38,9 @@ public abstract class ChessFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         add(panel);
+
+        tools.WINDOW_WIDTH = width;
+        tools.WINDOW_HEIGHT = height;
 
         if (fullscreen) {
             setExtendedState(Frame.MAXIMIZED_BOTH);

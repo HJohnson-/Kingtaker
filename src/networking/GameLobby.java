@@ -16,6 +16,8 @@ import static networking.NetworkingUtils.checkInetAddressIsValid;
  */
 public class GameLobby {
     private List<RemoteGame> games;
+    private LocalOpenGame localOpenGame;
+
     private GameLobbyFetcher gameLobbyFetcher;
     private Thread fetcherThread;
 
@@ -48,6 +50,11 @@ public class GameLobby {
                 games.add(remoteGame);
             }
         }
+    }
+
+    public boolean userLoggedIn() {
+        //TODO user accounts
+        return false;
     }
 
     public void close() {

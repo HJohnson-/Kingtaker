@@ -80,7 +80,9 @@ public class frmLobby {
                 if (gameLobby.userLoggedIn()) {
                     //TODO Open frmVariationPicker as dialog
                     //somehow this has to talk back to gameLobby.createGame()
+
                 }
+                tblLobbyModel.addRow(new Object[]{"Capablanca","jc4512",2003});
             }
         });
     }
@@ -105,7 +107,13 @@ public class frmLobby {
 
 
         tblLobbyModel = new DefaultTableModel(null, new String[]{"Variant", "User", "ELO Rating"});
-        tblLobby = new JTable(tblLobbyModel);
+        tblLobby = new JTable(tblLobbyModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            };
+        };
+        tblLobby.setRowHeight(30);
     }
 
 

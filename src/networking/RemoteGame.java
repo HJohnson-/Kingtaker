@@ -16,6 +16,7 @@ public class RemoteGame {
         try {
             this.ip = InetAddress.getByName(ipString);
         } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
 
         this.hostUsername = hostUsername;

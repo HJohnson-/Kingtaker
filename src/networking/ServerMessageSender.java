@@ -15,6 +15,7 @@ public class ServerMessageSender {
     private final String IP = "localhost";
     private final int PORT = 4444;
     private final int TIMEOUT_MS = 10000;
+    private final int RETRY_WAIT_MS = 5000;
     private Socket socket = new Socket();
 
     //Send message to server and if flag is set, await a response.
@@ -34,6 +35,7 @@ public class ServerMessageSender {
                     BufferedReader clientReader =
                             new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     response = clientReader.readLine();
+                    System.out.println("[" + socket.getInetAddress().getHostAddress() + "] response: " + response);
                     clientReader.close();
                 }
 
@@ -42,6 +44,7 @@ public class ServerMessageSender {
                 return response;
             } catch (IOException e) {
                 System.out.println(e.getMessage());
+                try {Thread.sleep(RETRY_WAIT_MS);} catch (InterruptedException e1) {}
             }
         }
         return response;

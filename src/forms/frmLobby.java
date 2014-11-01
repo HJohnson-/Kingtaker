@@ -26,10 +26,7 @@ public class frmLobby {
     private final String TXT_USERNAME_SUGGESTION_TEXT = "username";
     private final String TXT_PASSWORD_SUGGESTION_TEXT = "password";
 
-    private GameLobby gameLobby;
-
-
-    public frmLobby(final JFrame parentFrame) {
+    public frmLobby(final JFrame parentFrame, final GameLobby gameLobby) {
         this.parentFrame = parentFrame;
 
         final JFrame frame = new JFrame("frmLobby");
@@ -37,15 +34,15 @@ public class frmLobby {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setLocation(parentFrame.getLocation());
         panel.grabFocus();
 
         //Called when the lobby form is closed - reopens last form if hidden
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                //TODO: remove any open games
-
                 parentFrame.setVisible(true);
+                gameLobby.close();
             }
         });
         txtUsername.addFocusListener(new FocusAdapter() {
@@ -88,4 +85,6 @@ public class frmLobby {
         txtPassword = new JPasswordField();
         txtPassword.setText(TXT_PASSWORD_SUGGESTION_TEXT);
     }
+
+
 }

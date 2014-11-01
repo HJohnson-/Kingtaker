@@ -27,7 +27,7 @@ public class GameLobby {
         fetcherThread = new Thread(gameLobbyFetcher);
         fetcherThread.start();
 
-        frm = new frmLobby(parentFrame);
+        frm = new frmLobby(parentFrame, this);
     }
 
     private void parseRemoteGameList(String list) {
@@ -50,6 +50,11 @@ public class GameLobby {
         }
     }
 
+    public void close() {
+        fetcherThread.interrupt();
+        //TODO: remove any open games
+    }
+
     private class GameLobbyFetcher implements Runnable {
         private final long REFRESH_MS = 10000;
         @Override
@@ -62,7 +67,7 @@ public class GameLobby {
             while (true) {
                 String response = sms.sendMessage(
                         ClientCommandCode.GET_GAME_LIST + "", true);
-                if (response.startsWith(ResponseCode.OK + ",")) {
+                if (response != null && response.startsWith(ResponseCode.OK + ",")) {
                     parseRemoteGameList(response.substring(2));
                     frm.displayOpenGames(games);
                 }

@@ -26,6 +26,7 @@ public class frmVariantChooser {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setLocation(parentFrame.getLocation());
 
         //Called when the variation picker form is closed - reopens last form if hidden
         frame.addWindowListener(new WindowAdapter() {

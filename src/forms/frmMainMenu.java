@@ -3,8 +3,7 @@ package forms;
 import networking.GameLobby;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * Created by jc4512 on 15/10/14.
@@ -20,16 +19,24 @@ public class frmMainMenu {
 
     //Form initialisation, specifying actions for form events
     public frmMainMenu() {
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                super.windowActivated(e);
+                toggleButtonsEnabled(!(frmVariantChooser.isVisible() || GameLobby.isOpen()));
+            }
+        });
+        
         btnSinglePlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                showVariantChooser();
+                beginLocalSP();
             }
         });
         btnLocalMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                showVariantChooser();
+                beginLocalMP();
             }
         });
         btnOnlineMP.addActionListener(new ActionListener() {
@@ -44,17 +51,35 @@ public class frmMainMenu {
                 System.exit(0);
             }
         });
-
-    }
-
-    private void showVariantChooser() {
-        frmVariantChooser frm = new frmVariantChooser(frame);
-        frame.setVisible(false);
+        panel1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                toggleButtonsEnabled(!(frmVariantChooser.isVisible() || GameLobby.isOpen()));
+            }
+        });
     }
 
     private void showLobby() {
-        GameLobby lobby = new GameLobby(frame);
-        frame.setVisible(false);
+        toggleButtonsEnabled(false);
+        GameLobby.showLobby();
+    }
+
+    private void beginLocalMP() {
+        toggleButtonsEnabled(false);
+        frmVariantChooser.showInstance();
+    }
+
+    private void beginLocalSP() {
+        toggleButtonsEnabled(false);
+        frmVariantChooser.showInstance();
+    }
+
+    private void toggleButtonsEnabled(boolean enabled) {
+        btnExit.setEnabled(enabled);
+        btnLocalMP.setEnabled(enabled);
+        btnOnlineMP.setEnabled(enabled);
+        btnSinglePlayer.setEnabled(enabled);
     }
 
     public static void main(String[] args) {

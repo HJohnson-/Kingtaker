@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class frmLobby {
 
+    private final JFrame frame = new JFrame("frmLobby");
     private JPanel panel;
     private JTextField txtUsername;
     private JPasswordField txtPassword;
@@ -24,29 +25,31 @@ public class frmLobby {
     private JButton btnRegister;
     private JButton btnCreateGame;
 
-    private JFrame parentFrame;
-
     private final String TXT_USERNAME_SUGGESTION_TEXT = "username";
     private final String TXT_PASSWORD_SUGGESTION_TEXT = "password";
 
     private DefaultTableModel tblLobbyModel;
 
-    public frmLobby(final JFrame parentFrame, final GameLobby gameLobby) {
-        this.parentFrame = parentFrame;
+    private static frmLobby instance;
 
-        final JFrame frame = new JFrame("frmLobby");
+    public static void showInstance(final GameLobby gameLobby) {
+        if (instance == null) {
+            instance = new frmLobby(gameLobby);
+        } else {
+            instance.displayForm();
+        }
+    }
+
+    private frmLobby(final GameLobby gameLobby) {
         frame.setContentPane(panel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
-        frame.setVisible(true);
-        frame.setLocation(parentFrame.getLocation());
-        panel.grabFocus();
+        displayForm();
 
         //Called when the lobby form is closed - reopens last form if hidden
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                parentFrame.setVisible(true);
                 gameLobby.close();
             }
         });
@@ -78,6 +81,7 @@ public class frmLobby {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (gameLobby.userLoggedIn()) {
+
                     //TODO Open frmVariationPicker as dialog
                     //somehow this has to talk back to gameLobby.createGame()
 
@@ -85,6 +89,13 @@ public class frmLobby {
                 tblLobbyModel.addRow(new Object[]{"Capablanca","jc4512",2003});
             }
         });
+    }
+
+    // Makes the form visible and sets focus to the panel, so that no fields or
+    // other UI elements are selected when first shown.
+    private void displayForm() {
+        frame.setVisible(true);
+        panel.grabFocus();
     }
 
     private boolean isAllowableUsernameField(String username) {

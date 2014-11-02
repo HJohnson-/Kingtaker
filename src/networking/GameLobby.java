@@ -18,19 +18,35 @@ public class GameLobby {
     private List<RemoteGame> games;
     private LocalOpenGame localOpenGame;
 
+    private static GameLobby instance;
+
     private GameLobbyFetcher gameLobbyFetcher;
     private Thread fetcherThread;
 
+    private boolean lobbyIsOpen;
+
     private frmLobby frm;
 
-    public GameLobby(JFrame parentFrame) {
+    public static void showLobby() {
+        if (instance == null) {
+            instance = new GameLobby();
+        }
+        frmLobby.showInstance(instance);
+    }
+
+    public static boolean isOpen() {
+        return instance != null && instance.lobbyIsOpen;
+    }
+
+    private GameLobby() {
+        lobbyIsOpen = true;
         games = Collections.synchronizedList(new ArrayList<RemoteGame>());
         gameLobbyFetcher = new GameLobbyFetcher();
         fetcherThread = new Thread(gameLobbyFetcher);
         fetcherThread.start();
-
-        frm = new frmLobby(parentFrame, this);
     }
+
+
 
     private void parseRemoteGameList(String list) {
         games.clear();
@@ -59,6 +75,7 @@ public class GameLobby {
 
     public void close() {
         fetcherThread.interrupt();
+        lobbyIsOpen = false;
         //TODO: remove any open games
     }
 

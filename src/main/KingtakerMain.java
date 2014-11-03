@@ -14,7 +14,7 @@ import RandomChess.RandomChess;
 /**
  * Primitive main function for running tests until a menu is added
  */
-public class KingtakerMain extends JFrame {
+public class KingtakerMain {
 
     public static void main(String[] args) {
 

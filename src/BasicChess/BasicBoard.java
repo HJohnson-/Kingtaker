@@ -11,8 +11,6 @@ public class BasicBoard extends Board {
 	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.
 	public boolean initializeBoard(){
 
-
-
 		// black pawns
 		for(int j = 0; j < 8; j++){
 			Location location = new Location(1,j);

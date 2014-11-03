@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
+import RandomChess.RandomChess;
+import GrandChess.GrandChess;
 
 /**
  * Created by jc4512 on 15/10/14.
@@ -53,8 +55,15 @@ public class frmVariantChooser {
                 switch (lstVariationPicker.getSelectedIndex()) {
                     case 0 :
                         BasicChess bc = new BasicChess();
-                        bc.game.getBoard().initializeBoard();
                         bc.drawBoard();
+                        break;
+                    case 1:
+                        RandomChess rc = new RandomChess();
+                        rc.drawBoard();
+                        break;
+                    case 2:
+                        GrandChess gc = new GrandChess();
+                        gc.drawBoard();
                 }
             }
         });
@@ -74,7 +83,7 @@ public class frmVariantChooser {
 
     private void createUIComponents() {
         //TODO need to be able to enumerate variants
-        lstVariationPicker = new JList(new String[]{"Standard Chess"});
+        lstVariationPicker = new JList(new String[]{"Standard Chess", "Random Chess", "Grand Chess"});
     }
 
 

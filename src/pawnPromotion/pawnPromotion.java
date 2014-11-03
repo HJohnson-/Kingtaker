@@ -1,9 +1,6 @@
 package pawnPromotion;
 
-import BasicChess.Bishop;
-import BasicChess.King;
-import BasicChess.Queen;
-import BasicChess.Rook;
+import BasicChess.*;
 import graphics.GraphicsControl;
 import main.Location;
 import pieces.ChessPiece;
@@ -22,7 +19,7 @@ import javax.swing.*;
 
 
 
-public class pawnPromotion implements  Runnable{
+public class pawnPromotion implements Runnable {
 
     JFrame frame = new JFrame(" Pawn Promotion ");
 
@@ -41,10 +38,7 @@ public class pawnPromotion implements  Runnable{
 
         pawn.board.clearSpace(pawn.cords);
 
-
-
-        System.out.println("pawn cords" + pawn.cords+" clear space...");
-
+        //System.out.println("pawn cords" + pawn.cords+" clear space...");
 
         switch (promoteType) {
             case QUEEN:
@@ -57,16 +51,14 @@ public class pawnPromotion implements  Runnable{
                 promotedPiece = new Bishop(pawn.board,pawn.type,pawn.cords);
                 break;
             case KNIGHT:
-                promotedPiece = new King(pawn.board,pawn.type,pawn.cords);
+                promotedPiece = new Knight(pawn.board,pawn.type,pawn.cords);
                 break;
         }
 
-
         promotedPiece.board.placePiece(promotedPiece.cords, promotedPiece);
 
-
-
         // this function need to be added
+        pawn.graphics.panel.repaint();
 //        promotedPiece.graphics.callRepaintFromOther();
 
     }

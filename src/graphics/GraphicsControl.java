@@ -11,7 +11,7 @@ public class GraphicsControl implements Runnable {
     protected boolean animating = false;
     protected int totalSteps = 25;
     protected int animationTime = 50;
-    protected ChessPanel panel;
+    public ChessPanel panel;
 
     /**
      * Converts the given locations from board co-ordinates to graphics co-ordinates.

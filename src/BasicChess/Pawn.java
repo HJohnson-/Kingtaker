@@ -55,9 +55,8 @@ public class Pawn extends ChessPiece{
 	}
 
 	private boolean validPawnDoubleMove(Location to) {
-		int startingCol =  type == PieceType.WHITE ? board.numRows()-2 : 1;
-		if(cords.getX() == startingCol && cords.getY().equals(to.getY())) {
-			if(to.getX() == startingCol + movementDirection*2) {
+		if(lastTurnMovedOn == 0 && cords.getY().equals(to.getY())) {
+			if(to.getX() == cords.getX() + movementDirection*2) {
 				if(board.isEmptySpace(to) && board.isEmptySpace(new Location(cords.getX()+movementDirection, cords.getY()))) {
 					return true;
 				}
@@ -135,9 +134,8 @@ public class Pawn extends ChessPiece{
                 moves.add(new Location(newX, cords.getY() + 1));
             }
         }
-        int startX = type == PieceType.WHITE ? 6 : 1;
-        if (cords.getX() == startX) {
-            moves.add(new Location(startX + (2 * movementDirection), cords.getY()));
+        if (lastTurnMovedOn == 0) {
+            moves.add(new Location(cords.getX() + (2 * movementDirection), cords.getY()));
         }
 
         return moves;

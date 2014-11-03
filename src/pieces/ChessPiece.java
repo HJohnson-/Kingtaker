@@ -115,15 +115,7 @@ abstract public class ChessPiece {
     /**
      * @return A list of all moves this piece could make from this location on an empty board.
      */
-    public List<Location> allPieceMoves() {
-        LinkedList<Location> moves = new LinkedList<Location>();
-        for (int x = 0; x < board.numCols(); x++) {
-            for (int y = 0; y < board.numRows(); y++) {
-                moves.add(new Location(x, y));
-            }
-        }
-        return moves;
-    }
+    abstract public List<Location> allPieceMoves();
 
 	/**
 	 * @return The value of the piece, typically in pawns. Used to evaluate moves for AIs.

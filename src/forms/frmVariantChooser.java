@@ -15,31 +15,40 @@ public class frmVariantChooser {
     private JButton btnAcceptVariation;
     private JList lstVariationPicker;
     private JTextArea txtVariationRulesDisplay;
+    private boolean visibility = false;
 
-    private JFrame parentFrame;
+    private static frmVariantChooser instance;
 
-    public frmVariantChooser(final JFrame parentFrame) {
-        this.parentFrame = parentFrame;
+    public static void showInstance() {
+        if (instance == null || !instance.visibility) {
+            instance = new frmVariantChooser();
+        }
+    }
 
+    public static boolean isVisible() {
+        return instance != null && instance.visibility;
+    }
+
+    private frmVariantChooser() {
         final JFrame frame = new JFrame("frmVariantChooser");
         frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        visibility = true;
 
-        //Called when the variation picker form is closed - reopens last form if hidden
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                parentFrame.setVisible(true);
+                visibility = false;
             }
         });
-
         btnAcceptVariation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //Close form on accept and start game
                 frame.setVisible(false);
+                visibility = false;
 
                 switch (lstVariationPicker.getSelectedIndex()) {
                     case 0 :

@@ -1,11 +1,10 @@
-package ClientConnection;
+package networking;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 
 /**
  * Created by jc4512 on 23/10/14.
@@ -32,13 +31,13 @@ public class OpponentMessageSender {
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
                 clientWriter.writeBytes(msg);
-                System.out.println("[localhost] sent to [" + socket.getInetAddress().getAddress() + "]: " + msg);
+                System.out.println("[localhost] sent to [" + socket.getInetAddress().getHostAddress() + "]: " + msg);
 
                 clientWriter.close();
                 socket.close();
                 return true;
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
         return false;

@@ -1,4 +1,4 @@
-package ClientConnection;
+package networking.unused;
 
 import java.io.*;
 import java.net.InetSocketAddress;

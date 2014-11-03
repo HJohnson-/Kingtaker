@@ -8,10 +8,14 @@ import pieces.ChessPiece;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * An abstract JPanel extension, which contains lots of graphics tools which are identical across variants.
@@ -20,6 +24,10 @@ public abstract class ChessPanel extends JPanel {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
+    protected static int cellWidth;
+    protected static int cellHeight;
+    protected int UIWidth = 200;
+    public boolean animating = false;
 
     /**
      * This constructor sets up a listener to handle the user clicking on the screen.
@@ -27,7 +35,13 @@ public abstract class ChessPanel extends JPanel {
      */
     protected ChessPanel(Board board) {
         this.board = board;
+        recalculateCellSize();
         this.addMouseListener(new HitTestAdapter());
+        this.addComponentListener(new resizeListener());
+
+        for (ChessPiece p : board.allPieces()) {
+            p.graphics.givePanel(ChessPanel.this);
+        }
     }
 
     /**
@@ -49,26 +63,45 @@ public abstract class ChessPanel extends JPanel {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {
-        int x = tools.CELL_WIDTH * (board.numCols() + 1);
-        int y = tools.CELL_HEIGHT;
-        Color c = board.getController().isWhitesTurn() ? tools.BLACK : tools.WHITE;
+        int x = cellWidth * (board.numCols());
+        int y = 0;
+        Color c = board.getController().isWhitesTurn() ? Color.BLACK : Color.WHITE;
         g2.setPaint(c);
-        g2.fillRect(x, y, tools.CELL_WIDTH * 2, tools.CELL_HEIGHT);
+        g2.fillRect(x + UIWidth / 4, y, UIWidth / 2, cellHeight);
         g2.setPaint(tools.TEXT);
-        g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + tools.CELL_HEIGHT * 2);
+        x += 10;
+        g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + cellHeight * 2);
 
         if (board.getController().gameOver()) {
             g2.setFont(new Font("Bauhaus", Font.BOLD, 50));
-            g2.drawString("Game Over", tools.CELL_WIDTH, tools.CELL_HEIGHT * board.numRows());
+            g2.drawString("Game Over", cellWidth, cellHeight * board.numRows());
             g2.drawString(board.getController().getWinner() + " Wins",
-                    tools.CELL_WIDTH, tools.CELL_HEIGHT * (board.numRows() / 2 + 1));
+                    cellWidth, cellHeight * (board.numRows() / 2 + 1));
         }
 
-        int movesY = tools.CELL_HEIGHT * board.numRows() / 2;
+        int movesY = cellHeight * board.numRows() / 2;
         g2.setFont(new Font("Bauhaus", Font.PLAIN, 10));
         for (Move move : board.getController().getMoves()) {
-            g2.drawString(move.toString(), tools.CELL_WIDTH * board.numCols() + 10, movesY);
+            g2.drawString(move.toString(), cellWidth * board.numCols() + 10, movesY);
             movesY += 12;
+        }
+    }
+
+    protected void drawGrid(Graphics2D g2) {
+        g2.setColor(tools.BOARD_BLACK);
+        for (int x = 0; x < board.numRows() * cellWidth; x += cellWidth * 2) {
+            for (int y = 0; y < board.numCols() * cellHeight; y += cellHeight * 2) {
+                g2.fillRect(x, y, cellWidth, cellHeight);
+                g2.fillRect(x + cellWidth, y + cellHeight, cellWidth, cellHeight);
+            }
+        }
+
+        g2.setColor(tools.BOARD_WHITE);
+        for (int x = 0; x < board.numRows() * cellWidth; x += cellWidth * 2) {
+            for (int y = 0; y < board.numCols() * cellHeight; y += cellWidth * 2) {
+                g2.fillRect(x + cellWidth, y, cellWidth, cellHeight);
+                g2.fillRect(x, y + cellHeight, cellWidth, cellHeight);
+            }
         }
     }
 
@@ -89,9 +122,9 @@ public abstract class ChessPanel extends JPanel {
 
 
             TexturePaint texture = new TexturePaint(tools.imageMap.get(imgName),
-                    new Rectangle(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT));
+                    new Rectangle(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight));
             g2.setPaint(texture);
-            g2.fillRect(p.graphics.getX(), p.graphics.getY(), tools.CELL_WIDTH, tools.CELL_HEIGHT);
+            g2.fillRect(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight);
         }
 
         g2.setPaint(tools.CHECK);
@@ -100,25 +133,25 @@ public abstract class ChessPanel extends JPanel {
 
         if (board.getController().isInCheck(true)) {
             Location l = board.getController().findKing(true);
-            g2.drawOval(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT, tools.CELL_WIDTH, tools.CELL_HEIGHT);
+            g2.drawOval(l.getX() * cellWidth, l.getY() * cellHeight, cellWidth, cellHeight);
         }
 
         if (board.getController().isInCheck(false)) {
             Location l = board.getController().findKing(false);
-            g2.drawOval(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT, tools.CELL_WIDTH, tools.CELL_HEIGHT);
+            g2.drawOval(l.getX() * cellWidth, l.getY() * cellHeight, cellWidth, cellHeight);
         }
 
         if (selectedPiece != null) {
             g2.setStroke(new BasicStroke(2));
             g2.setPaint(tools.CUR_PIECE);
             g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
-                    tools.CELL_WIDTH, tools.CELL_HEIGHT);
+                    cellWidth, cellHeight);
 
             List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
             g2.setPaint(tools.CUR_MOVES);
             for (Location l : moves) {
-                g2.drawRect(l.getX() * tools.CELL_WIDTH, l.getY() * tools.CELL_HEIGHT,
-                        tools.CELL_WIDTH, tools.CELL_HEIGHT);
+                g2.drawRect(l.getX() * cellWidth, l.getY() * cellHeight,
+                        cellWidth, cellHeight);
             }
         }
 
@@ -131,8 +164,25 @@ public abstract class ChessPanel extends JPanel {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void doDrawing(Graphics2D g2) {
+        drawGrid(g2);
         drawPieces(g2);
         drawUI(g2);
+    }
+
+    /**
+     * Recalculated how large the board needs to be, based on the current size of the panel.
+     */
+    protected void recalculateCellSize() {
+        cellWidth = (int) Math.round((
+                Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows()) / 2) * 2;
+        cellHeight = cellWidth;
+
+        for (ChessPiece p : board.allPieces()) {
+            p.graphics.curCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
+            p.graphics.endCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
+            p.graphics.totalSteps = cellWidth / 2;
+            p.graphics.animationTime = 1500 / cellWidth;
+        }
     }
 
     class HitTestAdapter extends MouseAdapter {
@@ -145,30 +195,38 @@ public abstract class ChessPanel extends JPanel {
          */
         @Override
         public void mousePressed(MouseEvent e) {
-            int x = e.getX() / tools.CELL_WIDTH;
-            int y = e.getY() / tools.CELL_HEIGHT;
-            Location l = new Location(x, y);
+            if (!animating) {
+                int x = e.getX() / cellWidth;
+                int y = e.getY() / cellHeight;
+                Location l = new Location(x, y);
 
-            if (!board.onBoard(l)) {
-                selectedPiece = null;
-            } else if (selectedPiece == null) {
-                if (!board.isEmptySpace(l)) {
-                    selectedPiece = board.getPiece(l);
-                }
-            } else {
-                if (selectedPiece.allPieceMoves().contains(l)) {
-                    selectedPiece.graphics.setGoal(l);
-                    selectedPiece.graphics.givePanel(ChessPanel.this);
-                    if (board.getController().attemptMove(selectedPiece.cords, l)) {
-                        Thread t = new Thread(selectedPiece.graphics);
-                        selectedPiece = null;
-                        t.start();
+                if (!board.onBoard(l)) {
+                    selectedPiece = null;
+                } else if (selectedPiece == null) {
+                    if (!board.isEmptySpace(l)) {
+                        selectedPiece = board.getPiece(l);
                     }
+                } else {
+                    if (selectedPiece.allPieceMoves().contains(l)) {
+                        selectedPiece.graphics.setGoal(l);
+                        if (board.getController().attemptMove(selectedPiece.cords, l)) {
+                            ExecutorService pool = Executors.newFixedThreadPool(1);
+                            pool.submit(selectedPiece.graphics);
+                        }
+                    }
+                    selectedPiece = null;
                 }
-                selectedPiece = null;
-            }
 
-            repaint();
+                repaint();
+            }
+        }
+    }
+
+    class resizeListener extends ComponentAdapter {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            ChessPanel.this.recalculateCellSize();
+            ChessPanel.this.repaint();
         }
     }
 

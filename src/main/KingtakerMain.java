@@ -2,9 +2,8 @@ package main;
 
 import javax.swing.*;
 import BasicChess.BasicChess;
+
 import BasicChess.BasicBoard;
-import ClientConnection.MessageListener;
-import ClientConnection.OpponentMessageSender;
 import BasicChess.BasicDecoder;
 import java.net.Inet4Address;
 import java.net.InetAddress;

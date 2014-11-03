@@ -29,7 +29,7 @@ abstract public class ChessPiece {
 		lastTurnMovedOn = 0;
 
         if (cords != null) {
-            graphics = new GraphicsControl(cords, cords, board);
+            graphics = new GraphicsControl(cords, cords);
         }
     }
 

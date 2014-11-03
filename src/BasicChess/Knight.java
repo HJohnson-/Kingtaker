@@ -14,7 +14,7 @@ import java.util.List;
 public class Knight extends ChessPiece {
 	public Knight(Board board, PieceType type, Location cords) {
 		super(board, type, cords, "knight");
-        graphics = new KnightGraphicsControl(cords, cords, board);
+        graphics = new KnightGraphicsControl(cords, cords);
 	}
 
 	public int returnValue() {

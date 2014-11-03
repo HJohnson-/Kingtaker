@@ -10,9 +10,9 @@ import java.awt.*;
  */
 public abstract class ChessFrame extends JFrame {
 
-    protected String title = "Basic Chess";
-    protected int width = 600, height = 600;
-    protected ChessPanel panel = new BasicChessPanel(null);
+    protected String title;
+    protected int width, height;
+    protected ChessPanel panel;
     private boolean fullscreen = false;
 
     /**

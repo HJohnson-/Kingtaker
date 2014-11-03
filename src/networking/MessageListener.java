@@ -1,4 +1,4 @@
-package ClientConnection;
+package networking;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -33,16 +33,16 @@ public class MessageListener implements Runnable {
                 BufferedReader clientReader =
                         new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String clientMessage = clientReader.readLine();
-                System.out.println("[" + socket.getInetAddress().getAddress() + "] sent: " + clientMessage);
+                System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent: " + clientMessage);
 
                 //Process message and generate an appropriate response, or none if it is junk.
                 String serverResponseMessage = "OK";//processMessageAndGetResponse(socket,clientMessage);
                 if (serverResponseMessage != null) {
                     DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
                     clientWriter.writeBytes(serverResponseMessage);
-                    System.out.println("[" + socket.getInetAddress().getAddress() + "] response: " + serverResponseMessage);
+                    System.out.println("[" + socket.getInetAddress().getHostAddress() + "] response: " + serverResponseMessage);
                 } else {
-                    System.out.println("[" + socket.getInetAddress().getAddress() + "] no response required");
+                    System.out.println("[" + socket.getInetAddress().getHostAddress() + "] no response required");
                 }
 
                 //TODO: is this needed?

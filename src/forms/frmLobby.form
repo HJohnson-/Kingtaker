@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="forms.frmLobby">
+  <grid id="27dc6" binding="panel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="604" height="604"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <splitpane id="48a28">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <minimum-size width="600" height="600"/>
+            <preferred-size width="600" height="600"/>
+          </grid>
+        </constraints>
+        <properties>
+          <orientation value="0"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <splitpane id="956bb">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <splitpane id="c096b">
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
+                <properties>
+                  <dividerSize value="0"/>
+                  <orientation value="0"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="d6888" class="javax.swing.JTextField" binding="txtUsername" custom-create="true">
+                    <constraints>
+                      <splitpane position="left"/>
+                    </constraints>
+                    <properties>
+                      <font size="18"/>
+                      <text value="username"/>
+                    </properties>
+                  </component>
+                  <component id="31ba" class="javax.swing.JPasswordField" binding="txtPassword">
+                    <constraints>
+                      <splitpane position="right"/>
+                    </constraints>
+                    <properties>
+                      <font size="18"/>
+                      <text value="txtPassword"/>
+                    </properties>
+                  </component>
+                </children>
+              </splitpane>
+              <splitpane id="1f91">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <splitpane id="41d35">
+                    <constraints>
+                      <splitpane position="right"/>
+                    </constraints>
+                    <properties>
+                      <orientation value="0"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <component id="c2277" class="javax.swing.JLabel" binding="lblIsConnected">
+                        <constraints>
+                          <splitpane position="left"/>
+                        </constraints>
+                        <properties>
+                          <horizontalAlignment value="0"/>
+                          <horizontalTextPosition value="0"/>
+                          <text value="NOT CONNECTED"/>
+                        </properties>
+                      </component>
+                      <splitpane id="a3959">
+                        <constraints>
+                          <splitpane position="right"/>
+                        </constraints>
+                        <properties>
+                          <dividerLocation value="210"/>
+                          <dividerSize value="0"/>
+                          <enabled value="false"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="50381" class="javax.swing.JLabel" binding="lblUsernameRating">
+                            <constraints>
+                              <splitpane position="left"/>
+                            </constraints>
+                            <properties>
+                              <horizontalAlignment value="0"/>
+                              <horizontalTextPosition value="0"/>
+                              <text value="NOT LOGGED IN"/>
+                            </properties>
+                          </component>
+                          <component id="33008" class="javax.swing.JButton" binding="btnCreateGame">
+                            <constraints>
+                              <splitpane position="right"/>
+                            </constraints>
+                            <properties>
+                              <text value="CREATE GAME"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </splitpane>
+                    </children>
+                  </splitpane>
+                  <splitpane id="906c9">
+                    <constraints>
+                      <splitpane position="left"/>
+                    </constraints>
+                    <properties>
+                      <dividerSize value="0"/>
+                      <orientation value="0"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <component id="78a49" class="javax.swing.JButton" binding="btnLogin">
+                        <constraints>
+                          <splitpane position="left"/>
+                        </constraints>
+                        <properties>
+                          <font/>
+                          <text value="LOG IN"/>
+                        </properties>
+                      </component>
+                      <component id="16ec8" class="javax.swing.JButton" binding="btnRegister">
+                        <constraints>
+                          <splitpane position="right"/>
+                        </constraints>
+                        <properties>
+                          <text value="REGISTER"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </splitpane>
+                </children>
+              </splitpane>
+            </children>
+          </splitpane>
+          <component id="7a4c5" class="javax.swing.JTable" binding="tblLobby" custom-create="true">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <font size="18"/>
+              <intercellSpacing width="5" height="5"/>
+            </properties>
+          </component>
+        </children>
+      </splitpane>
+    </children>
+  </grid>
+</form>

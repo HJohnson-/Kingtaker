@@ -21,10 +21,9 @@ public class KingtakerMain extends JFrame {
         //BasicChess bc = new BasicChess(new GameController( new BasicBoard(), new BasicDecoder(), myState));
 
 		//BasicChess bc = new BasicChess();
+		//bc.drawBoard();
 
 		GrandChess gc = new GrandChess();
-		gc.game.getBoard().initializeBoard();
-		//System.out.println(bc.board.getPiece(new Location(0,0)).toString());
         gc.drawBoard();
     }
 

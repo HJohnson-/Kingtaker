@@ -12,19 +12,22 @@ import java.util.*;
  * while checking move validation.
  */
 abstract public class Board {
-	private pieces.ChessPiece[][] pieces;
+	protected pieces.ChessPiece[][] pieces;
 	private GameController game;
 
 	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.
 	abstract public boolean initializeBoard();
 
     public Board() {
-        pieces = new ChessPiece[8][8];
-        for (ChessPiece[] row : pieces) {
-            Arrays.fill(row, new EmptyPiece(this, null));
-        }
-
+        this(8, 8);
     }
+
+	public Board(int rows, int cols) {
+		pieces = new ChessPiece[rows][cols];
+		for (ChessPiece[] row : pieces) {
+			Arrays.fill(row, new EmptyPiece(this, null));
+		}
+	}
 
 	/**
 	 * Used to link the board and controller right after board is created. Game is null before this so the board can be

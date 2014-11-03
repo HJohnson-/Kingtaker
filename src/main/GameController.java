@@ -194,7 +194,7 @@ public class GameController {
 	public Location findKing(boolean checkingForWhite) {
 		PieceType type = checkingForWhite ? PieceType.WHITE : PieceType.BLACK;
 		for(ChessPiece piece : board.allPieces()) {
-			if(piece instanceof King && piece.type == type) {
+			if (piece instanceof King && piece.type == type) {
 				return piece.cords;
 			}
 		}

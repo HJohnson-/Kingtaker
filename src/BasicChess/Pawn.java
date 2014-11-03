@@ -131,7 +131,7 @@ public class Pawn extends ChessPiece{
             if (cords.getY() > 0) {
                 moves.add(new Location(newX, cords.getY() - 1));
             }
-            if (cords.getY() < board.numRows() - 2) {
+            if (cords.getY() <= board.numRows() - 2) {
                 moves.add(new Location(newX, cords.getY() + 1));
             }
         }

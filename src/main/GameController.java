@@ -99,6 +99,7 @@ public class GameController {
 	public boolean attemptMove(Location pieceLocation, Location targetLocation) {
 		if (gameOver) return false;
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
+		ChessPiece movedOnto = board.getPiece(targetLocation);
 		if(!beingMoved.isValidMove(targetLocation)) {
 			return false;
 		}

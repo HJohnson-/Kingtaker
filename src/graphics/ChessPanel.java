@@ -169,12 +169,14 @@ public abstract class ChessPanel extends JPanel {
      * Recalculated how large the board needs to be, based on the current size of the panel.
      */
     public void recalculateCellSize() {
-        cellWidth = (int) Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows();
+        cellWidth = (int) Math.round((
+                Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows()) / 2) * 2;
         cellHeight = cellWidth;
 
         for (ChessPiece p : board.allPieces()) {
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
             p.graphics.endCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
+            p.graphics.totalSteps = cellWidth / 2;
         }
     }
 

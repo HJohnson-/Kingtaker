@@ -2,8 +2,6 @@ package graphics;
 
 import main.Location;
 
-import javax.swing.*;
-
 /**
  * Handles the animation and display of chess pieces, rather than having this in the ChessPiece class.
  */
@@ -55,6 +53,7 @@ public class GraphicsControl implements Runnable {
     public void run() {
         int animationXStep = (endCords.getX() - curCords.getX()) / totalSteps;
         int animationYStep = (endCords.getY() - curCords.getY()) / totalSteps;
+
         animating = true;
         panel.animating = true;
 

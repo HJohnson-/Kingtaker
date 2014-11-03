@@ -1,10 +1,7 @@
 package BasicChess;
-import graphics.tools;
 import main.Board;
-import main.GameController;
 import main.Location;
 import main.PieceType;
-import pieces.EmptyPiece;
 
 /**
  * Created by crix9 on 15/10/2014.
@@ -39,10 +36,10 @@ public class BasicBoard extends Board {
 				case 5:
 					this.placePiece(location, new Bishop(this, PieceType.BLACK, location));
 					break;
-				case 3:
+				case 4:
 					this.placePiece(location, new Queen(this, PieceType.BLACK, location));
 					break;
-				case 4:
+				case 3:
 					this.placePiece(location, new King(this, PieceType.BLACK, location));
 					break;
 				default:
@@ -73,10 +70,10 @@ public class BasicBoard extends Board {
 				case 5:
 					this.placePiece(location, new Bishop(this, PieceType.WHITE, location));
 					break;
-				case 3:
+				case 4:
 					this.placePiece(location, new Queen(this, PieceType.WHITE, location));
 					break;
-				case 4:
+				case 3:
 					this.placePiece(location, new King(this, PieceType.WHITE, location));
 					break;
 				default:

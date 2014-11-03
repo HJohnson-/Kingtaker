@@ -2,6 +2,7 @@ package main;
 
 import BasicChess.King;
 import pieces.ChessPiece;
+import pieces.PieceDecoder;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by hj1012 on 23/10/14.
+ * Handles game logic
  */
 public class GameController {
 	private boolean isWhitesTurn;
@@ -17,6 +18,8 @@ public class GameController {
 	private String winner;
 	private boolean gameOver;
 	private Board board;
+	private String gameVariant;
+	private PieceDecoder decoder;
     private List<Move> moves;
 
 	public Board getBoard() {
@@ -26,12 +29,32 @@ public class GameController {
 	/**
 	 * @param board board
 	 */
-	public GameController(Board board) {
+	public GameController(Board board, String gameVariant, PieceDecoder decoder) {
 		currentTurn = 1;
 		this.board = board;
 		winner = "None";
 		gameOver = false;
         moves = new LinkedList<Move>();
+		this.gameVariant = gameVariant;
+		this.decoder = decoder;
+	}
+
+	public GameController(Board board, PieceDecoder decoder, String code) {
+		moves = new LinkedList<Move>();
+		this.board = board;
+		winner = "None";
+		gameOver = false;
+		this.decoder = decoder;
+		int startOfValue = 4;
+		int endOfValue = code.indexOf('~', startOfValue);
+		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
+		startOfValue = endOfValue+3;
+		endOfValue = code.indexOf('$', startOfValue);
+		gameVariant = code.substring(startOfValue, endOfValue);
+		startOfValue = endOfValue+1;
+		endOfValue = code.indexOf('#', startOfValue);
+		String pieces = code.substring(startOfValue, endOfValue);
+		board.populateFromCode(pieces, decoder);
 	}
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves() {
@@ -201,6 +224,20 @@ public class GameController {
 
 	public boolean gameOver() {
 		return gameOver;
+	}
+
+	public String toCode() {
+		StringBuilder code = new StringBuilder();
+		code.append("#$");
+		code.append("T:" + currentTurn);
+		code.append("~");
+		code.append("V:" + gameVariant);
+		code.append("$");
+		for(ChessPiece p : board.allPieces()) {
+			code.append(p.toCode());
+		}
+		code.append("#");
+		return code.toString();
 	}
 
     public List<Move> getMoves() {

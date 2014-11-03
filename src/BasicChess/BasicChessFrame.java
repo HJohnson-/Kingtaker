@@ -1,6 +1,7 @@
 package BasicChess;
 
 import graphics.ChessFrame;
+import graphics.tools;
 import main.Board;
 
 /**

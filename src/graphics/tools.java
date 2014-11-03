@@ -25,8 +25,8 @@ public class tools {
     public static final Color CHECK = new Color(255, 0, 0);
     public static final Color TEXT = new Color(93, 195, 101);
 
-    public static final int CELL_WIDTH = 50;
-    public static final int CELL_HEIGHT = 50;
+    public static int CELL_WIDTH = 50;
+    public static int CELL_HEIGHT = 50;
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
     /**
@@ -36,6 +36,7 @@ public class tools {
      * @param num_cols The number of columns to draw.
      */
     public static void drawQuadGrid(Graphics2D g2, int num_rows, int num_cols) {
+        recalculateCellSize(num_rows, num_cols);
         g2.setColor(BOARD_BLACK);
         for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
             for (int y = 0; y < num_cols * CELL_HEIGHT; y += CELL_HEIGHT * 2) {
@@ -50,6 +51,24 @@ public class tools {
                 g2.fillRect(x + CELL_WIDTH, y, CELL_WIDTH, CELL_HEIGHT);
                 g2.fillRect(x, y + CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
             }
+        }
+    }
+
+    /**
+     * This updates the values of CELL_WIDTH and CELL_HEIGHT, based on the current size of the screen.
+     * @param num_rows The number of rows that the board needs to have.
+     * @param num_cols The number of columns that the board needs to have.
+     */
+    public static void recalculateCellSize(int num_rows, int num_cols) {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        int width = (int) Math.floor(tk.getScreenSize().getWidth());
+        int height = (int) Math.floor(tk.getScreenSize().getHeight());
+        if (height < width) {
+            CELL_HEIGHT = (int) Math.floor((height / num_rows) / 25) * 25;
+            CELL_WIDTH = CELL_HEIGHT;
+        } else {
+            CELL_WIDTH = (int) Math.floor((width / num_cols) / 25) * 25;
+            CELL_HEIGHT = CELL_WIDTH;
         }
     }
 

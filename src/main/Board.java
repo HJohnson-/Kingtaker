@@ -2,6 +2,7 @@ package main;
 
 import pieces.ChessPiece;
 import pieces.EmptyPiece;
+import pieces.PieceDecoder;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ abstract public class Board {
         for (ChessPiece[] row : pieces) {
             Arrays.fill(row, new EmptyPiece(this, null));
         }
-		this.initializeBoard();
+
     }
 
 	/**
@@ -157,6 +158,17 @@ abstract public class Board {
 	 * @return length of first row of the board. Unspecified if the board doesn't have any rows. Why would you do that.
 	 */
 	public int numCols() { return pieces[0].length; }
+
+	public void populateFromCode(String code, PieceDecoder decoder) {
+		int startOfValue = 0;
+		int endOfValue = code.indexOf('|', startOfValue+1)+1;
+		while(endOfValue > 0) {
+			ChessPiece piece = decoder.decode(code.substring(startOfValue, endOfValue), this);
+			placePiece(piece.cords, piece);
+			startOfValue = endOfValue;
+			endOfValue = code.indexOf('|', startOfValue+1)+1;
+		}
+	}
 
 }
 

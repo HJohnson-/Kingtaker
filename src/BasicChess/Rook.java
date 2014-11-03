@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by hj1012 on 15/10/14.
+ * Default Rook
  */
 public class Rook extends ChessPiece {
 
@@ -37,4 +37,10 @@ public class Rook extends ChessPiece {
         }
         return moves;
     }
+
+	@Override
+	public String getName() {
+		return "Rook";
+	}
+
 }

@@ -14,6 +14,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * An abstract JPanel extension, which contains lots of graphics tools which are identical across variants.
@@ -24,7 +26,8 @@ public abstract class ChessPanel extends JPanel {
     protected ChessPiece selectedPiece = null;
     protected static int cellWidth;
     protected static int cellHeight;
-    protected int UIWidth;
+    protected int UIWidth = 150;
+    public boolean animating = false;
 
     /**
      * This constructor sets up a listener to handle the user clicking on the screen.
@@ -56,12 +59,13 @@ public abstract class ChessPanel extends JPanel {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {
-        int x = cellWidth * (board.numCols() + 1);
-        int y = cellHeight;
+        int x = cellWidth * (board.numCols());
+        int y = 0;
         Color c = board.getController().isWhitesTurn() ? Color.BLACK : Color.WHITE;
         g2.setPaint(c);
         g2.fillRect(x, y, cellWidth * 2, cellHeight);
         g2.setPaint(tools.TEXT);
+        x += 10;
         g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + cellHeight * 2);
 
         if (board.getController().gameOver()) {
@@ -165,13 +169,8 @@ public abstract class ChessPanel extends JPanel {
      * Recalculated how large the board needs to be, based on the current size of the panel.
      */
     public void recalculateCellSize() {
-        if (getSize().getHeight() < getSize().getWidth()) {
-            cellWidth = (int) Math.floor(((getSize().getWidth() - UIWidth) / board.numRows()) / 25) * 25;
-            cellHeight = cellWidth;
-        } else {
-            cellWidth = (int) Math.floor((getSize().getHeight() / board.numCols()) / 25) * 25;
-            cellHeight = cellWidth;
-        }
+        cellWidth = (int) Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows();
+        cellHeight = cellWidth;
 
         for (ChessPiece p : board.allPieces()) {
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
@@ -189,30 +188,31 @@ public abstract class ChessPanel extends JPanel {
          */
         @Override
         public void mousePressed(MouseEvent e) {
-            int x = e.getX() / cellWidth;
-            int y = e.getY() / cellHeight;
-            Location l = new Location(x, y);
+            if (!animating) {
+                int x = e.getX() / cellWidth;
+                int y = e.getY() / cellHeight;
+                Location l = new Location(x, y);
 
-            if (!board.onBoard(l)) {
-                selectedPiece = null;
-            } else if (selectedPiece == null) {
-                if (!board.isEmptySpace(l)) {
-                    selectedPiece = board.getPiece(l);
-                }
-            } else {
-                if (selectedPiece.allPieceMoves().contains(l)) {
-                    selectedPiece.graphics.setGoal(l);
-                    selectedPiece.graphics.givePanel(ChessPanel.this);
-                    if (board.getController().attemptMove(selectedPiece.cords, l)) {
-                        Thread t = new Thread(selectedPiece.graphics);
-                        selectedPiece = null;
-                        t.start();
+                if (!board.onBoard(l)) {
+                    selectedPiece = null;
+                } else if (selectedPiece == null) {
+                    if (!board.isEmptySpace(l)) {
+                        selectedPiece = board.getPiece(l);
                     }
+                } else {
+                    if (selectedPiece.allPieceMoves().contains(l)) {
+                        selectedPiece.graphics.setGoal(l);
+                        selectedPiece.graphics.givePanel(ChessPanel.this);
+                        if (board.getController().attemptMove(selectedPiece.cords, l)) {
+                            ExecutorService pool = Executors.newFixedThreadPool(1);
+                            pool.submit(selectedPiece.graphics);
+                        }
+                    }
+                    selectedPiece = null;
                 }
-                selectedPiece = null;
-            }
 
-            repaint();
+                repaint();
+            }
         }
     }
 

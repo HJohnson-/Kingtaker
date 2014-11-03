@@ -13,7 +13,7 @@ public class GraphicsControl implements Runnable {
     protected boolean animating = false;
     protected int totalSteps = 25;
     protected int animationTime = 50;
-    protected JPanel panel;
+    protected ChessPanel panel;
 
     /**
      * Converts the given locations from board co-ordinates to graphics co-ordinates.
@@ -42,7 +42,7 @@ public class GraphicsControl implements Runnable {
         endCords = new Location(l.getX() * ChessPanel.cellWidth, l.getY() * ChessPanel.cellHeight);
     }
 
-    public void givePanel(JPanel panel) {
+    public void givePanel(ChessPanel panel) {
         this.panel = panel;
     }
 
@@ -56,6 +56,7 @@ public class GraphicsControl implements Runnable {
         int animationXStep = (endCords.getX() - curCords.getX()) / totalSteps;
         int animationYStep = (endCords.getY() - curCords.getY()) / totalSteps;
         animating = true;
+        panel.animating = true;
 
         while (!curCords.equals(endCords)) {
 
@@ -71,6 +72,7 @@ public class GraphicsControl implements Runnable {
 
         }
 
+        panel.animating = false;
         animating = false;
     }
 

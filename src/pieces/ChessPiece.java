@@ -14,7 +14,7 @@ import java.util.List;
  */
 abstract public class ChessPiece {
 
-    protected Board board;
+    public Board board;
     public String img;
     public PieceType type;
     public Location cords;

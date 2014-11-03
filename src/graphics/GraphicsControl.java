@@ -1,6 +1,5 @@
 package graphics;
 
-import main.Board;
 import main.Location;
 
 import javax.swing.*;
@@ -12,9 +11,9 @@ public class GraphicsControl implements Runnable {
 
     protected Location curCords, endCords;
     protected boolean animating = false;
-    protected ChessPanel panel;
     protected int totalSteps = 25;
     protected int animationTime = 50;
+    protected JPanel panel;
 
     /**
      * Converts the given locations from board co-ordinates to graphics co-ordinates.
@@ -22,11 +21,9 @@ public class GraphicsControl implements Runnable {
      * @param end The position the piece will be in at the end of the animation. NB this will equal current piece
      *            when a piece is first created or when a piece is not moving.
      */
-    public GraphicsControl(Location cur, Location end, ChessPanel panel) {
-        this.panel = panel;
-        panel.recalculateCellSize();
-        this.curCords = new Location(cur.getX() * panel.cellWidth, cur.getY() * panel.cellWidth);
-        this.endCords = new Location(end.getX() * panel.cellHeight, end.getY() * panel.cellHeight);
+    public GraphicsControl(Location cur, Location end) {
+        curCords = new Location(cur.getX() * ChessPanel.cellWidth, cur.getY() * ChessPanel.cellHeight);
+        endCords = new Location(end.getX() * ChessPanel.cellWidth, end.getY() * ChessPanel.cellHeight);
     }
 
     public int getX() {
@@ -42,7 +39,11 @@ public class GraphicsControl implements Runnable {
      * @param l The location which the piece will end up on, when the animation concludes.
      */
     public void setGoal(Location l) {
-        endCords = new Location(l.getX() * panel.cellWidth, l.getY() * panel.cellHeight);
+        endCords = new Location(l.getX() * ChessPanel.cellWidth, l.getY() * ChessPanel.cellHeight);
+    }
+
+    public void givePanel(JPanel panel) {
+        this.panel = panel;
     }
 
     /**

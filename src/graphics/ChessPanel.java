@@ -22,8 +22,8 @@ public abstract class ChessPanel extends JPanel {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
-    protected int cellWidth;
-    protected int cellHeight;
+    protected static int cellWidth;
+    protected static int cellHeight;
     protected int UIWidth;
 
     /**
@@ -58,7 +58,7 @@ public abstract class ChessPanel extends JPanel {
     protected void drawUI(Graphics2D g2) {
         int x = cellWidth * (board.numCols() + 1);
         int y = cellHeight;
-        Color c = board.getController().isWhitesTurn() ? tools.BLACK : tools.WHITE;
+        Color c = board.getController().isWhitesTurn() ? Color.BLACK : Color.WHITE;
         g2.setPaint(c);
         g2.fillRect(x, y, cellWidth * 2, cellHeight);
         g2.setPaint(tools.TEXT);
@@ -80,7 +80,6 @@ public abstract class ChessPanel extends JPanel {
     }
 
     protected void drawGrid(Graphics2D g2) {
-        recalculateCellSize();
         g2.setColor(tools.BOARD_BLACK);
         for (int x = 0; x < board.numRows() * cellWidth; x += cellWidth * 2) {
             for (int y = 0; y < board.numCols() * cellHeight; y += cellHeight * 2) {
@@ -173,6 +172,11 @@ public abstract class ChessPanel extends JPanel {
             cellWidth = (int) Math.floor((getSize().getHeight() / board.numCols()) / 25) * 25;
             cellHeight = cellWidth;
         }
+
+        for (ChessPiece p : board.allPieces()) {
+            p.graphics.curCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
+            p.graphics.endCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
+        }
     }
 
     class HitTestAdapter extends MouseAdapter {
@@ -198,6 +202,7 @@ public abstract class ChessPanel extends JPanel {
             } else {
                 if (selectedPiece.allPieceMoves().contains(l)) {
                     selectedPiece.graphics.setGoal(l);
+                    selectedPiece.graphics.givePanel(ChessPanel.this);
                     if (board.getController().attemptMove(selectedPiece.cords, l)) {
                         Thread t = new Thread(selectedPiece.graphics);
                         selectedPiece = null;

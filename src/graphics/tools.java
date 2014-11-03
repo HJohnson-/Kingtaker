@@ -16,8 +16,6 @@ public class tools {
 
     //These are all the colours used by the program. The idea is that by declaring them as variables it will be easier
     //to implement some sort of settings menu.
-    public static final Color WHITE = new Color(255, 255, 255);
-    public static final Color BLACK = new Color(0, 0, 0);
     public static final Color BOARD_BLACK = new Color(140, 83, 56);
     public static final Color BOARD_WHITE = new Color(255, 215, 142);
     public static final Color CUR_PIECE = new Color(143, 198, 222);
@@ -25,26 +23,7 @@ public class tools {
     public static final Color CHECK = new Color(255, 0, 0);
     public static final Color TEXT = new Color(93, 195, 101);
 
-    public static int WINDOW_WIDTH = 700;
-    public static int WINDOW_HEIGHT = 600;
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
-
-    /**
-     * This will draw a quadrilateral grid onto the screen, of the given size.
-     * @param g2 This is the graphics object to draw the grid onto.
-     * @param num_rows The number of rows to draw.
-     * @param num_cols The number of columns to draw.
-     */
-    public static void drawQuadGrid(Graphics2D g2, int num_rows, int num_cols) {
-
-    }
-
-    /**
-     * This updates the values of CELL_WIDTH and CELL_HEIGHT, based on the current size of the screen.
-     * @param num_rows The number of rows that the board needs to have.
-     * @param num_cols The number of columns that the board needs to have.
-     */
-
 
     /**
      * This is a function to abstract the process of first creating the screen.

@@ -26,7 +26,7 @@ public abstract class ChessPanel extends JPanel {
     protected ChessPiece selectedPiece = null;
     protected static int cellWidth;
     protected static int cellHeight;
-    protected int UIWidth = 150;
+    protected int UIWidth = 200;
     public boolean animating = false;
 
     /**
@@ -63,7 +63,7 @@ public abstract class ChessPanel extends JPanel {
         int y = 0;
         Color c = board.getController().isWhitesTurn() ? Color.BLACK : Color.WHITE;
         g2.setPaint(c);
-        g2.fillRect(x, y, cellWidth * 2, cellHeight);
+        g2.fillRect(x + UIWidth / 4, y, UIWidth / 2, cellHeight);
         g2.setPaint(tools.TEXT);
         x += 10;
         g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + cellHeight * 2);
@@ -168,7 +168,7 @@ public abstract class ChessPanel extends JPanel {
     /**
      * Recalculated how large the board needs to be, based on the current size of the panel.
      */
-    public void recalculateCellSize() {
+    protected void recalculateCellSize() {
         cellWidth = (int) Math.round((
                 Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows()) / 2) * 2;
         cellHeight = cellWidth;

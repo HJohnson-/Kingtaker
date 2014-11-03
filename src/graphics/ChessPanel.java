@@ -38,6 +38,10 @@ public abstract class ChessPanel extends JPanel {
         recalculateCellSize();
         this.addMouseListener(new HitTestAdapter());
         this.addComponentListener(new resizeListener());
+
+        for (ChessPiece p : board.allPieces()) {
+            p.graphics.givePanel(ChessPanel.this);
+        }
     }
 
     /**
@@ -205,7 +209,6 @@ public abstract class ChessPanel extends JPanel {
                 } else {
                     if (selectedPiece.allPieceMoves().contains(l)) {
                         selectedPiece.graphics.setGoal(l);
-                        selectedPiece.graphics.givePanel(ChessPanel.this);
                         if (board.getController().attemptMove(selectedPiece.cords, l)) {
                             ExecutorService pool = Executors.newFixedThreadPool(1);
                             pool.submit(selectedPiece.graphics);

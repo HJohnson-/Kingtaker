@@ -58,10 +58,10 @@ public class GrandBoard extends Board {
 					this.placePiece(location, new King(this, PieceType.BLACK, location));
 					break;
 				case 5:
-					//Marshal
+					this.placePiece(location, new Marshal(this, PieceType.BLACK, location));
 					break;
 				case 6:
-					//Cardinal
+					this.placePiece(location, new Cardinal(this, PieceType.BLACK, location));
 					break;
 				default:
 			}
@@ -98,10 +98,10 @@ public class GrandBoard extends Board {
 					this.placePiece(location, new King(this, PieceType.WHITE, location));
 					break;
 				case 5:
-					//Marshal
+					this.placePiece(location, new Marshal(this, PieceType.WHITE, location));
 					break;
 				case 6:
-					//Cardinal
+					this.placePiece(location, new Cardinal(this, PieceType.WHITE, location));
 					break;
 			}
 		}

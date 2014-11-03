@@ -177,6 +177,7 @@ public abstract class ChessPanel extends JPanel {
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
             p.graphics.endCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
             p.graphics.totalSteps = cellWidth / 2;
+            p.graphics.animationTime = 1500 / cellWidth;
         }
     }
 

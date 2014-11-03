@@ -1,5 +1,6 @@
 package BasicChess;
 
+import graphics.ChessPanel;
 import graphics.GraphicsControl;
 import main.Board;
 import main.Location;
@@ -9,8 +10,8 @@ import main.Location;
  */
 public class KnightGraphicsControl extends GraphicsControl {
 
-    public KnightGraphicsControl(Location cur, Location end, Board board) {
-        super(cur, end, board);
+    public KnightGraphicsControl(Location cur, Location end) {
+        super(cur, end);
     }
 
     /**

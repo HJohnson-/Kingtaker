@@ -29,6 +29,7 @@ public class tools {
     public static int CELL_HEIGHT = 50;
     public static int WINDOW_WIDTH = 700;
     public static int WINDOW_HEIGHT = 600;
+    public static int UI_WIDTH = 150;
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
     /**
@@ -63,8 +64,8 @@ public class tools {
      */
     public static void recalculateCellSize(int num_rows, int num_cols) {
         if (WINDOW_HEIGHT < WINDOW_WIDTH) {
-            CELL_HEIGHT = (int) Math.floor((WINDOW_HEIGHT / num_rows) / 25) * 25;
-            CELL_WIDTH = CELL_HEIGHT;
+            CELL_WIDTH = (int) Math.floor(((WINDOW_WIDTH - UI_WIDTH) / num_rows) / 25) * 25;
+            CELL_HEIGHT = CELL_WIDTH;
         } else {
             CELL_WIDTH = (int) Math.floor((WINDOW_WIDTH / num_cols) / 25) * 25;
             CELL_HEIGHT = CELL_WIDTH;

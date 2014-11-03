@@ -48,6 +48,7 @@ public class frmVariantChooser {
             public void actionPerformed(ActionEvent actionEvent) {
                 //Close form on accept and start game
                 frame.setVisible(false);
+                visibility = false;
 
                 switch (lstVariationPicker.getSelectedIndex()) {
                     case 0 :

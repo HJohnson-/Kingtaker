@@ -31,6 +31,7 @@ public class GameLobby {
         if (instance == null) {
             instance = new GameLobby();
         }
+        instance.lobbyIsOpen = true;
         frmLobby.showInstance(instance);
     }
 
@@ -39,7 +40,6 @@ public class GameLobby {
     }
 
     private GameLobby() {
-        lobbyIsOpen = true;
         games = Collections.synchronizedList(new ArrayList<RemoteGame>());
         gameLobbyFetcher = new GameLobbyFetcher();
         fetcherThread = new Thread(gameLobbyFetcher);

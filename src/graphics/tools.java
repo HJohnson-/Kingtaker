@@ -25,11 +25,8 @@ public class tools {
     public static final Color CHECK = new Color(255, 0, 0);
     public static final Color TEXT = new Color(93, 195, 101);
 
-    public static int CELL_WIDTH = 50;
-    public static int CELL_HEIGHT = 50;
     public static int WINDOW_WIDTH = 700;
     public static int WINDOW_HEIGHT = 600;
-    public static int UI_WIDTH = 150;
     public static Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
     /**
@@ -39,22 +36,7 @@ public class tools {
      * @param num_cols The number of columns to draw.
      */
     public static void drawQuadGrid(Graphics2D g2, int num_rows, int num_cols) {
-        recalculateCellSize(num_rows, num_cols);
-        g2.setColor(BOARD_BLACK);
-        for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
-            for (int y = 0; y < num_cols * CELL_HEIGHT; y += CELL_HEIGHT * 2) {
-                g2.fillRect(x, y, CELL_WIDTH, CELL_HEIGHT);
-                g2.fillRect(x + CELL_WIDTH, y + CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
-            }
-        }
 
-        g2.setColor(BOARD_WHITE);
-        for (int x = 0; x < num_rows * CELL_WIDTH; x += CELL_WIDTH * 2) {
-            for (int y = 0; y < num_cols * CELL_HEIGHT; y += CELL_WIDTH * 2) {
-                g2.fillRect(x + CELL_WIDTH, y, CELL_WIDTH, CELL_HEIGHT);
-                g2.fillRect(x, y + CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
-            }
-        }
     }
 
     /**
@@ -62,15 +44,7 @@ public class tools {
      * @param num_rows The number of rows that the board needs to have.
      * @param num_cols The number of columns that the board needs to have.
      */
-    public static void recalculateCellSize(int num_rows, int num_cols) {
-        if (WINDOW_HEIGHT < WINDOW_WIDTH) {
-            CELL_WIDTH = (int) Math.floor(((WINDOW_WIDTH - UI_WIDTH) / num_rows) / 25) * 25;
-            CELL_HEIGHT = CELL_WIDTH;
-        } else {
-            CELL_WIDTH = (int) Math.floor((WINDOW_WIDTH / num_cols) / 25) * 25;
-            CELL_HEIGHT = CELL_WIDTH;
-        }
-    }
+
 
     /**
      * This is a function to abstract the process of first creating the screen.

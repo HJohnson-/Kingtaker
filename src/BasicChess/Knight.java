@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by hj1012 on 15/10/14.
+ * Default knight
  */
 public class Knight extends ChessPiece {
 	public Knight(Board board, PieceType type, Location cords) {
@@ -44,5 +44,10 @@ public class Knight extends ChessPiece {
         }
 
 		return moves;
+	}
+
+	@Override
+	public String getName() {
+		return "Knight";
 	}
 }

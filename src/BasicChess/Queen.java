@@ -8,7 +8,7 @@ import pieces.ChessPiece;
 import java.util.List;
 
 /**
- * Created by hj1012 on 15/10/14.
+ * Default Queen
  */
 public class Queen extends ChessPiece {
 	public Queen(Board board, PieceType type, Location location) {
@@ -34,4 +34,9 @@ public class Queen extends ChessPiece {
 
         return moves;
     }
+
+	@Override
+	public String getName() {
+		return "Queen";
+	}
 }

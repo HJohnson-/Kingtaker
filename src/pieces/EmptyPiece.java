@@ -22,4 +22,8 @@ public class EmptyPiece extends ChessPiece {
 	protected boolean validInState(Location to) {
 		return false;
 	}
+
+	public String getName() {
+		return "NOT A PIECE";
+	}
 }

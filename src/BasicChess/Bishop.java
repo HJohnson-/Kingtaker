@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by hj1012 on 15/10/14.
+ * Default Bishop
  */
 public class Bishop extends ChessPiece {
 	public Bishop(Board board, PieceType type, Location cords) {
@@ -44,4 +44,9 @@ public class Bishop extends ChessPiece {
 
         return moves;
     }
+
+	@Override
+	public String getName() {
+		return "Bishop";
+	}
 }

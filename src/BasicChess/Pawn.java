@@ -6,12 +6,11 @@ import main.PieceType;
 import pieces.ChessPiece;
 import pieces.EmptyPiece;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by hj1012 on 15/10/14.
+ * Default Pawn
  */
 public class Pawn extends ChessPiece{
 	protected boolean justDidADoubleMove;
@@ -132,7 +131,7 @@ public class Pawn extends ChessPiece{
             if (cords.getY() > 0) {
                 moves.add(new Location(newX, cords.getY() - 1));
             }
-            if (cords.getY() < board.numRows() - 2) {
+            if (cords.getY() <= board.numRows() - 2) {
                 moves.add(new Location(newX, cords.getY() + 1));
             }
         }
@@ -143,4 +142,20 @@ public class Pawn extends ChessPiece{
 
         return moves;
     }
+
+	@Override
+	public void finishGen(int lastMovedOn, String miscFields) {
+		lastTurnMovedOn = lastMovedOn;
+		justDidADoubleMove = miscFields.equals("T");
+	}
+
+	@Override
+	public String getMisc() {
+		return justDidADoubleMove ? "T" : "F";
+	}
+
+	@Override
+	public String getName() {
+		return "Pawn";
+	}
 }

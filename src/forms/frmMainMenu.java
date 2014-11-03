@@ -51,13 +51,7 @@ public class frmMainMenu {
                 System.exit(0);
             }
         });
-        panel1.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                super.focusGained(e);
-                toggleButtonsEnabled(!(frmVariantChooser.isVisible() || GameLobby.isOpen()));
-            }
-        });
+
     }
 
     private void showLobby() {

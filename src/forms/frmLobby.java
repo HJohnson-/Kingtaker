@@ -1,6 +1,8 @@
 package forms;
 
 import networking.GameLobby;
+import networking.LocalUserAccount;
+import networking.NetworkingCodes.ResponseCode;
 import networking.RemoteGame;
 
 import javax.swing.*;
@@ -24,6 +26,7 @@ public class frmLobby {
     private JButton btnLogin;
     private JButton btnRegister;
     private JButton btnCreateGame;
+    private MessageBoxAlert messageBoxAlert;
 
     private final String TXT_USERNAME_SUGGESTION_TEXT = "username";
     private final String TXT_PASSWORD_SUGGESTION_TEXT = "password";
@@ -44,6 +47,7 @@ public class frmLobby {
         frame.setContentPane(panel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
+        messageBoxAlert = new MessageBoxAlert(frame);
         displayForm();
 
         //Called when the lobby form is closed - reopens last form if hidden
@@ -80,13 +84,35 @@ public class frmLobby {
         btnCreateGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (gameLobby.userLoggedIn()) {
+                if (gameLobby.getUser().isLoggedIn()) {
 
                     //TODO Open frmVariationPicker as dialog
                     //somehow this has to talk back to gameLobby.createGame()
 
                 }
                 tblLobbyModel.addRow(new Object[]{"Capablanca","jc4512",2003});
+            }
+        });
+        btnLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int result = gameLobby.attemptLogin(txtUsername.getText(), txtPassword.getPassword());
+                if (result == ResponseCode.OK) {
+                    displayUserInformation(gameLobby.getUser());
+                } else {
+                    messageBoxAlert.showUserLoginResponse(result);
+                }
+            }
+        });
+        btnRegister.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int result = gameLobby.attemptRegister(txtUsername.getText(), txtPassword.getPassword());
+                if (result == ResponseCode.OK) {
+                    displayUserInformation(gameLobby.getUser());
+                } else {
+                    messageBoxAlert.showUserRegisterResponse(result);
+                }
             }
         });
     }
@@ -98,6 +124,17 @@ public class frmLobby {
         panel.grabFocus();
     }
 
+    // Shows username and rating of current user logged in.
+    private void displayUserInformation(LocalUserAccount user) {
+        lblUsernameRating.setText("Welcome, " + user.getUsername() + " (" + user.getRating() + ") ");
+    }
+
+    // Clears all user information from lobby, due to having been logged out.
+    private void clearUserInformation() {
+
+    }
+
+    // Used by textbox listeners to determine whether the user is in the process of logging in.
     private boolean isAllowableUsernameField(String username) {
         return username.length() > 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
     }

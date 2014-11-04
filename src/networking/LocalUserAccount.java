@@ -5,11 +5,13 @@ package networking;
  */
 public class LocalUserAccount {
     private String username;
-    private String password;
+    private int passwordHash;
     private int rating;
+    private boolean loggedIn;
 
     public LocalUserAccount(String username, String password) {
         this.username = username;
+        this.passwordHash = (username + password).hashCode();
     }
 
     public String getUsername() {
@@ -28,5 +30,9 @@ public class LocalUserAccount {
     public boolean attemptLogin() {
 
         return false;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 }

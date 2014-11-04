@@ -30,6 +30,8 @@ public class frmLobby {
 
     private final String TXT_USERNAME_SUGGESTION_TEXT = "username";
     private final String TXT_PASSWORD_SUGGESTION_TEXT = "password";
+    private final String LBL_ISCONNECTED_TEXT_NO = "NOT CONNECTED";
+    private final String LBL_ISCONNECTED_TEXT_YES = "CONNECTED";
 
     private DefaultTableModel tblLobbyModel;
 
@@ -41,6 +43,10 @@ public class frmLobby {
         } else {
             instance.displayForm();
         }
+    }
+
+    public static frmLobby getInstance() {
+        return instance;
     }
 
     private frmLobby(final GameLobby gameLobby) {
@@ -99,12 +105,13 @@ public class frmLobby {
                 if (!LocalUserAccount.checkAcceptableUsernameAndPassword(
                         txtUsername.getText(), new String(txtPassword.getPassword()))) {
                     messageBoxAlert.showInvalidLoginDetails();
-                }
-                int result = gameLobby.attemptLogin(txtUsername.getText(), txtPassword.getPassword());
-                if (result == ResponseCode.OK) {
-                    displayUserInformation(gameLobby.getUser());
                 } else {
-                    messageBoxAlert.showUserLoginResponse(result);
+                    int result = gameLobby.attemptLogin(txtUsername.getText(), txtPassword.getPassword());
+                    if (result == ResponseCode.OK) {
+                        displayUserInformation(gameLobby.getUser());
+                    } else {
+                        messageBoxAlert.showUserLoginResponse(result);
+                    }
                 }
             }
         });
@@ -114,12 +121,13 @@ public class frmLobby {
                 if (!LocalUserAccount.checkAcceptableUsernameAndPassword(
                         txtUsername.getText(), new String(txtPassword.getPassword()))) {
                     messageBoxAlert.showInvalidLoginDetails();
-                }
-                int result = gameLobby.attemptRegister(txtUsername.getText(), txtPassword.getPassword());
-                if (result == ResponseCode.OK) {
-                    displayUserInformation(gameLobby.getUser());
                 } else {
-                    messageBoxAlert.showUserRegisterResponse(result);
+                    int result = gameLobby.attemptRegister(txtUsername.getText(), txtPassword.getPassword());
+                    if (result == ResponseCode.OK) {
+                        displayUserInformation(gameLobby.getUser());
+                    } else {
+                        messageBoxAlert.showUserRegisterResponse(result);
+                    }
                 }
             }
         });
@@ -147,13 +155,18 @@ public class frmLobby {
         return username.length() >= 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
     }
 
-    // Clear rows and refill. This method is only called when the list actually changes.
-    public void displayOpenGames(List<RemoteGame> list) {
+    // Clear table rows and refill. Set connection label accordingly.
+    public void displayOpenGamesAndConnectionStatus(List<RemoteGame> list, boolean isConnected) {
         tblLobbyModel.getDataVector().removeAllElements();
         for (RemoteGame game : list) {
             tblLobbyModel.addRow(new Object[]{game.variantId, game.hostUsername, game.hostRating});
         }
+        tblLobbyModel.fireTableRowsUpdated(0,tblLobbyModel.getRowCount()-1);
+
+        String text = isConnected ? LBL_ISCONNECTED_TEXT_YES : LBL_ISCONNECTED_TEXT_NO;
+        lblIsConnected.setText(text);
     }
+
 
     private void createUIComponents() {
         txtUsername = new JTextField();

@@ -39,11 +39,11 @@ public class LocalUserAccount {
         ServerMessageSender sms = new ServerMessageSender();
         String response = sms.sendMessage(msg, true);
 
-        if (response == null || !response.matches("\\d(" + ResponseCode.DELIMINATOR + "\\d+)?")) {
+        if (response == null || !response.matches("\\d(" + ResponseCode.DEL + "\\d+)?")) {
             return ResponseCode.UNSPECIFIED_ERROR;
         }
 
-        if (response.matches(ResponseCode.OK + ResponseCode.DELIMINATOR + "\\d+")) {
+        if (response.matches(ResponseCode.OK + ResponseCode.DEL + "\\d+")) {
             rating = Integer.parseInt(response.substring(2));
             return ResponseCode.OK;
         }

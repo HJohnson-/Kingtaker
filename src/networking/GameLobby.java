@@ -4,7 +4,6 @@ import forms.frmLobby;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ResponseCode;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,8 +25,6 @@ public class GameLobby {
 
     private boolean lobbyIsOpen;
 
-    private frmLobby frm;
-
     public static void showLobby() {
         if (instance == null) {
             instance = new GameLobby();
@@ -43,8 +40,6 @@ public class GameLobby {
         games = Collections.synchronizedList(new ArrayList<RemoteGame>());
         gameLobbyFetcher = new GameLobbyFetcher();
     }
-
-
 
     private void parseRemoteGameList(String list) {
         games.clear();
@@ -71,17 +66,17 @@ public class GameLobby {
     }
 
     public void close() {
-        fetcherThread.interrupt();
         lobbyIsOpen = false;
         //TODO: remove any open games
     }
     public void open() {
+        lobbyIsOpen = true;
+        frmLobby.showInstance(instance);
+
         if (fetcherThread == null || !fetcherThread.isAlive()) {
             fetcherThread = new Thread(gameLobbyFetcher);
             fetcherThread.start();
         }
-        lobbyIsOpen = true;
-        frmLobby.showInstance(instance);
     }
 
     public int attemptLogin(String user, char[] password) {
@@ -94,22 +89,34 @@ public class GameLobby {
         return localUser.authenticate(ClientCommandCode.REGISTER_ACCOUNT);
     }
 
+
+    //Repeatedly requests a new game list. Upon receipt, checks response code
+    // and passes the list (minus the response code) to GameLobby. If the
+    // connection is lost, the list is cleared and the connection status
+    // is shown on the form. Stops running if the lobby is closed.
     private class GameLobbyFetcher implements Runnable {
         private final long REFRESH_MS = 10000;
         @Override
 
-        //Keep requesting a new game list. Upon receipt, check the response code
-        // and pass the list (minus the response code) to GameLobby.
-        //Runs until interrupted (thread is disposed).
         public void run() {
             ServerMessageSender sms = new ServerMessageSender();
+            boolean isOnline;
             while (lobbyIsOpen) {
                 String response = sms.sendMessage(
                         ClientCommandCode.GET_GAME_LIST + "", true);
-                if (response != null && response.startsWith(ResponseCode.OK + ResponseCode.DELIMINATOR)) {
-                    parseRemoteGameList(response.substring(2));
-                    frm.displayOpenGames(games);
+                if (response != null) {
+                    isOnline = true;
+                    if (response.startsWith(ResponseCode.OK + ResponseCode.DEL)) {
+                        parseRemoteGameList(response.substring(2));
+                    } else if (response.equals(ResponseCode.EMPTY + "")) {
+                        games.clear();
+                    }
+                } else {
+                    isOnline = false;
+                    games.clear();
                 }
+
+                frmLobby.getInstance().displayOpenGamesAndConnectionStatus(games, isOnline);
 
                 try {
                     Thread.sleep(REFRESH_MS);

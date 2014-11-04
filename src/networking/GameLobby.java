@@ -32,8 +32,7 @@ public class GameLobby {
         if (instance == null) {
             instance = new GameLobby();
         }
-        instance.lobbyIsOpen = true;
-        frmLobby.showInstance(instance);
+        instance.open();
     }
 
     public static boolean isOpen() {
@@ -43,8 +42,6 @@ public class GameLobby {
     private GameLobby() {
         games = Collections.synchronizedList(new ArrayList<RemoteGame>());
         gameLobbyFetcher = new GameLobbyFetcher();
-        fetcherThread = new Thread(gameLobbyFetcher);
-        fetcherThread.start();
     }
 
 
@@ -78,6 +75,14 @@ public class GameLobby {
         lobbyIsOpen = false;
         //TODO: remove any open games
     }
+    public void open() {
+        if (fetcherThread == null || !fetcherThread.isAlive()) {
+            fetcherThread = new Thread(gameLobbyFetcher);
+            fetcherThread.start();
+        }
+        lobbyIsOpen = true;
+        frmLobby.showInstance(instance);
+    }
 
     public int attemptLogin(String user, char[] password) {
         localUser = new LocalUserAccount(user, new String(password));
@@ -98,7 +103,7 @@ public class GameLobby {
         //Runs until interrupted (thread is disposed).
         public void run() {
             ServerMessageSender sms = new ServerMessageSender();
-            while (true) {
+            while (lobbyIsOpen) {
                 String response = sms.sendMessage(
                         ClientCommandCode.GET_GAME_LIST + "", true);
                 if (response != null && response.startsWith(ResponseCode.OK + ResponseCode.DELIMINATOR)) {
@@ -109,8 +114,6 @@ public class GameLobby {
                 try {
                     Thread.sleep(REFRESH_MS);
                 } catch (InterruptedException e) {
-                    //TODO: test this, not sure how java handles threads
-                    return;
                 }
             }
         }

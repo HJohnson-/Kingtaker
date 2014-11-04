@@ -96,6 +96,10 @@ public class frmLobby {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                if (!LocalUserAccount.checkAcceptableUsernameAndPassword(
+                        txtUsername.getText(), new String(txtPassword.getPassword()))) {
+                    messageBoxAlert.showInvalidLoginDetails();
+                }
                 int result = gameLobby.attemptLogin(txtUsername.getText(), txtPassword.getPassword());
                 if (result == ResponseCode.OK) {
                     displayUserInformation(gameLobby.getUser());
@@ -107,6 +111,10 @@ public class frmLobby {
         btnRegister.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                if (!LocalUserAccount.checkAcceptableUsernameAndPassword(
+                        txtUsername.getText(), new String(txtPassword.getPassword()))) {
+                    messageBoxAlert.showInvalidLoginDetails();
+                }
                 int result = gameLobby.attemptRegister(txtUsername.getText(), txtPassword.getPassword());
                 if (result == ResponseCode.OK) {
                     displayUserInformation(gameLobby.getUser());
@@ -136,7 +144,7 @@ public class frmLobby {
 
     // Used by textbox listeners to determine whether the user is in the process of logging in.
     private boolean isAllowableUsernameField(String username) {
-        return username.length() > 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
+        return username.length() >= 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
     }
 
     // Clear rows and refill. This method is only called when the list actually changes.

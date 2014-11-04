@@ -17,6 +17,7 @@ import static networking.NetworkingUtils.checkInetAddressIsValid;
 public class GameLobby {
     private List<RemoteGame> games;
     private LocalOpenGame localOpenGame;
+    private LocalUserAccount localUser;
 
     private static GameLobby instance;
 
@@ -68,15 +69,24 @@ public class GameLobby {
         }
     }
 
-    public boolean userLoggedIn() {
-        //TODO user accounts
-        return false;
+    public LocalUserAccount getUser() {
+        return localUser;
     }
 
     public void close() {
         fetcherThread.interrupt();
         lobbyIsOpen = false;
         //TODO: remove any open games
+    }
+
+    public int attemptLogin(String user, char[] password) {
+        localUser = new LocalUserAccount(user, new String(password));
+        return localUser.authenticate(ClientCommandCode.AUTHENTICATE_USER);
+    }
+
+    public int attemptRegister(String user, char[] password) {
+        localUser = new LocalUserAccount(user, new String(password));
+        return localUser.authenticate(ClientCommandCode.REGISTER_ACCOUNT);
     }
 
     private class GameLobbyFetcher implements Runnable {
@@ -91,7 +101,7 @@ public class GameLobby {
             while (true) {
                 String response = sms.sendMessage(
                         ClientCommandCode.GET_GAME_LIST + "", true);
-                if (response != null && response.startsWith(ResponseCode.OK + ",")) {
+                if (response != null && response.startsWith(ResponseCode.OK + ResponseCode.DELIMINATOR)) {
                     parseRemoteGameList(response.substring(2));
                     frm.displayOpenGames(games);
                 }

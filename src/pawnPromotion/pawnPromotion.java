@@ -29,7 +29,7 @@ public class pawnPromotion implements Runnable {
     private ChessPiece pawn;
 
     // constructor
-    public  pawnPromotion (ChessPiece pawn){
+    public pawnPromotion (ChessPiece pawn){
         this.pawn = pawn;
     }
 
@@ -66,7 +66,7 @@ public class pawnPromotion implements Runnable {
 
     //   A board GUI for choosing a promotion piece
 
-    public  void addComponentsToPane(Container pane) {
+    public void addComponentsToPane(Container pane) {
         pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
         addAButton(PromoteType.QUEEN, "queen",pane);
         addAButton(PromoteType.ROOK,"rook", pane);
@@ -74,7 +74,7 @@ public class pawnPromotion implements Runnable {
         addAButton(PromoteType.KNIGHT,"knight", pane);
     }
 
-    private  void addAButton(final PromoteType promoteType,String name, Container container) {
+    private void addAButton(final PromoteType promoteType,String name, Container container) {
         // new button and set size
         JButton button = new JButton();
         button.setPreferredSize(new Dimension(150, 150));
@@ -112,7 +112,6 @@ public class pawnPromotion implements Runnable {
 
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-
         //Set up the content pane
         addComponentsToPane(frame.getContentPane());
 
@@ -127,6 +126,7 @@ public class pawnPromotion implements Runnable {
         frame.setVisible(true);
     }
 
+    @Override
     public void run() {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.

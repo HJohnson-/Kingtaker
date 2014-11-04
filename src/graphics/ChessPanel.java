@@ -24,8 +24,8 @@ public abstract class ChessPanel extends JPanel {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
-    protected int cellWidth;
-    protected int cellHeight;
+    public int cellWidth;
+    public int cellHeight;
     protected int UIWidth = 200;
     public boolean animating = false;
 
@@ -65,6 +65,18 @@ public abstract class ChessPanel extends JPanel {
     protected void drawUI(Graphics2D g2) {
         int x = cellWidth * (board.numCols());
         int y = 0;
+
+        JButton load = new JButton("Load");
+        JButton save = new JButton("Save");
+        load.setLocation(x, y);
+        load.setSize(100, cellHeight);
+        save.setLocation(x + 100, y);
+        save.setSize(100, cellHeight);
+        this.add(load);
+        this.add(save);
+
+        y += cellHeight;
+
         Color c = board.getController().isWhitesTurn() ? Color.BLACK : Color.WHITE;
         g2.setPaint(c);
         g2.fillRect(x + UIWidth / 4, y, UIWidth / 2, cellHeight);
@@ -77,13 +89,6 @@ public abstract class ChessPanel extends JPanel {
             g2.drawString("Game Over", cellWidth, cellHeight * board.numRows());
             g2.drawString(board.getController().getWinner() + " Wins",
                     cellWidth, cellHeight * (board.numRows() / 2 + 1));
-        }
-
-        int movesY = cellHeight * board.numRows() / 2;
-        g2.setFont(new Font("Bauhaus", Font.PLAIN, 10));
-        for (Move move : board.getController().getMoves()) {
-            g2.drawString(move.toString(), cellWidth * board.numCols() + 10, movesY);
-            movesY += 12;
         }
     }
 
@@ -195,7 +200,7 @@ public abstract class ChessPanel extends JPanel {
          */
         @Override
         public void mousePressed(MouseEvent e) {
-            if (!animating) {
+            if (!animating && !board.getController().gameOver()) {
                 int x = e.getX() / cellWidth;
                 int y = e.getY() / cellHeight;
                 Location l = new Location(x, y);
@@ -216,9 +221,8 @@ public abstract class ChessPanel extends JPanel {
                     }
                     selectedPiece = null;
                 }
-
-                repaint();
             }
+            repaint();
         }
     }
 

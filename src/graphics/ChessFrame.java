@@ -35,7 +35,7 @@ public abstract class ChessFrame extends JFrame {
      */
     protected void initUI() {
         setTitle(title);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         add(panel);
 

@@ -20,7 +20,6 @@ public class GameController {
 	private Board board;
 	private String gameVariant;
 	private PieceDecoder decoder;
-    private List<Move> moves;
 
 	public Board getBoard() {
 		return board;
@@ -34,13 +33,11 @@ public class GameController {
 		this.board = board;
 		winner = "None";
 		gameOver = false;
-        moves = new LinkedList<Move>();
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
 	}
 
 	public GameController(Board board, PieceDecoder decoder, String code) {
-		moves = new LinkedList<Move>();
 		this.board = board;
 		winner = "None";
 		gameOver = false;
@@ -113,15 +110,6 @@ public class GameController {
                 nextPlayersTurn();
             }
 
-            String col = beingMoved.isWhite() ? "White" : "Black";
-            String otherCol = col.equals("White") ? "Black" : "White";
-
-            if (movedOnto.type != PieceType.EMPTY) {
-                moves.add(new Move(pieceLocation, targetLocation, col + " " + beingMoved.getClass().getSimpleName(),
-                        otherCol + " " + movedOnto.getClass().getSimpleName()));
-            } else {
-                moves.add(new Move(pieceLocation, targetLocation, col + " " + beingMoved.getClass().getSimpleName()));
-            }
 			return true;
 		} else {
 			return false;
@@ -228,19 +216,11 @@ public class GameController {
 
 	public String toCode() {
 		StringBuilder code = new StringBuilder();
-		code.append("#$");
-		code.append("T:" + currentTurn);
-		code.append("~");
-		code.append("V:" + gameVariant);
-		code.append("$");
+		code.append("#$").append("T:").append(currentTurn).append("~").append("V:").append(gameVariant).append("$");
 		for(ChessPiece p : board.allPieces()) {
 			code.append(p.toCode());
 		}
 		code.append("#");
 		return code.toString();
 	}
-
-    public List<Move> getMoves() {
-        return moves;
-    }
 }

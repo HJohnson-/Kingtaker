@@ -4,6 +4,7 @@ import BasicChess.BasicChess;
 import graphics.tools;
 import main.GameController;
 import BasicChess.BasicDecoder;
+import BasicChess.BasicChessFrame;
 
 /**
  * Implements the Random960 chess variant.
@@ -24,4 +25,10 @@ public class RandomChess extends BasicChess {
 		this.game = game;
 		this.game.getBoard().setController(game);
 	}
+
+    @Override
+    public boolean drawBoard() {
+        graphics.tools.create(new BasicChessFrame("Random Chess", 700, 625, game.getBoard()));
+        return true;
+    }
 }

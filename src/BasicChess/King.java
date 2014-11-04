@@ -42,20 +42,17 @@ public class King extends ChessPiece {
 	 */
 	private boolean validCastleAttempt(Location to) {
 		boolean debugS = to.equals(new Location(7,2));
-		int myFirstRank = (this.type == PieceType.WHITE ? board.numCols()-1 : 0);
-		int movementDirection = to.getY().compareTo(cords.getY());
-		int rookY = (movementDirection == 1 ? board.numRows()-1 : 0 );
+		int rookY = (to.getY() > cords.getY() ? board.numRows() - 1 : 0 );
 		ChessPiece targetRook = board.getPiece(new Location(cords.getX(), rookY));
 
 		if(Math.abs(cords.getY() - to.getY()) != 2) {
 			return false;
 		}
+        if (Math.abs(cords.getX() - to.getX()) != 0) {
+            return false;
+        }
 
 		if(!(targetRook instanceof Rook)) {
-			return false;
-		}
-
-		if(cords.getX() != myFirstRank || myFirstRank != to.getX()) {
 			return false;
 		}
 
@@ -83,9 +80,12 @@ public class King extends ChessPiece {
 	@Override
 	public boolean executeMove(Location to) {
 		if(validCastleAttempt(to)) {
-			int movementDirection = to.getY().compareTo(cords.getY());
-			int rookY = (movementDirection == 1 ? board.numRows()-1 : 0 );
-			board.movePiece(new Location(cords.getX(), rookY), new Location(cords.getX(), cords.getY()+movementDirection));
+			int kingDirection = (int) Math.signum(to.getY() - cords.getY());
+			int rookY = (kingDirection == 1 ? board.numRows() - 1 : 0 );
+
+            board.movePiece(new Location(cords.getX(), rookY),
+                    new Location(cords.getX(), cords.getY() + kingDirection));
+
 			return super.executeMove(to);
 		} else {
 			return super.executeMove(to);
@@ -134,6 +134,10 @@ public class King extends ChessPiece {
                 int newY = cords.getY() + j;
                 if (newY < 0 || newY >= board.numRows()) continue;
                 moves.add(new Location(newX, newY));
+            }
+            if (lastTurnMovedOn == 0) {
+                moves.add(new Location(cords.getX(), cords.getY() + 2));
+                moves.add(new Location(cords.getX(), cords.getY() - 2));
             }
         }
 

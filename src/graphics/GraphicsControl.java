@@ -1,5 +1,6 @@
 package graphics;
 
+import main.Board;
 import main.Location;
 
 /**
@@ -20,8 +21,8 @@ public class GraphicsControl implements Runnable {
      *            when a piece is first created or when a piece is not moving.
      */
     public GraphicsControl(Location cur, Location end) {
-        curCords = new Location(cur.getX() * ChessPanel.cellWidth, cur.getY() * ChessPanel.cellHeight);
-        endCords = new Location(end.getX() * ChessPanel.cellWidth, end.getY() * ChessPanel.cellHeight);
+        curCords = cur;
+        endCords = end;
     }
 
     public int getX() {
@@ -37,7 +38,7 @@ public class GraphicsControl implements Runnable {
      * @param l The location which the piece will end up on, when the animation concludes.
      */
     public void setGoal(Location l) {
-        endCords = new Location(l.getX() * ChessPanel.cellWidth, l.getY() * ChessPanel.cellHeight);
+        endCords = new Location(l.getX() * panel.cellWidth, l.getY() * panel.cellHeight);
     }
 
     public void givePanel(ChessPanel panel) {

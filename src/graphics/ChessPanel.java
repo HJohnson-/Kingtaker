@@ -24,8 +24,8 @@ public abstract class ChessPanel extends JPanel {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
-    protected static int cellWidth;
-    protected static int cellHeight;
+    protected int cellWidth;
+    protected int cellHeight;
     protected int UIWidth = 200;
     public boolean animating = false;
 
@@ -35,13 +35,13 @@ public abstract class ChessPanel extends JPanel {
      */
     protected ChessPanel(Board board) {
         this.board = board;
-        recalculateCellSize();
         this.addMouseListener(new HitTestAdapter());
         this.addComponentListener(new resizeListener());
 
         for (ChessPiece p : board.allPieces()) {
             p.graphics.givePanel(ChessPanel.this);
         }
+        recalculateCellSize();
     }
 
     /**
@@ -172,7 +172,7 @@ public abstract class ChessPanel extends JPanel {
     /**
      * Recalculated how large the board needs to be, based on the current size of the panel.
      */
-    protected void recalculateCellSize() {
+    public void recalculateCellSize() {
         cellWidth = (int) Math.round((
                 Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows()) / 2) * 2;
         cellHeight = cellWidth;

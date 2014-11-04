@@ -1,5 +1,8 @@
 package networking;
 
+import networking.NetworkingCodes.ClientCommandCode;
+import networking.NetworkingCodes.ResponseCode;
+
 /**
  * Created by jc4512 on 04/11/14.
  */
@@ -22,15 +25,32 @@ public class LocalUserAccount {
         return rating;
     }
 
-    public boolean attemptRegister() {
+    //authenticate builds and sends a command message to the server and
+    // awaits either an OK with the user's rating, or an error code. If the
+    // response is of an unexpected format, it will return an unexpected
+    // error code, otherwise, whichever response code it received.
+    public int authenticate(int clientCommandCode) {
+        assert clientCommandCode == ClientCommandCode.REGISTER_ACCOUNT ||
+                clientCommandCode == ClientCommandCode.AUTHENTICATE_USER;
 
-        return false;
+        String msg = clientCommandCode + ClientCommandCode.DELIMINATOR +
+                     username + ClientCommandCode.DELIMINATOR + passwordHash;
+
+        ServerMessageSender sms = new ServerMessageSender();
+        String response = sms.sendMessage(msg, true);
+
+        if (response == null || !response.matches("\\d(" + ResponseCode.DELIMINATOR + "\\d+)?")) {
+            return ResponseCode.UNSPECIFIED_ERROR;
+        }
+
+        if (response.matches(ResponseCode.OK + ResponseCode.DELIMINATOR + "\\d+")) {
+            rating = Integer.parseInt(response.substring(2));
+            return ResponseCode.OK;
+        }
+
+        return Integer.parseInt(response);
     }
 
-    public boolean attemptLogin() {
-
-        return false;
-    }
 
     public boolean isLoggedIn() {
         return loggedIn;

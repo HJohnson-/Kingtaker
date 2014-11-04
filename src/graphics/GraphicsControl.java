@@ -58,7 +58,6 @@ public class GraphicsControl implements Runnable {
         panel.animating = true;
 
         while (!curCords.equals(endCords)) {
-
             curCords.incrX(animationXStep);
             curCords.incrY(animationYStep);
             panel.repaint();
@@ -73,6 +72,11 @@ public class GraphicsControl implements Runnable {
 
         panel.animating = false;
         animating = false;
+    }
+
+    @Override
+    public String toString() {
+        return curCords + " -> " + endCords;
     }
 
 }

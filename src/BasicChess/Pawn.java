@@ -9,6 +9,9 @@ import pawnPromotion.pawnPromotion;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Default Pawn
@@ -110,8 +113,8 @@ public class Pawn extends ChessPiece{
         if (valid) {
             boolean successful = super.executeMove(to);
             if (to.getX() == 0 || to.getX() == board.numCols() - 1) {
-                pawnPromotion pp = new pawnPromotion(this);
-                pp.run();
+                ExecutorService exe = Executors.newFixedThreadPool(1);
+                exe.submit(new pawnPromotion(this));
             }
             return successful;
         } else {

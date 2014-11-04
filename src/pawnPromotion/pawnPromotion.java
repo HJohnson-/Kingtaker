@@ -36,8 +36,6 @@ public class pawnPromotion implements Runnable {
     // chess piece promotion
     public void promote(ChessPiece pawn, PromoteType promoteType) {
 
-        pawn.board.clearSpace(pawn.cords);
-
         //System.out.println("pawn cords" + pawn.cords+" clear space...");
 
         switch (promoteType) {
@@ -55,11 +53,12 @@ public class pawnPromotion implements Runnable {
                 break;
         }
 
+        pawn.board.clearSpace(pawn.cords);
         promotedPiece.board.placePiece(promotedPiece.cords, promotedPiece);
+        promotedPiece.lastTurnMovedOn = pawn.lastTurnMovedOn;
+        promotedPiece.graphics.givePanel(pawn.graphics.panel);
 
-        // this function need to be added
         pawn.graphics.panel.repaint();
-//        promotedPiece.graphics.callRepaintFromOther();
 
     }
 
@@ -95,7 +94,6 @@ public class pawnPromotion implements Runnable {
             public void actionPerformed(ActionEvent e)
             {
                 promote(pawn,promoteType);
-                System.out.println("pawn :" + pawn + "     " + promoteType);
                 frame.dispose();
             }
         });

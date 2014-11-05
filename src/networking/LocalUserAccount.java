@@ -44,6 +44,7 @@ public class LocalUserAccount {
         }
 
         if (response.matches(ResponseCode.OK + ResponseCode.DEL + "\\d+")) {
+            loggedIn = true;
             rating = Integer.parseInt(response.substring(2));
             return ResponseCode.OK;
         }

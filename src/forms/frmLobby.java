@@ -90,7 +90,7 @@ public class frmLobby {
         btnCreateGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (gameLobby.getUser().isLoggedIn()) {
+                if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
 
                     //TODO Open frmVariationPicker as dialog
                     //somehow this has to talk back to gameLobby.createGame()
@@ -161,7 +161,7 @@ public class frmLobby {
         for (RemoteGame game : list) {
             tblLobbyModel.addRow(new Object[]{game.variantId, game.hostUsername, game.hostRating});
         }
-        tblLobbyModel.fireTableRowsUpdated(0,tblLobbyModel.getRowCount()-1);
+        tblLobbyModel.fireTableDataChanged();
 
         String text = isConnected ? LBL_ISCONNECTED_TEXT_YES : LBL_ISCONNECTED_TEXT_NO;
         lblIsConnected.setText(text);

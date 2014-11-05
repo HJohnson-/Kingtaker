@@ -8,6 +8,7 @@ import networking.RemoteGame;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class frmLobby {
     private final String TXT_PASSWORD_SUGGESTION_TEXT = "password";
     private final String LBL_ISCONNECTED_TEXT_NO = "NOT CONNECTED";
     private final String LBL_ISCONNECTED_TEXT_YES = "CONNECTED";
+    private final Color LBL_ISCONNECTED_COLOR_NO = Color.red;
+    private final Color LBL_ISCONNECTED_COLOR_YES = Color.green;
 
     private DefaultTableModel tblLobbyModel;
 
@@ -55,6 +58,8 @@ public class frmLobby {
         frame.pack();
         messageBoxAlert = new MessageBoxAlert(frame);
         displayForm();
+
+        lblIsConnected.setBackground(LBL_ISCONNECTED_COLOR_NO);
 
         //Called when the lobby form is closed - reopens last form if hidden
         frame.addWindowListener(new WindowAdapter() {
@@ -163,8 +168,8 @@ public class frmLobby {
         }
         tblLobbyModel.fireTableDataChanged();
 
-        String text = isConnected ? LBL_ISCONNECTED_TEXT_YES : LBL_ISCONNECTED_TEXT_NO;
-        lblIsConnected.setText(text);
+        lblIsConnected.setText(isConnected ? LBL_ISCONNECTED_TEXT_YES : LBL_ISCONNECTED_TEXT_NO);
+        lblIsConnected.setBackground(isConnected ? LBL_ISCONNECTED_COLOR_YES : LBL_ISCONNECTED_COLOR_NO);
     }
 
 
@@ -183,6 +188,10 @@ public class frmLobby {
             };
         };
         tblLobby.setRowHeight(30);
+        tblLobby.setTableHeader();
+
+        lblIsConnected = new JLabel(LBL_ISCONNECTED_TEXT_NO);
+        lblIsConnected.setOpaque(true);
     }
 
 

@@ -73,7 +73,7 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="c2277" class="javax.swing.JLabel" binding="lblIsConnected">
+                      <component id="c2277" class="javax.swing.JLabel" binding="lblIsConnected" custom-create="true">
                         <constraints>
                           <splitpane position="left"/>
                         </constraints>

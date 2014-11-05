@@ -40,6 +40,7 @@ public class LocalUserAccount {
         String response = sms.sendMessage(msg, true);
 
         if (response == null || !response.matches("\\d(" + ResponseCode.DEL + "\\d+)?")) {
+            loggedIn = false;
             return ResponseCode.UNSPECIFIED_ERROR;
         }
 
@@ -47,6 +48,8 @@ public class LocalUserAccount {
             loggedIn = true;
             rating = Integer.parseInt(response.substring(2));
             return ResponseCode.OK;
+        } else {
+            loggedIn = false;
         }
 
         return Integer.parseInt(response);

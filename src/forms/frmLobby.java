@@ -7,7 +7,6 @@ import networking.RemoteGame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.List;
  * Created by jc4512 on 28/10/14.
  */
 public class frmLobby {
-
     private final JFrame frame = new JFrame("frmLobby");
     private JPanel panel;
     private JTextField txtUsername;
@@ -26,7 +24,7 @@ public class frmLobby {
     private JTable tblLobby;
     private JButton btnLogin;
     private JButton btnRegister;
-    private JButton btnCreateGame;
+    private JButton btnCreateRemoveGame;
     private MessageBoxAlert messageBoxAlert;
 
     private final String TXT_USERNAME_SUGGESTION_TEXT = "username";
@@ -35,6 +33,10 @@ public class frmLobby {
     private final String LBL_ISCONNECTED_TEXT_YES = "CONNECTED";
     private final Color LBL_ISCONNECTED_COLOR_NO = Color.red;
     private final Color LBL_ISCONNECTED_COLOR_YES = Color.green;
+    private final String LBL_USERNAMERATING_TEXT_NO = "NOT LOGGED IN";
+    private final String LBL_USERNAMERATING_TEXT_YES = "Welcome, %s (%d)";
+    private final String BTN_CREATEGAME_TEXT = "CREATE GAME";
+    private final String BTN_REMOVEGAME_TEXT = "REMOVE GAME";
 
     private DefaultTableModel tblLobbyModel;
 
@@ -57,11 +59,11 @@ public class frmLobby {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         messageBoxAlert = new MessageBoxAlert(frame);
+        setControlsOnServerStatus(null, false);
         displayForm();
 
         lblIsConnected.setBackground(LBL_ISCONNECTED_COLOR_NO);
 
-        //Called when the lobby form is closed - reopens last form if hidden
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -92,7 +94,7 @@ public class frmLobby {
             }
         });
 
-        btnCreateGame.addActionListener(new ActionListener() {
+        btnCreateRemoveGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
@@ -113,7 +115,7 @@ public class frmLobby {
                 } else {
                     int result = gameLobby.attemptLogin(txtUsername.getText(), txtPassword.getPassword());
                     if (result == ResponseCode.OK) {
-                        displayUserInformation(gameLobby.getUser());
+                        setControlsOnServerStatus(gameLobby.getUser(), true);
                     } else {
                         messageBoxAlert.showUserLoginResponse(result);
                     }
@@ -129,7 +131,7 @@ public class frmLobby {
                 } else {
                     int result = gameLobby.attemptRegister(txtUsername.getText(), txtPassword.getPassword());
                     if (result == ResponseCode.OK) {
-                        displayUserInformation(gameLobby.getUser());
+                        setControlsOnServerStatus(gameLobby.getUser(), true);
                     } else {
                         messageBoxAlert.showUserRegisterResponse(result);
                     }
@@ -146,13 +148,21 @@ public class frmLobby {
     }
 
     // Shows username and rating of current user logged in.
-    private void displayUserInformation(LocalUserAccount user) {
-        lblUsernameRating.setText("Welcome, " + user.getUsername() + " (" + user.getRating() + ") ");
-    }
+    // Deactivate log in and register buttons and fields.
+    private void setControlsOnServerStatus(LocalUserAccount user, boolean isConnected) {
+        boolean isLoggedIn = user != null && user.isLoggedIn();
 
-    // Clears all user information from lobby, due to having been logged out.
-    private void clearUserInformation() {
+        lblUsernameRating.setText(isLoggedIn ?
+                String.format(LBL_USERNAMERATING_TEXT_YES, user.getUsername(), user.getRating()) :
+                LBL_USERNAMERATING_TEXT_NO);
+        txtUsername.setEnabled(isConnected && !isLoggedIn);
+        txtPassword.setEnabled(isConnected && !isLoggedIn);
+        btnLogin.setEnabled(isConnected && !isLoggedIn);
+        btnRegister.setEnabled(isConnected && !isLoggedIn);
+        btnCreateRemoveGame.setEnabled(isConnected && isLoggedIn);
 
+        lblIsConnected.setText(isConnected ? LBL_ISCONNECTED_TEXT_YES : LBL_ISCONNECTED_TEXT_NO);
+        lblIsConnected.setBackground(isConnected ? LBL_ISCONNECTED_COLOR_YES : LBL_ISCONNECTED_COLOR_NO);
     }
 
     // Used by textbox listeners to determine whether the user is in the process of logging in.
@@ -161,18 +171,19 @@ public class frmLobby {
     }
 
     // Clear table rows and refill. Set connection label accordingly.
-    public void displayOpenGamesAndConnectionStatus(List<RemoteGame> list, boolean isConnected) {
+    // Enable user to create/remove their open game with the JButton.
+    public void setOpenGamesAndServerStatus(List<RemoteGame> list, boolean isConnected, LocalUserAccount user) {
         tblLobbyModel.getDataVector().removeAllElements();
         for (RemoteGame game : list) {
             tblLobbyModel.addRow(new Object[]{game.variantId, game.hostUsername, game.hostRating});
         }
         tblLobbyModel.fireTableDataChanged();
 
-        lblIsConnected.setText(isConnected ? LBL_ISCONNECTED_TEXT_YES : LBL_ISCONNECTED_TEXT_NO);
-        lblIsConnected.setBackground(isConnected ? LBL_ISCONNECTED_COLOR_YES : LBL_ISCONNECTED_COLOR_NO);
+        setControlsOnServerStatus(user, isConnected);
     }
 
 
+    // Called when form is instantiated to customise particular GUI controls.
     private void createUIComponents() {
         txtUsername = new JTextField();
         txtUsername.setText(TXT_USERNAME_SUGGESTION_TEXT);
@@ -192,6 +203,10 @@ public class frmLobby {
 
         lblIsConnected = new JLabel(LBL_ISCONNECTED_TEXT_NO);
         lblIsConnected.setOpaque(true);
+
+        lblUsernameRating = new JLabel(LBL_USERNAMERATING_TEXT_NO);
+
+        btnCreateRemoveGame = new JButton(BTN_CREATEGAME_TEXT);
     }
 
 

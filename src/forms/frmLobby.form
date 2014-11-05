@@ -42,6 +42,7 @@
                       <splitpane position="left"/>
                     </constraints>
                     <properties>
+                      <enabled value="false"/>
                       <font size="18"/>
                       <text value="username"/>
                     </properties>
@@ -51,6 +52,7 @@
                       <splitpane position="right"/>
                     </constraints>
                     <properties>
+                      <enabled value="false"/>
                       <font size="18"/>
                       <text value="txtPassword"/>
                     </properties>
@@ -94,7 +96,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="50381" class="javax.swing.JLabel" binding="lblUsernameRating">
+                          <component id="50381" class="javax.swing.JLabel" binding="lblUsernameRating" custom-create="true">
                             <constraints>
                               <splitpane position="left"/>
                             </constraints>
@@ -104,11 +106,12 @@
                               <text value="NOT LOGGED IN"/>
                             </properties>
                           </component>
-                          <component id="33008" class="javax.swing.JButton" binding="btnCreateGame">
+                          <component id="33008" class="javax.swing.JButton" binding="btnCreateRemoveGame" custom-create="true">
                             <constraints>
                               <splitpane position="right"/>
                             </constraints>
                             <properties>
+                              <enabled value="false"/>
                               <text value="CREATE GAME"/>
                             </properties>
                           </component>
@@ -131,6 +134,7 @@
                           <splitpane position="left"/>
                         </constraints>
                         <properties>
+                          <enabled value="false"/>
                           <font/>
                           <text value="LOG IN"/>
                         </properties>
@@ -140,6 +144,7 @@
                           <splitpane position="right"/>
                         </constraints>
                         <properties>
+                          <enabled value="false"/>
                           <text value="REGISTER"/>
                         </properties>
                       </component>

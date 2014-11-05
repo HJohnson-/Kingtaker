@@ -116,7 +116,8 @@ public class GameLobby {
                     games.clear();
                 }
 
-                frmLobby.getInstance().displayOpenGamesAndConnectionStatus(games, isOnline);
+                frmLobby.getInstance().setOpenGamesAndServerStatus(
+                        games, isOnline, localUser);
 
                 try {
                     Thread.sleep(REFRESH_MS);

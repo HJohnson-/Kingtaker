@@ -29,7 +29,8 @@ public class LocalOpenGame {
         String response = sms.sendMessage(ClientCommandCode.CREATE_GAME
                 + ClientCommandCode.DEL + variant.getVariationID(), true);
 
-        MessageListener.getInstance().acceptJoins = true;
+        int pieceTypeCode = pieceType.ordinal();
+        MessageListener.getInstance().hostOpenGame(pieceTypeCode);
     }
 
     public void destroy() {

@@ -15,8 +15,9 @@ public class MessageListener implements Runnable {
     private ServerSocket sktListener;
     private static MessageListener instance;
 
-    public boolean acceptJoins = false;
+    private boolean acceptJoins = false;
     public boolean acceptMoves = false;
+    private int pieceCode = -1;
 
     //This needs to be a singleton as two identical sockets cannot be opened
     // on the same computer, yet the port number must be known.
@@ -75,13 +76,21 @@ public class MessageListener implements Runnable {
             switch (clientToClientCode) {
                 case ClientToClientCode.JOIN_OPEN_GAME :
                     if (acceptJoins) {
-                        response = ResponseCode.OK + ResponseCode.DEL;
-                    }
+                        response = ResponseCode.OK + ResponseCode.DEL + pieceCode;
+                        acceptJoins = false;
+                        //TODO: initiate game. We probably want a GameLauncher class or something
 
+                    } else {
+                        response = ResponseCode.REFUSED + "";
+                    }
                     break;
 
                 case ClientToClientCode.SEND_MOVE :
-
+                    if (acceptMoves /*&& The socket is expected? What is the proper behaviour here?*/) {
+                        //TODO: swapping moves
+                    } else {
+                        response = ResponseCode.REFUSED + "";
+                    }
                     break;
             }
 
@@ -93,4 +102,12 @@ public class MessageListener implements Runnable {
         return response;
     }
 
+    public void hostOpenGame(int pieceCode) {
+        acceptJoins = true;
+        this.pieceCode = pieceCode;
+    }
+
+    public void removeOpenGame() {
+        acceptJoins = false;
+    }
 }

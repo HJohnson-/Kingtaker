@@ -8,7 +8,22 @@ import main.*;
  */
 public class BasicChess extends ChessVariant {
 
-	public BasicChess(){
+    @Override
+    public int getVariationID() {
+        return 0;
+    }
+
+    @Override
+    public String getName() {
+        return "Standard Chess";
+    }
+
+    @Override
+    public String getDescription() {
+        return "[brief chess rules]";
+    }
+
+	public BasicChess() {
 		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn"};
 		tools.loadPieces(pieces);
 		game = new GameController(new BasicBoard(), "Basic", new BasicDecoder());
@@ -28,4 +43,5 @@ public class BasicChess extends ChessVariant {
         graphics.tools.create(new BasicChessFrame("Basic Chess", 700, 625, game.getBoard()));
         return true;
 	}
+
 }

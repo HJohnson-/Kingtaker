@@ -11,8 +11,23 @@ import BasicChess.BasicChessFrame;
  * Created by hj1012 on 03/11/14.
  */
 public class GrandChess extends ChessVariant {
+    @Override
+    public int getVariationID() {
+        return 2;
+    }
 
-	public GrandChess(){
+    @Override
+    public String getName() {
+        return "Grand Chess";
+    }
+
+    @Override
+    public String getDescription() {
+        return "[grand chess rules]\n" +
+               "[grand chess rules]\n";
+    }
+
+    public GrandChess(){
 		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn", "cardinal", "marshal"};
 		tools.loadPieces(pieces);
 		game = new GameController(new GrandBoard(), "Grand", new BasicDecoder());

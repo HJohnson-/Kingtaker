@@ -10,6 +10,21 @@ import BasicChess.BasicDecoder;
  */
 public class RandomChess extends BasicChess {
 
+    @Override
+    public int getVariationID() {
+        return 1;
+    }
+
+    @Override
+    public String getName() {
+        return "Chess960";
+    }
+
+    @Override
+    public String getDescription() {
+        return "[random chess description]";
+    }
+
 	public RandomChess(){
 		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn"};
 		tools.loadPieces(pieces);

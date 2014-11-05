@@ -3,12 +3,16 @@ package forms;
 import BasicChess.BasicChess;
 
 import javax.swing.*;
+import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
+import java.util.List;
+
 import RandomChess.RandomChess;
 import GrandChess.GrandChess;
 import main.ChessVariant;
+import main.ChessVariantManager;
 import main.GameMode;
 
 /**
@@ -18,6 +22,7 @@ public class frmVariantChooser {
     private JPanel panel1;
     private JButton btnAcceptVariation;
     private JList lstVariationPicker;
+    private DefaultListModel<String> lstVariationPickerModel;
     private JTextArea txtVariationRulesDisplay;
     private boolean visibility = false;
 
@@ -25,6 +30,7 @@ public class frmVariantChooser {
 
     public static GameMode currentGameMode;
     private static frmVariantChooser instance;
+    private List<ChessVariant> variants;
 
     public static void showInstance() {
         if (instance == null || !instance.visibility) {
@@ -47,6 +53,7 @@ public class frmVariantChooser {
         frame.pack();
         frame.setVisible(true);
         visibility = true;
+        initialiseChessVariantsList();
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -62,20 +69,8 @@ public class frmVariantChooser {
                 visibility = false;
 
                 //TODO: needs refactoring - perhaps GameLauncher class. Need to consult group on this.
-                switch (lstVariationPicker.getSelectedIndex()) {
-                    case 0 :
-                        BasicChess bc = new BasicChess();
-                        selectedVariant = bc;
-                        break;
-                    case 1:
-                        RandomChess rc = new RandomChess();
-                        selectedVariant = rc;
-                        break;
-                    case 2:
-                        GrandChess gc = new GrandChess();
-                        selectedVariant = gc;
-                        break;
-                }
+                selectedVariant = variants.get(lstVariationPicker.getSelectedIndex());
+
                 if (currentGameMode == GameMode.SINGLE_PLAYER ||
                         currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
                     selectedVariant.drawBoard();
@@ -89,6 +84,8 @@ public class frmVariantChooser {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 toggleBtnAcceptVariation();
+                txtVariationRulesDisplay.setText(variants.get(
+                     lstVariationPicker.getSelectedIndex()).getDescription());
             }
         });
 
@@ -99,10 +96,17 @@ public class frmVariantChooser {
         btnAcceptVariation.setEnabled(!lstVariationPicker.isSelectionEmpty());
     }
 
-    private void createUIComponents() {
-        //TODO need to be able to enumerate variants
-        lstVariationPicker = new JList(new String[]{"Standard Chess", "Random Chess", "Grand Chess"});
+    private void initialiseChessVariantsList() {
+        variants = ChessVariantManager.getInstance().getAllVariants();
+
+        for (ChessVariant variant : variants) {
+            lstVariationPickerModel.addElement(variant.getName());
+        }
     }
 
 
+    private void createUIComponents() {
+        lstVariationPickerModel = new DefaultListModel<String>();
+        lstVariationPicker = new JList(lstVariationPickerModel);
+    }
 }

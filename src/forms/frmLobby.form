@@ -149,16 +149,25 @@
               </splitpane>
             </children>
           </splitpane>
-          <component id="7a4c5" class="javax.swing.JTable" binding="tblLobby" custom-create="true">
+          <scrollpane id="27e39">
             <constraints>
               <splitpane position="right"/>
             </constraints>
             <properties>
-              <enabled value="true"/>
-              <font size="18"/>
-              <intercellSpacing width="5" height="5"/>
+              <horizontalScrollBarPolicy value="31"/>
             </properties>
-          </component>
+            <border type="none"/>
+            <children>
+              <component id="2a1d0" class="javax.swing.JTable" binding="tblLobby" custom-create="true">
+                <constraints/>
+                <properties>
+                  <enabled value="true"/>
+                  <font size="18"/>
+                  <intercellSpacing width="5" height="5"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
         </children>
       </splitpane>
     </children>

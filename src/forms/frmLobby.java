@@ -188,7 +188,7 @@ public class frmLobby {
             };
         };
         tblLobby.setRowHeight(30);
-        tblLobby.setTableHeader();
+        tblLobby.getTableHeader().setReorderingAllowed(false);
 
         lblIsConnected = new JLabel(LBL_ISCONNECTED_TEXT_NO);
         lblIsConnected.setOpaque(true);

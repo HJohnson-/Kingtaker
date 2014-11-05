@@ -14,6 +14,7 @@ import GrandChess.GrandChess;
 import main.ChessVariant;
 import main.ChessVariantManager;
 import main.GameMode;
+import networking.GameLobby;
 
 /**
  * Created by jc4512 on 15/10/14.
@@ -75,7 +76,7 @@ public class frmVariantChooser {
                         currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
                     selectedVariant.drawBoard();
                 } else if (currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
-
+                    GameLobby.createLocalOpenGame(selectedVariant);
                 }
 
             }

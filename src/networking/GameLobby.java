@@ -1,6 +1,7 @@
 package networking;
 
 import forms.frmLobby;
+import main.ChessVariant;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -34,6 +35,15 @@ public class GameLobby {
 
     public static boolean isOpen() {
         return instance != null && instance.lobbyIsOpen;
+    }
+
+    public static void createLocalOpenGame(ChessVariant variant) {
+        instance.localOpenGame = new LocalOpenGame(variant);
+
+        instance.localOpenGame.host();
+
+        //Forces game lobby to be refreshed.
+        instance.fetcherThread.interrupt();
     }
 
     private GameLobby() {

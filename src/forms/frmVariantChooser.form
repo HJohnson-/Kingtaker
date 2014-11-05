@@ -36,7 +36,7 @@
               <splitpane position="left"/>
             </constraints>
             <properties>
-              <dividerLocation value="100"/>
+              <dividerLocation value="180"/>
               <dividerSize value="1"/>
               <enabled value="false"/>
             </properties>
@@ -47,7 +47,8 @@
                   <splitpane position="left"/>
                 </constraints>
                 <properties>
-                  <selectionMode value="1"/>
+                  <font size="18"/>
+                  <selectionMode value="0"/>
                 </properties>
               </component>
               <component id="5029b" class="javax.swing.JTextArea" binding="txtVariationRulesDisplay">

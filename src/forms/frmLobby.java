@@ -98,10 +98,7 @@ public class frmLobby {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
-
-                    //TODO Open frmVariationPicker as dialog
-                    //somehow this has to talk back to gameLobby.createGame()
-
+                    frmVariantChooser.showInstance();
                 }
                 tblLobbyModel.addRow(new Object[]{"Capablanca","jc4512",2003});
             }
@@ -109,8 +106,7 @@ public class frmLobby {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (!LocalUserAccount.checkAcceptableUsernameAndPassword(
-                        txtUsername.getText(), new String(txtPassword.getPassword()))) {
+                if (!checkUsernameAndPasswordFields()) {
                     messageBoxAlert.showInvalidLoginDetails();
                 } else {
                     int result = gameLobby.attemptLogin(txtUsername.getText(), txtPassword.getPassword());
@@ -125,8 +121,7 @@ public class frmLobby {
         btnRegister.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (!LocalUserAccount.checkAcceptableUsernameAndPassword(
-                        txtUsername.getText(), new String(txtPassword.getPassword()))) {
+                if (!checkUsernameAndPasswordFields()) {
                     messageBoxAlert.showInvalidLoginDetails();
                 } else {
                     int result = gameLobby.attemptRegister(txtUsername.getText(), txtPassword.getPassword());
@@ -168,6 +163,19 @@ public class frmLobby {
     // Used by textbox listeners to determine whether the user is in the process of logging in.
     private boolean isAllowableUsernameField(String username) {
         return username.length() >= 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
+    }
+    private boolean isAllowablePasswordField(String password) {
+        return password.length() >= 3 && !password.equals(TXT_PASSWORD_SUGGESTION_TEXT);
+    }
+
+    // Called before making a new LocalUserAccount and authenticating.
+    private boolean checkUsernameAndPasswordFields() {
+        String username = txtUsername.getText();
+        String password = new String(txtPassword.getPassword());
+        return isAllowableUsernameField(username) &&
+               isAllowablePasswordField(password) &&
+               LocalUserAccount.checkAcceptableUsernameAndPassword(
+                                                    username, password);
     }
 
     // Clear table rows and refill. Set connection label accordingly.

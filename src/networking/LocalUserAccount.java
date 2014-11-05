@@ -63,6 +63,7 @@ public class LocalUserAccount {
     private static final String USERNAME_REGEX = "(\\w){3,20}";
     private static final String PASSWORD_REGEX = "......+";
     public static boolean checkAcceptableUsernameAndPassword(String u, String pw) {
-        return u.matches(USERNAME_REGEX) && pw.matches(PASSWORD_REGEX);
+        return u != null && pw != null &&
+                u.matches(USERNAME_REGEX) && pw.matches(PASSWORD_REGEX);
     }
 }

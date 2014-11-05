@@ -8,6 +8,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
 import RandomChess.RandomChess;
 import GrandChess.GrandChess;
+import main.ChessVariant;
+import main.GameMode;
 
 /**
  * Created by jc4512 on 15/10/14.
@@ -19,6 +21,9 @@ public class frmVariantChooser {
     private JTextArea txtVariationRulesDisplay;
     private boolean visibility = false;
 
+    private ChessVariant selectedVariant = null;
+
+    public static GameMode currentGameMode;
     private static frmVariantChooser instance;
 
     public static void showInstance() {
@@ -29,6 +34,10 @@ public class frmVariantChooser {
 
     public static boolean isVisible() {
         return instance != null && instance.visibility;
+    }
+
+    public static ChessVariant getSelectedVariant() {
+        return (instance != null) ? instance.selectedVariant : null;
     }
 
     private frmVariantChooser() {
@@ -52,19 +61,28 @@ public class frmVariantChooser {
                 frame.setVisible(false);
                 visibility = false;
 
+                //TODO: needs refactoring - perhaps GameLauncher class. Need to consult group on this.
                 switch (lstVariationPicker.getSelectedIndex()) {
                     case 0 :
                         BasicChess bc = new BasicChess();
-                        bc.drawBoard();
+                        selectedVariant = bc;
                         break;
                     case 1:
                         RandomChess rc = new RandomChess();
-                        rc.drawBoard();
+                        selectedVariant = rc;
                         break;
                     case 2:
                         GrandChess gc = new GrandChess();
-                        gc.drawBoard();
+                        selectedVariant = gc;
+                        break;
                 }
+                if (currentGameMode == GameMode.SINGLE_PLAYER ||
+                        currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
+                    selectedVariant.drawBoard();
+                } else if (currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
+
+                }
+
             }
         });
         lstVariationPicker.addListSelectionListener(new ListSelectionListener() {

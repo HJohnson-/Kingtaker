@@ -1,5 +1,6 @@
 package forms;
 
+import main.GameMode;
 import networking.GameLobby;
 
 import javax.swing.*;
@@ -56,16 +57,19 @@ public class frmMainMenu {
 
     private void showLobby() {
         toggleButtonsEnabled(false);
+        frmVariantChooser.currentGameMode = GameMode.MULTIPLAYER_ONLINE;
         GameLobby.showLobby();
     }
 
     private void beginLocalMP() {
         toggleButtonsEnabled(false);
+        frmVariantChooser.currentGameMode = GameMode.MULTIPLAYER_LOCAL;
         frmVariantChooser.showInstance();
     }
 
     private void beginLocalSP() {
         toggleButtonsEnabled(false);
+        frmVariantChooser.currentGameMode = GameMode.SINGLE_PLAYER;
         frmVariantChooser.showInstance();
     }
 

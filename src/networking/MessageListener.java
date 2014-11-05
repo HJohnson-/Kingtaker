@@ -1,5 +1,8 @@
 package networking;
 
+import networking.NetworkingCodes.ClientToClientCode;
+import networking.NetworkingCodes.ResponseCode;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,14 +10,24 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- * Created by jc4512 on 23/10/14.
- */
-
-//TODO: make this a singleton
 public class MessageListener implements Runnable {
     private static final int LISTENER_PORT = 4445;
     private ServerSocket sktListener;
+    private static MessageListener instance;
+
+    public boolean acceptJoins = false;
+    public boolean acceptMoves = false;
+
+    //This needs to be a singleton as two identical sockets cannot be opened
+    // on the same computer, yet the port number must be known.
+    public static MessageListener getInstance() {
+        if (instance == null) {
+            instance = new MessageListener();
+        }
+        return instance;
+    }
+
+    private MessageListener() {}
 
     @Override
     public void run() {
@@ -36,7 +49,7 @@ public class MessageListener implements Runnable {
                 System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent: " + clientMessage);
 
                 //Process message and generate an appropriate response, or none if it is junk.
-                String serverResponseMessage = "OK";//processMessageAndGetResponse(socket,clientMessage);
+                String serverResponseMessage = processMessageAndGetResponse(socket, clientMessage);
                 if (serverResponseMessage != null) {
                     DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
                     clientWriter.writeBytes(serverResponseMessage);
@@ -45,7 +58,6 @@ public class MessageListener implements Runnable {
                     System.out.println("[" + socket.getInetAddress().getHostAddress() + "] no response required");
                 }
 
-                //TODO: is this needed?
                 clientReader.close();
                 socket.close();
             } catch (IOException e) {
@@ -53,4 +65,32 @@ public class MessageListener implements Runnable {
             }
         }
     }
+
+    private String processMessageAndGetResponse(Socket socket, String message) {
+        String response = null;
+        try {
+            String fields[] = message.split(ClientToClientCode.DEL);
+            int clientToClientCode = Integer.valueOf(fields[0]);
+
+            switch (clientToClientCode) {
+                case ClientToClientCode.JOIN_OPEN_GAME :
+                    if (acceptJoins) {
+                        response = ResponseCode.OK + ResponseCode.DEL;
+                    }
+
+                    break;
+
+                case ClientToClientCode.SEND_MOVE :
+
+                    break;
+            }
+
+        } catch (Exception e) {
+            //Is only supposed to occur if the message is malformed and fields[n] is out of bounds,
+            //throwing an ArrayIndexOutOfBoundsException.
+            response = ResponseCode.INVALID + "";
+        }
+        return response;
+    }
+
 }

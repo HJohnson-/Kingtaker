@@ -15,7 +15,7 @@ import static networking.NetworkingUtils.checkInetAddressIsValid;
  * Created by jc4512 on 29/10/14.
  */
 public class GameLobby {
-    private List<RemoteGame> games;
+    private List<RemoteOpenGame> games;
     private LocalOpenGame localOpenGame;
     private LocalUserAccount localUser;
 
@@ -47,7 +47,7 @@ public class GameLobby {
     }
 
     private GameLobby() {
-        games = Collections.synchronizedList(new ArrayList<RemoteGame>());
+        games = Collections.synchronizedList(new ArrayList<RemoteOpenGame>());
         gameLobbyFetcher = new GameLobbyFetcher();
     }
 
@@ -62,11 +62,11 @@ public class GameLobby {
                     fields[2].matches("\\d+") &&
                     fields[3].matches("\\d+")) {
 
-                RemoteGame remoteGame = new RemoteGame(
+                RemoteOpenGame remoteOpenGame = new RemoteOpenGame(
                     fields[0], fields[1], Integer.parseInt(fields[2]),
                         Integer.parseInt(fields[3])
                 );
-                games.add(remoteGame);
+                games.add(remoteOpenGame);
             }
         }
     }

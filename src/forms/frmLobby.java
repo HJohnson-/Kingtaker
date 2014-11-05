@@ -1,9 +1,10 @@
 package forms;
 
+import main.ChessVariantManager;
 import networking.GameLobby;
 import networking.LocalUserAccount;
 import networking.NetworkingCodes.ResponseCode;
-import networking.RemoteGame;
+import networking.RemoteOpenGame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -180,10 +181,11 @@ public class frmLobby {
 
     // Clear table rows and refill. Set connection label accordingly.
     // Enable user to create/remove their open game with the JButton.
-    public void setOpenGamesAndServerStatus(List<RemoteGame> list, boolean isConnected, LocalUserAccount user) {
+    public void setOpenGamesAndServerStatus(List<RemoteOpenGame> list, boolean isConnected, LocalUserAccount user) {
         tblLobbyModel.getDataVector().removeAllElements();
-        for (RemoteGame game : list) {
-            tblLobbyModel.addRow(new Object[]{game.variantId, game.hostUsername, game.hostRating});
+        for (RemoteOpenGame game : list) {
+            String variantName = ChessVariantManager.getInstance().getVariantByID(game.variantId).getName();
+            tblLobbyModel.addRow(new Object[]{variantName, game.hostUsername, game.hostRating});
         }
         tblLobbyModel.fireTableDataChanged();
 

@@ -4,7 +4,6 @@ import forms.frmLobby;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ResponseCode;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +16,7 @@ import static networking.NetworkingUtils.checkInetAddressIsValid;
 public class GameLobby {
     private List<RemoteGame> games;
     private LocalOpenGame localOpenGame;
+    private LocalUserAccount localUser;
 
     private static GameLobby instance;
 
@@ -25,14 +25,11 @@ public class GameLobby {
 
     private boolean lobbyIsOpen;
 
-    private frmLobby frm;
-
     public static void showLobby() {
         if (instance == null) {
             instance = new GameLobby();
         }
-        instance.lobbyIsOpen = true;
-        frmLobby.showInstance(instance);
+        instance.open();
     }
 
     public static boolean isOpen() {
@@ -42,11 +39,7 @@ public class GameLobby {
     private GameLobby() {
         games = Collections.synchronizedList(new ArrayList<RemoteGame>());
         gameLobbyFetcher = new GameLobbyFetcher();
-        fetcherThread = new Thread(gameLobbyFetcher);
-        fetcherThread.start();
     }
-
-
 
     private void parseRemoteGameList(String list) {
         games.clear();
@@ -68,39 +61,67 @@ public class GameLobby {
         }
     }
 
-    public boolean userLoggedIn() {
-        //TODO user accounts
-        return false;
+    public LocalUserAccount getUser() {
+        return localUser;
     }
 
     public void close() {
-        fetcherThread.interrupt();
         lobbyIsOpen = false;
         //TODO: remove any open games
     }
+    public void open() {
+        lobbyIsOpen = true;
+        frmLobby.showInstance(instance);
 
+        if (fetcherThread == null || !fetcherThread.isAlive()) {
+            fetcherThread = new Thread(gameLobbyFetcher);
+            fetcherThread.start();
+        }
+    }
+
+    public int attemptLogin(String user, char[] password) {
+        localUser = new LocalUserAccount(user, new String(password));
+        return localUser.authenticate(ClientCommandCode.AUTHENTICATE_USER);
+    }
+
+    public int attemptRegister(String user, char[] password) {
+        localUser = new LocalUserAccount(user, new String(password));
+        return localUser.authenticate(ClientCommandCode.REGISTER_ACCOUNT);
+    }
+
+
+    //Repeatedly requests a new game list. Upon receipt, checks response code
+    // and passes the list (minus the response code) to GameLobby. If the
+    // connection is lost, the list is cleared and the connection status
+    // is shown on the form. Stops running if the lobby is closed.
     private class GameLobbyFetcher implements Runnable {
         private final long REFRESH_MS = 10000;
         @Override
 
-        //Keep requesting a new game list. Upon receipt, check the response code
-        // and pass the list (minus the response code) to GameLobby.
-        //Runs until interrupted (thread is disposed).
         public void run() {
             ServerMessageSender sms = new ServerMessageSender();
-            while (true) {
+            boolean isOnline;
+            while (lobbyIsOpen) {
                 String response = sms.sendMessage(
                         ClientCommandCode.GET_GAME_LIST + "", true);
-                if (response != null && response.startsWith(ResponseCode.OK + ",")) {
-                    parseRemoteGameList(response.substring(2));
-                    frm.displayOpenGames(games);
+                if (response != null) {
+                    isOnline = true;
+                    if (response.startsWith(ResponseCode.OK + ResponseCode.DEL)) {
+                        parseRemoteGameList(response.substring(2));
+                    } else if (response.equals(ResponseCode.EMPTY + "")) {
+                        games.clear();
+                    }
+                } else {
+                    isOnline = false;
+                    games.clear();
                 }
+
+                frmLobby.getInstance().setOpenGamesAndServerStatus(
+                        games, isOnline, localUser);
 
                 try {
                     Thread.sleep(REFRESH_MS);
                 } catch (InterruptedException e) {
-                    //TODO: test this, not sure how java handles threads
-                    return;
                 }
             }
         }

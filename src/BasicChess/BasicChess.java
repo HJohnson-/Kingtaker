@@ -9,16 +9,12 @@ import main.*;
 public class BasicChess extends ChessVariant {
 
 	public BasicChess(){
-		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn"};
-		tools.loadPieces(pieces);
 		game = new GameController(new BasicBoard(), "Basic", new BasicDecoder());
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
 
 	public BasicChess(GameController game) {
-		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn"};
-		tools.loadPieces(pieces);
 		this.game = game;
 		this.game.getBoard().setController(game);
 	}

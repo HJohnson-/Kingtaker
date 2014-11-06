@@ -13,16 +13,12 @@ import BasicChess.BasicChessFrame;
 public class GrandChess extends ChessVariant {
 
 	public GrandChess(){
-		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn", "cardinal", "marshal"};
-		tools.loadPieces(pieces);
 		game = new GameController(new GrandBoard(), "Grand", new BasicDecoder());
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
 
 	public GrandChess(GameController game) {
-		String[] pieces = {"rook", "bishop", "knight", "queen", "king", "pawn", "cardinal", "marshal"};
-		tools.loadPieces(pieces);
 		this.game = game;
 		this.game.getBoard().setController(game);
 	}

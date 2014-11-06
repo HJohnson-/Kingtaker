@@ -45,7 +45,7 @@ public abstract class ChessFrame extends JFrame {
         } else {
             Dimension minimumDimensions = new Dimension(width, height);
             setSize(minimumDimensions);
-            setMinimumSize(minimumDimensions);
+            //setMinimumSize(minimumDimensions);
         }
         setLocationRelativeTo(null);
     }

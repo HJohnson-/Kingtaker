@@ -40,18 +40,16 @@ public class tools {
     }
 
     /**
-     * This will load all of the images specified into the imageMap, used to draw pieces later.
-     * @param pieces An array of all the pieces which need to be loaded.
+     * This will load the specified image into the imageMap, used to draw pieces later.
+     * @param name The piece to be loaded into the image map.
      */
-    public static void loadPieces(String[] pieces) {
-        for (String name : pieces) {
-            try {
-                imageMap.put(name, ImageIO.read(new File("media/" + name + ".png")));
-                imageMap.put(name + "Black", ImageIO.read(new File("media/" + name + "Black.png")));
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.exit(2);
-            }
+    public static void loadPiece(String name) {
+        try {
+            imageMap.put(name, ImageIO.read(new File("media/" + name + ".png")));
+            imageMap.put(name + "Black", ImageIO.read(new File("media/" + name + "Black.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(2);
         }
     }
 

@@ -6,6 +6,7 @@ import main.PieceType;
 import main.Board;
 
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,17 +16,20 @@ import java.util.List;
 abstract public class ChessPiece {
 
     public Board board;
-    public String img;
     public PieceType type;
     public Location cords;
 	public int lastTurnMovedOn;
     public GraphicsControl graphics;
+    public String image;
 
     public ChessPiece(Board board, PieceType type, Location cords, String img) {
         this.type = type;
         this.board = board;
         this.cords = cords;
-		this.img = img;
+        this.image = img;
+        if (!tools.imageMap.containsKey(img)) {
+            tools.loadPiece(img);
+        }
 		lastTurnMovedOn = 0;
 
         if (cords != null) {

@@ -2,7 +2,6 @@ package graphics;
 
 import main.Board;
 import main.Location;
-import main.Move;
 import main.PieceType;
 import pieces.ChessPiece;
 
@@ -28,6 +27,8 @@ public abstract class ChessPanel extends JPanel {
     public int cellHeight;
     protected int UIWidth = 200;
     public boolean animating = false;
+    JButton load = new JButton("Load");
+    JButton save = new JButton("Save");
 
     /**
      * This constructor sets up a listener to handle the user clicking on the screen.
@@ -66,14 +67,15 @@ public abstract class ChessPanel extends JPanel {
         int x = cellWidth * (board.numCols());
         int y = 0;
 
-        JButton load = new JButton("Load");
-        JButton save = new JButton("Save");
         load.setLocation(x, y);
         load.setSize(100, cellHeight);
         save.setLocation(x + 100, y);
         save.setSize(100, cellHeight);
-        this.add(load);
-        this.add(save);
+
+        if (load.getParent() == null) {
+            this.add(load);
+            this.add(save);
+        }
 
         y += cellHeight;
 
@@ -120,7 +122,7 @@ public abstract class ChessPanel extends JPanel {
 
         for (ChessPiece p : pieces) {
 
-            String imgName = p.img;
+            String imgName = p.image;
             if (p.type == PieceType.BLACK) imgName += "Black";
 
             if (tools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
@@ -178,6 +180,7 @@ public abstract class ChessPanel extends JPanel {
      * Recalculated how large the board needs to be, based on the current size of the panel.
      */
     public void recalculateCellSize() {
+        while (animating) Thread.yield();
         cellWidth = (int) Math.round((
                 Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows()) / 2) * 2;
         cellHeight = cellWidth;

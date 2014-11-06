@@ -12,7 +12,7 @@ import java.util.List;
 public class EmptyPiece extends ChessPiece {
 
     public EmptyPiece(Board board, Location loc) {
-        super(board, PieceType.EMPTY, loc, "");
+        super(board, PieceType.EMPTY, loc, "pawn");
     }
 
 	public int returnValue() {return 0;}

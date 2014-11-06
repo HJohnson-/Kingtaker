@@ -36,6 +36,6 @@ public class LocalOpenGame {
     public void destroy() {
         ServerMessageSender sms = new ServerMessageSender();
         sms.sendMessage(ClientCommandCode.REMOVE_GAME + "", false);
-        MessageListener.getInstance().acceptJoins = false;
+        MessageListener.getInstance().removeOpenGame();
     }
 }

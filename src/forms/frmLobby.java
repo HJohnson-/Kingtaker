@@ -1,5 +1,6 @@
 package forms;
 
+import main.ChessVariant;
 import main.ChessVariantManager;
 import networking.GameLobby;
 import networking.LocalUserAccount;
@@ -184,8 +185,11 @@ public class frmLobby {
     public void setOpenGamesAndServerStatus(List<RemoteOpenGame> list, boolean isConnected, LocalUserAccount user) {
         tblLobbyModel.getDataVector().removeAllElements();
         for (RemoteOpenGame game : list) {
-            String variantName = ChessVariantManager.getInstance().getVariantByID(game.variantId).getName();
-            tblLobbyModel.addRow(new Object[]{variantName, game.hostUsername, game.hostRating});
+            ChessVariant variant = ChessVariantManager.getInstance().getVariantByID(game.variantId);
+            if (variant != null) {
+                //variant is installed and can be joined.
+                tblLobbyModel.addRow(new Object[]{variant.getName(), game.hostUsername, game.hostRating});
+            }
         }
         tblLobbyModel.fireTableDataChanged();
 

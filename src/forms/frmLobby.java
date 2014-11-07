@@ -147,12 +147,23 @@ public class frmLobby {
         tblLobby.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                String hostUsername = tblLobbyModel.getValueAt(tblLobby.getSelectedRow(), 1).toString();
+
                 if (e.getClickCount() == 2) {
-                    String hostUsername = tblLobbyModel.getValueAt(tblLobby.getSelectedRow(), 1).toString();
+
+                    //One cannot connect to a game hosted by oneself.
+                    if (hostUsername.equals(gameLobby.getUser().getUsername())) {
+                        messageBoxAlert.showGameJoinResponse(ResponseCode.INVALID);
+                        return;
+                    }
+
+                    //Destroy locally created game.
+                    gameLobby.destroyLocalGame();
+                    btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
+
                     int response = gameLobby.attemptJoinGameByUsername(hostUsername);
                     if (response != ResponseCode.OK) {
                         messageBoxAlert.showGameJoinResponse(response);
-
                     }
                 }
             }

@@ -214,6 +214,16 @@ public class GameController {
 		return gameOver;
 	}
 
+	/**
+	 * @return A string representation of the board
+	 * Format is #$ followed by fields in the form X:<value> where X is a letter identifying the field and fields are
+	 * separated by a ~. This is followed by a $, and then the code for each non-empty piece on the board. The string
+	 * is terminated with a #.
+	 * The fields are
+	 * T: for the current Turn
+	 * V: for the game Variant
+	 * Variants can add any fields to this string as long as they also include something to decode them
+	 */
 	public String toCode() {
 		StringBuilder code = new StringBuilder();
 		code.append("#$").append("T:").append(currentTurn).append("~").append("V:").append(gameVariant).append("$");

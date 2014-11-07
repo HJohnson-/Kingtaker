@@ -58,7 +58,7 @@ public class frmMainMenu {
     private void showLobby() {
         toggleButtonsEnabled(false);
         frmVariantChooser.currentGameMode = GameMode.MULTIPLAYER_ONLINE;
-        GameLobby.showLobby();
+        GameLobby.getInstance().open();
     }
 
     private void beginLocalMP() {

@@ -103,8 +103,14 @@ public class frmLobby {
         btnCreateRemoveGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
-                    frmVariantChooser.showInstance();
+                if (gameLobby.getLocalGame() == null) {
+                    if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
+                        frmVariantChooser.showInstance();
+                    }
+                    btnCreateRemoveGame.setText(BTN_REMOVEGAME_TEXT);
+                } else {
+                    gameLobby.destroyLocalGame();
+                    btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
                 }
             }
         });

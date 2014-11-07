@@ -27,24 +27,15 @@ public class GameLobby {
 
     private boolean lobbyIsOpen;
 
-    public static void showLobby() {
+    public static GameLobby getInstance() {
         if (instance == null) {
             instance = new GameLobby();
         }
-        instance.open();
+        return instance;
     }
 
     public static boolean isOpen() {
         return instance != null && instance.lobbyIsOpen;
-    }
-
-    public static void createLocalOpenGame(ChessVariant variant) {
-        instance.localOpenGame = new LocalOpenGame(variant);
-
-        instance.localOpenGame.host();
-
-        //Forces game lobby to be refreshed.
-        instance.fetcherThread.interrupt();
     }
 
     private GameLobby() {
@@ -76,9 +67,11 @@ public class GameLobby {
         return localUser;
     }
 
-    public static void close() {
-        instance.lobbyIsOpen = false;
-        instance.localOpenGame.destroy();
+    public void close() {
+        lobbyIsOpen = false;
+        if (localOpenGame != null) {
+            localOpenGame.destroy();
+        }
         frmLobby.hideInstance();
     }
     public void open() {
@@ -111,6 +104,24 @@ public class GameLobby {
         return ResponseCode.UNSPECIFIED_ERROR;
     }
 
+    public void createLocalOpenGame(ChessVariant variant) {
+        localOpenGame = new LocalOpenGame(variant);
+        localOpenGame.host();
+
+        //Forces game lobby to be refreshed.
+        fetcherThread.interrupt();
+    }
+
+    public LocalOpenGame getLocalGame() {
+        return localOpenGame;
+    }
+
+    public void destroyLocalGame() {
+        localOpenGame.destroy();
+        localOpenGame = null;
+        //Forces game lobby to be refreshed.
+        fetcherThread.interrupt();
+    }
 
     //Repeatedly requests a new game list. Upon receipt, checks response code
     // and passes the list (minus the response code) to GameLobby. If the

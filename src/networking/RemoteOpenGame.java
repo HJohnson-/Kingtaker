@@ -1,6 +1,10 @@
 package networking;
 
+import forms.frmVariantChooser;
+import main.ChessVariantManager;
+import main.OnlineGameLauncher;
 import networking.NetworkingCodes.ClientToClientCode;
+import networking.NetworkingCodes.ResponseCode;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -29,7 +33,23 @@ public class RemoteOpenGame {
     public int attemptToJoin(LocalUserAccount localUser) {
         String message = ClientToClientCode.JOIN_OPEN_GAME + ClientToClientCode.DEL + localUser.getUsername() + ClientToClientCode.DEL + localUser.getRating();
         OpponentMessageSender oms = new OpponentMessageSender(ip);
-        oms.sendMessage(message);
-        //TODO: untested
+        String response = oms.sendMessage(message, true);
+
+        if (response == null) {
+            //Due to timeout
+            return ResponseCode.EMPTY;
+        } else if (response.equals(ResponseCode.REFUSED + "")) {
+            //Game already joined by some other client (most likely).
+            return ResponseCode.REFUSED;
+        } else if (response.startsWith(ResponseCode.OK + ResponseCode.DEL)) {
+            frmVariantChooser.currentGameLauncher = new OnlineGameLauncher(
+                    ChessVariantManager.getInstance().getVariantByID(variantId),
+                    oms.getOpponentSocket()
+            );
+            return ResponseCode.OK;
+        } else {
+            //Response malformed/unexpected.
+            return ResponseCode.UNSPECIFIED_ERROR;
+        }
     }
 }

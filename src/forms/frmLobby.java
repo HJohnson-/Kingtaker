@@ -52,6 +52,10 @@ public class frmLobby {
         }
     }
 
+    public static void hideInstance() {
+        instance.frame.setVisible(false);
+    }
+
     public static frmLobby getInstance() {
         return instance;
     }
@@ -139,7 +143,11 @@ public class frmLobby {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     String hostUsername = tblLobbyModel.getValueAt(tblLobby.getSelectedRow(), 1).toString();
-                    int result = gameLobby.attemptJoinGameByUsername(hostUsername);
+                    int response = gameLobby.attemptJoinGameByUsername(hostUsername);
+                    if (response != ResponseCode.OK) {
+                        messageBoxAlert.showGameJoinResponse(response);
+
+                    }
                 }
             }
         });

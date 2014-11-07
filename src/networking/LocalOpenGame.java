@@ -20,7 +20,7 @@ public class LocalOpenGame {
         this.variant = variant;
         creationDate = new Date();
 
-        //Coin flip to decide whether playing first.
+        //Coin flip to decide whether playing first. Host decides!
         pieceType = new Random().nextInt(2) == 0 ? PieceType.WHITE : PieceType.BLACK;
     }
 
@@ -33,6 +33,8 @@ public class LocalOpenGame {
         MessageListener.getInstance().hostOpenGame(pieceTypeCode, variant.game.toCode());
     }
 
+    // Removes open game from server lobby.
+    // MessageListener is told to refuse any join requests from now on.
     public void destroy() {
         ServerMessageSender sms = new ServerMessageSender();
         sms.sendMessage(ClientCommandCode.REMOVE_GAME + "", false);

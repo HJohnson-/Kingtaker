@@ -76,9 +76,10 @@ public class GameLobby {
         return localUser;
     }
 
-    public void close() {
-        lobbyIsOpen = false;
-        //TODO: remove any open games
+    public static void close() {
+        instance.lobbyIsOpen = false;
+        instance.localOpenGame.destroy();
+        frmLobby.hideInstance();
     }
     public void open() {
         lobbyIsOpen = true;
@@ -107,6 +108,7 @@ public class GameLobby {
                 return game.attemptToJoin(localUser);
             }
         }
+        return ResponseCode.UNSPECIFIED_ERROR;
     }
 
 

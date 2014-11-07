@@ -86,6 +86,7 @@ public class MessageListener implements Runnable {
                         remoteAddress = socket.getInetAddress();
                         OnlineGameLauncher launcher = (OnlineGameLauncher) frmVariantChooser.currentGameLauncher;
                         launcher.setOpponentAddress(remoteAddress);
+
                         frmVariantChooser.currentGameLauncher.launch();
 
                     } else {

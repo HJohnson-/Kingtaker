@@ -9,12 +9,25 @@ import javax.swing.*;
 public class MessageBoxAlert {
     private String MSGBOX_TITLE = "KingTaker";
 
-    private final String UNSPECIFIED_ERROR = "An unspecified error occurred";
+    private final String UNSPECIFIED_ERROR_MSG = "An unspecified error occurred";
 
     private JFrame parent;
 
     public MessageBoxAlert(JFrame parent) {
         this.parent = parent;
+    }
+
+    //Opens a small GUI form with a single OK button, title "KingTaker",
+    // with specified message. 0-length messages are replaced with an.
+    // 'unspecified error' message.
+    private void showMessage(String msg) {
+        if (msg != null && msg.length() > 0) {
+            JOptionPane.showMessageDialog(parent, msg,
+                    MSGBOX_TITLE, JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(parent, UNSPECIFIED_ERROR_MSG,
+                    MSGBOX_TITLE, JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     public void showUserLoginResponse(int responseCode) {
@@ -50,17 +63,16 @@ public class MessageBoxAlert {
                     "Your password must be 6 characters or longer");
     }
 
-    //Opens a small GUI form with a single OK button, title "KingTaker",
-    // with specified message. 0-length messages are replaced with an.
-    // 'unspecified error' message.
-    private void showMessage(String msg) {
-        if (msg != null && msg.length() > 0) {
-            JOptionPane.showMessageDialog(parent, msg,
-                    MSGBOX_TITLE, JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(parent, UNSPECIFIED_ERROR,
-                    MSGBOX_TITLE, JOptionPane.INFORMATION_MESSAGE);
+    public void showGameJoinResponse(int responseCode) {
+        String msg = "";
+        switch (responseCode) {
+            case (ResponseCode.REFUSED) :
+                msg = "This game has been removed or is already in session";
+                break;
+            case (ResponseCode.EMPTY) :
+                msg = "The other player is no longer online";
+                break;
         }
+        showMessage(msg);
     }
-
 }

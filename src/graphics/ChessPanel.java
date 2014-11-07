@@ -1,25 +1,27 @@
 package graphics;
 
-import main.Board;
-import main.Location;
-import main.PieceType;
+import main.*;
 import pieces.ChessPiece;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.Toolkit;
+import java.io.*;
 /**
  * An abstract JPanel extension, which contains lots of graphics tools which are identical across variants.
  */
-public abstract class ChessPanel extends JPanel {
+public abstract class ChessPanel extends JPanel implements ClipboardOwner {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
@@ -69,8 +71,24 @@ public abstract class ChessPanel extends JPanel {
 
         load.setLocation(x, y);
         load.setSize(100, cellHeight);
+		load.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String code = getClipboardContents();
+				int start = code.indexOf("V:")+2;
+				int end = code.indexOf('$',start);
+				String variant = code.substring(start, end);
+				GameController gameState = GameControllerMaker.get(variant, code);
+				ChessVariant game = ChessVariantMaker.get(variant, gameState);
+				game.drawBoard();
+			}
+		});
         save.setLocation(x + 100, y);
         save.setSize(100, cellHeight);
+		save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setClipboardContents(board.getController().toCode());
+			}
+		});
 
         if (load.getParent() == null) {
             this.add(load);
@@ -93,6 +111,45 @@ public abstract class ChessPanel extends JPanel {
                     cellWidth, cellHeight * (board.numRows() / 2 + 1));
         }
     }
+
+	/**
+	 * Get the String residing on the clipboard.
+	 *
+	 * @return any text found on the Clipboard; if none found, return an
+	 * empty String.
+	 */
+	public String getClipboardContents() {
+		String result = "";
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		//odd: the Object param of getContents is not currently used
+		Transferable contents = clipboard.getContents(null);
+		boolean hasTransferableText =
+				(contents != null) &&
+						contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+		if (hasTransferableText) {
+			try {
+				result = (String)contents.getTransferData(DataFlavor.stringFlavor);
+			}
+			catch (IOException ex){
+				System.out.println(ex);
+				ex.printStackTrace();
+			} catch(UnsupportedFlavorException ex) {
+				System.out.println(ex);
+				ex.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Place a String on the clipboard, and make this class the
+	 * owner of the Clipboard's contents.
+	 */
+	public void setClipboardContents(String aString){
+		StringSelection stringSelection = new StringSelection(aString);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(stringSelection, this);
+	}
 
     protected void drawGrid(Graphics2D g2) {
         g2.setColor(tools.BOARD_BLACK);
@@ -237,4 +294,8 @@ public abstract class ChessPanel extends JPanel {
         }
     }
 
+	@Override
+	public void lostOwnership(Clipboard clipboard, Transferable contents) {
+		//Don't worry about it
+	}
 }

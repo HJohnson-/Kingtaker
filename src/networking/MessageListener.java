@@ -1,5 +1,7 @@
 package networking;
 
+import forms.frmVariantChooser;
+import main.OnlineGameLauncher;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -7,17 +9,20 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MessageListener implements Runnable {
-    private static final int LISTENER_PORT = 4445;
+    public static final int LISTENER_PORT = 4445;
     private ServerSocket sktListener;
     private static MessageListener instance;
+    private InetAddress remoteAddress;
 
     private boolean acceptJoins = false;
     public boolean acceptMoves = false;
     private int pieceCode = -1;
+    private String board = "";
 
     //This needs to be a singleton as two identical sockets cannot be opened
     // on the same computer, yet the port number must be known.
@@ -76,17 +81,21 @@ public class MessageListener implements Runnable {
             switch (clientToClientCode) {
                 case ClientToClientCode.JOIN_OPEN_GAME :
                     if (acceptJoins) {
-                        response = ResponseCode.OK + ResponseCode.DEL + pieceCode;
+                        response = ResponseCode.OK + ResponseCode.DEL + pieceCode + ResponseCode.DEL + board;
                         acceptJoins = false;
-                        //TODO: initiate game. We probably want a GameLauncher class or something
+                        remoteAddress = socket.getInetAddress();
+                        OnlineGameLauncher launcher = (OnlineGameLauncher) frmVariantChooser.currentGameLauncher;
+                        launcher.setOpponentAddress(remoteAddress);
+                        frmVariantChooser.currentGameLauncher.launch();
 
                     } else {
                         response = ResponseCode.REFUSED + "";
                     }
                     break;
 
+                //Checks that the game is running and the IP is recognised.
                 case ClientToClientCode.SEND_MOVE :
-                    if (acceptMoves /*&& The socket is expected? What is the proper behaviour here?*/) {
+                    if (acceptMoves && remoteAddress != null && remoteAddress.equals(socket.getInetAddress())) {
                         //TODO: swapping moves
                     } else {
                         response = ResponseCode.REFUSED + "";
@@ -102,9 +111,10 @@ public class MessageListener implements Runnable {
         return response;
     }
 
-    public void hostOpenGame(int pieceCode) {
+    public void hostOpenGame(int pieceCode, String board) {
         acceptJoins = true;
         this.pieceCode = pieceCode;
+        this.board = board;
     }
 
     public void removeOpenGame() {

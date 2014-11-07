@@ -30,7 +30,7 @@ public class LocalOpenGame {
                 + ClientCommandCode.DEL + variant.getVariationID(), true);
 
         int pieceTypeCode = pieceType.ordinal();
-        MessageListener.getInstance().hostOpenGame(pieceTypeCode);
+        MessageListener.getInstance().hostOpenGame(pieceTypeCode, variant.game.toCode());
     }
 
     public void destroy() {

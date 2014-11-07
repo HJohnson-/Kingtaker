@@ -11,9 +11,7 @@ import java.util.List;
 
 import RandomChess.RandomChess;
 import GrandChess.GrandChess;
-import main.ChessVariant;
-import main.ChessVariantManager;
-import main.GameMode;
+import main.*;
 import networking.GameLobby;
 
 /**
@@ -30,6 +28,7 @@ public class frmVariantChooser {
     private ChessVariant selectedVariant = null;
 
     public static GameMode currentGameMode;
+    public static GameLauncher currentGameLauncher;
     private static frmVariantChooser instance;
     private List<ChessVariant> variants;
 
@@ -69,14 +68,15 @@ public class frmVariantChooser {
                 frame.setVisible(false);
                 visibility = false;
 
-                //TODO: needs refactoring - perhaps GameLauncher class. Need to consult group on this.
                 selectedVariant = variants.get(lstVariationPicker.getSelectedIndex());
 
                 if (currentGameMode == GameMode.SINGLE_PLAYER ||
                         currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
-                    selectedVariant.drawBoard();
+                    currentGameLauncher = new OfflineGameLauncher(selectedVariant);
+                    currentGameLauncher.launch();
                 } else if (currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
                     GameLobby.createLocalOpenGame(selectedVariant);
+                    currentGameLauncher = new OnlineGameLauncher(selectedVariant);
                 }
 
             }

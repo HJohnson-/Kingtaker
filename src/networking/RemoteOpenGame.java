@@ -1,5 +1,7 @@
 package networking;
 
+import networking.NetworkingCodes.ClientToClientCode;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -22,5 +24,12 @@ public class RemoteOpenGame {
         this.hostUsername = hostUsername;
         this.hostRating = hostRating;
         this.variantId = variantId;
+    }
+
+    public int attemptToJoin(LocalUserAccount localUser) {
+        String message = ClientToClientCode.JOIN_OPEN_GAME + ClientToClientCode.DEL + localUser.getUsername() + ClientToClientCode.DEL + localUser.getRating();
+        OpponentMessageSender oms = new OpponentMessageSender(ip);
+        oms.sendMessage(message);
+        //TODO: untested
     }
 }

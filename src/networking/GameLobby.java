@@ -2,6 +2,7 @@ package networking;
 
 import forms.frmLobby;
 import main.ChessVariant;
+import main.ChessVariantManager;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -97,6 +98,15 @@ public class GameLobby {
     public int attemptRegister(String user, char[] password) {
         localUser = new LocalUserAccount(user, new String(password));
         return localUser.authenticate(ClientCommandCode.REGISTER_ACCOUNT);
+    }
+
+    public int attemptJoinGameByUsername(String username) {
+        //Find remote open game.
+        for (RemoteOpenGame game : games) {
+            if (game.hostUsername == username) {
+                return game.attemptToJoin(localUser);
+            }
+        }
     }
 
 

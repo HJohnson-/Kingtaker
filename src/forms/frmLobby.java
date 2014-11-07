@@ -102,7 +102,6 @@ public class frmLobby {
                 if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
                     frmVariantChooser.showInstance();
                 }
-                tblLobbyModel.addRow(new Object[]{"Capablanca","jc4512",2003});
             }
         });
         btnLogin.addActionListener(new ActionListener() {
@@ -132,6 +131,15 @@ public class frmLobby {
                     } else {
                         messageBoxAlert.showUserRegisterResponse(result);
                     }
+                }
+            }
+        });
+        tblLobby.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    String hostUsername = tblLobbyModel.getValueAt(tblLobby.getSelectedRow(), 1).toString();
+                    int result = gameLobby.attemptJoinGameByUsername(hostUsername);
                 }
             }
         });

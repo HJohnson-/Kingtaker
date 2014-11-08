@@ -38,9 +38,11 @@ public class GameLobby {
         return instance != null && instance.lobbyIsOpen;
     }
 
+    // Initialises remote games list, starts fetcher thread, starts message listener.
     private GameLobby() {
         games = Collections.synchronizedList(new ArrayList<RemoteOpenGame>());
         gameLobbyFetcher = new GameLobbyFetcher();
+        MessageListener.getInstance();
     }
 
     private void parseRemoteGameList(String list) {

@@ -19,6 +19,8 @@ public class MessageListener implements Runnable {
     private static MessageListener instance;
     private InetAddress remoteAddress;
 
+    private Thread thread;
+
     private boolean acceptJoins = false;
     public boolean acceptMoves = false;
     private int pieceCode = -1;
@@ -33,7 +35,10 @@ public class MessageListener implements Runnable {
         return instance;
     }
 
-    private MessageListener() {}
+    private MessageListener() {
+        thread =  new Thread(this);
+        thread.start();
+    }
 
     @Override
     public void run() {
@@ -43,7 +48,7 @@ public class MessageListener implements Runnable {
             e.printStackTrace();
             return;
         }
-
+        System.out.println("MessageListener running");
         //Run listening loop
         while (true) {
             try {

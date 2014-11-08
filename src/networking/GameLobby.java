@@ -71,6 +71,7 @@ public class GameLobby {
         lobbyIsOpen = false;
         if (localOpenGame != null) {
             localOpenGame.destroy();
+            localOpenGame = null;
         }
         frmLobby.hideInstance();
     }
@@ -117,10 +118,12 @@ public class GameLobby {
     }
 
     public void destroyLocalGame() {
-        localOpenGame.destroy();
-        localOpenGame = null;
-        //Forces game lobby to be refreshed.
-        fetcherThread.interrupt();
+        if (localOpenGame != null) {
+            localOpenGame.destroy();
+            localOpenGame = null;
+            //Forces game lobby to be refreshed.
+            fetcherThread.interrupt();
+        }
     }
 
     //Repeatedly requests a new game list. Upon receipt, checks response code

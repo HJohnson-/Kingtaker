@@ -195,7 +195,8 @@ public class frmLobby {
         lblIsConnected.setBackground(isConnected ? LBL_ISCONNECTED_COLOR_YES : LBL_ISCONNECTED_COLOR_NO);
     }
 
-    // Used by textbox listeners to determine whether the user is in the process of logging in.
+    // Used by textbox listeners to determine whether the user is in the process
+    // of logging in. Also ensures someone cannot register with the suggestion text.
     private boolean isAllowableUsernameField(String username) {
         return username.length() >= 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
     }

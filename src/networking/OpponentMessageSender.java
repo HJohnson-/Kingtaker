@@ -40,10 +40,11 @@ public class OpponentMessageSender {
         while (System.currentTimeMillis() - startTime < timeout) {
             try {
                 socket = new Socket();
+                socket.setSoTimeout(timeout);
                 socket.connect(new InetSocketAddress(inetAddress, PORT), timeout);
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                clientWriter.writeBytes(msg);
+                clientWriter.writeBytes(msg + "\n");
                 System.out.println("[localhost] sent to [" + socket.getInetAddress().getHostAddress() + "]: " + msg);
 
                 if (waitForResponse) {

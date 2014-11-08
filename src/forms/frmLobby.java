@@ -147,9 +147,8 @@ public class frmLobby {
         tblLobby.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String hostUsername = tblLobbyModel.getValueAt(tblLobby.getSelectedRow(), 1).toString();
-
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 2 && gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
+                    String hostUsername = tblLobbyModel.getValueAt(tblLobby.getSelectedRow(), 1).toString();
 
                     //One cannot connect to a game hosted by oneself.
                     if (hostUsername.equals(gameLobby.getUser().getUsername())) {
@@ -162,7 +161,10 @@ public class frmLobby {
                     btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
 
                     int response = gameLobby.attemptJoinGameByUsername(hostUsername);
-                    if (response != ResponseCode.OK) {
+                    if (response == ResponseCode.OK) {
+                        gameLobby.close();
+                       frmVariantChooser.currentGameLauncher.launch();
+                    } else {
                         messageBoxAlert.showGameJoinResponse(response);
                     }
                 }

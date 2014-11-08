@@ -36,7 +36,7 @@ public class MessageListener implements Runnable {
     }
 
     private MessageListener() {
-        thread =  new Thread(this);
+        thread = new Thread(this);
         thread.start();
     }
 
@@ -93,6 +93,7 @@ public class MessageListener implements Runnable {
                         launcher.setOpponentAddress(remoteAddress);
 
                         frmVariantChooser.currentGameLauncher.launch();
+                        GameLobby.getInstance().close();
 
                     } else {
                         response = ResponseCode.REFUSED + "";

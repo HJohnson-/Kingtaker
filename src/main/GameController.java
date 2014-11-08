@@ -1,6 +1,7 @@
 package main;
 
 import BasicChess.King;
+import forms.frmVariantChooser;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -91,10 +92,11 @@ public class GameController {
 	/**
 	 * @param pieceLocation location of the piece you are attempting to move
 	 * @param targetLocation location representing the move
+     * @param local true if the move was executed by a local user (via mouse click)
 	 * @return if the move was successful and the game-state modified
 	 */
-	public boolean attemptMove(Location pieceLocation, Location targetLocation) {
-		if (gameOver) return false;
+	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
+        if (gameOver) return false;
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);
 		if(!beingMoved.isValidMove(targetLocation)) {
@@ -104,17 +106,33 @@ public class GameController {
 			return false;
 		}
 		if(beingMoved.executeMove(targetLocation)) {
-			if (checkMate()) {
+            if (checkMate()) {
 				endGame();
 			} else {
                 nextPlayersTurn();
             }
 
+            if (local) {
+                //TODO: Desperately needs to be refactored
+                frmVariantChooser.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
+            }
+
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
+
+    /**
+     * Co-ordinates of move and optional extra field for pawn promotion.
+     * Function is used to handle moves from a remote or AI user.
+     */
+    public boolean handleRemoteMove(int oldX, int oldY, int newX, int newY, String extra) {
+        Location oldL = new Location(oldX, oldY);
+        Location newL = new Location(newX, newY);
+
+        return attemptMove(oldL, newL, false);
+    }
 
 	/**
 	 * set the game state to over

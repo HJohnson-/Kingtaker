@@ -20,4 +20,9 @@ public class OfflineGameLauncher extends GameLauncher {
     public void setFirstMover(boolean localUserIsWhite) {
         this.localUserIsWhite = localUserIsWhite;
     }
+
+    @Override
+    public void broadcastMove(Location oldL, Location newL, String extra) {
+        // No-one cares about your move.
+    }
 }

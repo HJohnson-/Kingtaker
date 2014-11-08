@@ -1,6 +1,11 @@
 package main;
 
+import forms.MessageBoxAlert;
 import networking.MessageListener;
+import networking.NetworkingCodes.ClientCommandCode;
+import networking.NetworkingCodes.ClientToClientCode;
+import networking.NetworkingCodes.ResponseCode;
+import networking.OpponentMessageSender;
 
 import java.net.InetAddress;
 import java.net.Socket;
@@ -34,6 +39,27 @@ public class OnlineGameLauncher extends GameLauncher {
     @Override
     public void setFirstMover(boolean localUserIsWhite) {
         this.localUserIsWhite = localUserIsWhite;
+    }
+
+    @Override
+    public void broadcastMove(Location oldL, Location newL, String extra) {
+        OpponentMessageSender oms = new OpponentMessageSender(sktOpponent.getInetAddress());
+
+        StringBuilder message = new StringBuilder(ClientToClientCode.SEND_MOVE + ClientToClientCode.DEL);
+        message.append(oldL.getX());
+        message.append(ClientToClientCode.DEL);
+        message.append(oldL.getY());
+        message.append(ClientToClientCode.DEL);
+        message.append(newL.getX());
+        message.append(ClientToClientCode.DEL);
+        message.append(newL.getY());
+        message.append(ClientToClientCode.DEL);
+        message.append(extra);
+        String response = oms.sendMessage(message.toString(), true);
+
+        if (!response.equals(ResponseCode.OK)) {
+            System.out.println("Other client rejected move!");
+        }
     }
 
     public void setGameBoardLayout(String boardState) {

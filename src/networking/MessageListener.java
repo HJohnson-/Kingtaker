@@ -1,6 +1,7 @@
 package networking;
 
 import forms.frmVariantChooser;
+import main.GameController;
 import main.OnlineGameLauncher;
 import main.PieceType;
 import networking.NetworkingCodes.ClientToClientCode;
@@ -24,8 +25,13 @@ public class MessageListener implements Runnable {
 
     private boolean acceptJoins = false;
     public boolean acceptMoves = false;
+
+    //For game set up
     private int pieceCode = -1;
     private String board = "";
+
+    //For ingame move-swapping.
+    private GameController gameController;
 
     //This needs to be a singleton as two identical sockets cannot be opened
     // on the same computer, yet the port number must be known.
@@ -106,9 +112,16 @@ public class MessageListener implements Runnable {
                     break;
 
                 //Checks that the game is running and the IP is recognised.
+                //Move is not executed if it is invalid
                 case ClientToClientCode.SEND_MOVE :
                     if (acceptMoves && remoteAddress != null && remoteAddress.equals(socket.getInetAddress())) {
-                        //TODO: swapping moves
+                        boolean successfulMove = gameController.handleRemoteMove(
+                                Integer.valueOf(fields[1]), Integer.valueOf(fields[2]),
+                                Integer.valueOf(fields[3]), Integer.valueOf(fields[4]),
+                                fields[5]);
+
+                        response = (successfulMove ? ResponseCode.OK : ResponseCode.INVALID) + "";
+
                     } else {
                         response = ResponseCode.REFUSED + "";
                     }

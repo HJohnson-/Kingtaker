@@ -5,7 +5,9 @@ package main;
  */
 abstract public class GameLauncher {
 
-    abstract public void launch();
+    public abstract void launch();
 
     public abstract void setFirstMover(boolean localUserIsWhite);
+
+    public abstract void broadcastMove(Location oldL, Location newL, String extra);
 }

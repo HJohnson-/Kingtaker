@@ -274,7 +274,7 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
                 } else {
                     if (selectedPiece.allPieceMoves().contains(l)) {
                         selectedPiece.graphics.setGoal(l);
-                        if (board.getController().attemptMove(selectedPiece.cords, l)) {
+                        if (board.getController().attemptMove(selectedPiece.cords, l, true)) {
                             ExecutorService pool = Executors.newFixedThreadPool(1);
                             pool.submit(selectedPiece.graphics);
                         }

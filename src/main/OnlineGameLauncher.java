@@ -33,6 +33,7 @@ public class OnlineGameLauncher extends GameLauncher {
 
     @Override
     public void launch() {
+        MessageListener.getInstance().setGameController(variant.game);
         variant.drawBoard();
     }
 
@@ -57,7 +58,7 @@ public class OnlineGameLauncher extends GameLauncher {
         message.append(extra);
         String response = oms.sendMessage(message.toString(), true);
 
-        if (!response.equals(ResponseCode.OK)) {
+        if (response == null || !response.equals(ResponseCode.OK)) {
             System.out.println("Other client rejected move!");
         }
     }

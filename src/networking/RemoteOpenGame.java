@@ -55,6 +55,8 @@ public class RemoteOpenGame {
                 );
                 launcher.setFirstMover(localUserIsWhite);
                 launcher.setGameBoardLayout(boardState);
+                MessageListener.getInstance().acceptMoves = true;
+                MessageListener.getInstance().setRemoteAddress(ip);
 
                 frmVariantChooser.currentGameLauncher = launcher;
                 return ResponseCode.OK;

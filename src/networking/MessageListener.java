@@ -70,7 +70,7 @@ public class MessageListener implements Runnable {
                 String serverResponseMessage = processMessageAndGetResponse(socket, clientMessage);
                 if (serverResponseMessage != null) {
                     DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                    clientWriter.writeBytes(serverResponseMessage);
+                    clientWriter.writeBytes(serverResponseMessage + "\n");
                     System.out.println("[" + socket.getInetAddress().getHostAddress() + "] response: " + serverResponseMessage);
                 } else {
                     System.out.println("[" + socket.getInetAddress().getHostAddress() + "] no response required");
@@ -104,6 +104,8 @@ public class MessageListener implements Runnable {
                         launcher.setFirstMover(pieceCode == PieceType.WHITE.ordinal());
 
                         frmVariantChooser.currentGameLauncher.launch();
+                        acceptMoves = true;
+
                         GameLobby.getInstance().close();
 
                     } else {
@@ -112,13 +114,15 @@ public class MessageListener implements Runnable {
                     break;
 
                 //Checks that the game is running and the IP is recognised.
-                //Move is not executed if it is invalid
+                //Move is not executed locally if it is invalid. TODO: do something!
                 case ClientToClientCode.SEND_MOVE :
                     if (acceptMoves && remoteAddress != null && remoteAddress.equals(socket.getInetAddress())) {
+                        String extraField = fields.length > 5 ? fields[5] : "";
+
                         boolean successfulMove = gameController.handleRemoteMove(
                                 Integer.valueOf(fields[1]), Integer.valueOf(fields[2]),
                                 Integer.valueOf(fields[3]), Integer.valueOf(fields[4]),
-                                fields[5]);
+                                extraField);
 
                         response = (successfulMove ? ResponseCode.OK : ResponseCode.INVALID) + "";
 
@@ -136,6 +140,10 @@ public class MessageListener implements Runnable {
         return response;
     }
 
+    public void setRemoteAddress(InetAddress remoteAddress) {
+        this.remoteAddress = remoteAddress;
+    }
+
     public void hostOpenGame(int pieceCode, String board) {
         acceptJoins = true;
         this.pieceCode = pieceCode;
@@ -144,5 +152,9 @@ public class MessageListener implements Runnable {
 
     public void removeOpenGame() {
         acceptJoins = false;
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 }

@@ -1,5 +1,7 @@
 package networking;
 
+import networking.NetworkingCodes.ResponseCode;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -36,7 +38,7 @@ public class OpponentMessageSender {
     //Returns true if successful, false if there were only timeouts or IO exceptions.
     public String sendMessage(String msg, boolean waitForResponse, int timeout) {
         long startTime = System.currentTimeMillis();
-        String response = null;
+        String response = ResponseCode.UNSPECIFIED_ERROR + "";
         while (System.currentTimeMillis() - startTime < timeout) {
             try {
                 socket = new Socket();
@@ -63,7 +65,7 @@ public class OpponentMessageSender {
                 try {
                     Thread.sleep(RETRY_WAIT_MS);
                 } catch (InterruptedException e1) {
-                    return null;
+                    return response;
                 }
             }
         }

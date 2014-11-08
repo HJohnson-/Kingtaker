@@ -19,7 +19,6 @@ public class OpponentMessageSender {
     private final int TIMEOUT_DEFAULT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;
 
-    private Socket socket = null;
     private InetAddress inetAddress = null;
 
     public OpponentMessageSender(InetAddress inetAddress) {
@@ -30,9 +29,9 @@ public class OpponentMessageSender {
         return sendMessage(msg, waitForResponse, TIMEOUT_DEFAULT_MS);
     }
 
-    public Socket getOpponentSocket() {
-        return socket;
-    }
+//    public Socket getOpponentSocket() {
+//        return socket;
+//    }
 
     //Attempts to send message to other client.
     //Returns true if successful, false if there were only timeouts or IO exceptions.
@@ -41,19 +40,21 @@ public class OpponentMessageSender {
         String response = ResponseCode.UNSPECIFIED_ERROR + "";
         while (System.currentTimeMillis() - startTime < timeout) {
             try {
-                socket = new Socket();
+                Socket socket = new Socket();
                 socket.setSoTimeout(timeout);
                 socket.connect(new InetSocketAddress(inetAddress, PORT), timeout);
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                clientWriter.writeBytes(msg + "\n");
-                System.out.println("[localhost] sent to [" + socket.getInetAddress().getHostAddress() + "]: " + msg);
+                clientWriter.writeBytes(msg + '\n');
+                clientWriter.flush();
+                System.out.println("I sent to [" + socket.getInetAddress().getHostAddress() + "]: " + msg);
 
                 if (waitForResponse) {
-                    BufferedReader clientReader =
-                            new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
+                    BufferedReader clientReader = new BufferedReader(inputStreamReader);
                     response = clientReader.readLine();
-                    System.out.println("[" + socket.getInetAddress().getHostAddress() + "] response: " + response);
+                    System.out.println("[" + socket.getInetAddress().getHostAddress() + "] response to my message: " + response);
+                    inputStreamReader.close();
                     clientReader.close();
                 }
 

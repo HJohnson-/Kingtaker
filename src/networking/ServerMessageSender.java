@@ -16,7 +16,6 @@ public class ServerMessageSender {
     private final int PORT = 4444;
     private final int TIMEOUT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;
-    private Socket socket = new Socket();
 
     //Send message to server and if flag is set, await a response.
     public String sendMessage(String msg, boolean waitForResponse) {

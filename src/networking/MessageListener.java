@@ -61,19 +61,23 @@ public class MessageListener implements Runnable {
             try {
                 //Receive message from other client or server
                 Socket socket = sktListener.accept();
+
                 BufferedReader clientReader =
                         new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String clientMessage = clientReader.readLine();
-                System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent: " + clientMessage);
+                System.out.println("Message listener awakened");
+                System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent me: " + clientMessage);
 
                 //Process message and generate an appropriate response, or none if it is junk.
                 String serverResponseMessage = processMessageAndGetResponse(socket, clientMessage);
                 if (serverResponseMessage != null) {
                     DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                    clientWriter.writeBytes(serverResponseMessage + "\n");
-                    System.out.println("[" + socket.getInetAddress().getHostAddress() + "] response: " + serverResponseMessage);
+                    clientWriter.writeBytes(serverResponseMessage + '\n');
+                    clientWriter.flush();
+                    System.out.println("My response to [" + socket.getInetAddress().getHostAddress() + "]: " + serverResponseMessage);
+
                 } else {
-                    System.out.println("[" + socket.getInetAddress().getHostAddress() + "] no response required");
+                    System.out.println("I do not need to respond to this message");
                 }
 
                 clientReader.close();

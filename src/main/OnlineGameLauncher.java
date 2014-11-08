@@ -56,11 +56,11 @@ public class OnlineGameLauncher extends GameLauncher {
         message.append(newL.getY());
         message.append(ClientToClientCode.DEL);
         message.append(extra);
-        String response = oms.sendMessage(message.toString(), true);
+        oms.sendMessage(message.toString(), false);
 
-        if (response == null || !response.equals(ResponseCode.OK)) {
-            System.out.println("Other client rejected move!");
-        }
+//        if (response == null || !response.equals(ResponseCode.OK)) {
+//            System.out.println("Other client rejected move!");
+//        }
     }
 
     public void setGameBoardLayout(String boardState) {

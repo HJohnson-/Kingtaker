@@ -49,7 +49,7 @@ public class RemoteOpenGame {
                 String boardState = fields[2];
                 OnlineGameLauncher launcher = new OnlineGameLauncher(
                         ChessVariantManager.getInstance().getVariantByID(variantId),
-                        oms.getOpponentSocket(),
+                        null,
                         hostUsername,
                         hostRating
                 );

@@ -37,7 +37,7 @@ public class OnlineGameLauncher extends GameLauncher {
     }
 
     public void setGameBoardLayout(String boardState) {
-        variant.game.getBoard().populateFromCode(boardState, variant.getDecoder());
+        variant.game = new GameController(variant.game.getBoard(), variant.getDecoder(), boardState);
     }
 
     public void setOpponent(InetAddress remoteAddress, String opponentName,

@@ -12,7 +12,7 @@ import java.net.Socket;
 
 public class ServerMessageSender {
 
-    private final String IP = "localhost";
+    private final String IP = "line26";
     private final int PORT = 4444;
     private final int TIMEOUT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;

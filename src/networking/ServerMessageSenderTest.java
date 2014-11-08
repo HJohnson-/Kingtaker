@@ -12,7 +12,7 @@ public class ServerMessageSenderTest extends TestCase {
         ServerMessageSender sms = new ServerMessageSender();
         String response = sms.sendMessage(ClientCommandCode.AUTHENTICATE_USER + "," +
                 "***TESTUSER***" + "," + 0, true);
-        assertEquals(ResponseCode.OK + ",2000",response);
+        assertEquals(ResponseCode.OK + ",1000",response);
     }
     public void testSendMessage2() throws Exception {
         ServerMessageSender sms = new ServerMessageSender();

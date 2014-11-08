@@ -10,4 +10,8 @@ abstract public class ChessVariant {
 
 	//returns true if there was no errors
 	abstract public boolean drawBoard();
+
+    abstract public int getVariationID();
+    abstract public String getName();
+    abstract public String getDescription();
 }

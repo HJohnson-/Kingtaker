@@ -1,9 +1,11 @@
 package forms;
 
+import main.ChessVariant;
+import main.ChessVariantManager;
 import networking.GameLobby;
 import networking.LocalUserAccount;
 import networking.NetworkingCodes.ResponseCode;
-import networking.RemoteGame;
+import networking.RemoteOpenGame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -48,6 +50,10 @@ public class frmLobby {
         } else {
             instance.displayForm();
         }
+    }
+
+    public static void hideInstance() {
+        instance.frame.setVisible(false);
     }
 
     public static frmLobby getInstance() {
@@ -97,20 +103,21 @@ public class frmLobby {
         btnCreateRemoveGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
-
-                    //TODO Open frmVariationPicker as dialog
-                    //somehow this has to talk back to gameLobby.createGame()
-
+                if (gameLobby.getLocalGame() == null) {
+                    if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
+                        frmVariantChooser.showInstance();
+                    }
+                    btnCreateRemoveGame.setText(BTN_REMOVEGAME_TEXT);
+                } else {
+                    gameLobby.destroyLocalGame();
+                    btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
                 }
-                tblLobbyModel.addRow(new Object[]{"Capablanca","jc4512",2003});
             }
         });
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (!LocalUserAccount.checkAcceptableUsernameAndPassword(
-                        txtUsername.getText(), new String(txtPassword.getPassword()))) {
+                if (!checkUsernameAndPasswordFields()) {
                     messageBoxAlert.showInvalidLoginDetails();
                 } else {
                     int result = gameLobby.attemptLogin(txtUsername.getText(), txtPassword.getPassword());
@@ -125,8 +132,7 @@ public class frmLobby {
         btnRegister.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (!LocalUserAccount.checkAcceptableUsernameAndPassword(
-                        txtUsername.getText(), new String(txtPassword.getPassword()))) {
+                if (!checkUsernameAndPasswordFields()) {
                     messageBoxAlert.showInvalidLoginDetails();
                 } else {
                     int result = gameLobby.attemptRegister(txtUsername.getText(), txtPassword.getPassword());
@@ -134,6 +140,32 @@ public class frmLobby {
                         setControlsOnServerStatus(gameLobby.getUser(), true);
                     } else {
                         messageBoxAlert.showUserRegisterResponse(result);
+                    }
+                }
+            }
+        });
+        tblLobby.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
+                    String hostUsername = tblLobbyModel.getValueAt(tblLobby.getSelectedRow(), 1).toString();
+
+                    //One cannot connect to a game hosted by oneself.
+                    if (hostUsername.equals(gameLobby.getUser().getUsername())) {
+                        messageBoxAlert.showGameJoinResponse(ResponseCode.INVALID);
+                        return;
+                    }
+
+                    //Destroy locally created game.
+                    gameLobby.destroyLocalGame();
+                    btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
+
+                    int response = gameLobby.attemptJoinGameByUsername(hostUsername);
+                    if (response == ResponseCode.OK) {
+                        gameLobby.close();
+                       frmVariantChooser.currentGameLauncher.launch();
+                    } else {
+                        messageBoxAlert.showGameJoinResponse(response);
                     }
                 }
             }
@@ -165,17 +197,35 @@ public class frmLobby {
         lblIsConnected.setBackground(isConnected ? LBL_ISCONNECTED_COLOR_YES : LBL_ISCONNECTED_COLOR_NO);
     }
 
-    // Used by textbox listeners to determine whether the user is in the process of logging in.
+    // Used by textbox listeners to determine whether the user is in the process
+    // of logging in. Also ensures someone cannot register with the suggestion text.
     private boolean isAllowableUsernameField(String username) {
         return username.length() >= 3 && !username.equals(TXT_USERNAME_SUGGESTION_TEXT);
+    }
+    private boolean isAllowablePasswordField(String password) {
+        return password.length() >= 3 && !password.equals(TXT_PASSWORD_SUGGESTION_TEXT);
+    }
+
+    // Called before making a new LocalUserAccount and authenticating.
+    private boolean checkUsernameAndPasswordFields() {
+        String username = txtUsername.getText();
+        String password = new String(txtPassword.getPassword());
+        return isAllowableUsernameField(username) &&
+               isAllowablePasswordField(password) &&
+               LocalUserAccount.checkAcceptableUsernameAndPassword(
+                                                    username, password);
     }
 
     // Clear table rows and refill. Set connection label accordingly.
     // Enable user to create/remove their open game with the JButton.
-    public void setOpenGamesAndServerStatus(List<RemoteGame> list, boolean isConnected, LocalUserAccount user) {
+    public void setOpenGamesAndServerStatus(List<RemoteOpenGame> list, boolean isConnected, LocalUserAccount user) {
         tblLobbyModel.getDataVector().removeAllElements();
-        for (RemoteGame game : list) {
-            tblLobbyModel.addRow(new Object[]{game.variantId, game.hostUsername, game.hostRating});
+        for (RemoteOpenGame game : list) {
+            ChessVariant variant = ChessVariantManager.getInstance().getVariantByID(game.variantId);
+            if (variant != null) {
+                //variant is installed and can be joined.
+                tblLobbyModel.addRow(new Object[]{variant.getName(), game.hostUsername, game.hostRating});
+            }
         }
         tblLobbyModel.fireTableDataChanged();
 

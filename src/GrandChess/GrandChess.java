@@ -1,6 +1,5 @@
 package GrandChess;
 
-import BasicChess.BasicChess;
 import graphics.tools;
 import main.ChessVariant;
 import main.GameController;
@@ -11,8 +10,24 @@ import BasicChess.BasicChessFrame;
  * Created by hj1012 on 03/11/14.
  */
 public class GrandChess extends ChessVariant {
+    @Override
+    public int getVariationID() {
+        return 2;
+    }
 
-	public GrandChess(){
+
+    @Override
+    public String getName() {
+        return "Grand Chess";
+    }
+
+    @Override
+    public String getDescription() {
+        return "[grand chess rules]\n" +
+               "[grand chess rules]\n";
+    }
+
+    public GrandChess() {
 		game = new GameController(new GrandBoard(), "Grand", new BasicDecoder());
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();

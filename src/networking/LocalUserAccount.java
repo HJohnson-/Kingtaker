@@ -33,8 +33,8 @@ public class LocalUserAccount {
         assert clientCommandCode == ClientCommandCode.REGISTER_ACCOUNT ||
                 clientCommandCode == ClientCommandCode.AUTHENTICATE_USER;
 
-        String msg = clientCommandCode + ClientCommandCode.DELIMINATOR +
-                     username + ClientCommandCode.DELIMINATOR + passwordHash;
+        String msg = clientCommandCode + ClientCommandCode.DEL +
+                     username + ClientCommandCode.DEL + passwordHash;
 
         ServerMessageSender sms = new ServerMessageSender();
         String response = sms.sendMessage(msg, true);

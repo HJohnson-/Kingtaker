@@ -52,7 +52,7 @@ public class BasicBoard extends Board {
 			this.placePiece(location, new Pawn(this, PieceType.WHITE, location));
 		}
 
-		//black pieces
+		// white pieces
 		for(int i = 0; i < 8; i++){
 			Location location = new Location(7,i);
 			switch (i){

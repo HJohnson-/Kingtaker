@@ -7,4 +7,5 @@ abstract public class GameLauncher {
 
     abstract public void launch();
 
+    public abstract void setFirstMover(boolean localUserIsWhite);
 }

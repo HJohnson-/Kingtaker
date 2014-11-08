@@ -5,6 +5,7 @@ package main;
  */
 public class OfflineGameLauncher extends GameLauncher {
     private ChessVariant variant;
+    private boolean localUserIsWhite;
 
     public OfflineGameLauncher(ChessVariant variant) {
         this.variant = variant;
@@ -13,5 +14,10 @@ public class OfflineGameLauncher extends GameLauncher {
     @Override
     public void launch() {
         variant.drawBoard();
+    }
+
+    @Override
+    public void setFirstMover(boolean localUserIsWhite) {
+        this.localUserIsWhite = localUserIsWhite;
     }
 }

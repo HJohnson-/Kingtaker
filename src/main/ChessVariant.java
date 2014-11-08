@@ -1,5 +1,7 @@
 package main;
 
+import pieces.PieceDecoder;
+
 /**
  * The only class that is interacted with by the main function.
  * GameController objected should be initialized with a board, then a drawBoard function sets up a way for the board
@@ -14,4 +16,6 @@ abstract public class ChessVariant {
     abstract public int getVariationID();
     abstract public String getName();
     abstract public String getDescription();
+
+    public abstract PieceDecoder getDecoder();
 }

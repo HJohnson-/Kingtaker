@@ -1,6 +1,7 @@
 package networking;
 
 import main.ChessVariant;
+import main.OnlineGameLauncher;
 import main.PieceType;
 import networking.NetworkingCodes.ClientCommandCode;
 
@@ -13,6 +14,7 @@ import java.util.Random;
 public class LocalOpenGame {
     public ChessVariant variant;
 
+    public OnlineGameLauncher launcher;
     private PieceType pieceType;
     private Date creationDate;
 
@@ -20,7 +22,7 @@ public class LocalOpenGame {
         this.variant = variant;
         creationDate = new Date();
 
-        //Coin flip to decide whether playing first. Host decides!
+        //Coin flip to decide whether playing first. Host decides! 0=white
         pieceType = new Random().nextInt(2) == 0 ? PieceType.WHITE : PieceType.BLACK;
     }
 

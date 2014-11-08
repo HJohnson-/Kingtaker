@@ -42,14 +42,30 @@ public class RemoteOpenGame {
             //Game already joined by some other client (most likely).
             return ResponseCode.REFUSED;
         } else if (response.startsWith(ResponseCode.OK + ResponseCode.DEL)) {
-            frmVariantChooser.currentGameLauncher = new OnlineGameLauncher(
-                    ChessVariantManager.getInstance().getVariantByID(variantId),
-                    oms.getOpponentSocket()
-            );
-            return ResponseCode.OK;
-        } else {
-            //Response malformed/unexpected.
-            return ResponseCode.UNSPECIFIED_ERROR;
+
+            try {
+                String[] fields = response.split(ResponseCode.DEL);
+                boolean localUserIsWhite = fields[1].equals("0");
+                String boardState = fields[2];
+                OnlineGameLauncher launcher = new OnlineGameLauncher(
+                        ChessVariantManager.getInstance().getVariantByID(variantId),
+                        oms.getOpponentSocket(),
+                        hostUsername,
+                        hostRating
+                );
+                launcher.setFirstMover(localUserIsWhite);
+                launcher.setGameBoardLayout(boardState);
+
+                frmVariantChooser.currentGameLauncher = launcher;
+                return ResponseCode.OK;
+            } catch (Exception e) {
+                //Loading the game failed due to a malformed board state
+            }
+
         }
+
+        //Response malformed/unexpected.
+        return ResponseCode.UNSPECIFIED_ERROR;
+
     }
 }

@@ -105,7 +105,7 @@ public class frmVariantChooser {
         }
     }
 
-
+    @SuppressWarnings("unchecked")
     private void createUIComponents() {
         lstVariationPickerModel = new DefaultListModel<String>();
         lstVariationPicker = new JList(lstVariationPickerModel);

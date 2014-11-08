@@ -2,6 +2,7 @@ package networking;
 
 import forms.frmVariantChooser;
 import main.OnlineGameLauncher;
+import main.PieceType;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -86,11 +87,15 @@ public class MessageListener implements Runnable {
             switch (clientToClientCode) {
                 case ClientToClientCode.JOIN_OPEN_GAME :
                     if (acceptJoins) {
+                        String joinerUsername = fields[1];
+                        int joinerRating = Integer.valueOf(fields[2]);
+
                         response = ResponseCode.OK + ResponseCode.DEL + pieceCode + ResponseCode.DEL + board;
                         acceptJoins = false;
                         remoteAddress = socket.getInetAddress();
                         OnlineGameLauncher launcher = (OnlineGameLauncher) frmVariantChooser.currentGameLauncher;
-                        launcher.setOpponentAddress(remoteAddress);
+                        launcher.setOpponent(remoteAddress, joinerUsername, joinerRating);
+                        launcher.setFirstMover(pieceCode == PieceType.WHITE.ordinal());
 
                         frmVariantChooser.currentGameLauncher.launch();
                         GameLobby.getInstance().close();

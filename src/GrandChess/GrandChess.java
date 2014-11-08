@@ -5,6 +5,7 @@ import main.ChessVariant;
 import main.GameController;
 import BasicChess.BasicDecoder;
 import BasicChess.BasicChessFrame;
+import pieces.PieceDecoder;
 
 /**
  * Created by hj1012 on 03/11/14.
@@ -15,7 +16,6 @@ public class GrandChess extends ChessVariant {
         return 2;
     }
 
-
     @Override
     public String getName() {
         return "Grand Chess";
@@ -25,6 +25,11 @@ public class GrandChess extends ChessVariant {
     public String getDescription() {
         return "[grand chess rules]\n" +
                "[grand chess rules]\n";
+    }
+
+    @Override
+    public PieceDecoder getDecoder() {
+        return new GrandDecoder();
     }
 
     public GrandChess() {

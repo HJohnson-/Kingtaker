@@ -14,7 +14,6 @@ import java.net.Socket;
  * Created by jc4512 on 06/11/14.
  */
 public class OnlineGameLauncher extends GameLauncher {
-    //private Socket sktOpponent;
     private InetAddress ipOpponent;
     private ChessVariant variant;
     private String opponentName;
@@ -57,11 +56,11 @@ public class OnlineGameLauncher extends GameLauncher {
         message.append(newL.getY());
         message.append(ClientToClientCode.DEL);
         message.append(extra);
-        oms.sendMessage(message.toString(), false);
+        String response = oms.sendMessage(message.toString(), false);
 
-//        if (response == null || !response.equals(ResponseCode.OK)) {
-//            System.out.println("Other client rejected move!");
-//        }
+        if (response == null || !response.equals(ResponseCode.OK)) {
+            System.out.println("Other client rejected move!");
+        }
     }
 
     public void setGameBoardLayout(String boardState) {

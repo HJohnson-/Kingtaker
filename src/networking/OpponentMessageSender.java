@@ -29,10 +29,6 @@ public class OpponentMessageSender {
         return sendMessage(msg, waitForResponse, TIMEOUT_DEFAULT_MS);
     }
 
-//    public Socket getOpponentSocket() {
-//        return socket;
-//    }
-
     //Attempts to send message to other client.
     //Returns true if successful, false if there were only timeouts or IO exceptions.
     public String sendMessage(String msg, boolean waitForResponse, int timeout) {
@@ -41,14 +37,11 @@ public class OpponentMessageSender {
         while (System.currentTimeMillis() - startTime < timeout) {
             try {
                 Socket socket = new Socket();
-                socket.setTcpNoDelay(true);
-                //socket.setSoTimeout(timeout);
-                socket.connect(new InetSocketAddress(inetAddress, PORT));
+                socket.setSoTimeout(timeout);
+                socket.connect(new InetSocketAddress(inetAddress, PORT), timeout);
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                //clientWriter.writeBytes(msg + "\n");
-                clientWriter.writeUTF(msg + "\n");
-                clientWriter.flush();
+                clientWriter.writeBytes(msg + "\n");
                 System.out.println("I sent to [" + socket.getInetAddress().getHostAddress() + "]: " + msg);
 
                 if (waitForResponse) {
@@ -56,13 +49,12 @@ public class OpponentMessageSender {
                     BufferedReader clientReader = new BufferedReader(inputStreamReader);
                     response = clientReader.readLine();
                     System.out.println("[" + socket.getInetAddress().getHostAddress() + "] response to my message: " + response);
-                    //inputStreamReader.close();
-                    //clientReader.close();
+                    inputStreamReader.close();
+                    clientReader.close();
                 }
 
-                //clientWriter.close();
-                //socket.shutdownOutput();
-                //socket.close();
+                clientWriter.close();
+                socket.close();
                 return response;
             } catch (IOException e) {
                 System.out.println(e.getMessage());

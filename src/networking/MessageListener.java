@@ -18,7 +18,7 @@ public class MessageListener implements Runnable {
     private static MessageListener instance;
     private InetAddress remoteAddress;
 
-    public Thread thread;
+    private Thread thread;
 
     private boolean acceptJoins = false;
     public boolean acceptMoves = false;
@@ -57,14 +57,15 @@ public class MessageListener implements Runnable {
         while (true) {
             
             try {
-                //Receive message from other client or server
+                //The below 3 lines are dangerous ones, as they will block
+                //until a message has been sent or the socket is closed by
+                //the other client - either by .close() or program exit.
+                //If the other client does this twice: s = new Socket(me)
+                //the second message will not be flushed until the first is!
                 Socket socket = sktListener.accept();
-                socket.setTcpNoDelay(true);
-
-                //BufferedReader clientReader =
-                //        new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                DataInputStream clientReader = new DataInputStream(socket.getInputStream());
-                String clientMessage = clientReader.readUTF();
+                BufferedReader clientReader =
+                        new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String clientMessage = clientReader.readLine();
 
                 System.out.println("Message listener awakened");
                 System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent me: " + clientMessage);
@@ -74,15 +75,14 @@ public class MessageListener implements Runnable {
                 if (serverResponseMessage != null) {
                     DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
                     clientWriter.writeBytes(serverResponseMessage + "\n");
-                    clientWriter.flush();
                     System.out.println("My response to [" + socket.getInetAddress().getHostAddress() + "]: " + serverResponseMessage);
 
                 } else {
                     System.out.println("I do not need to respond to this message");
                 }
 
-                //clientReader.close();
-                //socket.close();
+                clientReader.close();
+                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -130,8 +130,6 @@ public class MessageListener implements Runnable {
                                 extraField);
 
                         response = (successfulMove ? ResponseCode.OK : ResponseCode.INVALID) + "";
-
-                        response = null;
                     } else {
                         response = ResponseCode.REFUSED + "";
                     }

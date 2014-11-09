@@ -22,17 +22,17 @@ public class NetworkedGameTest {
         MessageListener.getInstance().acceptMoves = true;
 
         String server = InetAddress.getLocalHost().getHostName().equals(host1) ? host2 : host1;
-
-        while (s == null) {
+        Socket socket = null;
+        while (socket == null) {
             try {
-                s = new Socket(server, 4445);
-                s.close(); //very very important here
+                socket = new Socket(server, 4445);
+                socket.close(); //very very important here
                 break;
             } catch (IOException e) {
             }
         }
 
-        MessageListener.getInstance().setRemoteAddress(s.getInetAddress());
+        MessageListener.getInstance().setRemoteAddress(socket.getInetAddress());
 
         OnlineGameLauncher o = new OnlineGameLauncher(variant,
                 InetAddress.getByName(server), "playa" + (new Random()).nextInt(100000) + "", 1000);

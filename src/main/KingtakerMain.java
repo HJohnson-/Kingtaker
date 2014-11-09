@@ -1,23 +1,8 @@
 package main;
 
-import javax.swing.*;
 import BasicChess.BasicChess;
-
-import BasicChess.BasicBoard;
-import BasicChess.BasicDecoder;
-
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Random;
-
 import GrandChess.GrandChess;
 import RandomChess.RandomChess;
-import forms.frmVariantChooser;
-import networking.MessageListener;
-import networking.OpponentMessageSender;
 
 /**
  * Primitive main function for running tests until a menu is added

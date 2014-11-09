@@ -18,7 +18,7 @@ public class MessageListener implements Runnable {
     private static MessageListener instance;
     private InetAddress remoteAddress;
 
-    private Thread thread;
+    public Thread thread;
 
     private boolean acceptJoins = false;
     public boolean acceptMoves = false;
@@ -55,9 +55,11 @@ public class MessageListener implements Runnable {
         System.out.println("MessageListener running");
         //Run listening loop
         while (true) {
+            
             try {
                 //Receive message from other client or server
                 Socket socket = sktListener.accept();
+                socket.setTcpNoDelay(true);
 
                 //BufferedReader clientReader =
                 //        new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -79,8 +81,8 @@ public class MessageListener implements Runnable {
                     System.out.println("I do not need to respond to this message");
                 }
 
-                clientReader.close();
-                socket.close();
+                //clientReader.close();
+                //socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -129,6 +131,7 @@ public class MessageListener implements Runnable {
 
                         response = (successfulMove ? ResponseCode.OK : ResponseCode.INVALID) + "";
 
+                        response = null;
                     } else {
                         response = ResponseCode.REFUSED + "";
                     }

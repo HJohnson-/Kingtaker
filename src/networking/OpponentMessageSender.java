@@ -41,6 +41,7 @@ public class OpponentMessageSender {
         while (System.currentTimeMillis() - startTime < timeout) {
             try {
                 Socket socket = new Socket();
+                socket.setTcpNoDelay(true);
                 //socket.setSoTimeout(timeout);
                 socket.connect(new InetSocketAddress(inetAddress, PORT));
 
@@ -55,12 +56,13 @@ public class OpponentMessageSender {
                     BufferedReader clientReader = new BufferedReader(inputStreamReader);
                     response = clientReader.readLine();
                     System.out.println("[" + socket.getInetAddress().getHostAddress() + "] response to my message: " + response);
-                    inputStreamReader.close();
-                    clientReader.close();
+                    //inputStreamReader.close();
+                    //clientReader.close();
                 }
 
-                clientWriter.close();
-                socket.close();
+                //clientWriter.close();
+                //socket.shutdownOutput();
+                //socket.close();
                 return response;
             } catch (IOException e) {
                 System.out.println(e.getMessage());

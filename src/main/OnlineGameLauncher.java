@@ -14,7 +14,8 @@ import java.net.Socket;
  * Created by jc4512 on 06/11/14.
  */
 public class OnlineGameLauncher extends GameLauncher {
-    private Socket sktOpponent;
+    //private Socket sktOpponent;
+    private InetAddress ipOpponent;
     private ChessVariant variant;
     private String opponentName;
     private int opponentRating;
@@ -24,11 +25,11 @@ public class OnlineGameLauncher extends GameLauncher {
         this.variant = variant;
     }
 
-    public OnlineGameLauncher(ChessVariant variant, Socket sktOpponent, String opponentName, int opponentRating) {
-        this.sktOpponent = sktOpponent;
+    public OnlineGameLauncher(ChessVariant variant, InetAddress ipOpponent, String opponentName, int opponentRating) {
         this.variant = variant;
         this.opponentName = opponentName;
         this.opponentRating = opponentRating;
+        this.ipOpponent = ipOpponent;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class OnlineGameLauncher extends GameLauncher {
 
     @Override
     public void broadcastMove(Location oldL, Location newL, String extra) {
-        OpponentMessageSender oms = new OpponentMessageSender(sktOpponent.getInetAddress());
+        OpponentMessageSender oms = new OpponentMessageSender(ipOpponent);
 
         StringBuilder message = new StringBuilder(ClientToClientCode.SEND_MOVE + ClientToClientCode.DEL);
         message.append(oldL.getX());
@@ -69,7 +70,7 @@ public class OnlineGameLauncher extends GameLauncher {
 
     public void setOpponent(InetAddress remoteAddress, String opponentName,
                             int opponentRating) throws Exception {
-        sktOpponent = new Socket(remoteAddress, MessageListener.LISTENER_PORT);
+        ipOpponent = remoteAddress;
         this.opponentRating = opponentRating;
         this.opponentName = opponentName;
     }

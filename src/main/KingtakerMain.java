@@ -35,6 +35,7 @@ public class KingtakerMain {
         while (s == null) {
             try {
                         s = new Socket(server, 4445);
+                s.close();
                         break;
 
 
@@ -53,7 +54,7 @@ public class KingtakerMain {
 
 
         OnlineGameLauncher o = new OnlineGameLauncher(ChessVariantManager.getInstance().getVariantByID(0),
-                new Socket(server, 4445), (new Random()).nextInt(100000) + "", 1000);
+                InetAddress.getByName(server), (new Random()).nextInt(100000) + "", 1000);
         frmVariantChooser.currentGameLauncher = o;
 
         o.launch();

@@ -2,6 +2,7 @@ package forms;
 
 import main.ChessVariant;
 import main.ChessVariantManager;
+import main.GameLauncher;
 import networking.GameLobby;
 import networking.LocalUserAccount;
 import networking.NetworkingCodes.ResponseCode;
@@ -163,7 +164,7 @@ public class frmLobby {
                     int response = gameLobby.attemptJoinGameByUsername(hostUsername);
                     if (response == ResponseCode.OK) {
                         gameLobby.close();
-                       frmVariantChooser.currentGameLauncher.launch();
+                        GameLauncher.currentGameLauncher.launch();
                     } else {
                         messageBoxAlert.showGameJoinResponse(response);
                     }

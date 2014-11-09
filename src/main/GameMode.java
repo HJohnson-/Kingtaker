@@ -6,5 +6,7 @@ package main;
 public enum GameMode {
     SINGLE_PLAYER,
     MULTIPLAYER_LOCAL,
-    MULTIPLAYER_ONLINE
+    MULTIPLAYER_ONLINE;
+
+    public static GameMode currentGameMode;
 }

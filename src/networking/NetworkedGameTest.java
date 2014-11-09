@@ -3,6 +3,7 @@ package networking;
 import forms.frmVariantChooser;
 import main.ChessVariant;
 import main.ChessVariantManager;
+import main.GameLauncher;
 import main.OnlineGameLauncher;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class NetworkedGameTest {
 
         OnlineGameLauncher o = new OnlineGameLauncher(variant,
                 InetAddress.getByName(server), "playa" + (new Random()).nextInt(100000) + "", 1000);
-        frmVariantChooser.currentGameLauncher = o;
+        GameLauncher.currentGameLauncher = o;
 
         o.launch();
     }

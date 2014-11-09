@@ -2,6 +2,7 @@ package networking;
 
 import forms.frmVariantChooser;
 import main.ChessVariantManager;
+import main.GameLauncher;
 import main.OnlineGameLauncher;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
@@ -58,7 +59,7 @@ public class RemoteOpenGame {
                 MessageListener.getInstance().acceptMoves = true;
                 MessageListener.getInstance().setRemoteAddress(ip);
 
-                frmVariantChooser.currentGameLauncher = launcher;
+                GameLauncher.currentGameLauncher = launcher;
                 return ResponseCode.OK;
             } catch (Exception e) {
                 //Loading the game failed due to a malformed board state

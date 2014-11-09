@@ -21,6 +21,8 @@ public class GameController {
 	private Board board;
 	private String gameVariant;
 	private PieceDecoder decoder;
+    private boolean fullInteractivity;
+    private PieceType interactivePiece = null;
 
 	public Board getBoard() {
 		return board;
@@ -36,6 +38,8 @@ public class GameController {
 		gameOver = false;
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
+
+        fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
 	}
 
 	public GameController(Board board, PieceDecoder decoder, String code) {
@@ -53,6 +57,8 @@ public class GameController {
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
+
+        fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
 	}
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves() {
@@ -99,10 +105,10 @@ public class GameController {
         if (gameOver) return false;
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);
-		if(!beingMoved.isValidMove(targetLocation)) {
+		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
 			return false;
 		}
-		if(!turnPlayersPiece(beingMoved)) {
+		if (!fullInteractivity && !beingMoved.type.equals(interactivePiece)) {
 			return false;
 		}
 		if(beingMoved.executeMove(targetLocation)) {
@@ -113,8 +119,7 @@ public class GameController {
             }
 
             if (local) {
-                //TODO: Desperately needs to be refactored
-                frmVariantChooser.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
+                GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
 
 			return true;

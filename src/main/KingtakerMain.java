@@ -15,8 +15,8 @@ public class KingtakerMain {
         BasicChess bc = new BasicChess(new GameController( new BasicBoard(), new BasicDecoder(), myState));
 
         ChessVariant v = bc; //ChessVariantManager.getInstance().getVariantByID(0);
-        frmVariantChooser.currentGameLauncher = new OfflineGameLauncher(v);
-        frmVariantChooser.currentGameLauncher.launch();
+        GameLauncher.currentGameLauncher = new OfflineGameLauncher(v);
+        GameLauncher.currentGameLauncher.launch();
     }
 
 }

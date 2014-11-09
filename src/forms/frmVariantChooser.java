@@ -27,8 +27,6 @@ public class frmVariantChooser {
 
     private ChessVariant selectedVariant = null;
 
-    public static GameMode currentGameMode;
-    public static GameLauncher currentGameLauncher;
     private static frmVariantChooser instance;
     private List<ChessVariant> variants;
 
@@ -70,13 +68,13 @@ public class frmVariantChooser {
 
                 selectedVariant = variants.get(lstVariationPicker.getSelectedIndex());
 
-                if (currentGameMode == GameMode.SINGLE_PLAYER ||
-                        currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
-                    currentGameLauncher = new OfflineGameLauncher(selectedVariant);
-                    currentGameLauncher.launch();
-                } else if (currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
+                if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER ||
+                        GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
+                    GameLauncher.currentGameLauncher = new OfflineGameLauncher(selectedVariant);
+                    GameLauncher.currentGameLauncher.launch();
+                } else if (GameMode.currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
                     GameLobby.getInstance().createLocalOpenGame(selectedVariant);
-                    currentGameLauncher = new OnlineGameLauncher(selectedVariant);
+                    GameLauncher.currentGameLauncher = new OnlineGameLauncher(selectedVariant);
                 }
 
             }

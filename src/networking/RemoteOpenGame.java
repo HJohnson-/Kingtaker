@@ -3,6 +3,7 @@ package networking;
 import main.ChessVariantManager;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
+import main.PieceType;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -45,7 +46,8 @@ public class RemoteOpenGame {
 
             try {
                 String[] fields = response.split(ResponseCode.DEL);
-                boolean localUserIsWhite = fields[1].equals("0");
+                PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];
+                boolean localUserIsWhite = !remotePiece.equals(PieceType.WHITE);
                 String boardState = fields[2];
                 OnlineGameLauncher launcher = new OnlineGameLauncher(
                         ChessVariantManager.getInstance().getVariantByID(variantId),

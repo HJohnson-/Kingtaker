@@ -101,6 +101,8 @@ public class GameController {
 	 * @return if the move was successful and the game-state modified
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
+        System.out.println("isWhitesTurn = " + isWhitesTurn);
+
         //Cannot make moves once the game has ended.
         if (gameOver) return false;
 
@@ -209,7 +211,7 @@ public class GameController {
 	 */
 	public boolean isInCheck(boolean checkingForWhite) {
 		Location kingLocation = findKing(checkingForWhite);
-        Boolean oldVal = isWhitesTurn;
+        boolean oldVal = isWhitesTurn;
         isWhitesTurn = !checkingForWhite;
 		for(List<Location> targets : getAllValidMoves(false).values()) {
 			if(targets.contains(kingLocation)) {
@@ -220,6 +222,10 @@ public class GameController {
         isWhitesTurn = oldVal;
 		return false;
 	}
+
+    public void setWhitesTurn(boolean value) {
+        isWhitesTurn = value;
+    }
 
 	public boolean isInCheck(PieceType type) {
 		return isInCheck(type == PieceType.WHITE);

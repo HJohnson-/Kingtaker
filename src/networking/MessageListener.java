@@ -130,6 +130,7 @@ public class MessageListener implements Runnable {
                                 extraField);
 
                         response = (successfulMove ? ResponseCode.OK : ResponseCode.INVALID) + "";
+                        //update display on separate thread.
                     } else {
                         response = ResponseCode.REFUSED + "";
                     }

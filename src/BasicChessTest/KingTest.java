@@ -45,6 +45,8 @@ public class KingTest extends TestCase {
     }
 
     public void testGetName() throws Exception {
-
+		BasicBoard board = new BasicBoard();
+		King king = new King(board, PieceType.BLACK, new Location(7,3));
+		assertEquals("King",king.getName());
     }
 }

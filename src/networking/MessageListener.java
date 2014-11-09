@@ -67,7 +67,7 @@ public class MessageListener implements Runnable {
                         new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String clientMessage = clientReader.readLine();
 
-                System.out.println("Message listener awakened");
+                System.out.println("MessageListener awakened");
                 System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent me: " + clientMessage);
 
                 //Process message and generate an appropriate response, or none if it is junk.

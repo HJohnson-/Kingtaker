@@ -5,26 +5,26 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-/**
- * Created by daniel on 14/10/20.
- */
+public class ServerMessageSender implements IMessageSender {
 
-
-public class ServerMessageSender {
-
-    private final String IP = "line26";
+    private final String IP_STRING = "line26";
     private final int PORT = 4444;
-    private final int TIMEOUT_MS = 10000;
+    private final int TIMEOUT_DEFAULT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;
 
     //Send message to server and if flag is set, await a response.
     public String sendMessage(String msg, boolean waitForResponse) {
+        return sendMessage(msg, waitForResponse, TIMEOUT_DEFAULT_MS);
+    }
+
+    @Override
+    public String sendMessage(String msg, boolean waitForResponse, int timeout) {
         long startTime = System.currentTimeMillis();
         String response = null;
-        while (System.currentTimeMillis() - startTime < TIMEOUT_MS) {
+        while (System.currentTimeMillis() - startTime < timeout) {
             try {
                 Socket socket = new Socket();
-                socket.connect(new InetSocketAddress(InetAddress.getByName(IP), PORT), TIMEOUT_MS);
+                socket.connect(new InetSocketAddress(InetAddress.getByName(IP_STRING), PORT), timeout);
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
                 clientWriter.writeBytes(msg + "\n");

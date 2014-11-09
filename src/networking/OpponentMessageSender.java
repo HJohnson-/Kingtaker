@@ -14,7 +14,7 @@ import java.net.Socket;
  * Created by jc4512 on 23/10/14.
  */
 //TODO: make this extend MessageSender
-public class OpponentMessageSender {
+public class OpponentMessageSender implements IMessageSender {
     private final int PORT = 4445;
     private final int TIMEOUT_DEFAULT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;

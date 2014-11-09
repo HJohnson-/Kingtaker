@@ -97,7 +97,7 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
 
         y += cellHeight;
 
-        Color c = board.getController().isWhitesTurn() ? Color.BLACK : Color.WHITE;
+        Color c = board.getController().isWhitesTurn() ? Color.WHITE : Color.BLACK ;
         g2.setPaint(c);
         g2.fillRect(x + UIWidth / 4, y, UIWidth / 2, cellHeight);
         g2.setPaint(tools.TEXT);

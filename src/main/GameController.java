@@ -14,7 +14,7 @@ import java.util.Map;
  * Handles game logic
  */
 public class GameController {
-	private boolean isWhitesTurn;
+	private boolean isWhitesTurn = true; //white always starts
 	private int currentTurn;
 	private String winner;
 	private boolean gameOver;
@@ -110,14 +110,18 @@ public class GameController {
         //Cannot perform a move that violates the variant's rules.
         //Cannot move a black piece when it's white's turn, and vice versa.
 		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
+            System.out.println("1 pieceLocation = [" + pieceLocation + "], targetLocation = [" + targetLocation + "], local = [" + local + "]");
+
             return false;
-		}
+        }
 
         //Cannot perform a move if the user is not white or black.
         //Does not apply to local multiplayer games, where fullInteractivity=true.
 		if (!userCanInteractWithPiece(beingMoved, local)) {
+            System.out.println("2 pieceLocation = [" + pieceLocation + "], targetLocation = [" + targetLocation + "], local = [" + local + "]");
+
 			return false;
-		}
+        }
 
         //Executes move, unless the piece... TODO: why is this a boolean? Does it always return true!
 		//If checkmate is detected, the game ends, otherwise the active player is switched.
@@ -176,7 +180,7 @@ public class GameController {
 	 * @return if the piece belongs to the turn player
 	 */
 	private boolean turnPlayersPiece(ChessPiece checkedPiece) {
-		return checkedPiece.type == PieceType.WHITE != isWhitesTurn;
+		return (checkedPiece.type == PieceType.WHITE) == isWhitesTurn;
 	}
 
     /**

@@ -31,7 +31,7 @@ public class GameController {
 	 * @param board board
 	 */
 	public GameController(Board board, String gameVariant, PieceDecoder decoder) {
-		currentTurn = 1;
+        currentTurn = 1;
 		this.board = board;
 		winner = "None";
 		gameOver = false;
@@ -42,7 +42,7 @@ public class GameController {
 	}
 
 	public GameController(Board board, PieceDecoder decoder, String code) {
-		this.board = board;
+        this.board = board;
 		winner = "None";
 		gameOver = false;
 		this.decoder = decoder;
@@ -101,7 +101,8 @@ public class GameController {
 	 * @return if the move was successful and the game-state modified
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
-        System.out.println("isWhitesTurn = " + isWhitesTurn);
+        System.out.println("attemptMove... isWhitesTurn = " + isWhitesTurn);
+        System.out.println(this);
 
         //Cannot make moves once the game has ended.
         if (gameOver) return false;
@@ -223,10 +224,6 @@ public class GameController {
 		return false;
 	}
 
-    public void setWhitesTurn(boolean value) {
-        isWhitesTurn = value;
-    }
-
 	public boolean isInCheck(PieceType type) {
 		return isInCheck(type == PieceType.WHITE);
 	}
@@ -263,7 +260,7 @@ public class GameController {
 	 */
 	private void nextPlayersTurn() {
 		currentTurn++;
-		isWhitesTurn = !isWhitesTurn;
+        isWhitesTurn = !isWhitesTurn;
 	}
 
 	public boolean gameOver() {

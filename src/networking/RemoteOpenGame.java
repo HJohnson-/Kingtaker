@@ -55,7 +55,7 @@ public class RemoteOpenGame {
                         hostUsername,
                         hostRating
                 );
-                launcher.setGameBoardLayout(boardState);
+                //launcher.setGameBoardLayout(boardState);
                 launcher.setUserIsWhite(localUserIsWhite);
                 MessageListener.getInstance().acceptMoves = true;
                 MessageListener.getInstance().setRemoteAddress(ip);

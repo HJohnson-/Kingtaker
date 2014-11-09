@@ -56,9 +56,9 @@ public class OnlineGameLauncher extends GameLauncher {
         message.append(newL.getY());
         message.append(ClientToClientCode.DEL);
         message.append(extra);
-        String response = oms.sendMessage(message.toString(), false);
+        String response = oms.sendMessage(message.toString(), true);
 
-        if (response == null || !response.equals(ResponseCode.OK)) {
+        if (response == null || !response.equals(ResponseCode.OK + "")) {
             System.out.println("Other client rejected move!");
         }
     }

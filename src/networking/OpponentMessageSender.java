@@ -41,11 +41,12 @@ public class OpponentMessageSender {
         while (System.currentTimeMillis() - startTime < timeout) {
             try {
                 Socket socket = new Socket();
-                socket.setSoTimeout(timeout);
-                socket.connect(new InetSocketAddress(inetAddress, PORT), timeout);
+                //socket.setSoTimeout(timeout);
+                socket.connect(new InetSocketAddress(inetAddress, PORT));
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                clientWriter.writeBytes(msg + '\n');
+                //clientWriter.writeBytes(msg + "\n");
+                clientWriter.writeUTF(msg + "\n");
                 clientWriter.flush();
                 System.out.println("I sent to [" + socket.getInetAddress().getHostAddress() + "]: " + msg);
 

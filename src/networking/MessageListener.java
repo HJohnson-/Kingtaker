@@ -7,10 +7,7 @@ import main.PieceType;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -62,9 +59,11 @@ public class MessageListener implements Runnable {
                 //Receive message from other client or server
                 Socket socket = sktListener.accept();
 
-                BufferedReader clientReader =
-                        new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String clientMessage = clientReader.readLine();
+                //BufferedReader clientReader =
+                //        new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                DataInputStream clientReader = new DataInputStream(socket.getInputStream());
+                String clientMessage = clientReader.readUTF();
+
                 System.out.println("Message listener awakened");
                 System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent me: " + clientMessage);
 
@@ -72,7 +71,7 @@ public class MessageListener implements Runnable {
                 String serverResponseMessage = processMessageAndGetResponse(socket, clientMessage);
                 if (serverResponseMessage != null) {
                     DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                    clientWriter.writeBytes(serverResponseMessage + '\n');
+                    clientWriter.writeBytes(serverResponseMessage + "\n");
                     clientWriter.flush();
                     System.out.println("My response to [" + socket.getInetAddress().getHostAddress() + "]: " + serverResponseMessage);
 

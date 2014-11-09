@@ -39,7 +39,7 @@ public class GameController {
 		this.decoder = decoder;
 
         fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
-	}
+    }
 
 	public GameController(Board board, PieceDecoder decoder, String code) {
         this.board = board;
@@ -101,9 +101,6 @@ public class GameController {
 	 * @return if the move was successful and the game-state modified
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
-        System.out.println("attemptMove... isWhitesTurn = " + isWhitesTurn);
-        System.out.println(this);
-
         //Cannot make moves once the game has ended.
         if (gameOver) return false;
 
@@ -113,16 +110,12 @@ public class GameController {
         //Cannot perform a move that violates the variant's rules.
         //Cannot move a black piece when it's white's turn, and vice versa.
 		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
-            System.out.println("1 pieceLocation = [" + pieceLocation + "], targetLocation = [" + targetLocation + "], local = [" + local + "]");
-
             return false;
         }
 
         //Cannot perform a move if the user is not white or black.
         //Does not apply to local multiplayer games, where fullInteractivity=true.
 		if (!userCanInteractWithPiece(beingMoved, local)) {
-            System.out.println("2 pieceLocation = [" + pieceLocation + "], targetLocation = [" + targetLocation + "], local = [" + local + "]");
-
 			return false;
         }
 

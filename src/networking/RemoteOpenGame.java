@@ -1,9 +1,6 @@
 package networking;
 
-import main.ChessVariantManager;
-import main.GameLauncher;
-import main.OnlineGameLauncher;
-import main.PieceType;
+import main.*;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -49,13 +46,14 @@ public class RemoteOpenGame {
                 PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];
                 boolean localUserIsWhite = !remotePiece.equals(PieceType.WHITE);
                 String boardState = fields[2];
+
                 OnlineGameLauncher launcher = new OnlineGameLauncher(
                         ChessVariantManager.getInstance().getVariantByID(variantId),
                         ip,
                         hostUsername,
                         hostRating
                 );
-                //launcher.setGameBoardLayout(boardState);
+                launcher.setGameBoardLayout(boardState);
                 launcher.setUserIsWhite(localUserIsWhite);
                 MessageListener.getInstance().acceptMoves = true;
                 MessageListener.getInstance().setRemoteAddress(ip);

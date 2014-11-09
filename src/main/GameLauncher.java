@@ -8,7 +8,9 @@ abstract public class GameLauncher {
 
     public abstract void launch();
 
-    public abstract void setFirstMover(boolean localUserIsWhite);
+    public abstract void setUserIsWhite(boolean localUserIsWhite);
+
+    public abstract boolean userIsWhite();
 
     public abstract void broadcastMove(Location oldL, Location newL, String extra);
 }

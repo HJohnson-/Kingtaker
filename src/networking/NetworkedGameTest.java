@@ -22,6 +22,7 @@ public class NetworkedGameTest {
 
         MessageListener.getInstance().acceptMoves = true;
 
+        boolean isWhite = InetAddress.getLocalHost().getHostName().equals(host1);
         String server = InetAddress.getLocalHost().getHostName().equals(host1) ? host2 : host1;
         Socket socket = null;
         while (socket == null) {
@@ -37,7 +38,9 @@ public class NetworkedGameTest {
 
         OnlineGameLauncher o = new OnlineGameLauncher(variant,
                 InetAddress.getByName(server), "playa" + (new Random()).nextInt(100000) + "", 1000);
+        o.setUserIsWhite(isWhite);
         GameLauncher.currentGameLauncher = o;
+
 
         o.launch();
     }

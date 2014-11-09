@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Random;
+
 /**
  * Created by jc4512 on 06/11/14.
  */
@@ -9,6 +11,7 @@ public class OfflineGameLauncher extends GameLauncher {
 
     public OfflineGameLauncher(ChessVariant variant) {
         this.variant = variant;
+        localUserIsWhite = new Random().nextInt(2) == 0;
     }
 
     @Override
@@ -17,8 +20,13 @@ public class OfflineGameLauncher extends GameLauncher {
     }
 
     @Override
-    public void setFirstMover(boolean localUserIsWhite) {
+    public void setUserIsWhite(boolean localUserIsWhite) {
         this.localUserIsWhite = localUserIsWhite;
+    }
+
+    @Override
+    public boolean userIsWhite() {
+        return localUserIsWhite;
     }
 
     @Override

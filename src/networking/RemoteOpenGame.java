@@ -1,6 +1,5 @@
 package networking;
 
-import forms.frmVariantChooser;
 import main.ChessVariantManager;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
@@ -54,7 +53,7 @@ public class RemoteOpenGame {
                         hostUsername,
                         hostRating
                 );
-                launcher.setFirstMover(localUserIsWhite);
+                launcher.setUserIsWhite(localUserIsWhite);
                 launcher.setGameBoardLayout(boardState);
                 MessageListener.getInstance().acceptMoves = true;
                 MessageListener.getInstance().setRemoteAddress(ip);

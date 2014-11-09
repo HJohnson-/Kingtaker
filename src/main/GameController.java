@@ -22,7 +22,6 @@ public class GameController {
 	private String gameVariant;
 	private PieceDecoder decoder;
     private boolean fullInteractivity;
-    private PieceType interactivePiece = null;
 
 	public Board getBoard() {
 		return board;
@@ -102,16 +101,28 @@ public class GameController {
 	 * @return if the move was successful and the game-state modified
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
+        //Cannot make moves once the game has ended.
         if (gameOver) return false;
+
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);
+
+        //Cannot perform a move that violates the variant's rules.
+        //Cannot move a black piece when it's white's turn, and vice versa.
 		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
+            return false;
+		}
+
+        //Cannot perform a move if the user is not white or black.
+        //Does not apply to local multiplayer games, where fullInteractivity=true.
+		if (!userCanInteractWithPiece(beingMoved, local)) {
 			return false;
 		}
-		if (!fullInteractivity && !beingMoved.type.equals(interactivePiece)) {
-			return false;
-		}
-		if(beingMoved.executeMove(targetLocation)) {
+
+        //Executes move, unless the piece... TODO: why is this a boolean? Does it always return true!
+		//If checkmate is detected, the game ends, otherwise the active player is switched.
+        //If the move was executed locally, it is sent to the remote player via launcher.
+        if (beingMoved.executeMove(targetLocation)) {
             if (checkMate()) {
 				endGame();
 			} else {
@@ -125,7 +136,7 @@ public class GameController {
 			return true;
 		}
 
-		return false;
+        return false;
 	}
 
     /**
@@ -167,6 +178,18 @@ public class GameController {
 	private boolean turnPlayersPiece(ChessPiece checkedPiece) {
 		return checkedPiece.type == PieceType.WHITE != isWhitesTurn;
 	}
+
+    /**
+     * @param checkedPiece piece to check
+     * @param localUser whether this move was attempted by the local user
+     *                  (as opposed to a remote user, in which case
+     * @return if the piece belongs to the interactive user.
+     */
+    private boolean userCanInteractWithPiece(ChessPiece checkedPiece, boolean localUser) {
+        return fullInteractivity ||
+                (checkedPiece.isWhite() == GameLauncher.currentGameLauncher.userIsWhite())
+                        == localUser;
+    }
 
 	/**
 	 * @param checking a location

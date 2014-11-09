@@ -9,6 +9,7 @@ import networking.OpponentMessageSender;
 
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Random;
 
 /**
  * Created by jc4512 on 06/11/14.
@@ -38,8 +39,13 @@ public class OnlineGameLauncher extends GameLauncher {
     }
 
     @Override
-    public void setFirstMover(boolean localUserIsWhite) {
+    public void setUserIsWhite(boolean localUserIsWhite) {
         this.localUserIsWhite = localUserIsWhite;
+    }
+
+    @Override
+    public boolean userIsWhite() {
+        return localUserIsWhite;
     }
 
     @Override

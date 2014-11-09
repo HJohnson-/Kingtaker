@@ -1,6 +1,5 @@
 package networking;
 
-import forms.frmVariantChooser;
 import main.GameController;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
@@ -107,7 +106,7 @@ public class MessageListener implements Runnable {
                         remoteAddress = socket.getInetAddress();
                         OnlineGameLauncher launcher = (OnlineGameLauncher) GameLauncher.currentGameLauncher;
                         launcher.setOpponent(remoteAddress, joinerUsername, joinerRating);
-                        launcher.setFirstMover(pieceCode == PieceType.WHITE.ordinal());
+                        launcher.setUserIsWhite(pieceCode == PieceType.WHITE.ordinal());
 
                         GameLauncher.currentGameLauncher.launch();
                         acceptMoves = true;

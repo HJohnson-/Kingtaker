@@ -7,10 +7,7 @@ import pieces.ChessPiece;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -23,12 +20,12 @@ public abstract class ChessPanel extends JPanel {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
+    protected int UIWidth = 200;
+    protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
-    protected int UIWidth = 200;
     public boolean animating = false;
-    JButton load = new JButton("Load");
-    JButton save = new JButton("Save");
+
 
     /**
      * This constructor sets up a listener to handle the user clicking on the screen.
@@ -54,8 +51,15 @@ public abstract class ChessPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setFont(new Font("Bauhaus", Font.BOLD, 16));
+        g2.setFont(createFont(16));
         doDrawing(g2);
+    }
+
+    protected Font createFont(int size) {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Font[] fonts = ge.getAllFonts();
+        int index = (int) Math.floor(Math.random() * fonts.length);
+        return new Font(fonts[index].getFontName(), Font.BOLD, size);
     }
 
     /**
@@ -64,18 +68,22 @@ public abstract class ChessPanel extends JPanel {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {
-        int x = cellWidth * (board.numCols());
-        int y = 0;
+        if (board.getController().gameOver()) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+            g2.setColor(Color.GREEN);
+            g2.fillRect(offset.getX(), offset.getY(), cellWidth * board.numCols(), cellHeight * board.numRows());
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
-        load.setLocation(x, y);
-        load.setSize(100, cellHeight);
-        save.setLocation(x + 100, y);
-        save.setSize(100, cellHeight);
-
-        if (load.getParent() == null) {
-            this.add(load);
-            this.add(save);
+            Font oldFont = g2.getFont();
+            g2.setFont(createFont(70));
+            g2.setColor(Color.GRAY);
+            drawCentreString(board.getController().getWinner() + " Wins",
+                    offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
+            g2.setFont(oldFont);
         }
+
+        int x = offset.getX() + cellWidth * (board.numCols());
+        int y = offset.getY() / 2;
 
         y += cellHeight;
 
@@ -85,27 +93,27 @@ public abstract class ChessPanel extends JPanel {
         g2.setPaint(tools.TEXT);
         x += 10;
         g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + cellHeight * 2);
+    }
 
-        if (board.getController().gameOver()) {
-            g2.setFont(new Font("Bauhaus", Font.BOLD, 50));
-            g2.drawString("Game Over", cellWidth, cellHeight * board.numRows());
-            g2.drawString(board.getController().getWinner() + " Wins",
-                    cellWidth, cellHeight * (board.numRows() / 2 + 1));
-        }
+    protected void drawCentreString(String s, Location offset, int width, int height, Graphics2D g2) {
+        FontMetrics fm = g2.getFontMetrics();
+        int x = offset.getX() + (width - fm.stringWidth(s)) / 2;
+        int y = offset.getY() + (fm.getAscent() + (height - (fm.getAscent() + fm.getDescent())) / 2);
+        g2.drawString(s, x, y);
     }
 
     protected void drawGrid(Graphics2D g2) {
         g2.setColor(tools.BOARD_BLACK);
-        for (int x = 0; x < board.numRows() * cellWidth; x += cellWidth * 2) {
-            for (int y = 0; y < board.numCols() * cellHeight; y += cellHeight * 2) {
+        for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
+            for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellHeight * 2) {
                 g2.fillRect(x, y, cellWidth, cellHeight);
                 g2.fillRect(x + cellWidth, y + cellHeight, cellWidth, cellHeight);
             }
         }
 
         g2.setColor(tools.BOARD_WHITE);
-        for (int x = 0; x < board.numRows() * cellWidth; x += cellWidth * 2) {
-            for (int y = 0; y < board.numCols() * cellHeight; y += cellWidth * 2) {
+        for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
+            for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellWidth * 2) {
                 g2.fillRect(x + cellWidth, y, cellWidth, cellHeight);
                 g2.fillRect(x, y + cellHeight, cellWidth, cellHeight);
             }
@@ -140,12 +148,12 @@ public abstract class ChessPanel extends JPanel {
 
         if (board.getController().isInCheck(true)) {
             Location l = board.getController().findKing(true);
-            g2.drawOval(l.getX() * cellWidth, l.getY() * cellHeight, cellWidth, cellHeight);
+            g2.drawOval(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(), cellWidth, cellHeight);
         }
 
         if (board.getController().isInCheck(false)) {
             Location l = board.getController().findKing(false);
-            g2.drawOval(l.getX() * cellWidth, l.getY() * cellHeight, cellWidth, cellHeight);
+            g2.drawOval(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(), cellWidth, cellHeight);
         }
 
         if (selectedPiece != null) {
@@ -157,7 +165,7 @@ public abstract class ChessPanel extends JPanel {
             List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
             g2.setPaint(tools.CUR_MOVES);
             for (Location l : moves) {
-                g2.drawRect(l.getX() * cellWidth, l.getY() * cellHeight,
+                g2.drawRect(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(),
                         cellWidth, cellHeight);
             }
         }
@@ -186,8 +194,9 @@ public abstract class ChessPanel extends JPanel {
         cellHeight = cellWidth;
 
         for (ChessPiece p : board.allPieces()) {
-            p.graphics.curCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
-            p.graphics.endCords = new Location(p.cords.getX() * cellWidth, p.cords.getY() * cellHeight);
+            p.graphics.curCords = new Location(p.cords.getX() * cellWidth + offset.getX(),
+                                               p.cords.getY() * cellHeight + offset.getY());
+            p.graphics.endCords = p.graphics.curCords.clone();
             p.graphics.totalSteps = cellWidth / 2;
             p.graphics.animationTime = 1500 / cellWidth;
         }
@@ -204,8 +213,8 @@ public abstract class ChessPanel extends JPanel {
         @Override
         public void mousePressed(MouseEvent e) {
             if (!animating && !board.getController().gameOver()) {
-                int x = e.getX() / cellWidth;
-                int y = e.getY() / cellHeight;
+                int x = (e.getX() - offset.getX()) / cellWidth;
+                int y = (e.getY() - offset.getY()) / cellHeight;
                 Location l = new Location(x, y);
 
                 if (!board.onBoard(l)) {

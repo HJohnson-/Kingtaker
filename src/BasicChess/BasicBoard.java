@@ -88,6 +88,7 @@ public class BasicBoard extends Board {
         BasicBoard b = new BasicBoard();
         b.pieces = this.pieces.clone();
         b.setController(this.getController().clone());
+        b.doDrawing = doDrawing;
         return b;
     }
 }

@@ -13,6 +13,7 @@ import java.util.*;
  */
 abstract public class Board {
 	protected pieces.ChessPiece[][] pieces;
+    public boolean doDrawing = true;
 	private GameController game;
 
 	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.

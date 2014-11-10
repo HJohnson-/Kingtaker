@@ -115,6 +115,7 @@ public class RandomBoard extends Board {
         RandomBoard b = new RandomBoard();
         b.pieces = this.pieces.clone();
         b.setController(this.getController().clone());
+        b.doDrawing = doDrawing;
         return b;
     }
 

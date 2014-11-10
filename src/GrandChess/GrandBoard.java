@@ -30,6 +30,7 @@ public class GrandBoard extends Board {
         GrandBoard b = new GrandBoard();
         b.pieces = this.pieces;
         b.setController(this.getController().clone());
+        b.doDrawing = doDrawing;
         return b;
     }
 

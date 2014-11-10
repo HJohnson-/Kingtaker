@@ -57,6 +57,7 @@ public class GraphicsControl implements Runnable {
      */
     @Override
     public void run() {
+        while (panel.animating) Thread.yield();
         int animationXStep = (endCords.getX() - curCords.getX()) / totalSteps;
         int animationYStep = (endCords.getY() - curCords.getY()) / totalSteps;
 

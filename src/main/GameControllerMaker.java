@@ -12,13 +12,13 @@ import RandomChess.RandomBoard;
 public class GameControllerMaker {
 	public static GameController get(String variant, String code) {
 		if(variant.equals("Basic")) {
-			return new GameController(new BasicBoard(), new BasicDecoder(), code);
+			return new GameController(new BasicBoard(), new BasicDecoder(), code, GameMode.MULTIPLAYER_LOCAL);
 		} else if(variant.equals("Random960")) {
-			return new GameController(new RandomBoard(), new BasicDecoder(), code);
+			return new GameController(new RandomBoard(), new BasicDecoder(), code, GameMode.MULTIPLAYER_LOCAL);
 		} else if(variant.equals("Grand")) {
-			return new GameController(new GrandBoard(), new GrandDecoder(), code);
+			return new GameController(new GrandBoard(), new GrandDecoder(), code, GameMode.MULTIPLAYER_LOCAL);
 		} else {
-			return new GameController(new BasicBoard(), new BasicDecoder(), code);
+			return new GameController(new BasicBoard(), new BasicDecoder(), code, GameMode.MULTIPLAYER_LOCAL);
 		}
 	}
 }

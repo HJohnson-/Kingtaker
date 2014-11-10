@@ -19,7 +19,7 @@ public class OfflineGameLauncher extends GameLauncher {
     @Override
     public void launch() {
         ChessVariant newVariant = variant.recreate(mode);
-        variant.drawBoard();
+        newVariant.drawBoard();
     }
 
     @Override

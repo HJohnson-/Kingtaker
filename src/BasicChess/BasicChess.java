@@ -30,7 +30,11 @@ public class BasicChess extends ChessVariant {
     }
 
     public BasicChess() {
-		game = new GameController(new BasicBoard(), "Basic", new BasicDecoder());
+        this(GameMode.MULTIPLAYER_LOCAL);
+    }
+
+    public BasicChess(GameMode mode) {
+		game = new GameController(new BasicBoard(), "Basic", new BasicDecoder(), mode);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
@@ -45,5 +49,10 @@ public class BasicChess extends ChessVariant {
         graphics.tools.create(new BasicChessFrame("Basic Chess", 700, 625, game.getBoard()));
         return true;
 	}
+
+    @Override
+    public ChessVariant recreate(GameMode mode) {
+        return new BasicChess(mode);
+    }
 
 }

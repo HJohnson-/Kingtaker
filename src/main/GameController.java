@@ -263,9 +263,8 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
-        if (!isWhitesTurn && GameMode.currentGameMode == GameMode.SINGLE_PLAYER && !gameOver) {
+        if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
             Location[] move = ai.getBestMove();
-            System.out.println(move[0] + " -> " + move[1]);
             attemptMove(move[0], move[1], false);
         }
 	}

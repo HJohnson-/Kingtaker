@@ -70,7 +70,7 @@ public class OnlineGameLauncher extends GameLauncher {
     }
 
     public void setGameBoardLayout(String boardState) {
-        variant.game = new GameController(variant.game.getBoard(), variant.getDecoder(), boardState);
+        variant.game = new GameController(variant.game.getBoard(), variant.getDecoder(), boardState, GameMode.MULTIPLAYER_ONLINE);
         variant.game.getBoard().setController(variant.game);
     }
 

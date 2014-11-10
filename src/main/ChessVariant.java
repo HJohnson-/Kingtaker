@@ -16,6 +16,7 @@ abstract public class ChessVariant {
     abstract public int getVariationID();
     abstract public String getName();
     abstract public String getDescription();
+    public abstract ChessVariant recreate(GameMode mode);
 
     public abstract PieceDecoder getDecoder();
 }

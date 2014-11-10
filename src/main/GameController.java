@@ -23,7 +23,7 @@ public class GameController {
 	private String gameVariant;
 	private PieceDecoder decoder;
     private ChessAI ai;
-    private GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
+    public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
 
 	public Board getBoard() {
 		return board;
@@ -32,20 +32,21 @@ public class GameController {
 	/**
 	 * @param board board
 	 */
-	public GameController(Board board, String gameVariant, PieceDecoder decoder) {
+	public GameController(Board board, String gameVariant, PieceDecoder decoder, GameMode mode) {
         currentTurn = 1;
 		this.board = board;
 		winner = "None";
 		gameOver = false;
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
+        this.gameMode = mode;
 
-        if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
+        if (gameMode == GameMode.SINGLE_PLAYER) {
             ai = new BasicAI(board, false);
         }
     }
 
-	public GameController(Board board, PieceDecoder decoder, String code) {
+	public GameController(Board board, PieceDecoder decoder, String code, GameMode mode) {
         this.board = board;
 		winner = "None";
 		gameOver = false;
@@ -61,7 +62,9 @@ public class GameController {
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
 
-        if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
+        this.gameMode = mode;
+
+        if (gameMode == GameMode.SINGLE_PLAYER) {
             ai = new BasicAI(board, false);
         }
 	}
@@ -260,9 +263,8 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
-        if (!isWhitesTurn && GameMode.currentGameMode == GameMode.SINGLE_PLAYER && !gameOver) {
+        if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
             Location[] move = ai.getBestMove();
-            System.out.println(move[0] + " -> " + move[1]);
             attemptMove(move[0], move[1], false);
         }
 	}

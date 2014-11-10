@@ -1,16 +1,11 @@
 package forms;
 
-import BasicChess.BasicChess;
-
 import javax.swing.*;
-import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
 import java.util.List;
 
-import RandomChess.RandomChess;
-import GrandChess.GrandChess;
 import main.*;
 import networking.GameLobby;
 
@@ -70,7 +65,7 @@ public class frmVariantChooser {
 
                 if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER ||
                         GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
-                    GameLauncher.currentGameLauncher = new OfflineGameLauncher(selectedVariant);
+                    GameLauncher.currentGameLauncher = new OfflineGameLauncher(selectedVariant, GameMode.currentGameMode);
                     GameLauncher.currentGameLauncher.launch();
                 } else if (GameMode.currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
                     GameLobby.getInstance().createLocalOpenGame(selectedVariant);

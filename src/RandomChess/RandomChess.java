@@ -5,6 +5,7 @@ import graphics.tools;
 import main.GameController;
 import BasicChess.BasicDecoder;
 import BasicChess.BasicChessFrame;
+import main.GameMode;
 
 /**
  * Implements the Random960 chess variant.
@@ -27,10 +28,14 @@ public class RandomChess extends BasicChess {
     }
 
 	public RandomChess(){
-		game = new GameController(new RandomBoard(), "Random960", new BasicDecoder());
-		game.getBoard().setController(game);
-		game.getBoard().initializeBoard();
+		this(GameMode.MULTIPLAYER_LOCAL);
 	}
+
+    public RandomChess(GameMode mode) {
+        game = new GameController(new RandomBoard(), "Random960", new BasicDecoder(), mode);
+        game.getBoard().setController(game);
+        game.getBoard().initializeBoard();
+    }
 
 	public RandomChess(GameController game) {
 		this.game = game;

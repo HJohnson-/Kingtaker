@@ -19,5 +19,4 @@ public class KingtakerMain {
         GameLauncher.currentGameLauncher.setUserIsWhite(true);
         GameLauncher.currentGameLauncher.launch();
     }
-
 }

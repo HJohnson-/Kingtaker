@@ -31,6 +31,6 @@ public class BasicAI extends ChessAI {
                 score -= p.returnValue();
             }
         }
-        return 0;
+        return score;
     }
 }

@@ -1,7 +1,8 @@
 package main;
 
 import BasicChess.King;
-import forms.frmVariantChooser;
+import ai.BasicAI;
+import ai.ChessAI;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -259,8 +260,9 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
-        if (isWhitesTurn == false && GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
+        if (!isWhitesTurn && GameMode.currentGameMode == GameMode.SINGLE_PLAYER && !gameOver) {
             Location[] move = ai.getBestMove();
+            System.out.println(move[0] + " -> " + move[1]);
             attemptMove(move[0], move[1], false);
         }
 	}

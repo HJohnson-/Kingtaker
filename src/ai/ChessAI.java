@@ -26,13 +26,15 @@ public abstract class ChessAI {
         for (ChessPiece piece : board.allPieces()) {
             if (piece.isWhite() == isWhite) {
                 for (Location l : piece.allPieceMoves()) {
-                    int tempScore = evaluateMove(piece.cords, l);
-                    if (tempScore > bestScore) {
-                        bestScore = tempScore;
-                        move.clear();
-                        move.add(new Location[]{piece.cords, l});
-                    } else if (tempScore == bestScore) {
-                        move.add(new Location[]{piece.cords, l});
+                    if (piece.isValidMove(l, true)) {
+                        int tempScore = evaluateMove(piece.cords, l);
+                        if (tempScore > bestScore) {
+                            bestScore = tempScore;
+                            move.clear();
+                            move.add(new Location[]{piece.cords, l});
+                        } else if (tempScore == bestScore) {
+                            move.add(new Location[]{piece.cords, l});
+                        }
                     }
                 }
             }

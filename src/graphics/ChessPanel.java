@@ -6,10 +6,7 @@ import pieces.ChessPiece;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.ColorModel;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -189,10 +186,8 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
 				result = (String)contents.getTransferData(DataFlavor.stringFlavor);
 			}
 			catch (IOException ex){
-				System.out.println(ex);
 				ex.printStackTrace();
 			} catch(UnsupportedFlavorException ex) {
-				System.out.println(ex);
 				ex.printStackTrace();
 			}
 		}
@@ -308,7 +303,8 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
             verticalUI = false;
         }
 
-        cellWidth = (int) Math.round(Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2;
+        cellWidth = Math.round(Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2;
+        //noinspection SuspiciousNameCombination
         cellHeight = cellWidth;
 
 

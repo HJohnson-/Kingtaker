@@ -1,11 +1,10 @@
 package BasicChess;
 
 import graphics.ChessFrame;
-import graphics.tools;
 import main.Board;
 
 /**
- * Created by rp1012 on 16/10/14.
+ * Implements the abstract class ChessFrame, specifically for basic chess.
  */
 public class BasicChessFrame extends ChessFrame {
 

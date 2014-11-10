@@ -1,9 +1,6 @@
 package graphics;
 
-import main.Board;
 import main.Location;
-
-import javax.swing.*;
 
 /**
  * Handles the animation and display of chess pieces, rather than having this in the ChessPiece class.

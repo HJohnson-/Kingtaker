@@ -1,7 +1,5 @@
 package graphics;
 
-import BasicChess.BasicChessPanel;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,7 +11,7 @@ public abstract class ChessFrame extends JFrame {
     protected String title;
     protected int width, height;
     protected ChessPanel panel;
-    private boolean fullscreen = false;
+    public boolean fullscreen = false;
 
     /**
      * Sets up all the parameters of the ChessFrame.

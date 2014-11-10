@@ -185,6 +185,7 @@ public class GameController {
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves();
 		for (Map.Entry<ChessPiece, List<Location>> entry : moves.entrySet()) {
 			if (!entry.getValue().isEmpty()) {
+                System.out.println(entry.getValue());
 				return false;
 			}
 		}

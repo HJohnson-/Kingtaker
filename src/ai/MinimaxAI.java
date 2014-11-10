@@ -96,6 +96,9 @@ public class MinimaxAI extends ChessAI {
                         if (piece.isValidMove(l)) {
                             Location[] move = {piece.cords, l};
                             Board newBoard = b.clone();
+                            if (piece.getName().equals("Pawn") && (l.getY() == 0 || l.getY() == b.numCols() - 1)) {
+
+                            }
                             newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
                             Pair<Location[], Integer> result = doRecursion(newBoard, !checkingWhite, curD + 1, move);
 

@@ -5,6 +5,7 @@ import main.ChessVariant;
 import main.GameController;
 import BasicChess.BasicDecoder;
 import BasicChess.BasicChessFrame;
+import main.GameMode;
 import pieces.PieceDecoder;
 
 /**
@@ -33,7 +34,11 @@ public class GrandChess extends ChessVariant {
     }
 
     public GrandChess() {
-		game = new GameController(new GrandBoard(), "Grand", new BasicDecoder());
+        this(GameMode.MULTIPLAYER_LOCAL);
+    }
+
+    public GrandChess(GameMode mode) {
+		game = new GameController(new GrandBoard(), "Grand", new BasicDecoder(), mode);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
@@ -48,4 +53,9 @@ public class GrandChess extends ChessVariant {
 		graphics.tools.create(new BasicChessFrame("Grand Chess", 700, 600, game.getBoard()));
 		return true;
 	}
+
+    @Override
+    public ChessVariant recreate(GameMode mode) {
+        return new GrandChess(mode);
+    }
 }

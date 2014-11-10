@@ -8,14 +8,17 @@ import java.util.Random;
 public class OfflineGameLauncher extends GameLauncher {
     private ChessVariant variant;
     private boolean localUserIsWhite;
+    private GameMode mode;
 
-    public OfflineGameLauncher(ChessVariant variant) {
+    public OfflineGameLauncher(ChessVariant variant, GameMode mode) {
+        this.mode = mode;
         this.variant = variant;
         localUserIsWhite = new Random().nextInt(2) == 0;
     }
 
     @Override
     public void launch() {
+        ChessVariant newVariant = variant.recreate(mode);
         variant.drawBoard();
     }
 

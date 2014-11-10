@@ -1,7 +1,8 @@
 package main;
 
 import BasicChess.King;
-import forms.frmVariantChooser;
+import ai.BasicAI;
+import ai.ChessAI;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -22,6 +23,7 @@ public class GameController {
 	private String gameVariant;
 	private PieceDecoder decoder;
     private boolean fullInteractivity;
+    private ChessAI ai;
 
 	public Board getBoard() {
 		return board;
@@ -39,6 +41,10 @@ public class GameController {
 		this.decoder = decoder;
 
         fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
+
+        if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
+            ai = new BasicAI(board, false);
+        }
     }
 
 	public GameController(Board board, PieceDecoder decoder, String code) {
@@ -58,6 +64,10 @@ public class GameController {
 		board.populateFromCode(pieces, decoder);
 
         fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
+
+        if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
+            ai = new BasicAI(board, false);
+        }
 	}
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves() {
@@ -254,6 +264,10 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
+        if (isWhitesTurn == false && GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
+            Location[] move = ai.getBestMove();
+            attemptMove(move[0], move[1], false);
+        }
 	}
 
 	public boolean gameOver() {

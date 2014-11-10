@@ -25,7 +25,15 @@ public class GrandBoard extends Board {
 		}
 	}
 
-	@Override
+    @Override
+    public Board clone() {
+        GrandBoard b = new GrandBoard();
+        b.pieces = this.pieces;
+        b.setController(this.getController().clone());
+        return b;
+    }
+
+    @Override
 	public boolean initializeBoard() {
 		// black pawns
 		for(int j = 0; j < 10; j++){

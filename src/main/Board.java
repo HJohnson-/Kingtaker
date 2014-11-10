@@ -173,5 +173,8 @@ abstract public class Board {
 		}
 	}
 
+    @Override
+    abstract public Board clone();
+
 }
 

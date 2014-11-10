@@ -3,6 +3,7 @@ package main;
 import BasicChess.King;
 import ai.BasicAI;
 import ai.ChessAI;
+import ai.MinimaxAI;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -10,6 +11,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Handles game logic
@@ -24,6 +29,7 @@ public class GameController {
 	private PieceDecoder decoder;
     private ChessAI ai;
     public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
+    private boolean playerIsWhite = true;
 
 	public Board getBoard() {
 		return board;
@@ -42,7 +48,7 @@ public class GameController {
         this.gameMode = mode;
 
         if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new BasicAI(board, false);
+            ai = new MinimaxAI(board, false, 10);
         }
     }
 
@@ -65,7 +71,7 @@ public class GameController {
         this.gameMode = mode;
 
         if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new BasicAI(board, false);
+            ai = new MinimaxAI(board, false, 10);
         }
 	}
 
@@ -125,6 +131,7 @@ public class GameController {
         //Cannot perform a move if the user is not white or black.
         //Does not apply to local multiplayer games, where fullInteractivity=true.
 		if (!userCanInteractWithPiece(beingMoved, local)) {
+
 			return false;
         }
 
@@ -140,6 +147,10 @@ public class GameController {
 
             if (local) {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
+            }
+
+            if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
+                ai.getBestMove();
             }
 
 			return true;
@@ -196,7 +207,7 @@ public class GameController {
      */
     private boolean userCanInteractWithPiece(ChessPiece checkedPiece, boolean localUser) {
         return gameMode == GameMode.MULTIPLAYER_LOCAL ||
-                (checkedPiece.isWhite() == GameLauncher.currentGameLauncher.userIsWhite())
+                (checkedPiece.isWhite() == playerIsWhite)
                         == localUser;
     }
 
@@ -263,10 +274,6 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
-        if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
-            Location[] move = ai.getBestMove();
-            attemptMove(move[0], move[1], false);
-        }
 	}
 
 	public boolean gameOver() {
@@ -292,4 +299,9 @@ public class GameController {
 		code.append("#");
 		return code.toString();
 	}
+
+    @Override
+    public GameController clone() {
+        return new GameController(board, gameVariant, decoder, gameMode);
+    }
 }

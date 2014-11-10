@@ -1,5 +1,6 @@
 package BasicChess;
 import main.Board;
+import main.GameController;
 import main.Location;
 import main.PieceType;
 
@@ -81,4 +82,12 @@ public class BasicBoard extends Board {
 
 		return false;
 	}
+
+    @Override
+    public Board clone() {
+        BasicBoard b = new BasicBoard();
+        b.pieces = this.pieces.clone();
+        b.setController(this.getController().clone());
+        return b;
+    }
 }

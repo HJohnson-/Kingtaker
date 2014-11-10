@@ -1,8 +1,6 @@
 package graphics;
 
-import main.Board;
-import main.Location;
-import main.PieceType;
+import main.*;
 import pieces.ChessPiece;
 
 import javax.swing.*;
@@ -12,11 +10,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.Toolkit;
+import java.io.*;
 /**
  * An abstract JPanel extension, which contains lots of graphics tools which are identical across variants.
  */
-public abstract class ChessPanel extends JPanel {
+public abstract class ChessPanel extends JPanel implements ClipboardOwner {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
@@ -25,6 +30,7 @@ public abstract class ChessPanel extends JPanel {
     public int cellWidth;
     public int cellHeight;
     public boolean animating = false;
+    protected JButton load = new JButton();
 
 
     /**
@@ -68,18 +74,46 @@ public abstract class ChessPanel extends JPanel {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {
-        if (board.getController().gameOver()) {
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-            g2.setColor(Color.GREEN);
-            g2.fillRect(offset.getX(), offset.getY(), cellWidth * board.numCols(), cellHeight * board.numRows());
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+    if (board.getController().gameOver()) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+        g2.setColor(Color.GREEN);
+        g2.fillRect(offset.getX(), offset.getY(), cellWidth * board.numCols(), cellHeight * board.numRows());
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
-            Font oldFont = g2.getFont();
-            g2.setFont(createFont(70));
-            g2.setColor(Color.GRAY);
-            drawCentreString(board.getController().getWinner() + " Wins",
-                    offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
-            g2.setFont(oldFont);
+        Font oldFont = g2.getFont();
+        g2.setFont(createFont(70));
+        g2.setColor(Color.GRAY);
+        drawCentreString(board.getController().getWinner() + " Wins",
+                offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
+        g2.setFont(oldFont);
+    }
+    int x = cellWidth * (board.numCols());
+    int y = 0;
+
+    load.setLocation(x, y);
+    load.setSize(100, cellHeight);
+		load.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String code = getClipboardContents();
+				int start = code.indexOf("V:")+2;
+				int end = code.indexOf('$',start);
+				String variant = code.substring(start, end);
+				GameController gameState = GameControllerMaker.get(variant, code);
+				ChessVariant game = ChessVariantMaker.get(variant, gameState);
+				game.drawBoard();
+			}
+		});
+        save.setLocation(x + 100, y);
+        save.setSize(100, cellHeight);
+		save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setClipboardContents(board.getController().toCode());
+			}
+		});
+
+        if (load.getParent() == null) {
+            this.add(load);
+            this.add(save);
         }
 
         int x = offset.getX() + cellWidth * (board.numCols());
@@ -87,7 +121,7 @@ public abstract class ChessPanel extends JPanel {
 
         y += cellHeight;
 
-        Color c = board.getController().isWhitesTurn() ? Color.BLACK : Color.WHITE;
+        Color c = board.getController().isWhitesTurn() ? Color.WHITE : Color.BLACK ;
         g2.setPaint(c);
         g2.fillRect(x + UIWidth / 4, y, UIWidth / 2, cellHeight);
         g2.setPaint(tools.TEXT);
@@ -101,6 +135,45 @@ public abstract class ChessPanel extends JPanel {
         int y = offset.getY() + (fm.getAscent() + (height - (fm.getAscent() + fm.getDescent())) / 2);
         g2.drawString(s, x, y);
     }
+
+	/**
+	 * Get the String residing on the clipboard.
+	 *
+	 * @return any text found on the Clipboard; if none found, return an
+	 * empty String.
+	 */
+	public String getClipboardContents() {
+		String result = "";
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		//odd: the Object param of getContents is not currently used
+		Transferable contents = clipboard.getContents(null);
+		boolean hasTransferableText =
+				(contents != null) &&
+						contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+		if (hasTransferableText) {
+			try {
+				result = (String)contents.getTransferData(DataFlavor.stringFlavor);
+			}
+			catch (IOException ex){
+				System.out.println(ex);
+				ex.printStackTrace();
+			} catch(UnsupportedFlavorException ex) {
+				System.out.println(ex);
+				ex.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Place a String on the clipboard, and make this class the
+	 * owner of the Clipboard's contents.
+	 */
+	public void setClipboardContents(String aString){
+		StringSelection stringSelection = new StringSelection(aString);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(stringSelection, this);
+	}
 
     protected void drawGrid(Graphics2D g2) {
         g2.setColor(tools.BOARD_BLACK);
@@ -226,7 +299,7 @@ public abstract class ChessPanel extends JPanel {
                 } else {
                     if (selectedPiece.allPieceMoves().contains(l)) {
                         selectedPiece.graphics.setGoal(l);
-                        if (board.getController().attemptMove(selectedPiece.cords, l)) {
+                        if (board.getController().attemptMove(selectedPiece.cords, l, true)) {
                             ExecutorService pool = Executors.newFixedThreadPool(1);
                             pool.submit(selectedPiece.graphics);
                         }
@@ -246,4 +319,8 @@ public abstract class ChessPanel extends JPanel {
         }
     }
 
+	@Override
+	public void lostOwnership(Clipboard clipboard, Transferable contents) {
+		//Don't worry about it
+	}
 }

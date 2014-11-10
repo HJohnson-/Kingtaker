@@ -3,13 +3,16 @@ package forms;
 import BasicChess.BasicChess;
 
 import javax.swing.*;
+import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
+import java.util.List;
+
 import RandomChess.RandomChess;
 import GrandChess.GrandChess;
-import main.ChessVariant;
-import main.GameMode;
+import main.*;
+import networking.GameLobby;
 
 /**
  * Created by jc4512 on 15/10/14.
@@ -18,13 +21,14 @@ public class frmVariantChooser {
     private JPanel panel1;
     private JButton btnAcceptVariation;
     private JList lstVariationPicker;
+    private DefaultListModel<String> lstVariationPickerModel;
     private JTextArea txtVariationRulesDisplay;
     private boolean visibility = false;
 
     private ChessVariant selectedVariant = null;
 
-    public static GameMode currentGameMode;
     private static frmVariantChooser instance;
+    private List<ChessVariant> variants;
 
     public static void showInstance() {
         if (instance == null || !instance.visibility) {
@@ -47,6 +51,7 @@ public class frmVariantChooser {
         frame.pack();
         frame.setVisible(true);
         visibility = true;
+        initialiseChessVariantsList();
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -61,26 +66,15 @@ public class frmVariantChooser {
                 frame.setVisible(false);
                 visibility = false;
 
-                //TODO: needs refactoring - perhaps GameLauncher class. Need to consult group on this.
-                switch (lstVariationPicker.getSelectedIndex()) {
-                    case 0 :
-                        BasicChess bc = new BasicChess();
-                        selectedVariant = bc;
-                        break;
-                    case 1:
-                        RandomChess rc = new RandomChess();
-                        selectedVariant = rc;
-                        break;
-                    case 2:
-                        GrandChess gc = new GrandChess();
-                        selectedVariant = gc;
-                        break;
-                }
-                if (currentGameMode == GameMode.SINGLE_PLAYER ||
-                        currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
-                    selectedVariant.drawBoard();
-                } else if (currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
+                selectedVariant = variants.get(lstVariationPicker.getSelectedIndex());
 
+                if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER ||
+                        GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
+                    GameLauncher.currentGameLauncher = new OfflineGameLauncher(selectedVariant);
+                    GameLauncher.currentGameLauncher.launch();
+                } else if (GameMode.currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
+                    GameLobby.getInstance().createLocalOpenGame(selectedVariant);
+                    GameLauncher.currentGameLauncher = new OnlineGameLauncher(selectedVariant);
                 }
 
             }
@@ -89,6 +83,8 @@ public class frmVariantChooser {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 toggleBtnAcceptVariation();
+                txtVariationRulesDisplay.setText(variants.get(
+                     lstVariationPicker.getSelectedIndex()).getDescription());
             }
         });
 
@@ -99,10 +95,17 @@ public class frmVariantChooser {
         btnAcceptVariation.setEnabled(!lstVariationPicker.isSelectionEmpty());
     }
 
-    private void createUIComponents() {
-        //TODO need to be able to enumerate variants
-        lstVariationPicker = new JList(new String[]{"Standard Chess", "Random Chess", "Grand Chess"});
+    private void initialiseChessVariantsList() {
+        variants = ChessVariantManager.getInstance().getAllVariants();
+
+        for (ChessVariant variant : variants) {
+            lstVariationPickerModel.addElement(variant.getName());
+        }
     }
 
-
+    @SuppressWarnings("unchecked")
+    private void createUIComponents() {
+        lstVariationPickerModel = new DefaultListModel<String>();
+        lstVariationPicker = new JList(lstVariationPickerModel);
+    }
 }

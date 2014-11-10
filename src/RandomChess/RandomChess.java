@@ -11,6 +11,21 @@ import BasicChess.BasicChessFrame;
  */
 public class RandomChess extends BasicChess {
 
+    @Override
+    public int getVariationID() {
+        return 1;
+    }
+
+    @Override
+    public String getName() {
+        return "Chess960";
+    }
+
+    @Override
+    public String getDescription() {
+        return "[random chess description]";
+    }
+
 	public RandomChess(){
 		game = new GameController(new RandomBoard(), "Random960", new BasicDecoder());
 		game.getBoard().setController(game);

@@ -1,6 +1,7 @@
 package main;
 
 import BasicChess.King;
+import forms.frmVariantChooser;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -13,13 +14,14 @@ import java.util.Map;
  * Handles game logic
  */
 public class GameController {
-	private boolean isWhitesTurn;
+	private boolean isWhitesTurn = true; //white always starts
 	private int currentTurn;
 	private String winner;
 	private boolean gameOver;
 	private Board board;
 	private String gameVariant;
 	private PieceDecoder decoder;
+    private boolean fullInteractivity;
 
 	public Board getBoard() {
 		return board;
@@ -29,16 +31,18 @@ public class GameController {
 	 * @param board board
 	 */
 	public GameController(Board board, String gameVariant, PieceDecoder decoder) {
-		currentTurn = 1;
+        currentTurn = 1;
 		this.board = board;
 		winner = "None";
 		gameOver = false;
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
-	}
+
+        fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
+    }
 
 	public GameController(Board board, PieceDecoder decoder, String code) {
-		this.board = board;
+        this.board = board;
 		winner = "None";
 		gameOver = false;
 		this.decoder = decoder;
@@ -52,6 +56,8 @@ public class GameController {
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
+
+        fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
 	}
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves() {
@@ -91,30 +97,58 @@ public class GameController {
 	/**
 	 * @param pieceLocation location of the piece you are attempting to move
 	 * @param targetLocation location representing the move
+     * @param local true if the move was executed by a local user (via mouse click)
 	 * @return if the move was successful and the game-state modified
 	 */
-	public boolean attemptMove(Location pieceLocation, Location targetLocation) {
-		if (gameOver) return false;
+	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
+        //Cannot make moves once the game has ended.
+        if (gameOver) return false;
+
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);
-		if(!beingMoved.isValidMove(targetLocation)) {
+
+        //Cannot perform a move that violates the variant's rules.
+        //Cannot move a black piece when it's white's turn, and vice versa.
+		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
+            return false;
+        }
+
+        //Cannot perform a move if the user is not white or black.
+        //Does not apply to local multiplayer games, where fullInteractivity=true.
+		if (!userCanInteractWithPiece(beingMoved, local)) {
 			return false;
-		}
-		if(!turnPlayersPiece(beingMoved)) {
-			return false;
-		}
-		if(beingMoved.executeMove(targetLocation)) {
-			if (checkMate()) {
+        }
+
+        //Executes move, unless the piece... TODO: why is this a boolean? Does it always return true!
+		//If checkmate is detected, the game ends, otherwise the active player is switched.
+        //If the move was executed locally, it is sent to the remote player via launcher.
+        if (beingMoved.executeMove(targetLocation)) {
+            if (checkMate()) {
 				endGame();
 			} else {
                 nextPlayersTurn();
             }
 
+            if (local) {
+                GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
+            }
+
 			return true;
-		} else {
-			return false;
 		}
+
+        return false;
 	}
+
+    /**
+     * Co-ordinates of move and optional extra field for pawn promotion.
+     * Function is used to handle moves from a remote or AI user.
+     */
+    public boolean handleRemoteMove(int oldX, int oldY, int newX, int newY, String extra) {
+        Location oldL = new Location(oldX, oldY);
+        Location newL = new Location(newX, newY);
+
+        return attemptMove(oldL, newL, false);
+    }
 
 	/**
 	 * set the game state to over
@@ -142,8 +176,20 @@ public class GameController {
 	 * @return if the piece belongs to the turn player
 	 */
 	private boolean turnPlayersPiece(ChessPiece checkedPiece) {
-		return checkedPiece.type == PieceType.WHITE != isWhitesTurn;
+		return (checkedPiece.type == PieceType.WHITE) == isWhitesTurn;
 	}
+
+    /**
+     * @param checkedPiece piece to check
+     * @param localUser whether this move was attempted by the local user
+     *                  (as opposed to a remote user, in which case
+     * @return if the piece belongs to the interactive user.
+     */
+    private boolean userCanInteractWithPiece(ChessPiece checkedPiece, boolean localUser) {
+        return fullInteractivity ||
+                (checkedPiece.isWhite() == GameLauncher.currentGameLauncher.userIsWhite())
+                        == localUser;
+    }
 
 	/**
 	 * @param checking a location
@@ -159,7 +205,7 @@ public class GameController {
 	 */
 	public boolean isInCheck(boolean checkingForWhite) {
 		Location kingLocation = findKing(checkingForWhite);
-        Boolean oldVal = isWhitesTurn;
+        boolean oldVal = isWhitesTurn;
         isWhitesTurn = !checkingForWhite;
 		for(List<Location> targets : getAllValidMoves(false).values()) {
 			if(targets.contains(kingLocation)) {
@@ -207,7 +253,7 @@ public class GameController {
 	 */
 	private void nextPlayersTurn() {
 		currentTurn++;
-		isWhitesTurn = !isWhitesTurn;
+        isWhitesTurn = !isWhitesTurn;
 	}
 
 	public boolean gameOver() {

@@ -1,6 +1,8 @@
 package networking;
 
 import forms.frmLobby;
+import main.ChessVariant;
+import main.ChessVariantManager;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -14,7 +16,7 @@ import static networking.NetworkingUtils.checkInetAddressIsValid;
  * Created by jc4512 on 29/10/14.
  */
 public class GameLobby {
-    private List<RemoteGame> games;
+    private List<RemoteOpenGame> games;
     private LocalOpenGame localOpenGame;
     private LocalUserAccount localUser;
 
@@ -25,20 +27,22 @@ public class GameLobby {
 
     private boolean lobbyIsOpen;
 
-    public static void showLobby() {
+    public static GameLobby getInstance() {
         if (instance == null) {
             instance = new GameLobby();
         }
-        instance.open();
+        return instance;
     }
 
     public static boolean isOpen() {
         return instance != null && instance.lobbyIsOpen;
     }
 
+    // Initialises remote games list, starts fetcher thread, starts message listener.
     private GameLobby() {
-        games = Collections.synchronizedList(new ArrayList<RemoteGame>());
+        games = Collections.synchronizedList(new ArrayList<RemoteOpenGame>());
         gameLobbyFetcher = new GameLobbyFetcher();
+        MessageListener.getInstance();
     }
 
     private void parseRemoteGameList(String list) {
@@ -52,11 +56,11 @@ public class GameLobby {
                     fields[2].matches("\\d+") &&
                     fields[3].matches("\\d+")) {
 
-                RemoteGame remoteGame = new RemoteGame(
+                RemoteOpenGame remoteOpenGame = new RemoteOpenGame(
                     fields[0], fields[1], Integer.parseInt(fields[2]),
                         Integer.parseInt(fields[3])
                 );
-                games.add(remoteGame);
+                games.add(remoteOpenGame);
             }
         }
     }
@@ -67,7 +71,11 @@ public class GameLobby {
 
     public void close() {
         lobbyIsOpen = false;
-        //TODO: remove any open games
+        if (localOpenGame != null) {
+            localOpenGame.destroy();
+            localOpenGame = null;
+        }
+        frmLobby.hideInstance();
     }
     public void open() {
         lobbyIsOpen = true;
@@ -89,6 +97,36 @@ public class GameLobby {
         return localUser.authenticate(ClientCommandCode.REGISTER_ACCOUNT);
     }
 
+    public int attemptJoinGameByUsername(String username) {
+        //Find remote open game.
+        for (RemoteOpenGame game : games) {
+            if (game.hostUsername == username) {
+                return game.attemptToJoin(localUser);
+            }
+        }
+        return ResponseCode.UNSPECIFIED_ERROR;
+    }
+
+    public void createLocalOpenGame(ChessVariant variant) {
+        localOpenGame = new LocalOpenGame(variant);
+        localOpenGame.host();
+
+        //Forces game lobby to be refreshed.
+        fetcherThread.interrupt();
+    }
+
+    public LocalOpenGame getLocalGame() {
+        return localOpenGame;
+    }
+
+    public void destroyLocalGame() {
+        if (localOpenGame != null) {
+            localOpenGame.destroy();
+            localOpenGame = null;
+            //Forces game lobby to be refreshed.
+            fetcherThread.interrupt();
+        }
+    }
 
     //Repeatedly requests a new game list. Upon receipt, checks response code
     // and passes the list (minus the response code) to GameLobby. If the

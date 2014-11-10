@@ -57,19 +57,19 @@ public class frmMainMenu {
 
     private void showLobby() {
         toggleButtonsEnabled(false);
-        frmVariantChooser.currentGameMode = GameMode.MULTIPLAYER_ONLINE;
-        GameLobby.showLobby();
+        GameMode.currentGameMode = GameMode.MULTIPLAYER_ONLINE;
+        GameLobby.getInstance().open();
     }
 
     private void beginLocalMP() {
         toggleButtonsEnabled(false);
-        frmVariantChooser.currentGameMode = GameMode.MULTIPLAYER_LOCAL;
+        GameMode.currentGameMode = GameMode.MULTIPLAYER_LOCAL;
         frmVariantChooser.showInstance();
     }
 
     private void beginLocalSP() {
         toggleButtonsEnabled(false);
-        frmVariantChooser.currentGameMode = GameMode.SINGLE_PLAYER;
+        GameMode.currentGameMode = GameMode.SINGLE_PLAYER;
         frmVariantChooser.showInstance();
     }
 

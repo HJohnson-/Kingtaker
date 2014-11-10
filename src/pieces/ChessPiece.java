@@ -44,7 +44,6 @@ abstract public class ChessPiece {
 	 * @return if move was successful.
 	 */
 	public boolean executeMove(Location targetLocation) {
-
 		board.clearSpace(cords);
 		board.placePiece(targetLocation, this);
 		this.lastTurnMovedOn = board.getController().getCurrentTurn();

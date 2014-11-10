@@ -2,13 +2,34 @@ package BasicChess;
 
 import graphics.tools;
 import main.*;
+import pieces.PieceDecoder;
 
 /**
  * The Chess we all know and love.
  */
 public class BasicChess extends ChessVariant {
 
-	public BasicChess(){
+    @Override
+    public int getVariationID() {
+        return 0;
+    }
+
+    @Override
+    public String getName() {
+        return "Standard Chess";
+    }
+
+    @Override
+    public String getDescription() {
+        return "[brief chess rules]";
+    }
+
+    @Override
+    public PieceDecoder getDecoder() {
+        return new BasicDecoder();
+    }
+
+    public BasicChess() {
 		game = new GameController(new BasicBoard(), "Basic", new BasicDecoder());
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
@@ -24,4 +45,5 @@ public class BasicChess extends ChessVariant {
         graphics.tools.create(new BasicChessFrame("Basic Chess", 700, 625, game.getBoard()));
         return true;
 	}
+
 }

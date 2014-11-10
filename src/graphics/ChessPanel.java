@@ -66,7 +66,7 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         final float[] FRACTIONS = {0.0f, 0.5f, 1.0f};
-        final Color[] BG_COLOURS = {Color.GREEN.darker(), Color.YELLOW.darker(), Color.RED.darker()};
+        final Color[] BG_COLOURS = {Color.WHITE.darker(), new Color(85, 55, 29), Color.DARK_GRAY};
         MultipleGradientPaint BG_GRADIENT = new LinearGradientPaint(new Point2D.Double(0, 0),
                 new Point2D.Double(getSize().getWidth(), getSize().getHeight()), FRACTIONS, BG_COLOURS);
         g2.setPaint(BG_GRADIENT);
@@ -120,7 +120,7 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
 
         int x, y;
 
-        g2.setPaint(tools.TEXT);
+        g2.setPaint(Color.WHITE);
 
         if (verticalUI) {
             x = offset.getX() * 2 + cellWidth * board.numCols();
@@ -297,18 +297,18 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
     public void recalculateCellSize() {
         while (animating) Thread.yield();
 
-        double boardWidth = getSize().getWidth() - UIWidth - offset.getX() * 2;
-        double boardHeight = getSize().getHeight() - UIHeight - offset.getY() * 2;
+        int boardWidth = (int) getSize().getWidth() - UIWidth - offset.getX() * 2;
+        int boardHeight = (int) getSize().getHeight() - UIHeight - offset.getY() * 2;
 
         if (boardWidth > boardHeight) {
-            boardHeight = getSize().getHeight() - offset.getY() * 2;
+            boardHeight = (int) getSize().getHeight() - offset.getY() * 2;
             verticalUI = true;
         } else {
-            boardWidth = getSize().getWidth() - offset.getX() * 2;
+            boardWidth = (int) getSize().getWidth() - offset.getX() * 2;
             verticalUI = false;
         }
 
-        cellWidth = (int) Math.round((Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2);
+        cellWidth = (int) Math.round(Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2;
         cellHeight = cellWidth;
 
 

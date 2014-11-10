@@ -1,7 +1,8 @@
 package main;
 
 import BasicChess.King;
-import forms.frmVariantChooser;
+import ai.BasicAI;
+import ai.ChessAI;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -21,6 +22,7 @@ public class GameController {
 	private Board board;
 	private String gameVariant;
 	private PieceDecoder decoder;
+    private ChessAI ai;
     private GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
 
 	public Board getBoard() {
@@ -37,6 +39,10 @@ public class GameController {
 		gameOver = false;
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
+
+        if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
+            ai = new BasicAI(board, false);
+        }
     }
 
 	public GameController(Board board, PieceDecoder decoder, String code) {
@@ -54,6 +60,10 @@ public class GameController {
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
+
+        if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
+            ai = new BasicAI(board, false);
+        }
 	}
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves() {
@@ -250,6 +260,11 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
+        if (!isWhitesTurn && GameMode.currentGameMode == GameMode.SINGLE_PLAYER && !gameOver) {
+            Location[] move = ai.getBestMove();
+            System.out.println(move[0] + " -> " + move[1]);
+            attemptMove(move[0], move[1], false);
+        }
 	}
 
 	public boolean gameOver() {

@@ -1,8 +1,7 @@
 package main;
 
 import BasicChess.King;
-import ai.BasicAI;
-import ai.ChessAI;
+import forms.frmVariantChooser;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -22,8 +21,8 @@ public class GameController {
 	private Board board;
 	private String gameVariant;
 	private PieceDecoder decoder;
-    private boolean fullInteractivity;
     private ChessAI ai;
+    private GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
 
 	public Board getBoard() {
 		return board;
@@ -39,8 +38,6 @@ public class GameController {
 		gameOver = false;
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
-
-        fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
 
         if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
             ai = new BasicAI(board, false);
@@ -62,8 +59,6 @@ public class GameController {
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
-
-        fullInteractivity = GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL;
 
         if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER) {
             ai = new BasicAI(board, false);
@@ -196,7 +191,7 @@ public class GameController {
      * @return if the piece belongs to the interactive user.
      */
     private boolean userCanInteractWithPiece(ChessPiece checkedPiece, boolean localUser) {
-        return fullInteractivity ||
+        return gameMode == GameMode.MULTIPLAYER_LOCAL ||
                 (checkedPiece.isWhite() == GameLauncher.currentGameLauncher.userIsWhite())
                         == localUser;
     }

@@ -2,6 +2,9 @@ package graphics;
 
 import main.Location;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Handles the animation and display of chess pieces, rather than having this in the ChessPiece class.
  */
@@ -39,6 +42,8 @@ public class GraphicsControl implements Runnable {
     public void setGoal(Location l) {
         endCords = new Location(l.getX() * panel.cellWidth + panel.offset.getX(),
                                 l.getY() * panel.cellHeight + panel.offset.getY());
+        ExecutorService pool = Executors.newFixedThreadPool(1);
+        pool.submit(this);
     }
 
     public void givePanel(ChessPanel panel) {

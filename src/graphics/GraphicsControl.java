@@ -40,7 +40,8 @@ public class GraphicsControl implements Runnable {
      * @param l The location which the piece will end up on, when the animation concludes.
      */
     public void setGoal(Location l) {
-        endCords = new Location(l.getX() * panel.cellWidth, l.getY() * panel.cellHeight);
+        endCords = new Location(l.getX() * panel.cellWidth + panel.offset.getX(),
+                                l.getY() * panel.cellHeight + panel.offset.getY());
     }
 
     public void givePanel(ChessPanel panel) {

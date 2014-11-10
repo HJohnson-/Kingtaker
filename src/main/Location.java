@@ -42,4 +42,9 @@ public class Location {
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}
+
+    @Override
+    public Location clone() {
+        return new Location(x, y);
+    }
 }

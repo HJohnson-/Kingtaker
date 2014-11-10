@@ -9,8 +9,6 @@ import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
@@ -341,11 +339,7 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
                     }
                 } else {
                     if (selectedPiece.allPieceMoves().contains(l)) {
-                        selectedPiece.graphics.setGoal(l);
-                        if (board.getController().attemptMove(selectedPiece.cords, l, true)) {
-                            ExecutorService pool = Executors.newFixedThreadPool(1);
-                            pool.submit(selectedPiece.graphics);
-                        }
+                        board.getController().attemptMove(selectedPiece.cords, l, true);
                     }
                     selectedPiece = null;
                 }

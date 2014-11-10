@@ -26,11 +26,13 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
     protected Board board;
     protected ChessPiece selectedPiece = null;
     protected int UIWidth = 200;
+    protected int UIHeight = 100;
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
     public boolean animating = false;
-    protected JButton load = new JButton();
+    protected JButton load = new JButton("Load");
+    protected JButton save = new JButton("Save");
 
 
     /**
@@ -74,24 +76,26 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {
-    if (board.getController().gameOver()) {
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-        g2.setColor(Color.GREEN);
-        g2.fillRect(offset.getX(), offset.getY(), cellWidth * board.numCols(), cellHeight * board.numRows());
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        if (board.getController().gameOver()) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+            g2.setColor(Color.GREEN);
+            g2.fillRect(offset.getX(), offset.getY(), cellWidth * board.numCols(), cellHeight * board.numRows());
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
-        Font oldFont = g2.getFont();
-        g2.setFont(createFont(70));
-        g2.setColor(Color.GRAY);
-        drawCentreString(board.getController().getWinner() + " Wins",
-                offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
-        g2.setFont(oldFont);
-    }
-    int x = cellWidth * (board.numCols());
-    int y = 0;
+            Font oldFont = g2.getFont();
+            g2.setFont(createFont(70));
+            g2.setColor(Color.GRAY);
+            drawCentreString(board.getController().getWinner() + " Wins",
+                    offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
+            g2.setFont(oldFont);
+        }
 
-    load.setLocation(x, y);
-    load.setSize(100, cellHeight);
+
+        int x = offset.getX() + cellWidth * (board.numCols());
+        int y = offset.getY() / 2;
+
+        load.setLocation(x, y);
+        load.setSize(UIWidth / 2, cellHeight);
 		load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String code = getClipboardContents();
@@ -103,8 +107,9 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
 				game.drawBoard();
 			}
 		});
-        save.setLocation(x + 100, y);
-        save.setSize(100, cellHeight);
+
+        save.setLocation(x + UIWidth / 2, y);
+        save.setSize(UIWidth / 2, cellHeight);
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setClipboardContents(board.getController().toCode());
@@ -115,9 +120,6 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
             this.add(load);
             this.add(save);
         }
-
-        int x = offset.getX() + cellWidth * (board.numCols());
-        int y = offset.getY() / 2;
 
         y += cellHeight;
 
@@ -262,8 +264,10 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
      */
     public void recalculateCellSize() {
         while (animating) Thread.yield();
-        cellWidth = (int) Math.round((
-                Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows()) / 2) * 2;
+
+        double tempCellWidth = (getSize().getWidth() - UIWidth - offset.getX()) / board.numCols();
+        double tempCellHeight = (getSize().getHeight() - UIHeight - offset.getX()) / board.numRows();
+        cellWidth = (int) Math.round((Math.min(tempCellHeight, tempCellWidth) / 2) * 2);
         cellHeight = cellWidth;
 
         for (ChessPiece p : board.allPieces()) {

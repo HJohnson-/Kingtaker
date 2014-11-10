@@ -6,6 +6,10 @@ import pieces.ChessPiece;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.ColorModel;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -26,12 +30,14 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
     protected Board board;
     protected ChessPiece selectedPiece = null;
     protected int UIWidth = 200;
+    protected int UIHeight = 100;
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
     public boolean animating = false;
-    protected JButton load = new JButton();
-
+    protected JButton load = new JButton("Load");
+    protected JButton save = new JButton("Save");
+    protected boolean verticalUI;
 
     /**
      * This constructor sets up a listener to handle the user clicking on the screen.
@@ -57,7 +63,16 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setFont(createFont(16));
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        final float[] FRACTIONS = {0.0f, 0.5f, 1.0f};
+        final Color[] BG_COLOURS = {Color.WHITE.darker(), new Color(85, 55, 29), Color.DARK_GRAY};
+        MultipleGradientPaint BG_GRADIENT = new LinearGradientPaint(new Point2D.Double(0, 0),
+                new Point2D.Double(getSize().getWidth(), getSize().getHeight()), FRACTIONS, BG_COLOURS);
+        g2.setPaint(BG_GRADIENT);
+        g2.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
+
+        g2.setFont(createFont(24));
         doDrawing(g2);
     }
 
@@ -74,59 +89,78 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {
-    if (board.getController().gameOver()) {
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-        g2.setColor(Color.GREEN);
-        g2.fillRect(offset.getX(), offset.getY(), cellWidth * board.numCols(), cellHeight * board.numRows());
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        Color endCol = new Color(255, 255, 255, 0);
+        Point2D start, end;
+        if (board.getController().isWhitesTurn()) {
+            start = new Point2D.Double(offset.getX() + board.numCols() * cellWidth, offset.getY());
+            end = new Point2D.Double(start.getX() + offset.getX(), offset.getY());
+        } else {
+            start = new Point2D.Double(offset.getX(), offset.getY());
+            end = new Point2D.Double(0, offset.getY());
+        }
 
-        Font oldFont = g2.getFont();
-        g2.setFont(createFont(70));
-        g2.setColor(Color.GRAY);
-        drawCentreString(board.getController().getWinner() + " Wins",
-                offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
-        g2.setFont(oldFont);
-    }
-    int x = cellWidth * (board.numCols());
-    int y = 0;
+        GradientPaint plyPaint = new GradientPaint(start, Color.WHITE, end, endCol);
+        g2.setPaint(plyPaint);
+        int plyMarkX = (int) (end.getX() == 0 ? end.getX() : start.getX());
+        g2.fillRect(plyMarkX, offset.getY(), offset.getX(), board.numRows() * cellHeight);
 
-    load.setLocation(x, y);
-    load.setSize(100, cellHeight);
-		load.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String code = getClipboardContents();
-				int start = code.indexOf("V:")+2;
-				int end = code.indexOf('$',start);
-				String variant = code.substring(start, end);
-				GameController gameState = GameControllerMaker.get(variant, code);
-				ChessVariant game = ChessVariantMaker.get(variant, gameState);
-				game.drawBoard();
-			}
-		});
-        save.setLocation(x + 100, y);
-        save.setSize(100, cellHeight);
-		save.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setClipboardContents(board.getController().toCode());
-			}
-		});
+        if (board.getController().gameOver()) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+            g2.setColor(Color.GREEN);
+            g2.fillRect(offset.getX(), offset.getY(), cellWidth * board.numCols(), cellHeight * board.numRows());
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+
+            Font oldFont = g2.getFont();
+            g2.setFont(createFont(70));
+            g2.setColor(Color.GRAY);
+            drawCentreString(board.getController().getWinner() + " Wins",
+                    offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
+            g2.setFont(oldFont);
+        }
+
+        int x, y;
+
+        g2.setPaint(Color.WHITE);
+
+        if (verticalUI) {
+            x = offset.getX() * 2 + cellWidth * board.numCols();
+            y = offset.getY();
+            save.setLocation(x + UIWidth / 2, y);
+            drawCentreString("Turn: " + board.getController().getCurrentTurn(), new Location(x, y + UIHeight / 2),
+                    UIWidth, UIHeight, g2);
+        } else {
+            x = offset.getX();
+            y = offset.getY() * 2 + cellHeight * board.numRows();
+            save.setLocation(x, y + UIHeight / 2);
+            g2.drawString("Turn: " + board.getController().getCurrentTurn(), x + 10 + UIWidth / 2, y + 10);
+        }
+
+        load.setLocation(x, y);
+        load.setSize(UIWidth / 2, UIHeight / 2);
+        save.setSize(UIWidth / 2, UIHeight / 2);
+
+        load.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String code = getClipboardContents();
+                int start = code.indexOf("V:")+2;
+                int end = code.indexOf('$',start);
+                String variant = code.substring(start, end);
+                GameController gameState = GameControllerMaker.get(variant, code);
+                ChessVariant game = ChessVariantMaker.get(variant, gameState);
+                game.drawBoard();
+            }
+        });
+
+        save.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setClipboardContents(board.getController().toCode());
+            }
+        });
 
         if (load.getParent() == null) {
             this.add(load);
             this.add(save);
         }
-
-        int x = offset.getX() + cellWidth * (board.numCols());
-        int y = offset.getY() / 2;
-
-        y += cellHeight;
-
-        Color c = board.getController().isWhitesTurn() ? Color.WHITE : Color.BLACK ;
-        g2.setPaint(c);
-        g2.fillRect(x + UIWidth / 4, y, UIWidth / 2, cellHeight);
-        g2.setPaint(tools.TEXT);
-        x += 10;
-        g2.drawString("Turn: " + board.getController().getCurrentTurn(), x, y + cellHeight * 2);
     }
 
     protected void drawCentreString(String s, Location offset, int width, int height, Graphics2D g2) {
@@ -262,9 +296,22 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
      */
     public void recalculateCellSize() {
         while (animating) Thread.yield();
-        cellWidth = (int) Math.round((
-                Math.min(getSize().getWidth() - UIWidth, getSize().getHeight()) / board.numRows()) / 2) * 2;
+
+        int boardWidth = (int) getSize().getWidth() - UIWidth - offset.getX() * 2;
+        int boardHeight = (int) getSize().getHeight() - UIHeight - offset.getY() * 2;
+
+        if (boardWidth > boardHeight) {
+            boardHeight = (int) getSize().getHeight() - offset.getY() * 2;
+            verticalUI = true;
+        } else {
+            boardWidth = (int) getSize().getWidth() - offset.getX() * 2;
+            verticalUI = false;
+        }
+
+        cellWidth = (int) Math.round(Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2;
         cellHeight = cellWidth;
+
+
 
         for (ChessPiece p : board.allPieces()) {
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth + offset.getX(),

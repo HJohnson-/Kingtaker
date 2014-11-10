@@ -21,7 +21,7 @@ import javax.swing.*;
 
 public class pawnPromotion implements Runnable {
 
-    JFrame frame = new JFrame(" Pawn Promotion ");
+    JFrame frame = new JFrame("Pawn Promotion");
 
     public enum PromoteType{QUEEN,ROOK,BISHOP,KNIGHT}
 

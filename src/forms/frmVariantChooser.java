@@ -16,7 +16,7 @@ public class frmVariantChooser {
     private JPanel panel1;
     private JButton btnAcceptVariation;
     private JList lstVariationPicker;
-    private DefaultListModel<String> lstVariationPickerModel;
+    private DefaultListModel lstVariationPickerModel;
     private JTextArea txtVariationRulesDisplay;
     private boolean visibility = false;
 
@@ -100,7 +100,9 @@ public class frmVariantChooser {
 
     @SuppressWarnings("unchecked")
     private void createUIComponents() {
-        lstVariationPickerModel = new DefaultListModel<String>();
+        //Do not make lstVariationPickerModel a DefaultListModel<String>
+        //It breaks compatibility with Java 1.6.
+        lstVariationPickerModel = new DefaultListModel();
         lstVariationPicker = new JList(lstVariationPickerModel);
     }
 }

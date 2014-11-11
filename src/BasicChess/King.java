@@ -151,6 +151,6 @@ public class King extends ChessPiece {
 
     @Override
     public ChessPiece clone() {
-        return new King(board, type, cords);
+        return new King(board, type, cords.clone());
     }
 }

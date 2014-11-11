@@ -35,16 +35,6 @@ public class MinimaxAI extends ChessAI {
                     if (piece.isValidMove(l)) {
                         Location[] move = {piece.cords, l};
                         Board newBoard = board.clone();
-                        ChessPiece[][] newPieces = new ChessPiece[board.numRows()][board.numCols()];
-                        for (ChessPiece[] col : newPieces) {
-                            Arrays.fill(col, new EmptyPiece(newBoard, null));
-                        }
-                        for (ChessPiece p : newBoard.allPieces()) {
-                            ChessPiece newPiece = p.clone();
-                            newPiece.board = newBoard;
-                            newPieces[newPiece.cords.getY()][newPiece.cords.getX()] = newPiece;
-                        }
-                        newBoard.setPieces(newPieces);
                         newBoard.doDrawing = false;
                         newBoard.getController().attemptMove(piece.cords, l, false);
                         if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == board.numCols())) {
@@ -130,16 +120,6 @@ public class MinimaxAI extends ChessAI {
                         if (piece.isValidMove(l)) {
                             Location[] move = {piece.cords, l};
                             Board newBoard = b.clone();
-                            ChessPiece[][] newPieces = new ChessPiece[b.numRows()][b.numCols()];
-                            for (ChessPiece[] col : newPieces) {
-                                Arrays.fill(col, new EmptyPiece(newBoard, null));
-                            }
-                            for (ChessPiece p : newBoard.allPieces()) {
-                                ChessPiece newPiece = p.clone();
-                                newPiece.board = newBoard;
-                                newPieces[newPiece.cords.getY()][newPiece.cords.getX()] = newPiece;
-                            }
-                            newBoard.setPieces(newPieces);
                             if (piece instanceof Pawn && (l.getY() == 0 || l.getY() == b.numCols() - 1)) {
                                 pawnPromotion pp = new pawnPromotion(piece);
                                 pp.promote(piece, pawnPromotion.PromoteType.QUEEN);

@@ -42,6 +42,6 @@ public class Queen extends ChessPiece {
 
     @Override
     public ChessPiece clone() {
-        return new Queen(board, type, cords);
+        return new Queen(board, type, cords.clone());
     }
 }

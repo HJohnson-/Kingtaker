@@ -3,6 +3,10 @@ import main.Board;
 import main.GameController;
 import main.Location;
 import main.PieceType;
+import pieces.ChessPiece;
+import pieces.EmptyPiece;
+
+import java.util.Arrays;
 
 /**
  * Created by crix9 on 15/10/2014.
@@ -89,6 +93,12 @@ public class BasicBoard extends Board {
         b.pieces = this.pieces.clone();
         b.setController(this.getController().clone());
         b.doDrawing = doDrawing;
+        for (int i = 0; i < b.pieces.length; i++) {
+            for (int j = 0; j < b.pieces.length; j++) {
+                b.pieces[i][j] = b.pieces[i][j].clone();
+                b.pieces[i][j].board = b;
+            }
+        }
         return b;
     }
 }

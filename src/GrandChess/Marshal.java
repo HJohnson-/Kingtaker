@@ -62,6 +62,6 @@ public class Marshal extends ChessPiece {
 
     @Override
     public ChessPiece clone() {
-        return new Marshal(board, type, cords);
+        return new Marshal(board, type, cords.clone());
     }
 }

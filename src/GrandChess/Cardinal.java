@@ -68,6 +68,6 @@ public class Cardinal extends ChessPiece {
 
     @Override
     public ChessPiece clone() {
-        return new Cardinal(board, type, cords);
+        return new Cardinal(board, type, cords.clone());
     }
 }

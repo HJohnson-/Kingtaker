@@ -47,4 +47,9 @@ public class RandomChess extends BasicChess {
         graphics.tools.create(new BasicChessFrame("Random Chess", 700, 625, game.getBoard()));
         return true;
     }
+
+    @Override
+    public RandomChess recreate(GameMode mode) {
+        return new RandomChess(mode);
+    }
 }

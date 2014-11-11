@@ -23,6 +23,7 @@ public class OnlineGameLauncher extends GameLauncher {
 
     public OnlineGameLauncher(ChessVariant variant) {
         this.variant = variant;
+        variant.game.gameMode = GameMode.MULTIPLAYER_ONLINE;
     }
 
     public OnlineGameLauncher(ChessVariant variant, InetAddress ipOpponent, String opponentName, int opponentRating) {
@@ -35,7 +36,9 @@ public class OnlineGameLauncher extends GameLauncher {
 
     @Override
     public void launch() {
+        variant.game.gameMode = GameMode.MULTIPLAYER_ONLINE;
         MessageListener.getInstance().setGameController(variant.game);
+        variant.game.getBoard().setController(variant.game);
         variant.drawBoard();
     }
 

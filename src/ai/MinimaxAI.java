@@ -1,5 +1,6 @@
 package ai;
 
+import BasicChess.King;
 import BasicChess.Pawn;
 import main.Board;
 import main.Location;
@@ -69,6 +70,8 @@ public class MinimaxAI extends ChessAI {
                 moves.add(result.getObj1());
             }
         }
+
+        executor.shutdown();
 
         return moves.get((int) Math.floor(Math.random() * moves.size()));
     }

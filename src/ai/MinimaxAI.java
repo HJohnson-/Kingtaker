@@ -34,7 +34,7 @@ public class MinimaxAI extends ChessAI {
                         Location[] move = {piece.cords, l};
                         Board newBoard = board.clone();
                         for (ChessPiece p : newBoard.allPieces()) {
-                            p.board = newBoard;
+                            p.board = newBoard; //TODO: Clone all the pieces, rather than using the same ones.
                         }
                         newBoard.doDrawing = false;
                         newBoard.getController().attemptMove(piece.cords, l, false);
@@ -122,12 +122,13 @@ public class MinimaxAI extends ChessAI {
                             Location[] move = {piece.cords, l};
                             Board newBoard = b.clone();
                             for (ChessPiece p : newBoard.allPieces()) {
-                                p.board = newBoard;
+                                p.board = newBoard; //TODO: Clone the pieces.
                             }
                             if (piece instanceof Pawn && (l.getY() == 0 || l.getY() == b.numCols() - 1)) {
                                 pawnPromotion pp = new pawnPromotion(piece);
                                 pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
                             }
+                            System.out.println(l);
                             newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
                             Pair<Location[], Integer> result = doRecursion(newBoard, !checkingWhite, curD + 1, move);
 

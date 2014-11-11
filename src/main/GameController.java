@@ -75,18 +75,18 @@ public class GameController {
         }
 	}
 
-	public Map<ChessPiece, List<Location>> getAllValidMoves() {
-		return getAllValidMoves(true);
+	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean whitePieces) {
+		return getAllValidMoves(true, whitePieces);
 	}
 
 	/**
 	 * @param caresAboutCheck false if we want to get moves that leave the mover in check, useful for seeing if any of those moves take the opposing king
 	 * @return Map of pieces to the locations representing the moves they can attempt
 	 */
-	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean caresAboutCheck) {
+	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean caresAboutCheck, boolean whitePieces) {
 		Map<ChessPiece, List<Location>> allPossibleMoves = new HashMap<ChessPiece, List<Location>>();
 		for(ChessPiece piece : board.allPieces()) {
-			if(piece.type != PieceType.EMPTY && piece.isWhite() == isWhitesTurn) {
+			if(piece.type != PieceType.EMPTY && piece.isWhite() == whitePieces) {
 				allPossibleMoves.put(piece, movesForPiece(piece, caresAboutCheck));
 			}
 		}
@@ -175,14 +175,14 @@ public class GameController {
 	 */
 	protected void endGame() {
 		gameOver = true;
-		winner = isWhitesTurn ? "Black" : "White";
+		winner = isWhitesTurn ? "White" : "Black";
 	}
 
 	/**
 	 * @return true if turn player is in checkmate
 	 */
 	protected boolean checkMate() {
-		Map<ChessPiece, List<Location>> moves = getAllValidMoves();
+		Map<ChessPiece, List<Location>> moves = getAllValidMoves(!isWhitesTurn);
 		for (Map.Entry<ChessPiece, List<Location>> entry : moves.entrySet()) {
 			if (!entry.getValue().isEmpty()) {
                 System.out.println(entry.getValue());
@@ -226,15 +226,11 @@ public class GameController {
 	 */
 	public boolean isInCheck(boolean checkingForWhite) {
 		Location kingLocation = findKing(checkingForWhite);
-        boolean oldVal = isWhitesTurn;
-        isWhitesTurn = !checkingForWhite;
-		for(List<Location> targets : getAllValidMoves(false).values()) {
+		for(List<Location> targets : getAllValidMoves(false, !checkingForWhite).values()) {
 			if(targets.contains(kingLocation)) {
-                isWhitesTurn = oldVal;
 				return true;
 			}
 		}
-        isWhitesTurn = oldVal;
 		return false;
 	}
 
@@ -247,9 +243,8 @@ public class GameController {
 	 * @return the location of a king of that player. Multiple kings not handled
 	 */
 	public Location findKing(boolean checkingForWhite) {
-		PieceType type = checkingForWhite ? PieceType.WHITE : PieceType.BLACK;
 		for(ChessPiece piece : board.allPieces()) {
-			if (piece instanceof King && piece.type == type) {
+			if (piece instanceof King && piece.isWhite() == checkingForWhite) {
 				return piece.cords;
 			}
 		}

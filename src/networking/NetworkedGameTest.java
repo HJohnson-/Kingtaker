@@ -1,10 +1,7 @@
 package networking;
 
 import forms.frmVariantChooser;
-import main.ChessVariant;
-import main.ChessVariantManager;
-import main.GameLauncher;
-import main.OnlineGameLauncher;
+import main.*;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -16,8 +13,8 @@ import java.util.Random;
  */
 public class NetworkedGameTest {
     public static void main(String[] args) throws Exception {
-        String host1 = "line24.doc.ic.ac.uk";
-        String host2 = "line25.doc.ic.ac.uk";
+        String host2 = "129.31.208.110";
+        String host1 = "line20.doc.ic.ac.uk";
         ChessVariant variant = ChessVariantManager.getInstance().getVariantByID(0);
 
         MessageListener.getInstance().acceptMoves = true;
@@ -36,6 +33,7 @@ public class NetworkedGameTest {
 
         MessageListener.getInstance().setRemoteAddress(socket.getInetAddress());
 
+        GameMode.currentGameMode = GameMode.MULTIPLAYER_ONLINE;
         OnlineGameLauncher o = new OnlineGameLauncher(variant,
                 InetAddress.getByName(server), "playa" + (new Random()).nextInt(100000) + "", 1000);
         o.setUserIsWhite(isWhite);

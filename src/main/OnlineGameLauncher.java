@@ -27,6 +27,7 @@ public class OnlineGameLauncher extends GameLauncher {
 
     public OnlineGameLauncher(ChessVariant variant, InetAddress ipOpponent, String opponentName, int opponentRating) {
         this.variant = variant;
+        variant.game.gameMode = GameMode.MULTIPLAYER_ONLINE;
         this.opponentName = opponentName;
         this.opponentRating = opponentRating;
         this.ipOpponent = ipOpponent;

@@ -1,8 +1,10 @@
 package ai;
 
+import BasicChess.Pawn;
 import main.Board;
 import main.Location;
 import pieces.ChessPiece;
+import pawnPromotion.pawnPromotion;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,8 +33,15 @@ public class MinimaxAI extends ChessAI {
                     if (piece.isValidMove(l)) {
                         Location[] move = {piece.cords, l};
                         Board newBoard = board.clone();
+                        for (ChessPiece p : newBoard.allPieces()) {
+                            p.board = newBoard;
+                        }
                         newBoard.doDrawing = false;
                         newBoard.getController().attemptMove(piece.cords, l, false);
+                        if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == board.numCols())) {
+                            pawnPromotion pp = new pawnPromotion(piece);
+                            pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
+                        }
                         Searcher s = new Searcher(newBoard, !isWhite, 0, move);
                         results.add(executor.submit(s));
                     }
@@ -80,12 +89,28 @@ public class MinimaxAI extends ChessAI {
         }
 
         private int calcBoardVal(Board b) {
-            return 1;
+            int sum = 0;
+            for (ChessPiece piece : b.allPieces()) {
+                if (piece.isWhite() == isWhite) {
+                    sum += piece.returnValue();
+                } else {
+                    sum -= piece.returnValue();
+                }
+            }
+            return sum;
         }
 
         private Pair<Location[], Integer> doRecursion(Board b, boolean checkingWhite, int curD, Location[] prevMove) {
             if (curD == maxDepth || b.getController().gameOver()) {
-                return new Pair<Location[], Integer>(prevMove, calcBoardVal(b));
+                int score = calcBoardVal(b);
+                if (b.getController().gameOver()) {
+                    if (b.getController().getWinner().equals("White") == isWhite) {
+                        score += 10000;
+                    } else {
+                        score -= 10000;
+                    }
+                }
+                return new Pair<Location[], Integer>(prevMove, score);
             }
 
             int curScore = (isWhite == checkingWhite) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
@@ -96,8 +121,12 @@ public class MinimaxAI extends ChessAI {
                         if (piece.isValidMove(l)) {
                             Location[] move = {piece.cords, l};
                             Board newBoard = b.clone();
-                            if (piece.getName().equals("Pawn") && (l.getY() == 0 || l.getY() == b.numCols() - 1)) {
-
+                            for (ChessPiece p : newBoard.allPieces()) {
+                                p.board = newBoard;
+                            }
+                            if (piece instanceof Pawn && (l.getY() == 0 || l.getY() == b.numCols() - 1)) {
+                                pawnPromotion pp = new pawnPromotion(piece);
+                                pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
                             }
                             newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
                             Pair<Location[], Integer> result = doRecursion(newBoard, !checkingWhite, curD + 1, move);

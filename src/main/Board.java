@@ -54,6 +54,10 @@ abstract public class Board {
 	 */
 	public pieces.ChessPiece getPiece(Location pieceLocation) {
 		if(!onBoard(pieceLocation)) {
+            System.out.println(pieceLocation);
+            for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+                System.out.println(ste);
+            }
 			return null;
 		}
 		return pieces[pieceLocation.getX()][pieceLocation.getY()];

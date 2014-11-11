@@ -67,7 +67,6 @@ public class GameController {
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
-
         this.gameMode = mode;
 
         if (gameMode == GameMode.SINGLE_PLAYER) {
@@ -185,7 +184,6 @@ public class GameController {
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves(!isWhitesTurn);
 		for (Map.Entry<ChessPiece, List<Location>> entry : moves.entrySet()) {
 			if (!entry.getValue().isEmpty()) {
-                System.out.println(entry.getValue());
 				return false;
 			}
 		}

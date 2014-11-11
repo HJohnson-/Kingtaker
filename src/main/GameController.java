@@ -119,12 +119,14 @@ public class GameController {
         //Cannot perform a move that violates the variant's rules.
         //Cannot move a black piece when it's white's turn, and vice versa.
 		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
+            System.out.println("Invalid move: against rules, or it is not this colours turn");
             return false;
         }
 
         //Cannot perform a move if the user is not white or black.
         //Does not apply to local multiplayer games, where fullInteractivity=true.
 		if (!userCanInteractWithPiece(beingMoved, local)) {
+            System.out.println("Invalid move: you cannot control this colour");
 			return false;
         }
 

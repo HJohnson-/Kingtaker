@@ -171,4 +171,7 @@ abstract public class ChessPiece {
 		this.lastTurnMovedOn = lastMovedOn;
 		//ignore substring
 	}
+
+    @Override
+    public abstract ChessPiece clone();
 }

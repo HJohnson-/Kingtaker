@@ -34,4 +34,9 @@ public class EmptyPiece extends ChessPiece {
 	public String getName() {
 		return "NOT A PIECE";
 	}
+
+    @Override
+    public ChessPiece clone() {
+        return new EmptyPiece(board, cords);
+    }
 }

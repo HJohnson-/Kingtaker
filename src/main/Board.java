@@ -177,5 +177,8 @@ abstract public class Board {
     @Override
     abstract public Board clone();
 
+    public void setPieces(ChessPiece[][] newPieces) {
+        this.pieces = newPieces;
+    }
 }
 

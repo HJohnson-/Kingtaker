@@ -50,4 +50,9 @@ public class Knight extends ChessPiece {
 	public String getName() {
 		return "Knight";
 	}
+
+    @Override
+    public ChessPiece clone() {
+        return new Knight(board, type, cords);
+    }
 }

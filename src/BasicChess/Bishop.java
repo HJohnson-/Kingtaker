@@ -49,4 +49,9 @@ public class Bishop extends ChessPiece {
 	public String getName() {
 		return "Bishop";
 	}
+
+    @Override
+    public ChessPiece clone() {
+        return new Bishop(board, type, cords);
+    }
 }

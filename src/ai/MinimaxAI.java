@@ -5,7 +5,9 @@ import main.Board;
 import main.Location;
 import pieces.ChessPiece;
 import pawnPromotion.pawnPromotion;
+import pieces.EmptyPiece;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -33,9 +35,16 @@ public class MinimaxAI extends ChessAI {
                     if (piece.isValidMove(l)) {
                         Location[] move = {piece.cords, l};
                         Board newBoard = board.clone();
-                        for (ChessPiece p : newBoard.allPieces()) {
-                            p.board = newBoard; //TODO: Clone all the pieces, rather than using the same ones.
+                        ChessPiece[][] newPieces = new ChessPiece[board.numRows()][board.numCols()];
+                        for (ChessPiece[] col : newPieces) {
+                            Arrays.fill(col, new EmptyPiece(newBoard, null));
                         }
+                        for (ChessPiece p : newBoard.allPieces()) {
+                            ChessPiece newPiece = p.clone();
+                            newPiece.board = newBoard;
+                            newPieces[newPiece.cords.getY()][newPiece.cords.getX()] = newPiece;
+                        }
+                        newBoard.setPieces(newPieces);
                         newBoard.doDrawing = false;
                         newBoard.getController().attemptMove(piece.cords, l, false);
                         if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == board.numCols())) {
@@ -121,14 +130,20 @@ public class MinimaxAI extends ChessAI {
                         if (piece.isValidMove(l)) {
                             Location[] move = {piece.cords, l};
                             Board newBoard = b.clone();
-                            for (ChessPiece p : newBoard.allPieces()) {
-                                p.board = newBoard; //TODO: Clone the pieces.
+                            ChessPiece[][] newPieces = new ChessPiece[b.numRows()][b.numCols()];
+                            for (ChessPiece[] col : newPieces) {
+                                Arrays.fill(col, new EmptyPiece(newBoard, null));
                             }
+                            for (ChessPiece p : newBoard.allPieces()) {
+                                ChessPiece newPiece = p.clone();
+                                newPiece.board = newBoard;
+                                newPieces[newPiece.cords.getY()][newPiece.cords.getX()] = newPiece;
+                            }
+                            newBoard.setPieces(newPieces);
                             if (piece instanceof Pawn && (l.getY() == 0 || l.getY() == b.numCols() - 1)) {
                                 pawnPromotion pp = new pawnPromotion(piece);
                                 pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
                             }
-                            System.out.println(l);
                             newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
                             Pair<Location[], Integer> result = doRecursion(newBoard, !checkingWhite, curD + 1, move);
 

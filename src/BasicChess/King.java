@@ -148,4 +148,9 @@ public class King extends ChessPiece {
 	public String getName() {
 		return "King";
 	}
+
+    @Override
+    public ChessPiece clone() {
+        return new King(board, type, cords);
+    }
 }

@@ -65,4 +65,9 @@ public class Cardinal extends ChessPiece {
 	public String getName() {
 		return "Cardinal";
 	}
+
+    @Override
+    public ChessPiece clone() {
+        return new Cardinal(board, type, cords);
+    }
 }

@@ -59,4 +59,9 @@ public class Marshal extends ChessPiece {
 	public String getName() {
 		return "Marshal";
 	}
+
+    @Override
+    public ChessPiece clone() {
+        return new Marshal(board, type, cords);
+    }
 }

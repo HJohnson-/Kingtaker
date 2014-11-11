@@ -263,7 +263,11 @@ public abstract class ChessPanel extends JPanel implements ClipboardOwner {
                     cellWidth, cellHeight);
 
             List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
-            g2.setPaint(tools.CUR_MOVES);
+            if (selectedPiece.isWhite() == board.getController().isWhitesTurn()) {
+                g2.setPaint(tools.CUR_MOVES);
+            } else {
+                g2.setPaint(Color.RED.darker());
+            }
             for (Location l : moves) {
                 g2.drawRect(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(),
                         cellWidth, cellHeight);

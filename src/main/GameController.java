@@ -40,10 +40,6 @@ public class GameController {
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
         this.gameMode = mode;
-
-        if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new BasicAI(board, false);
-        }
     }
 
 	public GameController(Board board, PieceDecoder decoder, String code, GameMode mode) {
@@ -61,13 +57,26 @@ public class GameController {
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
-
         this.gameMode = mode;
-
-        if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new BasicAI(board, false);
-        }
 	}
+
+    // If the user is in single player mode, initialise the AI and make
+    // it perform a turn if it is going first.
+    public void initialiseAI() {
+        if (gameMode == GameMode.SINGLE_PLAYER) {
+            boolean playerIsWhite = GameLauncher.currentGameLauncher.userIsWhite();
+            ai = new BasicAI(board, !playerIsWhite);
+
+            if (!playerIsWhite) {
+                performAIMove();
+            }
+        }
+    }
+
+    private void performAIMove() {
+        Location[] move = ai.getBestMove();
+        attemptMove(move[0], move[1], false);
+    }
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean whitePieces) {
 		return getAllValidMoves(true, whitePieces);
@@ -260,9 +269,8 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
-        if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
-            Location[] move = ai.getBestMove();
-            attemptMove(move[0], move[1], false);
+        if (ai != null && ai.isWhite() == isWhitesTurn) {
+            performAIMove();
         }
 	}
 

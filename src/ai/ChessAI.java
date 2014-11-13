@@ -20,6 +20,10 @@ public abstract class ChessAI {
         this.isWhite = isWhite;
     }
 
+    public boolean isWhite() {
+        return isWhite;
+    }
+
     public Location[] getBestMove() {
         List<Location[]> move = new ArrayList<Location[]>();
         int bestScore = Integer.MIN_VALUE;
@@ -39,6 +43,11 @@ public abstract class ChessAI {
                 }
             }
         }
+
+        if (move.size() == 0) {
+            throw new Error("AI could not find any moves");
+        }
+
         return move.get((int) Math.floor(Math.random() * move.size()));
     }
 

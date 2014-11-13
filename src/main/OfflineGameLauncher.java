@@ -13,13 +13,16 @@ public class OfflineGameLauncher extends GameLauncher {
     public OfflineGameLauncher(ChessVariant variant, GameMode mode) {
         this.mode = mode;
         this.variant = variant;
-        localUserIsWhite = new Random().nextInt(2) == 0;
+        localUserIsWhite = false;//new Random().nextInt(2) == 0;
+        //temporary for debugging
     }
 
     @Override
     public void launch() {
         ChessVariant newVariant = variant.recreate(mode);
         newVariant.drawBoard();
+//        newVariant.game.initialiseAI();
+        //Why does the game board not draw????
     }
 
     @Override

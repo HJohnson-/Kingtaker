@@ -18,13 +18,13 @@ public class MinimaxAI extends ChessAI {
 
     protected int maxDepth;
 
-    public MinimaxAI(Board board, boolean isWhite, int depth) {
-        super(board, isWhite);
+    public MinimaxAI(boolean isWhite, int depth) {
+        super(isWhite);
         this.maxDepth = depth;
     }
 
     @Override
-    public Location[] getBestMove() {
+    public Location[] getBestMove(Board board) {
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<Pair<Location[], Integer>>> results = new LinkedList<Future<Pair<Location[], Integer>>>();
 
@@ -79,13 +79,13 @@ public class MinimaxAI extends ChessAI {
 
     class Searcher implements Callable<Pair<Location[], Integer>> {
 
-        private Board board;
+        private Board searchBoard;
         private boolean checkWhite;
         private int curDepth;
         private Location[] previousMove;
 
         private Searcher(Board board, boolean checkWhite, int curDepth, Location[] previousMove) {
-            this.board = board;
+            this.searchBoard = board;
             this.checkWhite = checkWhite;
             this.curDepth = curDepth;
             this.previousMove = previousMove;
@@ -159,7 +159,7 @@ public class MinimaxAI extends ChessAI {
 
         @Override
         public Pair<Location[], Integer> call() {
-            return doRecursion(board, checkWhite, curDepth, previousMove);
+            return doRecursion(searchBoard, checkWhite, curDepth, previousMove);
         }
 
     }

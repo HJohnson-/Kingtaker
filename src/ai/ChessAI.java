@@ -8,14 +8,12 @@ import main.Location;
  */
 public abstract class ChessAI {
 
-    protected Board board;
     protected boolean isWhite;
 
-    public ChessAI(Board board, boolean isWhite) {
-        this.board = board;
+    public ChessAI(boolean isWhite) {
         this.isWhite = isWhite;
     }
 
-    abstract public Location[] getBestMove();
+    abstract public Location[] getBestMove(Board board);
 
 }

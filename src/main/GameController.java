@@ -1,7 +1,6 @@
 package main;
 
 import BasicChess.King;
-import ai.BasicAI;
 import ai.ChessAI;
 import ai.MinimaxAI;
 import pieces.ChessPiece;
@@ -11,10 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * Handles game logic
@@ -128,13 +123,14 @@ public class GameController {
         //Cannot perform a move that violates the variant's rules.
         //Cannot move a black piece when it's white's turn, and vice versa.
 		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
+            System.out.println("Invalid move: against rules, or it is not this colours turn");
             return false;
         }
 
         //Cannot perform a move if the user is not white or black.
         //Does not apply to local multiplayer games, where fullInteractivity=true.
 		if (!userCanInteractWithPiece(beingMoved, local)) {
-
+            System.out.println("Invalid move: you cannot control this colour");
 			return false;
         }
 

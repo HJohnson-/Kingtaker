@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class ServerMessageSender implements IMessageSender {
 
-    private final String IP_STRING = "line26";
+    private final String IP_STRING = "line20.doc.ic.ac.uk";
     private final int PORT = 4444;
     private final int TIMEOUT_DEFAULT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;
@@ -42,7 +42,7 @@ public class ServerMessageSender implements IMessageSender {
                 socket.close();
                 return response;
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 try {
                     Thread.sleep(RETRY_WAIT_MS);
                 } catch (InterruptedException e1) {

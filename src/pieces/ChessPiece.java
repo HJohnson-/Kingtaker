@@ -5,12 +5,8 @@ import main.Location;
 import main.PieceType;
 import main.Board;
 
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * Represents a square on the board: With a chess piece that understands what moves it can make, or as an empty square.

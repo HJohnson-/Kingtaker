@@ -69,6 +69,8 @@ public class MinimaxAI extends ChessAI {
             }
         }
 
+        executor.shutdown();
+
         return moves.get((int) Math.floor(Math.random() * moves.size()));
     }
 
@@ -113,9 +115,7 @@ public class MinimaxAI extends ChessAI {
 
             int curScore = (isWhite == checkingWhite) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
             List<Location[]> moves = new LinkedList<Location[]>();
-            boolean werePieces = false;
             for (ChessPiece piece : b.allPieces()) {
-                werePieces = true;
                 if (piece.isWhite() == checkingWhite) {
                     for (Location l : piece.allPieceMoves()) {
                         if (piece.isValidMove(l)) {
@@ -150,7 +150,7 @@ public class MinimaxAI extends ChessAI {
                     }
                 }
             }
-            if (!werePieces) System.out.println("No pieces.");
+
             return new Pair<Location[], Integer>(moves.get((int) Math.floor(Math.random() * moves.size())), curScore);
         }
 

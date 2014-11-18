@@ -1,6 +1,5 @@
 package BasicChess;
 import main.Board;
-import main.GameController;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;

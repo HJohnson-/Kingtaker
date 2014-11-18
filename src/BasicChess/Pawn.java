@@ -162,7 +162,15 @@ public class Pawn extends ChessPiece{
 		justDidADoubleMove = miscFields.equals("T");
 	}
 
-	@Override
+    @Override
+    public ChessPiece clone() {
+        Pawn newPawn = (Pawn) super.clone();
+        newPawn.justDidADoubleMove = this.justDidADoubleMove;
+        newPawn.movementDirection = this.movementDirection;
+        return newPawn;
+    }
+
+    @Override
 	public String getMisc() {
 		return justDidADoubleMove ? "T" : "F";
 	}

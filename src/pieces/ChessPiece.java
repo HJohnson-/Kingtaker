@@ -7,8 +7,10 @@ import main.Board;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Represents a square on the board: With a chess piece that understands what moves it can make, or as an empty square.
@@ -171,4 +173,23 @@ abstract public class ChessPiece {
 		this.lastTurnMovedOn = lastMovedOn;
 		//ignore substring
 	}
+
+    @Override
+    public ChessPiece clone() {
+        try {
+            ChessPiece newPiece = getClass().getDeclaredConstructor(Board.class, PieceType.class, Location.class).newInstance(null, type, cords.clone());
+            newPiece.lastTurnMovedOn = this.lastTurnMovedOn;
+            return newPiece;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

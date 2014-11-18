@@ -35,6 +35,10 @@ public class GameController {
 		return board;
 	}
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
 	/**
 	 * @param board board
 	 */
@@ -296,6 +300,12 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        return new GameController(board, gameVariant, decoder, gameMode);
+        GameController newGame = new GameController(null, gameVariant, decoder, gameMode);
+        newGame.isWhitesTurn = this.isWhitesTurn;
+        newGame.currentTurn = this.currentTurn;
+        newGame.gameOver = this.gameOver;
+        newGame.ai = null;
+        newGame.playerIsWhite = this.playerIsWhite;
+        return newGame;
     }
 }

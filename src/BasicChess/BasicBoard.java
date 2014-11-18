@@ -3,6 +3,7 @@ import main.Board;
 import main.GameController;
 import main.Location;
 import main.PieceType;
+import pieces.ChessPiece;
 
 /**
  * Created by crix9 on 15/10/2014.
@@ -86,9 +87,20 @@ public class BasicBoard extends Board {
     @Override
     public Board clone() {
         BasicBoard b = new BasicBoard();
-        b.pieces = this.pieces.clone();
+
+        ChessPiece[][] newPieces = new ChessPiece[this.pieces.length][this.pieces[0].length];
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                newPieces[i][j] = pieces[i][j].clone();
+                newPieces[i][j].board = b;
+            }
+        }
+
         b.setController(this.getController().clone());
-        b.doDrawing = doDrawing;
+        b.getController().setBoard(b);
+
+        b.doDrawing = this.doDrawing;
+
         return b;
     }
 }

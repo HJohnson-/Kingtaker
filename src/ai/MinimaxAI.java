@@ -33,9 +33,7 @@ public class MinimaxAI extends ChessAI {
                     if (piece.isValidMove(l)) {
                         Location[] move = {piece.cords, l};
                         Board newBoard = board.clone();
-                        for (ChessPiece p : newBoard.allPieces()) {
-                            p.board = newBoard;
-                        }
+
                         newBoard.doDrawing = false;
                         newBoard.getController().attemptMove(piece.cords, l, false);
                         if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == board.numCols())) {
@@ -115,20 +113,20 @@ public class MinimaxAI extends ChessAI {
 
             int curScore = (isWhite == checkingWhite) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
             List<Location[]> moves = new LinkedList<Location[]>();
+            boolean werePieces = false;
             for (ChessPiece piece : b.allPieces()) {
+                werePieces = true;
                 if (piece.isWhite() == checkingWhite) {
                     for (Location l : piece.allPieceMoves()) {
                         if (piece.isValidMove(l)) {
                             Location[] move = {piece.cords, l};
                             Board newBoard = b.clone();
-                            for (ChessPiece p : newBoard.allPieces()) {
-                                p.board = newBoard;
-                            }
+
+                            newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
                             if (piece instanceof Pawn && (l.getY() == 0 || l.getY() == b.numCols() - 1)) {
                                 pawnPromotion pp = new pawnPromotion(piece);
                                 pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
                             }
-                            newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
                             Pair<Location[], Integer> result = doRecursion(newBoard, !checkingWhite, curD + 1, move);
 
                             if (isWhite == checkingWhite) {
@@ -152,7 +150,7 @@ public class MinimaxAI extends ChessAI {
                     }
                 }
             }
-
+            if (!werePieces) System.out.println("No pieces.");
             return new Pair<Location[], Integer>(moves.get((int) Math.floor(Math.random() * moves.size())), curScore);
         }
 

@@ -94,6 +94,7 @@ public class BasicBoard extends Board {
                 newPieces[i][j].board = b;
             }
         }
+        b.pieces = newPieces;
 
         b.setController(this.getController().clone());
         b.getController().setBoard(b);

@@ -2,6 +2,7 @@ package ai;
 
 import BasicChess.Pawn;
 import main.Board;
+import main.GameMode;
 import main.Location;
 import pieces.ChessPiece;
 import pawnPromotion.pawnPromotion;
@@ -35,6 +36,8 @@ public class MinimaxAI extends ChessAI {
                         Board newBoard = board.clone();
 
                         newBoard.doDrawing = false;
+                        newBoard.getController().gameMode = GameMode.MULTIPLAYER_LOCAL;
+
                         newBoard.getController().attemptMove(piece.cords, l, false);
                         if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == board.numCols())) {
                             pawnPromotion pp = new pawnPromotion(piece);

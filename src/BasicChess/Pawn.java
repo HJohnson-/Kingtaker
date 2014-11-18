@@ -179,11 +179,4 @@ public class Pawn extends ChessPiece{
 	public String getName() {
 		return "Pawn";
 	}
-
-    @Override
-    public ChessPiece clone() {
-        Pawn newP = new Pawn(board, type, cords.clone());
-        newP.justDidADoubleMove = this.justDidADoubleMove;
-        return newP;
-    }
 }

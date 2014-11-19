@@ -56,10 +56,11 @@ public class pawnPromotion implements Runnable {
         pawn.board.clearSpace(pawn.cords);
         promotedPiece.board.placePiece(promotedPiece.cords, promotedPiece);
         promotedPiece.lastTurnMovedOn = pawn.lastTurnMovedOn;
-        promotedPiece.graphics.givePanel(pawn.graphics.panel);
-        promotedPiece.graphics.panel.recalculateCellSize();
-
-        pawn.graphics.panel.repaint();
+        if (promotedPiece.board.doDrawing) {
+            promotedPiece.graphics.givePanel(pawn.graphics.panel);
+            promotedPiece.graphics.panel.recalculateCellSize();
+            promotedPiece.graphics.panel.repaint();
+        }
 
     }
 

@@ -1,8 +1,8 @@
 package main;
 
 import BasicChess.King;
-import ai.BasicAI;
 import ai.ChessAI;
+import ai.MinimaxAI;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -24,10 +24,15 @@ public class GameController {
 	private PieceDecoder decoder;
     private ChessAI ai;
     public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
+    private boolean playerIsWhite = true;
 
 	public Board getBoard() {
 		return board;
 	}
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
 	/**
 	 * @param board board
@@ -42,7 +47,7 @@ public class GameController {
         this.gameMode = mode;
 
         if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new BasicAI(board, false);
+            ai = new MinimaxAI(false, 2);
         }
     }
 
@@ -61,11 +66,10 @@ public class GameController {
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
-
         this.gameMode = mode;
 
         if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new BasicAI(board, false);
+            ai = new MinimaxAI(false, 2);
         }
 	}
 
@@ -144,6 +148,12 @@ public class GameController {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
 
+            if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
+                Location[] aiMove = ai.getBestMove(board);
+                System.out.println(aiMove[0] + " -> " + aiMove[1]);
+                attemptMove(aiMove[0], aiMove[1], false);
+            }
+
 			return true;
 		}
 
@@ -198,7 +208,7 @@ public class GameController {
      */
     private boolean userCanInteractWithPiece(ChessPiece checkedPiece, boolean localUser) {
         return gameMode == GameMode.MULTIPLAYER_LOCAL ||
-                (checkedPiece.isWhite() == GameLauncher.currentGameLauncher.userIsWhite())
+                (checkedPiece.isWhite() == playerIsWhite)
                         == localUser;
     }
 
@@ -260,10 +270,6 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
-        if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
-            Location[] move = ai.getBestMove();
-            attemptMove(move[0], move[1], false);
-        }
 	}
 
 	public boolean gameOver() {
@@ -289,4 +295,15 @@ public class GameController {
 		code.append("#");
 		return code.toString();
 	}
+
+    @Override
+    public GameController clone() {
+        GameController newGame = new GameController(null, gameVariant, decoder, gameMode);
+        newGame.isWhitesTurn = this.isWhitesTurn;
+        newGame.currentTurn = this.currentTurn;
+        newGame.gameOver = this.gameOver;
+        newGame.ai = null;
+        newGame.playerIsWhite = this.playerIsWhite;
+        return newGame;
+    }
 }

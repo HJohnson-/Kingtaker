@@ -110,7 +110,22 @@ public class RandomBoard extends Board {
 		return true;
 	}
 
-	private Location flip(Location location) {
+    @Override
+    public Board clone() {
+        RandomBoard b = new RandomBoard();
+        b.pieces = this.pieces.clone();
+        b.setController(this.getController().clone());
+        b.doDrawing = doDrawing;
+        for (int i = 0; i < b.pieces.length; i++) {
+            for (int j = 0; j < b.pieces.length; j++) {
+                b.pieces[i][j] = b.pieces[i][j].clone();
+                b.pieces[i][j].board = b;
+            }
+        }
+        return b;
+    }
+
+    private Location flip(Location location) {
 		int newx = location.getX() == 0 ? numCols()-1 : 0;
 		int newy = numRows() - location.getY() - 1;
 		return new Location(newx, newy);

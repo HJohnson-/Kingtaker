@@ -39,4 +39,9 @@ public class Queen extends ChessPiece {
 	public String getName() {
 		return "Queen";
 	}
+
+    @Override
+    public ChessPiece clone() {
+        return new Queen(board, type, cords.clone());
+    }
 }

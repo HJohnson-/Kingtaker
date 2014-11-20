@@ -11,7 +11,6 @@ import java.util.concurrent.Executors;
 public class GraphicsControl implements Runnable {
 
     protected Location curCords, endCords;
-    protected boolean animating = false;
     protected int totalSteps = 25;
     protected int animationTime = 50;
     public ChessPanel panel;
@@ -57,11 +56,9 @@ public class GraphicsControl implements Runnable {
      */
     @Override
     public void run() {
-        while (panel.animating) Thread.yield();
         int animationXStep = (endCords.getX() - curCords.getX()) / totalSteps;
         int animationYStep = (endCords.getY() - curCords.getY()) / totalSteps;
 
-        animating = true;
         panel.animating = true;
 
         while (!curCords.equals(endCords)) {
@@ -77,7 +74,6 @@ public class GraphicsControl implements Runnable {
         }
 
         panel.animating = false;
-        animating = false;
     }
 
     @Override

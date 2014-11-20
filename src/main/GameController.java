@@ -150,7 +150,6 @@ public class GameController {
 
             if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
                 Location[] aiMove = ai.getBestMove(board);
-                System.out.println(aiMove[0] + " -> " + aiMove[1]);
                 attemptMove(aiMove[0], aiMove[1], false);
             }
 

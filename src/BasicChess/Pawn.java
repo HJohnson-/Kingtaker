@@ -99,17 +99,16 @@ public class Pawn extends ChessPiece{
 	public boolean executeMove(Location to) {
 		justDidADoubleMove = false;
         boolean valid = false;
-		if(validBasicPawnMove(to) || validBasicPawnTake(to)) {
+		if (validBasicPawnMove(to) || validBasicPawnTake(to)) {
 			valid = true;
-		} else if(validPawnDoubleMove(to)) {
+		} else if (validPawnDoubleMove(to)) {
 			justDidADoubleMove = true;
 			valid = true;
-		} else if(validEnPassant(to)) {
+		} else if (validEnPassant(to)) {
 			board.placePiece(new Location(cords.getX(), to.getY()), new EmptyPiece(board, new Location(cords.getX(), to.getY())));
 			valid = true;
-		} else {
-			valid = false;
 		}
+
         if (valid) {
             boolean successful = super.executeMove(to);
             if ((to.getX() == 0 || to.getX() == board.numCols() - 1) && board.doDrawing) {

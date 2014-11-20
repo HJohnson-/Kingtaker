@@ -38,12 +38,14 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected ChessPanel(Board board) {
         this.board = board;
         this.addMouseListener(new HitTestAdapter());
+        this.addComponentListener(new ResizeAdapter());
 
         for (ChessPiece p : board.allPieces()) {
             p.graphics.givePanel(ChessPanel.this);
         }
 
         mainFont = createFont(24);
+        recalculateCellSize();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
@@ -271,8 +273,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         //noinspection SuspiciousNameCombination
         cellHeight = cellWidth;
 
-
-
         for (ChessPiece p : board.allPieces()) {
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth + offset.getX(),
                                                p.cords.getY() * cellHeight + offset.getY());
@@ -310,14 +310,19 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                     selectedPiece = null;
                 }
             }
-            repaint();
+        }
+    }
+
+    class ResizeAdapter extends ComponentAdapter {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            ChessPanel.this.recalculateCellSize();
         }
     }
 
     @Override
     public void run() {
         while (true) {
-            recalculateCellSize();
             repaint();
         }
     }

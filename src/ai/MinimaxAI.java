@@ -25,6 +25,7 @@ public class MinimaxAI extends ChessAI {
 
     @Override
     public Location[] getBestMove(Board board) {
+        System.out.println("Starting AI.");
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<Pair<Location[], Integer>>> results = new LinkedList<Future<Pair<Location[], Integer>>>();
 

@@ -67,7 +67,6 @@ public class GraphicsControl implements Runnable {
         while (!curCords.equals(endCords)) {
             curCords.incrX(animationXStep);
             curCords.incrY(animationYStep);
-            panel.repaint();
 
             try {
                 Thread.sleep(animationTime);

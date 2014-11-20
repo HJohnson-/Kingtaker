@@ -30,7 +30,6 @@ public class MinimaxAI extends ChessAI {
 
         for (ChessPiece piece : board.allPieces()) {
             if (piece.isWhite() == isWhite) {
-                System.out.println("AI piece at " + piece.cords);
                 for (Location l : piece.allPieceMoves()) {
                     if (piece.isValidMove(l)) {
                         Location[] move = {piece.cords, l};
@@ -50,8 +49,6 @@ public class MinimaxAI extends ChessAI {
                 }
             }
         }
-        System.out.println();
-        System.out.println();
 
         int maxScore = Integer.MIN_VALUE;
         List<Location[]> moves = new LinkedList<Location[]>();

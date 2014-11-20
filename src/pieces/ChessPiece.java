@@ -42,9 +42,9 @@ abstract public class ChessPiece {
 	 * @return if move was successful.
 	 */
 	public boolean executeMove(Location targetLocation) {
-        if (board.doDrawing) graphics.setGoal(targetLocation);
 		board.clearSpace(cords);
 		board.placePiece(targetLocation, this);
+        if (board.doDrawing) graphics.setGoal(targetLocation);
 		this.lastTurnMovedOn = board.getController().getCurrentTurn();
 		return true;
 	}

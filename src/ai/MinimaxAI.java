@@ -25,12 +25,12 @@ public class MinimaxAI extends ChessAI {
 
     @Override
     public Location[] getBestMove(Board board) {
+        System.out.println("Starting AI.");
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<Pair<Location[], Integer>>> results = new LinkedList<Future<Pair<Location[], Integer>>>();
 
         for (ChessPiece piece : board.allPieces()) {
             if (piece.isWhite() == isWhite) {
-                System.out.println("AI piece at " + piece.cords);
                 for (Location l : piece.allPieceMoves()) {
                     if (piece.isValidMove(l)) {
                         Location[] move = {piece.cords, l};
@@ -50,8 +50,6 @@ public class MinimaxAI extends ChessAI {
                 }
             }
         }
-        System.out.println();
-        System.out.println();
 
         int maxScore = Integer.MIN_VALUE;
         List<Location[]> moves = new LinkedList<Location[]>();

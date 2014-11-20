@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Handles game logic
@@ -25,6 +27,7 @@ public class GameController {
     private ChessAI ai;
     public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
     private boolean playerIsWhite = true;
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public Board getBoard() {
 		return board;
@@ -149,8 +152,7 @@ public class GameController {
             }
 
             if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
-                Location[] aiMove = ai.getBestMove(board);
-                attemptMove(aiMove[0], aiMove[1], false);
+                executor.submit(new DoAIMove(this));
             }
 
 			return true;
@@ -304,5 +306,21 @@ public class GameController {
         newGame.ai = null;
         newGame.playerIsWhite = this.playerIsWhite;
         return newGame;
+    }
+
+    class DoAIMove implements Runnable {
+
+        private GameController control;
+
+        public DoAIMove(GameController control) {
+            this.control = control;
+        }
+
+        @Override
+        public void run() {
+            Location[] aiMove = control.ai.getBestMove(control.board);
+            control.attemptMove(aiMove[0], aiMove[1], false);
+        }
+
     }
 }

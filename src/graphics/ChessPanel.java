@@ -30,6 +30,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected boolean verticalUI;
     private String code;
     private Font mainFont;
+    private int fps;
+    private boolean drawFPS = true;
 
     /**
      * This constructor sets up a listener to handle the user clicking on the screen.
@@ -125,6 +127,9 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             save.setLocation(x + UIWidth / 2, y);
             drawCentreString("Turn: " + board.getController().getCurrentTurn(), new Location(x, y + UIHeight / 2),
                     UIWidth, UIHeight, g2);
+            if (drawFPS) {
+                drawCentreString("FPS: " + fps, new Location(x, y + 3 * UIHeight / 2), UIWidth, UIHeight, g2);
+            }
         } else {
             x = offset.getX();
             y = offset.getY() * 2 + cellHeight * board.numRows();
@@ -323,7 +328,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     @Override
     public void run() {
         while (true) {
+            long start = System.nanoTime();
             repaint();
+            long elapsed = System.nanoTime() - start;
+            fps = (int) (Math.pow(10, 9) / elapsed);
         }
     }
 

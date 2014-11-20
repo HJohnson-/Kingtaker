@@ -30,6 +30,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected boolean verticalUI;
     private String code;
     private Font mainFont;
+    private Font bigMainFont;
     private int fps;
     private boolean drawFPS = true;
 
@@ -47,6 +48,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
 
         mainFont = createFont(24);
+        bigMainFont = createFont(70);
         recalculateCellSize();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -110,7 +112,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
             Font oldFont = g2.getFont();
-            g2.setFont(createFont(70));
+            g2.setFont(bigMainFont);
             g2.setColor(Color.GRAY);
             drawCentreString(board.getController().getWinner() + " Wins",
                     offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
@@ -198,7 +200,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         LinkedList<ChessPiece> pieces = board.allPieces();
 
         for (ChessPiece p : pieces) {
-
             String imgName = p.image;
             if (p.type == PieceType.BLACK) imgName += "Black";
 

@@ -1,16 +1,46 @@
 package main;
 
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
 /**
  * Class to grab variants from .jar files
  */
 public class VariantFactory {
-	private List<String> unloadedVars;
+
+
+	private static List<String> unloadedVars;
 
 	public VariantFactory() {
-		unloadedVars = findVariants();
+
+		findVariants();
 	}
+
+	class Finder extends SimpleFileVisitor<Path> {
+		private final PathMatcher matcher;
+
+		public Finder() {
+			matcher = FileSystems.getDefault()
+					.getPathMatcher("glob:./variants/*/*variant");
+		}
+
+		private void find(Path file) {
+			Path name = file.getFileName();
+			if (name != null && matcher.matches(name)) {
+				unloadedVars.add(file.toString());
+			}
+		}
+
+		@Override
+		public FileVisitResult visitFile(Path file,
+										 BasicFileAttributes attrs) {
+			find(file);
+			return FileVisitResult.CONTINUE;
+		}
+	}
+
 
 	public ChessVariant getNextVariant() {
 		if(hasNextVariant()) {
@@ -39,9 +69,14 @@ public class VariantFactory {
 		return !unloadedVars.isEmpty();
 	}
 
-	private List<String> findVariants() {
-		//TODO search appropriate directory for variant-files
-		return null;
+	private void findVariants() {
+		try {
+			Files.walkFileTree(Paths.get("."), new Finder());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
+
+

@@ -50,7 +50,7 @@ public class GameController {
         this.gameMode = mode;
 
         if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new MinimaxAI(false, 2);
+            ai = new MinimaxAI(false, 3);
         }
     }
 
@@ -72,7 +72,7 @@ public class GameController {
         this.gameMode = mode;
 
         if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new MinimaxAI(false, 2);
+            ai = new MinimaxAI(false, 3);
         }
 	}
 

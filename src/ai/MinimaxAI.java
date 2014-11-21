@@ -43,7 +43,7 @@ public class MinimaxAI extends ChessAI {
                             pawnPromotion pp = new pawnPromotion(piece);
                             pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
                         }
-                        Searcher s = new Searcher(newBoard, !isWhite, 0, move);
+                        Searcher s = new Searcher(newBoard, !isWhite, move);
                         results.add(executor.submit(s));
                     }
                 }
@@ -81,14 +81,12 @@ public class MinimaxAI extends ChessAI {
 
         private Board searchBoard;
         private boolean checkWhite;
-        private int curDepth;
-        private Location[] previousMove;
+        private Location[] move;
 
-        private Searcher(Board board, boolean checkWhite, int curDepth, Location[] previousMove) {
+        private Searcher(Board board, boolean checkWhite, Location[] move) {
             this.searchBoard = board;
             this.checkWhite = checkWhite;
-            this.curDepth = curDepth;
-            this.previousMove = previousMove;
+            this.move = move;
         }
 
         private int calcBoardVal(Board b) {
@@ -103,8 +101,8 @@ public class MinimaxAI extends ChessAI {
             return sum;
         }
 
-        private Pair<Location[], Integer> doRecursion(Board b, boolean checkingWhite, int curD, Location[] prevMove) {
-            if (curD == maxDepth || b.getController().gameOver()) {
+        private Integer doRecursion(Board b, boolean checkingWhite, int curD, int alpha, int beta) {
+            if (curD <= 0 || b.getController().gameOver()) {
                 int score = calcBoardVal(b);
                 if (b.getController().gameOver()) {
                     if (b.getController().getWinner().equals("White") == isWhite) {
@@ -113,16 +111,14 @@ public class MinimaxAI extends ChessAI {
                         score -= 10000;
                     }
                 }
-                return new Pair<Location[], Integer>(prevMove, score);
+                return score;
             }
 
-            int curScore = (isWhite == checkingWhite) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-            List<Location[]> moves = new LinkedList<Location[]>();
+            Outer:
             for (ChessPiece piece : b.allPieces()) {
                 if (piece.isWhite() == checkingWhite) {
                     for (Location l : piece.allPieceMoves()) {
                         if (piece.isValidMove(l)) {
-                            Location[] move = {piece.cords, l};
                             Board newBoard = b.clone();
 
                             newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
@@ -130,36 +126,26 @@ public class MinimaxAI extends ChessAI {
                                 pawnPromotion pp = new pawnPromotion(piece);
                                 pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
                             }
-                            Pair<Location[], Integer> result = doRecursion(newBoard, !checkingWhite, curD + 1, move);
 
                             if (isWhite == checkingWhite) {
-                                if (result.getObj2() > curScore) {
-                                    curScore = result.getObj2();
-                                    moves.clear();
-                                    moves.add(prevMove);
-                                } else if (result.getObj2() == curScore) {
-                                    moves.add(prevMove);
-                                }
+                                alpha = Math.max(alpha, doRecursion(newBoard, !checkingWhite, curD - 1, alpha, beta));
+                                if (beta <= alpha) break Outer;
                             } else {
-                                if (result.getObj2() < curScore) {
-                                    curScore = result.getObj2();
-                                    moves.clear();
-                                    moves.add(prevMove);
-                                } else if (result.getObj2() == curScore) {
-                                    moves.add(prevMove);
-                                }
+                                beta = Math.min(beta, doRecursion(newBoard, !checkingWhite, curD - 1, alpha, beta));
+                                if (beta <= alpha) break Outer;
                             }
                         }
                     }
                 }
             }
 
-            return new Pair<Location[], Integer>(moves.get((int) Math.floor(Math.random() * moves.size())), curScore);
+            return (isWhite == checkingWhite) ? alpha : beta;
         }
 
         @Override
         public Pair<Location[], Integer> call() {
-            return doRecursion(searchBoard, checkWhite, curDepth, previousMove);
+            Integer score = doRecursion(searchBoard, checkWhite, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            return new Pair<Location[], Integer>(move, score);
         }
 
     }

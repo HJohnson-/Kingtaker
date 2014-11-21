@@ -50,8 +50,4 @@ public class Bishop extends ChessPiece {
 		return "Bishop";
 	}
 
-    @Override
-    public ChessPiece clone() {
-        return new Bishop(board, type, cords.clone());
-    }
 }

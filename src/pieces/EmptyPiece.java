@@ -37,6 +37,6 @@ public class EmptyPiece extends ChessPiece {
 
     @Override
     public ChessPiece clone() {
-        return new EmptyPiece(null, cords.clone());
+        return new EmptyPiece(null, null);
     }
 }

@@ -2,6 +2,7 @@ package BasicChess;
 
 import graphics.tools;
 import main.*;
+import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
 /**

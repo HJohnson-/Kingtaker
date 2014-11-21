@@ -51,8 +51,4 @@ public class Knight extends ChessPiece {
 		return "Knight";
 	}
 
-    @Override
-    public ChessPiece clone() {
-        return new Knight(board, type, cords.clone());
-    }
 }

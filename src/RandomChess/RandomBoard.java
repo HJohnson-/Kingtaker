@@ -4,6 +4,7 @@ import BasicChess.*;
 import main.Board;
 import main.Location;
 import main.PieceType;
+import pieces.ChessPiece;
 
 import java.util.Random;
 
@@ -113,15 +114,21 @@ public class RandomBoard extends Board {
     @Override
     public Board clone() {
         RandomBoard b = new RandomBoard();
-        b.pieces = this.pieces.clone();
-        b.setController(this.getController().clone());
-        b.doDrawing = doDrawing;
-        for (int i = 0; i < b.pieces.length; i++) {
-            for (int j = 0; j < b.pieces.length; j++) {
-                b.pieces[i][j] = b.pieces[i][j].clone();
-                b.pieces[i][j].board = b;
+
+        ChessPiece[][] newPieces = new ChessPiece[this.pieces.length][this.pieces[0].length];
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                newPieces[i][j] = pieces[i][j].clone();
+                newPieces[i][j].board = b;
             }
         }
+        b.pieces = newPieces;
+
+        b.setController(this.getController().clone());
+        b.getController().setBoard(b);
+
+        b.doDrawing = this.doDrawing;
+
         return b;
     }
 

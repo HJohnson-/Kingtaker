@@ -19,14 +19,14 @@ import java.util.concurrent.Executors;
 public class GameController {
 	private boolean isWhitesTurn = true; //white always starts
 	private int currentTurn;
-	private String winner;
-	private boolean gameOver;
+	private String winner = "None";
+	private boolean gameOver = false;
 	private Board board;
 	private String gameVariant;
 	private PieceDecoder decoder;
-    private ChessAI ai;
     public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
     private boolean playerIsWhite = true;
+    private ChessAI ai = new MinimaxAI(!playerIsWhite, 3);
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public Board getBoard() {
@@ -43,21 +43,13 @@ public class GameController {
 	public GameController(Board board, String gameVariant, PieceDecoder decoder, GameMode mode) {
         currentTurn = 1;
 		this.board = board;
-		winner = "None";
-		gameOver = false;
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
         this.gameMode = mode;
-
-        if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new MinimaxAI(false, 3);
-        }
     }
 
 	public GameController(Board board, PieceDecoder decoder, String code, GameMode mode) {
         this.board = board;
-		winner = "None";
-		gameOver = false;
 		this.decoder = decoder;
 		int startOfValue = 4;
 		int endOfValue = code.indexOf('~', startOfValue);
@@ -70,10 +62,6 @@ public class GameController {
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
         this.gameMode = mode;
-
-        if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new MinimaxAI(false, 3);
-        }
 	}
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean whitePieces) {
@@ -320,6 +308,7 @@ public class GameController {
         public void run() {
             Location[] aiMove = control.ai.getBestMove(control.board);
             control.attemptMove(aiMove[0], aiMove[1], false);
+            System.out.println(aiMove[0] + " -> " + aiMove[1]);
         }
 
     }

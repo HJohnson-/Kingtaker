@@ -43,9 +43,4 @@ public class Rook extends ChessPiece {
 		return "Rook";
 	}
 
-    @Override
-    public ChessPiece clone() {
-        return new Rook(board, type, cords.clone());
-    }
-
 }

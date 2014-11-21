@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * Implements the minimax algorithm with the specified look-ahead value.
+ * Implements the minimax algorithm (with alpha-beta pruning) with the specified look-ahead value.
  */
 public class MinimaxAI extends ChessAI {
 
@@ -28,16 +28,17 @@ public class MinimaxAI extends ChessAI {
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<Pair<Location[], Integer>>> results = new LinkedList<Future<Pair<Location[], Integer>>>();
 
+        int numMoves = 0;
+
         for (ChessPiece piece : board.allPieces()) {
             if (piece.isWhite() == isWhite) {
                 for (Location l : piece.allPieceMoves()) {
                     if (piece.isValidMove(l)) {
+                        numMoves++;
                         Location[] move = {piece.cords, l};
                         Board newBoard = board.clone();
-
                         newBoard.doDrawing = false;
                         newBoard.getController().gameMode = GameMode.MULTIPLAYER_LOCAL;
-
                         newBoard.getController().attemptMove(piece.cords, l, false);
                         if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == board.numCols())) {
                             pawnPromotion pp = new pawnPromotion(piece);
@@ -50,12 +51,17 @@ public class MinimaxAI extends ChessAI {
             }
         }
 
+        System.out.println("Starting " + numMoves + " moves.");
+
+        int completed = 0;
         int maxScore = Integer.MIN_VALUE;
         List<Location[]> moves = new LinkedList<Location[]>();
         for (Future<Pair<Location[], Integer>> val : results) {
             Pair<Location[], Integer> result = new Pair<Location[], Integer>(null, 0);
             try {
                 result = val.get();
+                completed++;
+                System.out.println("Completed " + completed + "/" + numMoves);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 continue;
@@ -122,7 +128,7 @@ public class MinimaxAI extends ChessAI {
                             Board newBoard = b.clone();
 
                             newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
-                            if (piece instanceof Pawn && (l.getY() == 0 || l.getY() == b.numCols() - 1)) {
+                            if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == b.numCols() - 1)) {
                                 pawnPromotion pp = new pawnPromotion(piece);
                                 pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
                             }

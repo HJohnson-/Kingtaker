@@ -1,7 +1,6 @@
 package BasicChessTest;
 
 import BasicChess.BasicBoard;
-import BasicChess.King;
 import BasicChess.Rook;
 import main.Location;
 import main.PieceType;

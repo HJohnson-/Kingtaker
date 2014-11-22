@@ -1,9 +1,10 @@
 package pieces;
+
 import graphics.GraphicsControl;
 import graphics.tools;
+import main.Board;
 import main.Location;
 import main.PieceType;
-import main.Board;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

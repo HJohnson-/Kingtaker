@@ -1,8 +1,8 @@
 package BasicChess;
 
-import graphics.tools;
-import main.*;
-import pieces.ChessPiece;
+import main.ChessVariant;
+import main.GameController;
+import main.GameMode;
 import pieces.PieceDecoder;
 
 /**

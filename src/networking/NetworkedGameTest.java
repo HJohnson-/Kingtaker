@@ -1,6 +1,5 @@
 package networking;
 
-import forms.frmVariantChooser;
 import main.*;
 
 import java.io.IOException;

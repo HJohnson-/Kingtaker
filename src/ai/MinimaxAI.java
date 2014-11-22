@@ -5,8 +5,8 @@ import main.Board;
 import main.GameMode;
 import main.GameResult;
 import main.Location;
-import pieces.ChessPiece;
 import pawnPromotion.pawnPromotion;
+import pieces.ChessPiece;
 
 import java.util.LinkedList;
 import java.util.List;

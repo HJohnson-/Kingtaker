@@ -1,6 +1,5 @@
 package main;
 
-import forms.MessageBoxAlert;
 import forms.frmLobby;
 import networking.MessageListener;
 import networking.NetworkingCodes.ClientCommandCode;
@@ -10,8 +9,6 @@ import networking.OpponentMessageSender;
 import networking.ServerMessageSender;
 
 import java.net.InetAddress;
-import java.net.Socket;
-import java.util.Random;
 
 /**
  * Created by jc4512 on 06/11/14.

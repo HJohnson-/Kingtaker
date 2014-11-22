@@ -3,8 +3,6 @@ package main;
 import BasicChess.King;
 import ai.ChessAI;
 import ai.MinimaxAI;
-import networking.NetworkingCodes.ClientCommandCode;
-import networking.ServerMessageSender;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 

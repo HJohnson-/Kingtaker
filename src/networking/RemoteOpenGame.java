@@ -1,6 +1,9 @@
 package networking;
 
-import main.*;
+import main.ChessVariantManager;
+import main.GameLauncher;
+import main.OnlineGameLauncher;
+import main.PieceType;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 

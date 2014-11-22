@@ -1,10 +1,9 @@
 package RandomChess;
 
 import BasicChess.BasicChess;
-import graphics.tools;
-import main.GameController;
-import BasicChess.BasicDecoder;
 import BasicChess.BasicChessFrame;
+import BasicChess.BasicDecoder;
+import main.GameController;
 import main.GameMode;
 
 /**

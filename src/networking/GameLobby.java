@@ -2,7 +2,6 @@ package networking;
 
 import forms.frmLobby;
 import main.ChessVariant;
-import main.ChessVariantManager;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ResponseCode;
 

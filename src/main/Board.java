@@ -4,7 +4,8 @@ import pieces.ChessPiece;
 import pieces.EmptyPiece;
 import pieces.PieceDecoder;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * Stores and manipulates where on the board pieces are. Takes commands from pieces and a GameController, and exposes

@@ -1,17 +1,18 @@
 package pawnPromotion;
 
-import BasicChess.*;
-import graphics.GraphicsControl;
-import main.Location;
+import BasicChess.Bishop;
+import BasicChess.Knight;
+import BasicChess.Queen;
+import BasicChess.Rook;
 import pieces.ChessPiece;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.*;
 
 /**
  * Created by daniel on 14/10/28.

@@ -1,10 +1,9 @@
 package GrandChess;
 
-import graphics.tools;
+import BasicChess.BasicChessFrame;
+import BasicChess.BasicDecoder;
 import main.ChessVariant;
 import main.GameController;
-import BasicChess.BasicDecoder;
-import BasicChess.BasicChessFrame;
 import main.GameMode;
 import pieces.PieceDecoder;
 

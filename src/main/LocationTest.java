@@ -1,8 +1,6 @@
 package main;
 
-import org.junit.After;
 import org.junit.Test;
-import main.Location;
 
 import static org.junit.Assert.*;
 

@@ -4,8 +4,6 @@ import junit.framework.TestCase;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ResponseCode;
 
-import static org.junit.Assert.assertEquals;
-
 public class LocalUserAccountTest extends TestCase {
     private final String testPassword = "123 abc XYZ !$#";
     private final int defaultRating = 1000; //known

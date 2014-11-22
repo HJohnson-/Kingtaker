@@ -1,8 +1,8 @@
 package main;
 
 import BasicChess.BasicChess;
-import RandomChess.RandomChess;
 import GrandChess.GrandChess;
+import RandomChess.RandomChess;
 
 /**
  * Created by hj1012 on 07/11/14.

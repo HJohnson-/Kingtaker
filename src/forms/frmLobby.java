@@ -9,10 +9,7 @@ import networking.NetworkingCodes.ResponseCode;
 import networking.RemoteOpenGame;
 
 import javax.swing.*;
-import javax.swing.event.RowSorterEvent;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;

@@ -3,7 +3,6 @@ package networking;
 import BasicChess.BasicChess;
 import junit.framework.TestCase;
 import networking.NetworkingCodes.ClientCommandCode;
-import networking.NetworkingCodes.ResponseCode;
 
 public class LocalOpenGameTest extends TestCase {
     private final String testPassword = "123 abc XYZ !$#";

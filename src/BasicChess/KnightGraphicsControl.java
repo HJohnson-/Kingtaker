@@ -1,8 +1,6 @@
 package BasicChess;
 
-import graphics.ChessPanel;
 import graphics.GraphicsControl;
-import main.Board;
 import main.Location;
 
 /**

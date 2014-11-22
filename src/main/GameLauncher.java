@@ -13,4 +13,6 @@ abstract public class GameLauncher {
     public abstract boolean userIsWhite();
 
     public abstract void broadcastMove(Location oldL, Location newL, String extra);
+
+    public abstract void broadcastEndGame();
 }

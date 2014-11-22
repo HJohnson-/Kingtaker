@@ -3,6 +3,8 @@ package main;
 import BasicChess.King;
 import ai.ChessAI;
 import ai.MinimaxAI;
+import networking.NetworkingCodes.ClientCommandCode;
+import networking.ServerMessageSender;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -20,7 +22,7 @@ public class GameController {
 	private boolean isWhitesTurn = true; //white always starts
 	private int currentTurn;
 	private String winner = "None";
-	private boolean gameOver = false;
+    private GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
 	private String gameVariant;
 	private PieceDecoder decoder;
@@ -106,7 +108,7 @@ public class GameController {
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
         //Cannot make moves once the game has ended.
-        if (gameOver) return false;
+        if (gameResult != GameResult.IN_PROGRESS) return false;
 
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);
@@ -164,8 +166,11 @@ public class GameController {
 	 * set the game state to over
 	 */
 	protected void endGame() {
-		gameOver = true;
+        gameResult = isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
 		winner = isWhitesTurn ? "White" : "Black";
+        if (gameMode == GameMode.MULTIPLAYER_ONLINE) {
+            GameLauncher.currentGameLauncher.broadcastEndGame();
+        }
 	}
 
 	/**
@@ -253,6 +258,15 @@ public class GameController {
 		return winner;
 	}
 
+    public GameResult getResult() {
+        return gameResult;
+//        if (gameOver) {
+//            return GameResult.IN_PROGRESS;
+//        } else {
+//            return isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
+//        }
+    }
+
 	/**
 	 * advances the turn,changes the turn player
 	 */
@@ -262,7 +276,7 @@ public class GameController {
 	}
 
 	public boolean gameOver() {
-		return gameOver;
+		return gameResult != GameResult.IN_PROGRESS;
 	}
 
 	/**
@@ -290,7 +304,7 @@ public class GameController {
         GameController newGame = new GameController(null, gameVariant, decoder, gameMode);
         newGame.isWhitesTurn = this.isWhitesTurn;
         newGame.currentTurn = this.currentTurn;
-        newGame.gameOver = this.gameOver;
+        newGame.gameResult = this.gameResult;
         newGame.ai = null;
         newGame.playerIsWhite = this.playerIsWhite;
         return newGame;

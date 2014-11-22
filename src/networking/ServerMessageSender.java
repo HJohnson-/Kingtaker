@@ -12,6 +12,10 @@ public class ServerMessageSender implements IMessageSender {
     private final int TIMEOUT_DEFAULT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;
 
+    public void sendMessageAsync(String msg) {
+
+    }
+
     //Send message to server and if flag is set, await a response.
     public String sendMessage(String msg, boolean waitForResponse) {
         return sendMessage(msg, waitForResponse, TIMEOUT_DEFAULT_MS);

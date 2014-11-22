@@ -4,10 +4,10 @@ import main.GameMode;
 import networking.GameLobby;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.util.Random;
 
 /**
  * Created by jc4512 on 15/10/14.
@@ -18,6 +18,11 @@ public class frmMainMenu {
     private JButton btnLocalMP;
     private JButton btnOnlineMP;
     private JButton btnExit;
+    private JLabel lblTitle;
+    private JPanel panButtons;
+    private Timer timer;
+
+    private final String LBLTITLE_TEXT = "KingTaker";
 
     private static JFrame frame = new JFrame("KingTaker");
 
@@ -56,6 +61,27 @@ public class frmMainMenu {
             }
         });
 
+        timer = new Timer(10, new ActionListener() {
+            int iteration = 0;
+            Graphics gr;
+            String characters = "♚♛♜♝♞♟";
+            Font pawnFont = new Font("", Font.PLAIN, 36);
+            Random r = new Random();
+
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (frame.getWidth() > 0) {
+                    gr = panel1.getGraphics();
+                    String piece = characters.charAt(r.nextInt(characters.length())) + "";
+                    gr.setFont(pawnFont);
+                    gr.setColor(r.nextBoolean() ? Color.BLACK : Color.WHITE);
+                    gr.drawString(piece, r.nextInt(frame.getWidth()), r.nextInt(frame.getHeight()));
+
+                    lblTitle.updateUI();
+                }
+            }
+        });
+        timer.start();
     }
 
     private void showLobby() {
@@ -90,4 +116,5 @@ public class frmMainMenu {
         frame.setVisible(true);
         frame.setResizable(false);
     }
+
 }

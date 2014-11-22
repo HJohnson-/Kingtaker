@@ -62,6 +62,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      */
     @Override
     public void paintComponent(Graphics g) {
+        long start = System.nanoTime();
+
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -74,7 +76,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         g2.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
 
         g2.setFont(mainFont);
+
         doDrawing(g2);
+
+        long elapsed = System.nanoTime() - start;
+        fps = (int) (Math.pow(10, 9) / elapsed);
     }
 
     protected Font createFont(int size) {
@@ -345,10 +351,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     @Override
     public void run() {
         while (true) {
-            long start = System.nanoTime();
             repaint();
-            long elapsed = System.nanoTime() - start;
-            fps = (int) (Math.pow(10, 9) / elapsed);
         }
     }
 

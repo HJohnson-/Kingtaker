@@ -61,11 +61,16 @@ public class frmMainMenu {
             }
         });
 
-        timer = new Timer(10, new ActionListener() {
+        timer = new Timer(40, new ActionListener() {
             int iteration = 0;
             Graphics gr;
             String characters = "♚♛♜♝♞♟";
+            Color color1 = new Color(181, 158, 122);
+            Color color2 = new Color(0, 0, 0);
             Font pawnFont = new Font("", Font.PLAIN, 36);
+            Font titleFont1 = new Font("", Font.BOLD, 80);
+            Font titleFont2 = new Font("", Font.BOLD, 78);
+
             Random r = new Random();
 
             @Override
@@ -74,14 +79,33 @@ public class frmMainMenu {
                     gr = panel1.getGraphics();
                     String piece = characters.charAt(r.nextInt(characters.length())) + "";
                     gr.setFont(pawnFont);
-                    gr.setColor(r.nextBoolean() ? Color.BLACK : Color.WHITE);
+                    gr.setColor(r.nextBoolean() ? color1 : color2);
                     gr.drawString(piece, r.nextInt(frame.getWidth()), r.nextInt(frame.getHeight()));
 
-                    lblTitle.updateUI();
+                    gr.setFont(titleFont1);
+                    gr.setColor(Color.gray);
+                    drawCenteredString(LBLTITLE_TEXT, frame.getWidth(), 80, gr);
+                    gr.setFont(titleFont2);
+                    gr.setColor(Color.DARK_GRAY);
+                    drawCenteredString(LBLTITLE_TEXT, frame.getWidth(), 80, gr);
+
+                    btnSinglePlayer.updateUI();
+                    btnLocalMP.updateUI();
+                    btnOnlineMP.updateUI();
+                    btnExit.updateUI();
                 }
+            }
+
+            public void drawCenteredString(String s, int w, int h, Graphics g) {
+                FontMetrics fm = g.getFontMetrics();
+                int x = (w - fm.stringWidth(s)) / 2;
+                int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
+                g.drawString(s, x, y);
             }
         });
         timer.start();
+
+        lblTitle.setText(" ");
     }
 
     private void showLobby() {

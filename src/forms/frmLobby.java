@@ -112,11 +112,10 @@ public class frmLobby {
                     if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
                         frmVariantChooser.showInstance();
                     }
-                    btnCreateRemoveGame.setText(BTN_REMOVEGAME_TEXT);
                 } else {
                     gameLobby.destroyLocalGame();
-                    btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
                 }
+                setBtnCreateRemoveGame(gameLobby.getLocalGame() != null);
             }
         });
         btnLogin.addActionListener(new ActionListener() {
@@ -163,7 +162,7 @@ public class frmLobby {
 
                     //Destroy locally created game.
                     gameLobby.destroyLocalGame();
-                    btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
+                    setBtnCreateRemoveGame(false);
 
                     int response = gameLobby.attemptJoinGameByUsername(hostUsername);
                     if (response == ResponseCode.OK) {
@@ -238,6 +237,9 @@ public class frmLobby {
         setControlsOnServerStatus(user, isConnected);
     }
 
+    public void setBtnCreateRemoveGame(boolean gameExists) {
+        btnCreateRemoveGame.setText(gameExists ? BTN_REMOVEGAME_TEXT : BTN_REMOVEGAME_TEXT);
+    }
 
     // Called when form is instantiated to customise particular GUI controls.
     private void createUIComponents() {

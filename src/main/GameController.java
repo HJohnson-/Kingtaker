@@ -133,7 +133,7 @@ public class GameController {
         if (beingMoved.executeMove(targetLocation)) {
             if (checkMate()) {
 				endGame();
-			} else {
+			} else {    //TODO: stalemate
                 nextPlayersTurn();
             }
 

@@ -1,6 +1,7 @@
 package main;
 
 import forms.MessageBoxAlert;
+import forms.frmLobby;
 import networking.MessageListener;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ClientToClientCode;
@@ -36,8 +37,12 @@ public class OnlineGameLauncher extends GameLauncher {
         this.ipOpponent = ipOpponent;
     }
 
+    //Called on both host and client when a new game has been agreed.
+    //Initialises the game controller and board (host decides layout)
+    //Creates game form and resets the lobby form.
     @Override
     public void launch() {
+        frmLobby.getInstance().setBtnCreateRemoveGame(false);
         variant.game.gameMode = GameMode.MULTIPLAYER_ONLINE;
         MessageListener.getInstance().setGameController(variant.game);
         variant.game.getBoard().setController(variant.game);
@@ -82,6 +87,9 @@ public class OnlineGameLauncher extends GameLauncher {
         }
     }
 
+    //Called by both clients when they detect the game has ended.
+    //This contacts the server which will only act on the result if both
+    //results match.
     public void broadcastEndGame() {
         int winnerParameter = -1;
         switch (variant.game.getResult()) {
@@ -118,6 +126,7 @@ public class OnlineGameLauncher extends GameLauncher {
         this.opponentName = opponentName;
     }
 
+    //TODO: handle this properly. Send a report to the server and offer to complete the game with AI?
     private void handleRemoteUserDisconnection() {
         System.out.println("Cannot connect to opponent!");
 

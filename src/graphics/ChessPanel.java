@@ -105,7 +105,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         int plyMarkX = (int) (end.getX() == 0 ? end.getX() : start.getX());
         g2.fillRect(plyMarkX, offset.getY(), offset.getX(), board.numRows() * cellHeight);
 
-        if (board.getController().gameOver()) {
+        String gameResultString = getGameResultString(board.getController().getResult());
+        if (gameResultString != null) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
             g2.setColor(Color.GREEN);
             g2.fillRect(offset.getX(), offset.getY(), cellWidth * board.numCols(), cellHeight * board.numRows());
@@ -114,10 +115,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             Font oldFont = g2.getFont();
             g2.setFont(bigMainFont);
             g2.setColor(Color.GRAY);
-            drawCentreString(board.getController().getWinner() + " Wins",
+            drawCentreString(gameResultString,
                     offset, cellWidth * board.numCols(), cellHeight * board.numRows(), g2);
             g2.setFont(oldFont);
         }
+
 
         int x, y;
 
@@ -286,6 +288,20 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             p.graphics.totalSteps = cellWidth / 2;
             p.graphics.animationTime = 1500 / cellWidth;
         }
+    }
+
+    //Returns the appropriate message to display based on the game's result
+    //or null if the game is still in progress.
+    private String getGameResultString(GameResult gameResult) {
+        switch (board.getController().getResult()) {
+            case DRAW:
+                return "Stalemate! It is a draw";
+            case WHITE_WIN:
+                return "Checkmate! White wins";
+            case WHITE_LOSS:
+                return "Checkmate! Black wins";
+        }
+        return null;
     }
 
     class HitTestAdapter extends MouseAdapter {

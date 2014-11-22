@@ -21,7 +21,6 @@ import java.util.concurrent.Executors;
 public class GameController {
 	private boolean isWhitesTurn = true; //white always starts
 	private int currentTurn;
-	private String winner = "None";
     private GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
 	private String gameVariant;
@@ -167,7 +166,6 @@ public class GameController {
 	 */
 	protected void endGame() {
         gameResult = isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
-		winner = isWhitesTurn ? "White" : "Black";
         if (gameMode == GameMode.MULTIPLAYER_ONLINE) {
             GameLauncher.currentGameLauncher.broadcastEndGame();
         }
@@ -254,17 +252,8 @@ public class GameController {
 		return isWhitesTurn;
 	}
 
-	public String getWinner() {
-		return winner;
-	}
-
     public GameResult getResult() {
         return gameResult;
-//        if (gameOver) {
-//            return GameResult.IN_PROGRESS;
-//        } else {
-//            return isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
-//        }
     }
 
 	/**
@@ -273,10 +262,6 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
-	}
-
-	public boolean gameOver() {
-		return gameResult != GameResult.IN_PROGRESS;
 	}
 
 	/**

@@ -314,7 +314,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
          */
         @Override
         public void mousePressed(MouseEvent e) {
-            if (!animating && !board.getController().gameOver()) {
+            if (!animating && board.getController().getResult() == GameResult.IN_PROGRESS) {
                 int x = (e.getX() - offset.getX()) / cellWidth;
                 int y = (e.getY() - offset.getY()) / cellHeight;
                 Location l = new Location(x, y);

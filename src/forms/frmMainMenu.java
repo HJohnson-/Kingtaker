@@ -19,7 +19,7 @@ public class frmMainMenu {
     private JButton btnOnlineMP;
     private JButton btnExit;
 
-    private static JFrame frame = new JFrame("frmMainMenu");
+    private static JFrame frame = new JFrame("KingTaker");
 
     //Form initialisation, specifying actions for form events
     public frmMainMenu() {

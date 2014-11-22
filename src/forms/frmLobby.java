@@ -19,7 +19,7 @@ import java.util.List;
  * Created by jc4512 on 28/10/14.
  */
 public class frmLobby {
-    private final JFrame frame = new JFrame("frmLobby");
+    private final JFrame frame = new JFrame("Online Game Lobby");
     private JPanel panel;
     private JTextField txtUsername;
     private JPasswordField txtPassword;

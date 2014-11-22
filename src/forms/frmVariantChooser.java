@@ -43,7 +43,7 @@ public class frmVariantChooser {
     }
 
     private frmVariantChooser() {
-        final JFrame frame = new JFrame("frmVariantChooser");
+        final JFrame frame = new JFrame("Choose a variant...");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.pack();

@@ -3,6 +3,7 @@ package ai;
 import BasicChess.Pawn;
 import main.Board;
 import main.GameMode;
+import main.GameResult;
 import main.Location;
 import pieces.ChessPiece;
 import pawnPromotion.pawnPromotion;
@@ -17,6 +18,9 @@ import java.util.concurrent.*;
 public class MinimaxAI extends ChessAI {
 
     protected int maxDepth;
+    private final int WIN_SCORE = 10000;
+    private final int LOSS_SCORE = -10000;
+    private final int DRAW_SCORE = -5000;
 
     public MinimaxAI(boolean isWhite, int depth) {
         super(isWhite);
@@ -108,14 +112,19 @@ public class MinimaxAI extends ChessAI {
         }
 
         private Integer doRecursion(Board b, boolean checkingWhite, int curD, int alpha, int beta) {
-            if (curD <= 0 || b.getController().gameOver()) {
+            GameResult gameResult = b.getController().getResult();
+            if (curD <= 0 || gameResult != GameResult.IN_PROGRESS) {
                 int score = calcBoardVal(b);
-                if (b.getController().gameOver()) {
-                    if (b.getController().getWinner().equals("White") == isWhite) {
-                        score += 10000;
-                    } else {
-                        score -= 10000;
-                    }
+                switch (gameResult) {
+                    case WHITE_WIN:
+                        score += isWhite ? WIN_SCORE : LOSS_SCORE;
+                        break;
+                    case WHITE_LOSS:
+                        score += isWhite ? LOSS_SCORE : WIN_SCORE;
+                        break;
+                    case DRAW:
+                        score += DRAW_SCORE;
+                        break;
                 }
                 return score;
             }

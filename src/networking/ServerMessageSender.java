@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class ServerMessageSender implements IMessageSender {
 
-    private final String IP_STRING = "line20.doc.ic.ac.uk";
+    private final String IP_STRING = "corona10.doc.ic.ac.uk";
     private final int PORT = 4444;
     private final int TIMEOUT_DEFAULT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;

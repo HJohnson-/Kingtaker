@@ -9,7 +9,11 @@ import networking.NetworkingCodes.ResponseCode;
 import networking.RemoteOpenGame;
 
 import javax.swing.*;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -221,6 +225,7 @@ public class frmLobby {
     // Enable user to create/remove their open game with the JButton.
     public void setOpenGamesAndServerStatus(List<RemoteOpenGame> list, boolean isConnected, LocalUserAccount user) {
         tblLobbyModel.getDataVector().removeAllElements();
+        tblLobbyModel.fireTableDataChanged();
         for (RemoteOpenGame game : list) {
             ChessVariant variant = ChessVariantManager.getInstance().getVariantByID(game.variantId);
             if (variant != null) {
@@ -243,12 +248,14 @@ public class frmLobby {
 
 
         tblLobbyModel = new DefaultTableModel(null, new String[]{"Variant", "User", "ELO Rating"});
+        final TableRowSorter<DefaultTableModel> tblLobbySorter = new TableRowSorter<DefaultTableModel>(tblLobbyModel);
         tblLobby = new JTable(tblLobbyModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             };
         };
+        tblLobby.setRowSorter(tblLobbySorter);
         tblLobby.setRowHeight(30);
         tblLobby.getTableHeader().setReorderingAllowed(false);
 

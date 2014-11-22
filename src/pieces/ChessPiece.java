@@ -35,6 +35,21 @@ abstract public class ChessPiece {
         }
     }
 
+	public ChessPiece(Board board, PieceType type, Location cords) {
+		this.type = type;
+		this.board = board;
+		this.cords = cords;
+		this.image = null;
+
+		lastTurnMovedOn = 0;
+
+		if (cords != null) {
+			graphics = new GraphicsControl(cords, cords);
+		}
+	}
+
+
+
 	/**
 	 * Assumes move is valid. Behaviour undefined and can be freely overwritten by a piece.
 	 * @param targetLocation location that represents the move the piece is going to make. Usually the space it will

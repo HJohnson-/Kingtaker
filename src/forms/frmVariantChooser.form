@@ -55,7 +55,10 @@
                 <constraints>
                   <splitpane position="right"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <lineWrap value="true"/>
+                  <wrapStyleWord value="true"/>
+                </properties>
               </component>
             </children>
           </splitpane>

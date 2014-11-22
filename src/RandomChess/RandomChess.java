@@ -24,7 +24,7 @@ public class RandomChess extends BasicChess {
 
     @Override
     public String getDescription() {
-        return "[random chess description]";
+        return "Otherwise known as Fischer Random Chess, this variant employs the same board and pieces as standard chess; however, the starting position of the pieces on the players' home ranks is randomized. The name \"Chess960\" is derived from the number of possible starting positions. The random setup renders the prospect of obtaining an advantage through the memorization of opening lines impracticable, compelling players to rely on their talent and creativity.";
     }
 
 	public RandomChess(){

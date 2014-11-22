@@ -22,7 +22,7 @@ public class BasicChess extends ChessVariant {
 
     @Override
     public String getDescription() {
-        return "[brief chess rules]";
+        return "Standard chess rules, as governed by the World Chess Organisation. Basic moves, as well as en passant, castling and pawn promotion are valid. For an overview, read http://en.wikipedia.org/wiki/Rules_of_chess";
     }
 
     @Override

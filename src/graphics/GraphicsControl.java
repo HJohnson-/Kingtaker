@@ -11,8 +11,7 @@ import java.util.concurrent.Executors;
 public class GraphicsControl implements Runnable {
 
     protected Location curCords, endCords;
-    protected int totalSteps = 25;
-    protected int animationTime = 50;
+    protected int animationTime = 1000;
     public ChessPanel panel;
 
     /**
@@ -56,8 +55,11 @@ public class GraphicsControl implements Runnable {
      */
     @Override
     public void run() {
-        int animationXStep = (endCords.getX() - curCords.getX()) / totalSteps;
-        int animationYStep = (endCords.getY() - curCords.getY()) / totalSteps;
+
+        float maxDistance = Math.max(Math.abs(endCords.getX() - curCords.getX()), Math.abs(endCords.getY() - curCords.getY()));
+
+        int animationXStep = (int) Math.signum(endCords.getX() - curCords.getX());
+        int animationYStep = (int) Math.signum(endCords.getY() - curCords.getY());
 
         panel.animating = true;
 
@@ -66,7 +68,7 @@ public class GraphicsControl implements Runnable {
             curCords.incrY(animationYStep);
 
             try {
-                Thread.sleep(animationTime);
+                Thread.sleep((int) Math.ceil(animationTime / maxDistance));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

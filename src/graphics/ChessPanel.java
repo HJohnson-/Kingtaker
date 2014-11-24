@@ -263,7 +263,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void doDrawing(Graphics2D g2) {
-        //drawGrid(g2);
+        drawGrid(g2);
         drawPieces(g2);
         drawUI(g2);
     }
@@ -342,6 +342,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         while (true) {
             repaint();
         }

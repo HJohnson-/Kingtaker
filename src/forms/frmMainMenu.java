@@ -61,15 +61,15 @@ public class frmMainMenu {
             }
         });
 
-        timer = new Timer(40, new ActionListener() {
+        timer = new Timer(1, new ActionListener() {
             int iteration = 0;
             Graphics gr;
             String characters = "♚♛♜♝♞♟";
             Color color1 = new Color(181, 158, 122);
             Color color2 = new Color(0, 0, 0);
             Font pawnFont = new Font("", Font.PLAIN, 36);
-            Font titleFont1 = new Font("", Font.BOLD, 80);
-            Font titleFont2 = new Font("", Font.BOLD, 78);
+            Font titleFont1 = new Font("", Font.BOLD, 78);
+            Font titleFont2 = new Font("", Font.BOLD, 75);
 
             Random r = new Random();
 
@@ -77,16 +77,17 @@ public class frmMainMenu {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (frame.getWidth() > 0) {
                     gr = panel1.getGraphics();
+
                     String piece = characters.charAt(r.nextInt(characters.length())) + "";
                     gr.setFont(pawnFont);
                     gr.setColor(r.nextBoolean() ? color1 : color2);
                     gr.drawString(piece, r.nextInt(frame.getWidth()), r.nextInt(frame.getHeight()));
 
                     gr.setFont(titleFont1);
-                    gr.setColor(Color.gray);
+                    gr.setColor(Color.DARK_GRAY);
                     drawCenteredString(LBLTITLE_TEXT, frame.getWidth(), 80, gr);
                     gr.setFont(titleFont2);
-                    gr.setColor(Color.DARK_GRAY);
+                    gr.setColor(Color.WHITE);
                     drawCenteredString(LBLTITLE_TEXT, frame.getWidth(), 80, gr);
 
                     btnSinglePlayer.updateUI();

@@ -16,4 +16,8 @@ public abstract class ChessAI {
 
     abstract public Location[] getBestMove(Board board);
 
+    public double pcComplete() {
+        return 0.0;
+    }
+
 }

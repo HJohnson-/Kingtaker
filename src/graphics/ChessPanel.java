@@ -19,7 +19,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
     protected Board board;
     protected ChessPiece selectedPiece = null;
-    protected int UIWidth = 200;
     protected int UIHeight = 100;
     protected Location offset = new Location(20, 20);
     public int cellWidth;
@@ -27,7 +26,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     public boolean animating = false;
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
-    protected boolean verticalUI;
     private String code;
     private Font mainFont;
     private Font bigMainFont;
@@ -131,25 +129,29 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         g2.setPaint(Color.WHITE);
 
-        if (verticalUI) {
-            x = offset.getX() * 2 + cellWidth * board.numCols();
-            y = offset.getY();
-            save.setLocation(x + UIWidth / 2, y);
-            drawCentreString("Turn: " + board.getController().getCurrentTurn(), new Location(x, y + UIHeight / 2),
-                    UIWidth, UIHeight, g2);
-            if (drawFPS) {
-                drawCentreString("FPS: " + fps, new Location(x, y + 3 * UIHeight / 2), UIWidth, UIHeight, g2);
-            }
-        } else {
-            x = offset.getX();
-            y = offset.getY() * 2 + cellHeight * board.numRows();
-            save.setLocation(x, y + UIHeight / 2);
-            g2.drawString("Turn: " + board.getController().getCurrentTurn(), x + 10 + UIWidth / 2, y + 10);
-        }
+        x = offset.getX();
+        y = offset.getY() * 2 + cellHeight * board.numRows();
 
+        g2.drawString("Turn: " + board.getController().getCurrentTurn(), x + 10 + cellWidth * 2, y + 10);
+
+        //Save and load buttons.
+        save.setLocation(x, y + UIHeight / 2);
         load.setLocation(x, y);
-        load.setSize(UIWidth / 2, UIHeight / 2);
-        save.setSize(UIWidth / 2, UIHeight / 2);
+        load.setSize(cellWidth * 2, UIHeight / 2);
+        save.setSize(cellWidth * 2, UIHeight / 2);
+
+        //AI progress bar.
+        if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
+            int newX = offset.getX() + (cellWidth * board.numCols() / 2);
+
+            g2.setPaint(Color.RED.darker().darker());
+            g2.fillRect(newX, y + 10, (cellWidth * board.numCols() / 2), 20);
+
+            double completed = board.getController().getAI().pcComplete();
+
+            g2.setPaint(Color.GREEN.darker());
+            g2.fillRect(newX, y + 10, (int) (completed * cellWidth * board.numCols() / 2), 20);
+        }
 
         load.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -272,16 +274,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     public void recalculateCellSize() {
         while (animating) Thread.yield();
 
-        int boardWidth = (int) getSize().getWidth() - UIWidth - offset.getX() * 2;
+        int boardWidth = (int) getSize().getWidth() - offset.getX() * 2;
         int boardHeight = (int) getSize().getHeight() - UIHeight - offset.getY() * 2;
-
-        if (boardWidth > boardHeight) {
-            boardHeight = (int) getSize().getHeight() - offset.getY() * 2;
-            verticalUI = true;
-        } else {
-            boardWidth = (int) getSize().getWidth() - offset.getX() * 2;
-            verticalUI = false;
-        }
 
         cellWidth = Math.round(Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2;
         //noinspection SuspiciousNameCombination
@@ -291,8 +285,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth + offset.getX(),
                                                p.cords.getY() * cellHeight + offset.getY());
             p.graphics.endCords = p.graphics.curCords.clone();
-            p.graphics.totalSteps = cellWidth / 2;
-            p.graphics.animationTime = 1500 / cellWidth;
         }
     }
 

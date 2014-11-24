@@ -21,6 +21,8 @@ public class MinimaxAI extends ChessAI {
     private final int WIN_SCORE = 10000;
     private final int LOSS_SCORE = -10000;
     private final int DRAW_SCORE = -5000;
+    private double numMoves = 1;
+    private double completed = 0;
 
     public MinimaxAI(boolean isWhite, int depth) {
         super(isWhite);
@@ -28,11 +30,16 @@ public class MinimaxAI extends ChessAI {
     }
 
     @Override
+    public double pcComplete() {
+        return completed / numMoves;
+    }
+
+    @Override
     public Location[] getBestMove(Board board) {
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<Pair<Location[], Integer>>> results = new LinkedList<Future<Pair<Location[], Integer>>>();
 
-        int numMoves = 0;
+        numMoves = 0;
 
         for (ChessPiece piece : board.allPieces()) {
             if (piece.isWhite() == isWhite) {
@@ -55,9 +62,7 @@ public class MinimaxAI extends ChessAI {
             }
         }
 
-        System.out.println("Starting " + numMoves + " moves.");
-
-        int completed = 0;
+        completed = 0;
         int maxScore = Integer.MIN_VALUE;
         List<Location[]> moves = new LinkedList<Location[]>();
         for (Future<Pair<Location[], Integer>> val : results) {
@@ -65,7 +70,6 @@ public class MinimaxAI extends ChessAI {
             try {
                 result = val.get();
                 completed++;
-                System.out.println("Completed " + completed + "/" + numMoves);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 continue;
@@ -84,6 +88,7 @@ public class MinimaxAI extends ChessAI {
 
         executor.shutdown();
 
+        completed = 0;
         return moves.get((int) Math.floor(Math.random() * moves.size()));
     }
 

@@ -63,6 +63,10 @@ public class GameController {
         this.gameMode = mode;
 	}
 
+    public ChessAI getAI() {
+        return ai;
+    }
+
 	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean whitePieces) {
 		return getAllValidMoves(true, whitePieces);
 	}

@@ -1,4 +1,4 @@
-package GrandChess;
+package variants.GrandChess;
 
 import main.Board;
 import main.Location;

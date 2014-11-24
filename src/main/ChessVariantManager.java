@@ -1,12 +1,11 @@
 package main;
 
 import BasicChess.BasicChess;
-import GrandChess.GrandChess;
-import RandomChess.RandomChess;
+import variants.GrandChess.Grandvar;
+import variants.RandomChess.Random960var;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +26,7 @@ public class ChessVariantManager {
         //TODO read in .JAR files instead
         variants = new HashMap<Integer, ChessVariant>();
 
-        ChessVariant[] cvs = {new BasicChess(), new RandomChess(), new GrandChess()};
+        ChessVariant[] cvs = {new BasicChess(), new Random960var(), new Grandvar()};
         for (ChessVariant var : cvs) {
             variants.put(var.getVariationID(), var);
         }

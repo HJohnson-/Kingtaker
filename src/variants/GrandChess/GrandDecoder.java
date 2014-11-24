@@ -1,11 +1,10 @@
-package GrandChess;
+package variants.GrandChess;
 
 import BasicChess.*;
 import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
-import pieces.PieceDecoder;
 
 /**
  * Created by hj1012 on 03/11/14.

@@ -1,6 +1,5 @@
-package GrandChess;
+package variants.GrandChess;
 
-import graphics.tools;
 import main.ChessVariant;
 import main.GameController;
 import BasicChess.BasicDecoder;
@@ -11,7 +10,7 @@ import pieces.PieceDecoder;
 /**
  * Created by hj1012 on 03/11/14.
  */
-public class GrandChess extends ChessVariant {
+public class Grandvar extends ChessVariant {
     @Override
     public int getVariationID() {
         return 2;
@@ -33,17 +32,17 @@ public class GrandChess extends ChessVariant {
         return new GrandDecoder();
     }
 
-    public GrandChess() {
+    public Grandvar() {
         this(GameMode.MULTIPLAYER_LOCAL);
     }
 
-    public GrandChess(GameMode mode) {
+    public Grandvar(GameMode mode) {
 		game = new GameController(new GrandBoard(), "Grand", new BasicDecoder(), mode);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
 
-	public GrandChess(GameController game) {
+	public Grandvar(GameController game) {
 		this.game = game;
 		this.game.getBoard().setController(game);
 	}
@@ -56,6 +55,6 @@ public class GrandChess extends ChessVariant {
 
     @Override
     public ChessVariant recreate(GameMode mode) {
-        return new GrandChess(mode);
+        return new Grandvar(mode);
     }
 }

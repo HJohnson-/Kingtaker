@@ -1,4 +1,4 @@
-package RandomChess;
+package variants.RandomChess;
 
 import main.Location;
 import org.junit.Test;

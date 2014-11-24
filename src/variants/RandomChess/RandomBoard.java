@@ -1,4 +1,4 @@
-package RandomChess;
+package variants.RandomChess;
 
 import BasicChess.*;
 import main.Board;

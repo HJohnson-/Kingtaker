@@ -3,6 +3,7 @@ package main;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -10,11 +11,12 @@ import java.util.List;
  */
 public class VariantFactory {
 
-
+	private static final String varDirectory = "";
+	private static final String varPattern = "**var.java";
 	private static List<String> unloadedVars;
 
 	public VariantFactory() {
-
+		unloadedVars = new LinkedList<String>();
 		findVariants();
 	}
 
@@ -23,7 +25,7 @@ public class VariantFactory {
 
 		public Finder() {
 			matcher = FileSystems.getDefault()
-					.getPathMatcher("glob:./variants/*/*variant");
+					.getPathMatcher("glob:"+varPattern);
 		}
 
 		private void find(Path file) {
@@ -44,7 +46,7 @@ public class VariantFactory {
 
 	public ChessVariant getNextVariant() {
 		if(hasNextVariant()) {
-			String nextVarName = unloadedVars.remove(0);
+			String nextVarName = reformatName(unloadedVars.remove(0));
 			ChessVariant result = null;
 			try {
 				Class implClass = Class.forName(nextVarName);
@@ -65,18 +67,40 @@ public class VariantFactory {
 		}
 	}
 
+	public String getNextVariantName() {
+		if(hasNextVariant()) {
+			return unloadedVars.get(0);
+		} else {
+			return null;
+		}
+	}
+
 	public boolean hasNextVariant() {
 		return !unloadedVars.isEmpty();
 	}
 
 	private void findVariants() {
 		try {
-			Files.walkFileTree(Paths.get("."), new Finder());
+			Files.walkFileTree(Paths.get(varDirectory), new Finder());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public static void main(String[] args) {
+		VariantFactory var = new VariantFactory();
+		while(var.hasNextVariant()) {
+			System.out.println("I found a variant called:" + reformatName(var.getNextVariantName()));
+			ChessVariant extremelyDangerous = var.getNextVariant();
+			extremelyDangerous.drawBoard();
+		}
+	}
+
+	private static String reformatName(String original) {
+		String plant = original.replaceAll("/", ".");
+		return plant.substring(plant.indexOf(".vari")+1, plant.indexOf(".java"));
+
+	}
 }
 
 

@@ -127,9 +127,8 @@ public class GameController {
             System.out.println("Invalid move: you cannot control this colour");
 			return false;
         }
-		//TODO CHANGE COMMENT TO REMOVE TODO STATEMENT
 
-        //Executes move, unless the piece... TODO: why is this a boolean? Does it always return true!
+        //Executes move, unless the piece has a final objection (useful for some variants)
 		//If checkmate is detected, the game ends, otherwise the active player is switched.
         //If the move was executed locally, it is sent to the remote player via launcher.
         if (beingMoved.executeMove(targetLocation)) {

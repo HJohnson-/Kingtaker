@@ -1,6 +1,8 @@
 package main;
 
 import BasicChess.King;
+import variants.BasicChess.King;
+import ai.BasicAI;
 import ai.ChessAI;
 import ai.MinimaxAI;
 import pieces.ChessPiece;
@@ -127,6 +129,7 @@ public class GameController {
             System.out.println("Invalid move: you cannot control this colour");
 			return false;
         }
+		//TODO CHANGE COMMENT TO REMOVE TODO STATEMENT
 
         //Executes move, unless the piece... TODO: why is this a boolean? Does it always return true!
 		//If checkmate is detected, the game ends, otherwise the active player is switched.

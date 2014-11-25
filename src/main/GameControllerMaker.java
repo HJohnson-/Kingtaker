@@ -1,10 +1,10 @@
 package main;
 
-import BasicChess.BasicBoard;
-import BasicChess.BasicDecoder;
-import GrandChess.GrandBoard;
-import GrandChess.GrandDecoder;
-import RandomChess.RandomBoard;
+import variants.BasicChess.BasicBoard;
+import variants.BasicChess.BasicDecoder;
+import variants.GrandChess.GrandBoard;
+import variants.GrandChess.GrandDecoder;
+import variants.RandomChess.RandomBoard;
 
 /**
  * Created by hj1012 on 07/11/14.

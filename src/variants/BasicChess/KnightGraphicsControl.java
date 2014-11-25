@@ -1,4 +1,4 @@
-package BasicChess;
+package variants.BasicChess;
 
 import graphics.GraphicsControl;
 import main.Location;

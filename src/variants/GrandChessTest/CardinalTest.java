@@ -1,7 +1,7 @@
-package GrandChessTest;
+package variants.GrandChessTest;
 
-import GrandChess.Cardinal;
-import GrandChess.GrandBoard;
+import variants.GrandChess.Cardinal;
+import variants.GrandChess.GrandBoard;
 import main.Location;
 import main.PieceType;
 import org.junit.Test;

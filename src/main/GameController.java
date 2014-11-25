@@ -298,6 +298,19 @@ public class GameController {
         return newGame;
     }
 
+	public void load(String code) {
+		int startOfValue = 4;
+		int endOfValue = code.indexOf('~', startOfValue);
+		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
+		startOfValue = endOfValue+3;
+		endOfValue = code.indexOf('$', startOfValue);
+		gameID = Integer.decode(code.substring(startOfValue, endOfValue));
+		startOfValue = endOfValue+1;
+		endOfValue = code.indexOf('#', startOfValue);
+		String pieces = code.substring(startOfValue, endOfValue);
+		board.populateFromCode(pieces, decoder);
+	}
+
     class DoAIMove implements Runnable {
 
         private GameController control;

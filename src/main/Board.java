@@ -165,6 +165,9 @@ abstract public class Board {
 	public int numCols() { return pieces[0].length; }
 
 	public void populateFromCode(String code, PieceDecoder decoder) {
+		for (ChessPiece[] row : pieces) {
+			Arrays.fill(row, new EmptyPiece(this, null));
+		}
 		int startOfValue = 0;
 		int endOfValue = code.indexOf('|', startOfValue+1)+1;
 		while(endOfValue > 0) {

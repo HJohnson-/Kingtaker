@@ -1,13 +1,13 @@
-package GrandChess;
+package variants.GrandChess;
 
-import BasicChess.BasicDecoder;
+import variants.BasicChess.BasicDecoder;
 import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
 
 /**
- * Created by hj1012 on 03/11/14.
+ * A custom decoder for the grand chess game variant because it has custom pieces
  */
 public class GrandDecoder extends BasicDecoder {
 	@Override

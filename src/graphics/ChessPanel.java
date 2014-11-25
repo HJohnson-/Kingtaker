@@ -157,10 +157,9 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             public void actionPerformed(ActionEvent e) {
                 int start = code.indexOf("V:")+2;
                 int end = code.indexOf('$',start);
-                String variant = code.substring(start, end);
-                GameController gameState = GameControllerMaker.get(variant, code);
-                ChessVariant game = ChessVariantMaker.get(variant, gameState);
-                game.drawBoard();
+                int var_id = Integer.decode(code.substring(start, end));
+				GameController gc = board.getController();
+				gc.load(code);
             }
         });
 
@@ -263,7 +262,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void doDrawing(Graphics2D g2) {
-        //drawGrid(g2);
+        drawGrid(g2);
         drawPieces(g2);
         drawUI(g2);
     }
@@ -342,6 +341,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         while (true) {
             repaint();
         }

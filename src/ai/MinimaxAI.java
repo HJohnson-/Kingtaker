@@ -1,6 +1,6 @@
 package ai;
 
-import BasicChess.Pawn;
+import variants.BasicChess.Pawn;
 import main.Board;
 import main.GameMode;
 import main.GameResult;
@@ -164,6 +164,7 @@ public class MinimaxAI extends ChessAI {
 
         @Override
         public Pair<Location[], Integer> call() {
+            Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
             Integer score = doRecursion(searchBoard, checkWhite, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE);
             return new Pair<Location[], Integer>(move, score);
         }

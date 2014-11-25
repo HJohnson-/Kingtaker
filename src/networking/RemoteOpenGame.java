@@ -1,9 +1,9 @@
 package networking;
 
-import main.ChessVariantManager;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
 import main.PieceType;
+import main.VariantFactory;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -51,7 +51,7 @@ public class RemoteOpenGame {
                 String boardState = fields[2];
 
                 OnlineGameLauncher launcher = new OnlineGameLauncher(
-                        ChessVariantManager.getInstance().getVariantByID(variantId),
+                        VariantFactory.getInstance().getVariantByID(variantId),
                         ip,
                         hostUsername,
                         hostRating

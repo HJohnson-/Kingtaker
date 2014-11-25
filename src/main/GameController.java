@@ -1,10 +1,10 @@
 package main;
 
-import BasicChess.King;
 import ai.ChessAI;
 import ai.MinimaxAI;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
+import variants.BasicChess.King;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,7 +21,7 @@ public class GameController {
 	private int currentTurn;
     private GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
-	private String gameVariant;
+	private int gameID;
 	private PieceDecoder decoder;
     public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
     private boolean playerIsWhite = true;
@@ -39,10 +39,10 @@ public class GameController {
 	/**
 	 * @param board board
 	 */
-	public GameController(Board board, String gameVariant, PieceDecoder decoder, GameMode mode) {
+	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode) {
         currentTurn = 1;
 		this.board = board;
-		this.gameVariant = gameVariant;
+		this.gameID = gameID;
 		this.decoder = decoder;
         this.gameMode = mode;
     }
@@ -55,7 +55,7 @@ public class GameController {
 		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+3;
 		endOfValue = code.indexOf('$', startOfValue);
-		gameVariant = code.substring(startOfValue, endOfValue);
+		gameID = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+1;
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
@@ -127,6 +127,7 @@ public class GameController {
             System.out.println("Invalid move: you cannot control this colour");
 			return false;
         }
+		//TODO CHANGE COMMENT TO REMOVE TODO STATEMENT
 
         //Executes move, unless the piece... TODO: why is this a boolean? Does it always return true!
 		//If checkmate is detected, the game ends, otherwise the active player is switched.
@@ -278,7 +279,7 @@ public class GameController {
 	 */
 	public String toCode() {
 		StringBuilder code = new StringBuilder();
-		code.append("#$").append("T:").append(currentTurn).append("~").append("V:").append(gameVariant).append("$");
+		code.append("#$").append("T:").append(currentTurn).append("~").append("V:").append(gameID).append("$");
 		for(ChessPiece p : board.allPieces()) {
 			code.append(p.toCode());
 		}
@@ -288,7 +289,7 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        GameController newGame = new GameController(null, gameVariant, decoder, gameMode);
+        GameController newGame = new GameController(null, gameID, decoder, gameMode);
         newGame.isWhitesTurn = this.isWhitesTurn;
         newGame.currentTurn = this.currentTurn;
         newGame.gameResult = this.gameResult;
@@ -296,6 +297,19 @@ public class GameController {
         newGame.playerIsWhite = this.playerIsWhite;
         return newGame;
     }
+
+	public void load(String code) {
+		int startOfValue = 4;
+		int endOfValue = code.indexOf('~', startOfValue);
+		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
+		startOfValue = endOfValue+3;
+		endOfValue = code.indexOf('$', startOfValue);
+		gameID = Integer.decode(code.substring(startOfValue, endOfValue));
+		startOfValue = endOfValue+1;
+		endOfValue = code.indexOf('#', startOfValue);
+		String pieces = code.substring(startOfValue, endOfValue);
+		board.populateFromCode(pieces, decoder);
+	}
 
     class DoAIMove implements Runnable {
 

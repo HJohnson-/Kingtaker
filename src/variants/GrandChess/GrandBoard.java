@@ -1,91 +1,116 @@
-package BasicChess;
+package variants.GrandChess;
+
+import variants.BasicChess.*;
 import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
+import pieces.EmptyPiece;
+
+import java.util.Arrays;
 
 /**
- * Created by crix9 on 15/10/2014.
+ * Created by hj1012 on 03/11/14.
  */
-public class BasicBoard extends Board {
+public class GrandBoard extends Board {
 
-	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.
-	public boolean initializeBoard(){
+	public GrandBoard() {
+		this(10,10);
+	}
 
+	public GrandBoard(int rows, int cols) {
+		pieces = new ChessPiece[rows][cols];
+		for (ChessPiece[] row : pieces) {
+			Arrays.fill(row, new EmptyPiece(this, null));
+		}
+	}
+
+    @Override
+	public boolean initializeBoard() {
 		// black pawns
-		for(int j = 0; j < 8; j++){
-			Location location = new Location(1,j);
+		for(int j = 0; j < 10; j++){
+			Location location = new Location(2,j);
 			this.placePiece(location, new Pawn(this, PieceType.BLACK, location));
 		}
 
 
 		//black pieces
-		for(int i = 0; i < 8; i++){
-			Location location = new Location(0,i);
+		for(int i = 0; i < 10; i++){
+			Location location = new Location(1,i);
 			switch (i){
 				case 0:
-				case 7:
+				case 9:
+					location = new Location(0,i);
 					this.placePiece(location, new Rook(this, PieceType.BLACK, location));
 					break;
 				case 1:
-				case 6:
+				case 8:
 					this.placePiece(location, new Knight(this, PieceType.BLACK, location));
 					break;
 				case 2:
-				case 5:
+				case 7:
 					this.placePiece(location, new Bishop(this, PieceType.BLACK, location));
 					break;
-				case 4:
+				case 3:
 					this.placePiece(location, new Queen(this, PieceType.BLACK, location));
 					break;
-				case 3:
+				case 4:
 					this.placePiece(location, new King(this, PieceType.BLACK, location));
 					break;
+				case 5:
+					this.placePiece(location, new Marshal(this, PieceType.BLACK, location));
+					break;
+				case 6:
+					this.placePiece(location, new Cardinal(this, PieceType.BLACK, location));
+					break;
 				default:
-
 			}
 		}
 
 
 		// white pawns
-		for(int j = 0; j < 8; j++){
-			Location location = new Location(6,j);
+		for(int j = 0; j < 10; j++){
+			Location location = new Location(7,j);
 			this.placePiece(location, new Pawn(this, PieceType.WHITE, location));
 		}
 
-		// white pieces
-		for(int i = 0; i < 8; i++){
-			Location location = new Location(7,i);
+		//white pieces
+		for(int i = 0; i < 10; i++){
+			Location location = new Location(8,i);
 			switch (i){
 				case 0:
-				case 7:
+				case 9:
+					location = new Location(9,i);
 					this.placePiece(location, new Rook(this, PieceType.WHITE, location));
 					break;
 				case 1:
-				case 6:
+				case 8:
 					this.placePiece(location, new Knight(this, PieceType.WHITE, location));
 					break;
 				case 2:
-				case 5:
+				case 7:
 					this.placePiece(location, new Bishop(this, PieceType.WHITE, location));
 					break;
-				case 4:
+				case 3:
 					this.placePiece(location, new Queen(this, PieceType.WHITE, location));
 					break;
-				case 3:
+				case 4:
 					this.placePiece(location, new King(this, PieceType.WHITE, location));
 					break;
-				default:
-
+				case 5:
+					this.placePiece(location, new Marshal(this, PieceType.WHITE, location));
+					break;
+				case 6:
+					this.placePiece(location, new Cardinal(this, PieceType.WHITE, location));
+					break;
 			}
 		}
-
-		return false;
+		return true;
 	}
 
     @Override
     public Board clone() {
-        BasicBoard b = new BasicBoard();
+        GrandBoard b = new GrandBoard();
 
         ChessPiece[][] newPieces = new ChessPiece[this.pieces.length][this.pieces[0].length];
         for (int i = 0; i < pieces.length; i++) {

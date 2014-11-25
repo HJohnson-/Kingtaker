@@ -1,11 +1,7 @@
 package pawnPromotion;
 
-import BasicChess.Bishop;
-import BasicChess.Knight;
-import BasicChess.Queen;
-import BasicChess.Rook;
 import pieces.ChessPiece;
-
+import variants.BasicChess.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -86,6 +82,7 @@ public class pawnPromotion implements Runnable {
             Image buttonImg = ImageIO.read(new File("media/" + name + "Black.png"));
             button.setIcon(new ImageIcon(buttonImg));
         } catch (IOException ex) {
+			ex.printStackTrace();
         }
 
         // set button alignment

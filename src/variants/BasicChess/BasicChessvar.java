@@ -1,14 +1,12 @@
-package BasicChess;
+package variants.BasicChess;
 
-import main.ChessVariant;
-import main.GameController;
-import main.GameMode;
+import main.*;
 import pieces.PieceDecoder;
 
 /**
  * The Chess we all know and love.
  */
-public class BasicChess extends ChessVariant {
+public class BasicChessvar extends ChessVariant {
 
     @Override
     public int getVariationID() {
@@ -22,7 +20,7 @@ public class BasicChess extends ChessVariant {
 
     @Override
     public String getDescription() {
-        return "Standard chess rules, as governed by the World Chess Organisation. Basic moves, as well as en passant, castling and pawn promotion are valid. For an overview, read http://en.wikipedia.org/wiki/Rules_of_chess";
+        return "\"Standard chess rules, as governed by the World Chess Organisation. Basic moves, as well as en passant, castling and pawn promotion are valid. For an overview, read http://en.wikipedia.org/wiki/Rules_of_chess\";";
     }
 
     @Override
@@ -30,17 +28,17 @@ public class BasicChess extends ChessVariant {
         return new BasicDecoder();
     }
 
-    public BasicChess() {
+    public BasicChessvar() {
         this(GameMode.MULTIPLAYER_LOCAL);
     }
 
-    public BasicChess(GameMode mode) {
-		game = new GameController(new BasicBoard(), "Basic", new BasicDecoder(), mode);
+    public BasicChessvar(GameMode mode) {
+		game = new GameController(new BasicBoard(), 0, new BasicDecoder(), mode);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
 
-	public BasicChess(GameController game) {
+	public BasicChessvar(GameController game) {
 		this.game = game;
 		this.game.getBoard().setController(game);
 	}
@@ -53,7 +51,7 @@ public class BasicChess extends ChessVariant {
 
     @Override
     public ChessVariant recreate(GameMode mode) {
-        return new BasicChess(mode);
+        return new BasicChessvar(mode);
     }
 
 }

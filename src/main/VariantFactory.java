@@ -6,17 +6,23 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Class to grab variants from .jar files
- */
 public class VariantFactory {
+
+    private static VariantFactory instance;
+
+	public static VariantFactory getInstance() {
+        if (instance == null) {
+            instance = new VariantFactory();
+        }
+        return instance;
+    }
 
 	private static final String varDirectory = "";
 	private static final String varPattern = "**var.java";
-	private static List<String> unloadedVars;
+	private static List<ChessVariant> loadedVars;
 
-	public VariantFactory() {
-		unloadedVars = new LinkedList<String>();
+	private VariantFactory() {
+		loadedVars = new LinkedList<ChessVariant>();
 		findVariants();
 	}
 
@@ -31,7 +37,7 @@ public class VariantFactory {
 		private void find(Path file) {
 			Path name = file.getFileName();
 			if (name != null && matcher.matches(name)) {
-				unloadedVars.add(file.toString());
+				loadedVars.add(varFromString(file.toString()));
 			}
 		}
 
@@ -43,43 +49,23 @@ public class VariantFactory {
 		}
 	}
 
-
-	public ChessVariant getNextVariant() {
-		if(hasNextVariant()) {
-			String nextVarName = reformatName(unloadedVars.remove(0));
-			ChessVariant result = null;
-			try {
-				Class implClass = Class.forName(nextVarName);
-				result = (ChessVariant)implClass.newInstance();
-			}
-			catch (ClassNotFoundException ex) {
-				ex.printStackTrace();
-			}
-			catch (InstantiationException ex) {
-				ex.printStackTrace();
-			}
-			catch (IllegalAccessException ex) {
-				ex.printStackTrace();
-			}
-			return result;
-		} else {
-			return null;
+	private ChessVariant varFromString(String name) {
+		ChessVariant result = null;
+		try {
+			Class implClass = Class.forName(reformatName(name));
+			result = (ChessVariant) implClass.newInstance();
+		} catch (ClassNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (InstantiationException ex) {
+			ex.printStackTrace();
+		} catch (IllegalAccessException ex) {
+			ex.printStackTrace();
 		}
-	}
-
-	public String getNextVariantName() {
-		if(hasNextVariant()) {
-			return unloadedVars.get(0);
-		} else {
-			return null;
-		}
-	}
-
-	public boolean hasNextVariant() {
-		return !unloadedVars.isEmpty();
+		return result;
 	}
 
 	private void findVariants() {
+		loadedVars = new LinkedList<ChessVariant>();
 		try {
 			Files.walkFileTree(Paths.get(varDirectory), new Finder());
 		} catch (IOException e) {
@@ -87,20 +73,23 @@ public class VariantFactory {
 		}
 	}
 
-	public static void main(String[] args) {
-		VariantFactory var = new VariantFactory();
-		while(var.hasNextVariant()) {
-			System.out.println("I found a variant called:" + reformatName(var.getNextVariantName()));
-			ChessVariant extremelyDangerous = var.getNextVariant();
-			extremelyDangerous.drawBoard();
-		}
+	private static String reformatName(String original) {
+		String dotted = original.replaceAll("/", ".");
+		return dotted.substring(dotted.indexOf(".vari")+1, dotted.indexOf(".java"));
+
 	}
 
-	private static String reformatName(String original) {
-		String plant = original.replaceAll("/", ".");
-		return plant.substring(plant.indexOf(".vari")+1, plant.indexOf(".java"));
+	public List<ChessVariant> getAllVariants() {
+		findVariants();
+		return loadedVars;
+	}
 
+	public ChessVariant getVariantByID(Integer id) {
+		for(ChessVariant var : loadedVars) {
+			if(var.getVariationID() == id) {
+				return var;
+			}
+		}
+		return null;
 	}
 }
-
-

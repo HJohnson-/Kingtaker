@@ -1,7 +1,7 @@
 package main;
 
-import BasicChess.BasicBoard;
-import BasicChess.BasicDecoder;
+import variants.BasicChess.BasicBoard;
+import variants.BasicChess.BasicDecoder;
 import variants.GrandChess.GrandBoard;
 import variants.GrandChess.GrandDecoder;
 import variants.RandomChess.RandomBoard;

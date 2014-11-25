@@ -2,8 +2,8 @@ package variants.GrandChess;
 
 import main.ChessVariant;
 import main.GameController;
-import BasicChess.BasicDecoder;
-import BasicChess.BasicChessFrame;
+import variants.BasicChess.BasicDecoder;
+import variants.BasicChess.BasicChessFrame;
 import main.GameMode;
 import pieces.PieceDecoder;
 

@@ -1,8 +1,6 @@
 package pawnPromotion;
 
-import BasicChess.*;
-import graphics.GraphicsControl;
-import main.Location;
+import variants.BasicChess.*;
 import pieces.ChessPiece;
 
 import java.awt.*;

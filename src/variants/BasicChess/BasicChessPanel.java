@@ -1,4 +1,4 @@
-package BasicChess;
+package variants.BasicChess;
 
 import graphics.ChessPanel;
 import main.Board;

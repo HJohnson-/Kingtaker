@@ -91,7 +91,7 @@ public class frmVariantChooser {
     }
 
     private void initialiseChessVariantsList() {
-        variants = ChessVariantManager.getInstance().getAllVariants();
+        variants = VariantFactory.getInstance().getAllVariants();
 
         for (ChessVariant variant : variants) {
             lstVariationPickerModel.addElement(variant.getName());

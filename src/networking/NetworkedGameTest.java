@@ -1,6 +1,5 @@
 package networking;
 
-import forms.frmVariantChooser;
 import main.*;
 
 import java.io.IOException;
@@ -15,7 +14,7 @@ public class NetworkedGameTest {
     public static void main(String[] args) throws Exception {
         String host2 = "129.31.208.110";
         String host1 = "line20.doc.ic.ac.uk";
-        ChessVariant variant = ChessVariantManager.getInstance().getVariantByID(0);
+        ChessVariant variant = VariantFactory.getInstance().getVariantByID(0);
 
         MessageListener.getInstance().acceptMoves = true;
 

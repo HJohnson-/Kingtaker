@@ -1,15 +1,15 @@
 package variants.RandomChess;
 
-import BasicChess.BasicChess;
+import variants.BasicChess.BasicChessvar;
 import main.GameController;
-import BasicChess.BasicDecoder;
-import BasicChess.BasicChessFrame;
+import variants.BasicChess.BasicDecoder;
+import variants.BasicChess.BasicChessFrame;
 import main.GameMode;
 
 /**
  * Implements the Random960 chess variant.
  */
-public class Random960var extends BasicChess {
+public class Random960var extends BasicChessvar {
 
     @Override
     public int getVariationID() {

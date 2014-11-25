@@ -1,9 +1,8 @@
 package networking;
 
-import BasicChess.BasicChess;
+import variants.BasicChess.BasicChessvar;
 import junit.framework.TestCase;
 import networking.NetworkingCodes.ClientCommandCode;
-import networking.NetworkingCodes.ResponseCode;
 
 public class LocalOpenGameTest extends TestCase {
     private final String testPassword = "123 abc XYZ !$#";
@@ -17,7 +16,7 @@ public class LocalOpenGameTest extends TestCase {
         LocalUserAccount lua = new LocalUserAccount(uniqueUserName, testPassword);
         lua.authenticate(ClientCommandCode.REGISTER_ACCOUNT);
 
-        LocalOpenGame log = new LocalOpenGame(new BasicChess());
+        LocalOpenGame log = new LocalOpenGame(new BasicChessvar());
         log.host();
 
         ServerMessageSender sms = new ServerMessageSender();

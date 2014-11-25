@@ -1,6 +1,6 @@
 package variants.RandomChess;
 
-import BasicChess.*;
+import variants.BasicChess.*;
 import main.Board;
 import main.Location;
 import main.PieceType;

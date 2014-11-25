@@ -1,4 +1,4 @@
-package BasicChess;
+package variants.BasicChess;
 
 import pieces.ChessPiece;
 import main.Location;

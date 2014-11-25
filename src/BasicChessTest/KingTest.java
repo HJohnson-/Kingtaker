@@ -1,7 +1,7 @@
 package BasicChessTest;
 
-import BasicChess.BasicBoard;
-import BasicChess.King;
+import variants.BasicChess.BasicBoard;
+import variants.BasicChess.King;
 import main.Location;
 import main.PieceType;
 import junit.framework.TestCase;

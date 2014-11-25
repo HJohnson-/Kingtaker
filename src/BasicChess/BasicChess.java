@@ -4,6 +4,9 @@ import main.ChessVariant;
 import main.GameController;
 import main.GameMode;
 import pieces.PieceDecoder;
+import variants.BasicChess.BasicBoard;
+import variants.BasicChess.BasicChessFrame;
+import variants.BasicChess.BasicDecoder;
 
 /**
  * The Chess we all know and love.

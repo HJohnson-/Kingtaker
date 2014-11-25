@@ -1,12 +1,10 @@
 package main;
 
-import BasicChess.King;
-import variants.BasicChess.King;
-import ai.BasicAI;
 import ai.ChessAI;
 import ai.MinimaxAI;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
+import variants.BasicChess.King;
 
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -8,7 +8,7 @@ import main.GameMode;
 import pieces.PieceDecoder;
 
 /**
- * Created by hj1012 on 03/11/14.
+ * The 'Grand Chess' variant. A 10x10 board with two new pieces on each side.
  */
 public class Grandvar extends ChessVariant {
     @Override

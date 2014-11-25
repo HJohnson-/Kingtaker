@@ -1,6 +1,6 @@
 package ai;
 
-import BasicChess.Pawn;
+import variants.BasicChess.Pawn;
 import main.Board;
 import main.GameMode;
 import main.GameResult;

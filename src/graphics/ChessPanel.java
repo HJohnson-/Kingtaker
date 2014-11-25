@@ -157,9 +157,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             public void actionPerformed(ActionEvent e) {
                 int start = code.indexOf("V:")+2;
                 int end = code.indexOf('$',start);
-                String variant = code.substring(start, end);
-                GameController gameState = GameControllerMaker.get(variant, code);
-                ChessVariant game = ChessVariantMaker.get(variant, gameState);
+                int var_id = Integer.decode(code.substring(start, end));
+                ChessVariant game = VariantFactory.getInstance().getVariantByID(var_id);
                 game.drawBoard();
             }
         });

@@ -21,7 +21,7 @@ public class GameController {
 	private int currentTurn;
     private GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
-	private String gameVariant;
+	private int gameID;
 	private PieceDecoder decoder;
     public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
     private boolean playerIsWhite = true;
@@ -39,10 +39,10 @@ public class GameController {
 	/**
 	 * @param board board
 	 */
-	public GameController(Board board, String gameVariant, PieceDecoder decoder, GameMode mode) {
+	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode) {
         currentTurn = 1;
 		this.board = board;
-		this.gameVariant = gameVariant;
+		this.gameID = gameID;
 		this.decoder = decoder;
         this.gameMode = mode;
     }
@@ -55,7 +55,7 @@ public class GameController {
 		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+3;
 		endOfValue = code.indexOf('$', startOfValue);
-		gameVariant = code.substring(startOfValue, endOfValue);
+		gameID = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+1;
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
@@ -279,7 +279,7 @@ public class GameController {
 	 */
 	public String toCode() {
 		StringBuilder code = new StringBuilder();
-		code.append("#$").append("T:").append(currentTurn).append("~").append("V:").append(gameVariant).append("$");
+		code.append("#$").append("T:").append(currentTurn).append("~").append("V:").append(gameID).append("$");
 		for(ChessPiece p : board.allPieces()) {
 			code.append(p.toCode());
 		}
@@ -289,7 +289,7 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        GameController newGame = new GameController(null, gameVariant, decoder, gameMode);
+        GameController newGame = new GameController(null, gameID, decoder, gameMode);
         newGame.isWhitesTurn = this.isWhitesTurn;
         newGame.currentTurn = this.currentTurn;
         newGame.gameResult = this.gameResult;

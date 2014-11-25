@@ -21,7 +21,6 @@ public class GrandChess extends ChessVariant {
         return "Grand Chess";
     }
 
-    //TODO: make pawn promotion optional on 8th/9th rank
     @Override
     public String getDescription() {
         return "Grand chess is played on a larger, 10x10 board and introduces two new characters: the Marshall, which combines the powers of the Rook and Knight and the Cardinal, which combines the powers of the Bishop and Knight. Pawn promotion is optional on moving to the 8th or 9th rank, but compulsary on moving to the 10th rank. There is no castling.";

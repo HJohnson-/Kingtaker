@@ -80,8 +80,9 @@ public class frmMainMenu {
 
                     String piece = characters.charAt(r.nextInt(characters.length())) + "";
                     gr.setFont(pawnFont);
-                    gr.setColor(r.nextBoolean() ? color1 : color2);
-                    gr.drawString(piece, r.nextInt(frame.getWidth()), r.nextInt(frame.getHeight()));
+                    //gr.setColor(r.nextBoolean() ? color1 : color2);
+                    gr.setColor(new Color(iteration));
+                    gr.drawString(piece, r.nextInt(frame.getWidth())-20, r.nextInt(frame.getHeight()));
 
                     gr.setFont(titleFont1);
                     gr.setColor(Color.DARK_GRAY);
@@ -94,6 +95,8 @@ public class frmMainMenu {
                     btnLocalMP.updateUI();
                     btnOnlineMP.updateUI();
                     btnExit.updateUI();
+
+                    iteration++;
                 }
             }
 

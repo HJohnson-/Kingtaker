@@ -10,6 +10,7 @@ import networking.RemoteOpenGame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by jc4512 on 28/10/14.
  */
 public class frmLobby {
-    private final JFrame frame = new JFrame("frmLobby");
+    private final JFrame frame = new JFrame("Online Game Lobby");
     private JPanel panel;
     private JTextField txtUsername;
     private JPasswordField txtPassword;
@@ -108,11 +109,10 @@ public class frmLobby {
                     if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
                         frmVariantChooser.showInstance();
                     }
-                    btnCreateRemoveGame.setText(BTN_REMOVEGAME_TEXT);
                 } else {
                     gameLobby.destroyLocalGame();
-                    btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
                 }
+                setBtnCreateRemoveGame(gameLobby.getLocalGame() != null);
             }
         });
         btnLogin.addActionListener(new ActionListener() {
@@ -159,7 +159,7 @@ public class frmLobby {
 
                     //Destroy locally created game.
                     gameLobby.destroyLocalGame();
-                    btnCreateRemoveGame.setText(BTN_CREATEGAME_TEXT);
+                    setBtnCreateRemoveGame(false);
 
                     int response = gameLobby.attemptJoinGameByUsername(hostUsername);
                     if (response == ResponseCode.OK) {
@@ -221,6 +221,7 @@ public class frmLobby {
     // Enable user to create/remove their open game with the JButton.
     public void setOpenGamesAndServerStatus(List<RemoteOpenGame> list, boolean isConnected, LocalUserAccount user) {
         tblLobbyModel.getDataVector().removeAllElements();
+        tblLobbyModel.fireTableDataChanged();
         for (RemoteOpenGame game : list) {
             ChessVariant variant = VariantFactory.getInstance().getVariantByID(game.variantId);
             if (variant != null) {
@@ -233,6 +234,9 @@ public class frmLobby {
         setControlsOnServerStatus(user, isConnected);
     }
 
+    public void setBtnCreateRemoveGame(boolean gameExists) {
+        btnCreateRemoveGame.setText(gameExists ? BTN_REMOVEGAME_TEXT : BTN_REMOVEGAME_TEXT);
+    }
 
     // Called when form is instantiated to customise particular GUI controls.
     private void createUIComponents() {
@@ -243,12 +247,14 @@ public class frmLobby {
 
 
         tblLobbyModel = new DefaultTableModel(null, new String[]{"Variant", "User", "ELO Rating"});
+        final TableRowSorter<DefaultTableModel> tblLobbySorter = new TableRowSorter<DefaultTableModel>(tblLobbyModel);
         tblLobby = new JTable(tblLobbyModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             };
         };
+        tblLobby.setRowSorter(tblLobbySorter);
         tblLobby.setRowHeight(30);
         tblLobby.getTableHeader().setReorderingAllowed(false);
 

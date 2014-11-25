@@ -82,9 +82,15 @@ public class King extends ChessPiece {
 		if(validCastleAttempt(to)) {
 			int kingDirection = (int) Math.signum(to.getY() - cords.getY());
 			int rookY = (kingDirection == 1 ? board.numRows() - 1 : 0 );
+            Location rookCurrent = new Location(cords.getX(), rookY);
+            Location rookTarget = new Location(cords.getX(), cords.getY() + kingDirection);
 
-            board.movePiece(new Location(cords.getX(), rookY),
-                    new Location(cords.getX(), cords.getY() + kingDirection));
+            if (board.doDrawing) {
+                ChessPiece rook = board.getPiece(rookCurrent);
+                rook.graphics.setGoal(rookTarget);
+            }
+
+            board.movePiece(rookCurrent, rookTarget);
 
 			return super.executeMove(to);
 		} else {
@@ -148,4 +154,9 @@ public class King extends ChessPiece {
 	public String getName() {
 		return "King";
 	}
+
+    @Override
+    public ChessPiece clone() {
+        return new King(board, type, cords.clone());
+    }
 }

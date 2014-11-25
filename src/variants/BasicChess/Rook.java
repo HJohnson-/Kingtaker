@@ -1,9 +1,9 @@
 package variants.BasicChess;
 
-import pieces.ChessPiece;
+import main.Board;
 import main.Location;
 import main.PieceType;
-import main.Board;
+import pieces.ChessPiece;
 
 import java.util.LinkedList;
 import java.util.List;

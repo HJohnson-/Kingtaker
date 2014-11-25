@@ -1,16 +1,23 @@
 package networking;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class ServerMessageSender implements IMessageSender {
 
-    private final String IP_STRING = "line20.doc.ic.ac.uk";
+    private final String IP_STRING = "corona10.doc.ic.ac.uk";
     private final int PORT = 4444;
     private final int TIMEOUT_DEFAULT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;
+
+    public void sendMessageAsync(String msg) {
+
+    }
 
     //Send message to server and if flag is set, await a response.
     public String sendMessage(String msg, boolean waitForResponse) {

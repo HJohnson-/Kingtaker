@@ -1,6 +1,6 @@
-package variants.GrandChess;
+package GrandChess;
 
-import variants.BasicChess.*;
+import BasicChess.BasicDecoder;
 import main.Board;
 import main.Location;
 import main.PieceType;

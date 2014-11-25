@@ -36,4 +36,9 @@ public class OfflineGameLauncher extends GameLauncher {
     public void broadcastMove(Location oldL, Location newL, String extra) {
         // No-one cares about your move.
     }
+
+    @Override
+    public void broadcastEndGame() {
+        // No-one cares who won either.
+    }
 }

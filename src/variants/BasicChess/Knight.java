@@ -50,4 +50,5 @@ public class Knight extends ChessPiece {
 	public String getName() {
 		return "Knight";
 	}
+
 }

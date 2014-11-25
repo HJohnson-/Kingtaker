@@ -25,7 +25,7 @@ public class GrandBoard extends Board {
 		}
 	}
 
-	@Override
+    @Override
 	public boolean initializeBoard() {
 		// black pawns
 		for(int j = 0; j < 10; j++){
@@ -107,4 +107,25 @@ public class GrandBoard extends Board {
 		}
 		return true;
 	}
+
+    @Override
+    public Board clone() {
+        GrandBoard b = new GrandBoard();
+
+        ChessPiece[][] newPieces = new ChessPiece[this.pieces.length][this.pieces[0].length];
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                newPieces[i][j] = pieces[i][j].clone();
+                newPieces[i][j].board = b;
+            }
+        }
+        b.pieces = newPieces;
+
+        b.setController(this.getController().clone());
+        b.getController().setBoard(b);
+
+        b.doDrawing = this.doDrawing;
+
+        return b;
+    }
 }

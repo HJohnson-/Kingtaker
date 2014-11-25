@@ -1,8 +1,10 @@
 package main;
 
+import BasicChess.King;
 import variants.BasicChess.King;
 import ai.BasicAI;
 import ai.ChessAI;
+import ai.MinimaxAI;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 
@@ -10,6 +12,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Handles game logic
@@ -17,17 +21,22 @@ import java.util.Map;
 public class GameController {
 	private boolean isWhitesTurn = true; //white always starts
 	private int currentTurn;
-	private String winner;
-	private boolean gameOver;
+    private GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
 	private String gameVariant;
 	private PieceDecoder decoder;
-    private ChessAI ai;
     public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
+    private boolean playerIsWhite = true;
+    private ChessAI ai = new MinimaxAI(!playerIsWhite, 3);
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public Board getBoard() {
 		return board;
 	}
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
 	/**
 	 * @param board board
@@ -35,21 +44,13 @@ public class GameController {
 	public GameController(Board board, String gameVariant, PieceDecoder decoder, GameMode mode) {
         currentTurn = 1;
 		this.board = board;
-		winner = "None";
-		gameOver = false;
 		this.gameVariant = gameVariant;
 		this.decoder = decoder;
         this.gameMode = mode;
-
-        if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new BasicAI(board, false);
-        }
     }
 
 	public GameController(Board board, PieceDecoder decoder, String code, GameMode mode) {
         this.board = board;
-		winner = "None";
-		gameOver = false;
 		this.decoder = decoder;
 		int startOfValue = 4;
 		int endOfValue = code.indexOf('~', startOfValue);
@@ -61,13 +62,12 @@ public class GameController {
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
-
         this.gameMode = mode;
-
-        if (gameMode == GameMode.SINGLE_PLAYER) {
-            ai = new BasicAI(board, false);
-        }
 	}
+
+    public ChessAI getAI() {
+        return ai;
+    }
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean whitePieces) {
 		return getAllValidMoves(true, whitePieces);
@@ -111,7 +111,7 @@ public class GameController {
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
         //Cannot make moves once the game has ended.
-        if (gameOver) return false;
+        if (gameResult != GameResult.IN_PROGRESS) return false;
 
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);
@@ -137,12 +137,16 @@ public class GameController {
         if (beingMoved.executeMove(targetLocation)) {
             if (checkMate()) {
 				endGame();
-			} else {
+			} else {    //TODO: stalemate
                 nextPlayersTurn();
             }
 
             if (local) {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
+            }
+
+            if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
+                executor.submit(new DoAIMove(this));
             }
 
 			return true;
@@ -166,8 +170,10 @@ public class GameController {
 	 * set the game state to over
 	 */
 	protected void endGame() {
-		gameOver = true;
-		winner = isWhitesTurn ? "White" : "Black";
+        gameResult = isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
+        if (gameMode == GameMode.MULTIPLAYER_ONLINE) {
+            GameLauncher.currentGameLauncher.broadcastEndGame();
+        }
 	}
 
 	/**
@@ -199,7 +205,7 @@ public class GameController {
      */
     private boolean userCanInteractWithPiece(ChessPiece checkedPiece, boolean localUser) {
         return gameMode == GameMode.MULTIPLAYER_LOCAL ||
-                (checkedPiece.isWhite() == GameLauncher.currentGameLauncher.userIsWhite())
+                (checkedPiece.isWhite() == playerIsWhite)
                         == localUser;
     }
 
@@ -251,9 +257,9 @@ public class GameController {
 		return isWhitesTurn;
 	}
 
-	public String getWinner() {
-		return winner;
-	}
+    public GameResult getResult() {
+        return gameResult;
+    }
 
 	/**
 	 * advances the turn,changes the turn player
@@ -261,14 +267,6 @@ public class GameController {
 	private void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
-        if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
-            Location[] move = ai.getBestMove();
-            attemptMove(move[0], move[1], false);
-        }
-	}
-
-	public boolean gameOver() {
-		return gameOver;
 	}
 
 	/**
@@ -290,4 +288,32 @@ public class GameController {
 		code.append("#");
 		return code.toString();
 	}
+
+    @Override
+    public GameController clone() {
+        GameController newGame = new GameController(null, gameVariant, decoder, gameMode);
+        newGame.isWhitesTurn = this.isWhitesTurn;
+        newGame.currentTurn = this.currentTurn;
+        newGame.gameResult = this.gameResult;
+        newGame.ai = null;
+        newGame.playerIsWhite = this.playerIsWhite;
+        return newGame;
+    }
+
+    class DoAIMove implements Runnable {
+
+        private GameController control;
+
+        public DoAIMove(GameController control) {
+            this.control = control;
+        }
+
+        @Override
+        public void run() {
+            Location[] aiMove = control.ai.getBestMove(control.board);
+            control.attemptMove(aiMove[0], aiMove[1], false);
+            System.out.println(aiMove[0] + " -> " + aiMove[1]);
+        }
+
+    }
 }

@@ -2,6 +2,7 @@ package variants.BasicChess;
 import main.Board;
 import main.Location;
 import main.PieceType;
+import pieces.ChessPiece;
 
 /**
  * Created by crix9 on 15/10/2014.
@@ -81,4 +82,25 @@ public class BasicBoard extends Board {
 
 		return false;
 	}
+
+    @Override
+    public Board clone() {
+        BasicBoard b = new BasicBoard();
+
+        ChessPiece[][] newPieces = new ChessPiece[this.pieces.length][this.pieces[0].length];
+        for (int i = 0; i < pieces.length; i++) {
+            for (int j = 0; j < pieces[i].length; j++) {
+                newPieces[i][j] = pieces[i][j].clone();
+                newPieces[i][j].board = b;
+            }
+        }
+        b.pieces = newPieces;
+
+        b.setController(this.getController().clone());
+        b.getController().setBoard(b);
+
+        b.doDrawing = this.doDrawing;
+
+        return b;
+    }
 }

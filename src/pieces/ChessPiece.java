@@ -1,13 +1,12 @@
 package pieces;
+
 import graphics.GraphicsControl;
 import graphics.tools;
+import main.Board;
 import main.Location;
 import main.PieceType;
-import main.Board;
 
-import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.util.LinkedList;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -44,9 +43,9 @@ abstract public class ChessPiece {
 	 * @return if move was successful.
 	 */
 	public boolean executeMove(Location targetLocation) {
-        graphics.setGoal(targetLocation);
 		board.clearSpace(cords);
 		board.placePiece(targetLocation, this);
+        if (board.doDrawing) graphics.setGoal(targetLocation);
 		this.lastTurnMovedOn = board.getController().getCurrentTurn();
 		return true;
 	}
@@ -171,4 +170,23 @@ abstract public class ChessPiece {
 		this.lastTurnMovedOn = lastMovedOn;
 		//ignore substring
 	}
+
+    @Override
+    public ChessPiece clone() {
+        try {
+            ChessPiece newPiece = getClass().getDeclaredConstructor(Board.class, PieceType.class, Location.class).newInstance(null, type, cords.clone());
+            newPiece.lastTurnMovedOn = this.lastTurnMovedOn;
+            return newPiece;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

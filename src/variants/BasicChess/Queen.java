@@ -39,4 +39,5 @@ public class Queen extends ChessPiece {
 	public String getName() {
 		return "Queen";
 	}
+
 }

@@ -1,7 +1,8 @@
 package BasicChess;
 
-import graphics.tools;
-import main.*;
+import main.ChessVariant;
+import main.GameController;
+import main.GameMode;
 import pieces.PieceDecoder;
 
 /**
@@ -21,7 +22,7 @@ public class BasicChess extends ChessVariant {
 
     @Override
     public String getDescription() {
-        return "[brief chess rules]";
+        return "Standard chess rules, as governed by the World Chess Organisation. Basic moves, as well as en passant, castling and pawn promotion are valid. For an overview, read http://en.wikipedia.org/wiki/Rules_of_chess";
     }
 
     @Override
@@ -46,7 +47,7 @@ public class BasicChess extends ChessVariant {
 
 	//returns true if there was no errors
 	public boolean drawBoard() {
-        graphics.tools.create(new BasicChessFrame("Basic Chess", 700, 625, game.getBoard()));
+        graphics.tools.create(new BasicChessFrame("Basic Chess", 600, 700, game.getBoard()));
         return true;
 	}
 

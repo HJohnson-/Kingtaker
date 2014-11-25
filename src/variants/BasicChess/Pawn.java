@@ -3,9 +3,9 @@ package variants.BasicChess;
 import main.Board;
 import main.Location;
 import main.PieceType;
+import pawnPromotion.pawnPromotion;
 import pieces.ChessPiece;
 import pieces.EmptyPiece;
-import pawnPromotion.pawnPromotion;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -98,20 +98,19 @@ public class Pawn extends ChessPiece{
 	public boolean executeMove(Location to) {
 		justDidADoubleMove = false;
         boolean valid = false;
-		if(validBasicPawnMove(to) || validBasicPawnTake(to)) {
+		if (validBasicPawnMove(to) || validBasicPawnTake(to)) {
 			valid = true;
-		} else if(validPawnDoubleMove(to)) {
+		} else if (validPawnDoubleMove(to)) {
 			justDidADoubleMove = true;
 			valid = true;
-		} else if(validEnPassant(to)) {
+		} else if (validEnPassant(to)) {
 			board.placePiece(new Location(cords.getX(), to.getY()), new EmptyPiece(board, new Location(cords.getX(), to.getY())));
 			valid = true;
-		} else {
-			valid = false;
 		}
+
         if (valid) {
             boolean successful = super.executeMove(to);
-            if (to.getX() == 0 || to.getX() == board.numCols() - 1) {
+            if ((to.getX() == 0 || to.getX() == board.numCols() - 1) && board.doDrawing) {
                 ExecutorService exe = Executors.newFixedThreadPool(1);
                 exe.submit(new pawnPromotion(this));
             }
@@ -161,7 +160,15 @@ public class Pawn extends ChessPiece{
 		justDidADoubleMove = miscFields.equals("T");
 	}
 
-	@Override
+    @Override
+    public ChessPiece clone() {
+        Pawn newPawn = (Pawn) super.clone();
+        newPawn.justDidADoubleMove = this.justDidADoubleMove;
+        newPawn.movementDirection = this.movementDirection;
+        return newPawn;
+    }
+
+    @Override
 	public String getMisc() {
 		return justDidADoubleMove ? "T" : "F";
 	}

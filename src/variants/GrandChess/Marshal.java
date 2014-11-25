@@ -47,4 +47,5 @@ public class Marshal extends ChessPiece {
 	public String getName() {
 		return "Marshal";
 	}
+
 }

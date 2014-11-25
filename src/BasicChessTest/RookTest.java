@@ -1,7 +1,7 @@
 package BasicChessTest;
 
-import variants.BasicChess.BasicBoard;
-import variants.BasicChess.Rook;
+import BasicChess.BasicBoard;
+import BasicChess.Rook;
 import main.Location;
 import main.PieceType;
 import org.junit.Test;

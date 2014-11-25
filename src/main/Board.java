@@ -4,7 +4,8 @@ import pieces.ChessPiece;
 import pieces.EmptyPiece;
 import pieces.PieceDecoder;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * Stores and manipulates where on the board pieces are. Takes commands from pieces and a GameController, and exposes
@@ -13,6 +14,7 @@ import java.util.*;
  */
 abstract public class Board {
 	protected pieces.ChessPiece[][] pieces;
+    public boolean doDrawing = true;
 	private GameController game;
 
 	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.
@@ -173,5 +175,11 @@ abstract public class Board {
 		}
 	}
 
+    @Override
+    abstract public Board clone();
+
+    public void setPieces(ChessPiece[][] newPieces) {
+        this.pieces = newPieces;
+    }
 }
 

@@ -49,4 +49,5 @@ public class Bishop extends ChessPiece {
 	public String getName() {
 		return "Bishop";
 	}
+
 }

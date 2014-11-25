@@ -1,14 +1,14 @@
 package BasicChessTest;
 
-import variants.BasicChess.BasicBoard;
-import variants.BasicChess.Pawn;
+import BasicChess.BasicBoard;
+import BasicChess.Pawn;
 import main.Location;
 import main.PieceType;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PawnTest {
 

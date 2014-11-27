@@ -93,6 +93,16 @@ public class MinimaxAI extends ChessAI {
         return moves.get((int) Math.floor(Math.random() * moves.size()));
     }
 
+    @Override
+    public int getTotal() {
+        return (int) numMoves;
+    }
+
+    @Override
+    public int getCompleted() {
+        return (int) completed;
+    }
+
     class Searcher implements Callable<Pair<Location[], Integer>> {
 
         private Board searchBoard;

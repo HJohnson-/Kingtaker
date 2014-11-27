@@ -20,4 +20,8 @@ public abstract class ChessAI {
         return 0.0;
     }
 
+    public int getTotal() { return 0; }
+
+    public int getCompleted() { return 0; }
+
 }

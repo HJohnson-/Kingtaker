@@ -156,23 +156,30 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         load.setLocation(x, y);
         load.setSize(cellWidth * 2, UIHeight / 2);
 
-		undo.setLocation(x + cellWidth * 5, y);
+		undo.setLocation(x + cellWidth * 2, y + UIHeight / 2);
 		undo.setSize(cellWidth * 2, UIHeight / 2);
 
-        //AI progress bar.
+        //AI progress bar and difficulty controller.
         if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
             int newX = offset.getX() + (cellWidth * board.numCols() / 2);
+            int barWidth = cellWidth * board.numCols() / 2;
+            int barHeight = 30;
 
             g2.setPaint(Color.RED.darker().darker());
-            g2.fillRect(newX, y + 10, (cellWidth * board.numCols() / 2), 20);
+            g2.fillRect(newX, y + 10, barWidth, barHeight);
 
             double completed = board.getController().getAI().pcComplete();
+            int total = board.getController().getAI().getTotal();
+            int done = board.getController().getAI().getCompleted();
 
             g2.setPaint(Color.GREEN.darker());
-            g2.fillRect(newX, y + 10, (int) (completed * cellWidth * board.numCols() / 2), 20);
+            g2.fillRect(newX, y + 10, (int) (barWidth * completed), barHeight);
 
-            difficulty.setLocation(newX, y + 50);
-            difficulty.setSize(cellWidth * board.numCols() / 2, 20);
+            g2.setPaint(Color.BLUE.brighter());
+            drawCentreString(done + "/" + total, new Location(newX, y + 10), barWidth, barHeight, g2);
+
+            difficulty.setLocation(newX, y + barHeight + 20);
+            difficulty.setSize(barWidth, 20);
         }
 
         load.addActionListener(new ActionListener() {

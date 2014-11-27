@@ -18,8 +18,8 @@ public class KnightGraphicsControl extends GraphicsControl {
      */
     @Override
     public void run() {
-
         int distance = Math.abs(endCords.getX() - curCords.getX()) + Math.abs(endCords.getY() - curCords.getY());
+        int sleepTime = (int) Math.ceil(animationTime / distance);
 
         int animationXStep = (int) Math.signum(endCords.getX() - curCords.getX());
         int animationYStep = (int) Math.signum(endCords.getY() - curCords.getY());
@@ -27,7 +27,7 @@ public class KnightGraphicsControl extends GraphicsControl {
         while (!curCords.getX().equals(endCords.getX())) {
             curCords.incrX(animationXStep);
             try {
-                Thread.sleep(animationTime / distance);
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -36,7 +36,7 @@ public class KnightGraphicsControl extends GraphicsControl {
         while (!curCords.getY().equals(endCords.getY())) {
             curCords.incrY(animationYStep);
             try {
-                Thread.sleep(animationTime / distance);
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

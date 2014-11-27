@@ -152,7 +152,6 @@ public class GameController {
             }
 
             if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
-				System.out.println("AI MOVE TIME");
                 executor.submit(new DoAIMove(this));
             }
 

@@ -25,7 +25,8 @@ public class GameController {
 	private PieceDecoder decoder;
     public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
     private boolean playerIsWhite = true;
-    private ChessAI ai = new MinimaxAI(!playerIsWhite, 3);
+	public final int initialDiff = 3;
+    private ChessAI ai = new MinimaxAI(!playerIsWhite, initialDiff);
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
     private boolean AIWorking = false;

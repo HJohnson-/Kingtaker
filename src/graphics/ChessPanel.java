@@ -4,6 +4,8 @@ import main.*;
 import pieces.ChessPiece;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
@@ -27,6 +29,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
 	protected JButton undo = new JButton("Undo");
+    protected JSlider difficulty = new JSlider();
     private String code;
     private Font mainFont;
     private Font bigMainFont;
@@ -49,6 +52,17 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         mainFont = createFont(24);
         bigMainFont = createFont(70);
         recalculateCellSize();
+
+        difficulty.setMinimum(0);
+        difficulty.setMaximum(10);
+        difficulty.setValue(board.getController().initialDiff);
+        difficulty.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                ChessPanel.this.board.getController().setDifficulty(difficulty.getValue());
+            }
+        });
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
@@ -137,11 +151,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         //Save and load buttons.
         save.setLocation(x, y + UIHeight / 2);
-        load.setLocation(x, y);
-		undo.setLocation(x + cellWidth * 5, y);
-        load.setSize(cellWidth * 2, UIHeight / 2);
-		undo.setSize(cellWidth * 2, UIHeight / 2);
         save.setSize(cellWidth * 2, UIHeight / 2);
+
+        load.setLocation(x, y);
+        load.setSize(cellWidth * 2, UIHeight / 2);
+
+		undo.setLocation(x + cellWidth * 5, y);
+		undo.setSize(cellWidth * 2, UIHeight / 2);
 
         //AI progress bar.
         if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
@@ -154,6 +170,9 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
             g2.setPaint(Color.GREEN.darker());
             g2.fillRect(newX, y + 10, (int) (completed * cellWidth * board.numCols() / 2), 20);
+
+            difficulty.setLocation(newX, y + 50);
+            difficulty.setSize(cellWidth * board.numCols() / 2, 20);
         }
 
         load.addActionListener(new ActionListener() {
@@ -189,6 +208,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             this.add(load);
             this.add(save);
 			this.add(undo);
+            if (board.getController().gameMode == GameMode.SINGLE_PLAYER) this.add(difficulty);
         }
     }
 
@@ -360,7 +380,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     @Override
     public void run() {
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-        int targetFPS = 60;
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int targetFPS = gd.getDisplayMode().getRefreshRate();
+        if (targetFPS == DisplayMode.REFRESH_RATE_UNKNOWN) {
+            targetFPS = 120;
+        }
         long lastDraw = System.currentTimeMillis();
         while (true) {
             while ((System.currentTimeMillis() - lastDraw) < (1000 / targetFPS));

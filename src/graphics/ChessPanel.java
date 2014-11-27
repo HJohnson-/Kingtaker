@@ -54,7 +54,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         recalculateCellSize();
 
         difficulty.setMinimum(0);
-        difficulty.setMaximum(10);
+        difficulty.setMaximum(5);
         difficulty.setValue(board.getController().initialDiff);
         difficulty.addChangeListener(new ChangeListener() {
 

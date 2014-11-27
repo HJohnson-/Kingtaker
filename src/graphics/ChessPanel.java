@@ -26,14 +26,15 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     public boolean animating = false;
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
+	protected JButton undo = new JButton("Undo");
     private String code;
     private Font mainFont;
     private Font bigMainFont;
     private int fps;
     private boolean drawFPS = true;
+	private static double lastLoad = 0;
 
-    /**
-     * This constructor sets up a listener to handle the user clicking on the screen.
+     /* This constructor sets up a listener to handle the user clicking on the screen.
      * @param board The board which information will be obtained from.
      */
     protected ChessPanel(Board board) {
@@ -137,7 +138,9 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         //Save and load buttons.
         save.setLocation(x, y + UIHeight / 2);
         load.setLocation(x, y);
+		undo.setLocation(x + cellWidth * 5, y);
         load.setSize(cellWidth * 2, UIHeight / 2);
+		undo.setSize(cellWidth * 2, UIHeight / 2);
         save.setSize(cellWidth * 2, UIHeight / 2);
 
         //AI progress bar.
@@ -155,13 +158,26 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         load.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int start = code.indexOf("V:")+2;
-                int end = code.indexOf('$',start);
-                int var_id = Integer.decode(code.substring(start, end));
-				GameController gc = board.getController();
-				gc.load(code);
+				if(System.currentTimeMillis()-300 > lastLoad) {
+					lastLoad = System.currentTimeMillis();
+					GameController gc = board.getController();
+					gc.load(code);
+					recalculateCellSize();
+				}
             }
         });
+
+		undo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(System.currentTimeMillis()-300 > lastLoad) {
+					lastLoad = System.currentTimeMillis();
+					GameController gc = board.getController();
+					gc.undo();
+					recalculateCellSize();
+				}
+			}
+		});
 
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -172,6 +188,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         if (load.getParent() == null) {
             this.add(load);
             this.add(save);
+			this.add(undo);
         }
     }
 
@@ -281,6 +298,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         cellHeight = cellWidth;
 
         for (ChessPiece p : board.allPieces()) {
+			p.graphics.givePanel(this);
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth + offset.getX(),
                                                p.cords.getY() * cellHeight + offset.getY());
             p.graphics.endCords = p.graphics.curCords.clone();

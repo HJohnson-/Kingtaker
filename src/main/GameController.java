@@ -9,10 +9,7 @@ import pieces.ChessPiece;
 import pieces.PieceDecoder;
 import variants.BasicChess.King;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,6 +27,7 @@ public class GameController {
     private boolean playerIsWhite = true;
     private ChessAI ai = new MinimaxAI(!playerIsWhite, 3);
     private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private List<String> previousTurns;
 
 	public Board getBoard() {
 		return board;
@@ -48,6 +46,7 @@ public class GameController {
 		this.gameID = gameID;
 		this.decoder = decoder;
         this.gameMode = mode;
+		previousTurns = new ArrayList<String>();
     }
 
 	public GameController(Board board, PieceDecoder decoder, String code, GameMode mode) {
@@ -64,6 +63,7 @@ public class GameController {
 		String pieces = code.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
         this.gameMode = mode;
+		previousTurns = new ArrayList<String>();
 	}
 
     public ChessAI getAI() {
@@ -131,6 +131,10 @@ public class GameController {
 			return false;
         }
 
+
+		if(local && gameMode != GameMode.MULTIPLAYER_ONLINE) {
+			previousTurns.add(toCode());
+		}
         //Executes move, unless the piece has a final objection (useful for some variants)
 		//If checkmate is detected, the game ends, otherwise the active player is switched.
         //If the move was executed locally, it is sent to the remote player via launcher.
@@ -146,6 +150,7 @@ public class GameController {
             }
 
             if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
+				System.out.println("AI MOVE TIME");
                 executor.submit(new DoAIMove(this));
             }
 
@@ -153,6 +158,18 @@ public class GameController {
 		}
 
         return false;
+	}
+
+	public void undo() {
+		int size = previousTurns.size();
+		if(size < 1) {
+			return;
+		}
+		String code = previousTurns.remove(size - 1);
+		if (code == null) {
+			return;
+		}
+		load(code);
 	}
 
     /**
@@ -318,6 +335,7 @@ public class GameController {
 		int startOfValue = 4;
 		int endOfValue = code.indexOf('~', startOfValue);
 		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
+		isWhitesTurn = currentTurn % 2 == 1;
 		startOfValue = endOfValue+3;
 		endOfValue = code.indexOf('$', startOfValue);
 		gameID = Integer.decode(code.substring(startOfValue, endOfValue));

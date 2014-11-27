@@ -1,5 +1,8 @@
 package main;
 
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -74,7 +77,12 @@ public class VariantFactory {
 	}
 
 	private static String reformatName(String original) {
-		String dotted = original.replaceAll("/", ".");
+        String dotted;
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            dotted = original.replaceAll("\\\\", ".");
+        } else {
+            dotted = original.replaceAll(File.separator, ".");
+        }
 		return dotted.substring(dotted.indexOf(".vari")+1, dotted.indexOf(".java"));
 
 	}

@@ -1,25 +1,46 @@
 package networking;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class ServerMessageSender implements IMessageSender {
 
-    private final String IP_STRING = "corona10.doc.ic.ac.uk";
+    private String ABSOLUTE_PATH_TO_SERVER_CONFIG_FILE = "server.txt";
+    private InetSocketAddress serverAddress;
     private final int PORT = 4444;
     private final int TIMEOUT_DEFAULT_MS = 10000;
     private final int RETRY_WAIT_MS = 500;
 
-    public void sendMessageAsync(String msg) {
+    //Server:port is loaded on demand from text file next to jar.
+    public InetSocketAddress getServerSocketAddress() {
+        if (serverAddress == null) {
+            try {
+                File file = new File(ABSOLUTE_PATH_TO_SERVER_CONFIG_FILE);
+                FileInputStream fis = null;
+                fis = new FileInputStream(file);
+                byte[] data = new byte[(int) file.length()];
+                fis.read(data);
+                fis.close();
+                String text = new String(data, "UTF-8").trim();
+                serverAddress = new InetSocketAddress(text.split(":")[0],
+                                    Integer.parseInt(text.split(":")[1]));
+            } catch (Exception e) {
+                //If for any reason the server file is not found or is wrong,
+                //lobby will not load, but single player is not impacted.
+                e.printStackTrace();
+            }
+        }
+        return serverAddress;
+    }
 
+    public void sendMessageAsync(String msg) {
+        //TODO: implement this if needed.
     }
 
     //Send message to server and if flag is set, await a response.
+    //Note that waitForResponse = false still guarantees the packet arrived.
     public String sendMessage(String msg, boolean waitForResponse) {
         return sendMessage(msg, waitForResponse, TIMEOUT_DEFAULT_MS);
     }
@@ -31,7 +52,7 @@ public class ServerMessageSender implements IMessageSender {
         while (System.currentTimeMillis() - startTime < timeout) {
             try {
                 Socket socket = new Socket();
-                socket.connect(new InetSocketAddress(InetAddress.getByName(IP_STRING), PORT), timeout);
+                socket.connect(getServerSocketAddress(), timeout);
 
                 DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
                 clientWriter.writeBytes(msg + "\n");

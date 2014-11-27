@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
@@ -61,6 +62,7 @@ public class frmMainMenu {
             }
         });
 
+
         timer = new Timer(1, new ActionListener() {
             int iteration = 0;
             Graphics gr;
@@ -70,13 +72,22 @@ public class frmMainMenu {
             Font pawnFont = new Font("", Font.PLAIN, 36);
             Font titleFont1 = new Font("", Font.BOLD, 78);
             Font titleFont2 = new Font("", Font.BOLD, 75);
-
+            BufferedImage panelImage;
             Random r = new Random();
+
+            boolean initialised = false;
 
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (frame.getWidth() > 0) {
-                    gr = panel1.getGraphics();
+                if (!initialised && frame.getWidth() > 0) {
+                    //Graphics are first available
+                    panelImage = new BufferedImage(panel1.getWidth(), panel1.getHeight(),
+                            BufferedImage.TYPE_INT_RGB);
+                    initialised = true;
+                }
+
+                if (initialised) {
+                    gr = panelImage.getGraphics();
 
                     String piece = characters.charAt(r.nextInt(characters.length())) + "";
                     gr.setFont(pawnFont);
@@ -90,6 +101,8 @@ public class frmMainMenu {
                     gr.setFont(titleFont2);
                     gr.setColor(Color.WHITE);
                     drawCenteredString(LBLTITLE_TEXT, frame.getWidth(), 80, gr);
+
+                    panel1.getGraphics().drawImage(panelImage, 0, 0, null);
 
                     btnSinglePlayer.updateUI();
                     btnLocalMP.updateUI();
@@ -107,7 +120,7 @@ public class frmMainMenu {
                 g.drawString(s, x, y);
             }
         });
-        timer.start();
+        //timer.start();
 
         lblTitle.setText(" ");
     }

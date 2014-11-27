@@ -23,8 +23,7 @@ public class Grandvar extends ChessVariant {
 
     @Override
     public String getDescription() {
-        return "[grand chess rules]\n" +
-               "[grand chess rules]\n";
+        return "Grand chess is played on a larger, 10x10 board and introduces two new characters: the Marshall, which combines the powers of the Rook and Knight and the Cardinal, which combines the powers of the Bishop and Knight. There is no castling.";
     }
 
     @Override

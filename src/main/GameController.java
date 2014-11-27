@@ -25,6 +25,7 @@ public class GameController {
     private ChessAI ai = new MinimaxAI(!playerIsWhite, 3);
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
+    private boolean AIWorking = false;
 
 	public Board getBoard() {
 		return board;
@@ -328,6 +329,11 @@ public class GameController {
 		board.populateFromCode(pieces, decoder);
 	}
 
+    public void setDifficulty(int difficulty) {
+        while (AIWorking) Thread.yield();
+        this.ai = new MinimaxAI(!playerIsWhite, difficulty);
+    }
+
     class DoAIMove implements Runnable {
 
         private GameController control;
@@ -338,9 +344,11 @@ public class GameController {
 
         @Override
         public void run() {
+            AIWorking = true;
             Location[] aiMove = control.ai.getBestMove(control.board);
             control.attemptMove(aiMove[0], aiMove[1], false);
-            System.out.println(aiMove[0] + " -> " + aiMove[1]);
+            //System.out.println(aiMove[0] + " -> " + aiMove[1]);
+            AIWorking = false;
         }
 
     }

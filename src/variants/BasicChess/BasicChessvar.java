@@ -33,7 +33,7 @@ public class BasicChessvar extends ChessVariant {
     }
 
     public BasicChessvar(GameMode mode) {
-		game = new GameController(new BasicBoard(), 0, new BasicDecoder(), mode);
+		game = new GameController(new BasicBoard(), 0, new BasicDecoder(), mode, GameController.defaultPIW);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}

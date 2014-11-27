@@ -17,19 +17,24 @@ import java.util.concurrent.Executors;
  * Handles game logic
  */
 public class GameController {
+	public static boolean defaultPIW = false; //TODO: Ask the player what colour they want to play.
+
 	private boolean isWhitesTurn = true; //white always starts
 	private int currentTurn;
     private GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
+
 	private int gameID;
+	public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
 	private PieceDecoder decoder;
-    public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
-    private boolean playerIsWhite = true;
+
 	public final int initialDiff = 3;
-    private ChessAI ai = new MinimaxAI(!playerIsWhite, initialDiff);
+	private ChessAI ai;
+	private boolean AIWorking = false;
+	private boolean playerIsWhite;
+
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
-    private boolean AIWorking = false;
 
 	public Board getBoard() {
 		return board;
@@ -42,13 +47,21 @@ public class GameController {
 	/**
 	 * @param board board
 	 */
-	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode) {
+	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode, boolean playerIsWhite) {
         currentTurn = 1;
 		this.board = board;
 		this.gameID = gameID;
 		this.decoder = decoder;
         this.gameMode = mode;
 		previousTurns = new ArrayList<String>();
+		this.playerIsWhite = playerIsWhite;
+
+		if (mode == GameMode.SINGLE_PLAYER) {
+			this.ai = new MinimaxAI(!playerIsWhite, initialDiff);
+			if (!playerIsWhite) {
+				executor.submit(new DoAIMove(this));
+			}
+		}
     }
 
 	public GameController(Board board, PieceDecoder decoder, String code, GameMode mode) {
@@ -66,6 +79,11 @@ public class GameController {
 		board.populateFromCode(pieces, decoder);
         this.gameMode = mode;
 		previousTurns = new ArrayList<String>();
+		//TODO: Save whether the player is playing white or black, for singleplayer.
+
+		if (mode == GameMode.SINGLE_PLAYER) {
+			this.ai = new MinimaxAI(!playerIsWhite, initialDiff);
+		}
 	}
 
     public ChessAI getAI() {
@@ -151,7 +169,7 @@ public class GameController {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
 
-            if (!isWhitesTurn && gameMode == GameMode.SINGLE_PLAYER) {
+            if ((isWhitesTurn != playerIsWhite) && (gameMode == GameMode.SINGLE_PLAYER)) {
                 executor.submit(new DoAIMove(this));
             }
 
@@ -323,12 +341,11 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        GameController newGame = new GameController(null, gameID, decoder, gameMode);
+        GameController newGame = new GameController(null, gameID, decoder, gameMode, playerIsWhite);
         newGame.isWhitesTurn = this.isWhitesTurn;
         newGame.currentTurn = this.currentTurn;
         newGame.gameResult = this.gameResult;
         newGame.ai = null;
-        newGame.playerIsWhite = this.playerIsWhite;
         return newGame;
     }
 

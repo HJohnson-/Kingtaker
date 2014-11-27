@@ -360,8 +360,12 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     @Override
     public void run() {
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+        int targetFPS = 60;
+        long lastDraw = System.currentTimeMillis();
         while (true) {
+            while ((System.currentTimeMillis() - lastDraw) < (1000 / targetFPS));
             repaint();
+            lastDraw = System.currentTimeMillis();
         }
     }
 

@@ -57,6 +57,7 @@ public class GraphicsControl implements Runnable {
     public void run() {
 
         float maxDistance = Math.max(Math.abs(endCords.getX() - curCords.getX()), Math.abs(endCords.getY() - curCords.getY()));
+        int sleepTime = (int) Math.ceil(animationTime / maxDistance);
 
         int animationXStep = (int) Math.signum(endCords.getX() - curCords.getX());
         int animationYStep = (int) Math.signum(endCords.getY() - curCords.getY());
@@ -68,7 +69,7 @@ public class GraphicsControl implements Runnable {
             curCords.incrY(animationYStep);
 
             try {
-                Thread.sleep((int) Math.ceil(animationTime / maxDistance));
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

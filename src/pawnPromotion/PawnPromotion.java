@@ -1,5 +1,6 @@
 package pawnPromotion;
 
+import main.GameLauncher;
 import pieces.ChessPiece;
 import variants.BasicChess.*;
 import javax.imageio.ImageIO;
@@ -16,26 +17,24 @@ import java.io.IOException;
 
 
 
-public class pawnPromotion implements Runnable {
+public class PawnPromotion implements Runnable {
 
     JFrame frame = new JFrame("Pawn Promotion");
-
-    public enum PromoteType{QUEEN,ROOK,BISHOP,KNIGHT}
 
     private ChessPiece promotedPiece;
     private ChessPiece pawn;
 
     // constructor
-    public pawnPromotion (ChessPiece pawn){
+    public PawnPromotion(ChessPiece pawn){
         this.pawn = pawn;
     }
 
     // chess piece promotion
-    public void promote(ChessPiece pawn, PromoteType promoteType) {
+    public void promote(PromotablePiece promotablePiece) {
 
         //System.out.println("pawn cords" + pawn.cords+" clear space...");
 
-        switch (promoteType) {
+        switch (promotablePiece) {
             case QUEEN:
                 promotedPiece = new Queen(pawn.board,pawn.type,pawn.cords);
                 break;
@@ -53,6 +52,7 @@ public class pawnPromotion implements Runnable {
         pawn.board.clearSpace(pawn.cords);
         promotedPiece.board.placePiece(promotedPiece.cords, promotedPiece);
         promotedPiece.lastTurnMovedOn = pawn.lastTurnMovedOn;
+        GameLauncher.currentGameLauncher.broadcastMove(pawn.cords, pawn.cords, "" + promotablePiece.ordinal());
         if (promotedPiece.board.doDrawing) {
             promotedPiece.graphics.givePanel(pawn.graphics.panel);
             promotedPiece.graphics.panel.recalculateCellSize();
@@ -66,13 +66,13 @@ public class pawnPromotion implements Runnable {
 
     public void addComponentsToPane(Container pane) {
         pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
-        addAButton(PromoteType.QUEEN, "queen",pane);
-        addAButton(PromoteType.ROOK,"rook", pane);
-        addAButton(PromoteType.BISHOP,"bishop", pane);
-        addAButton(PromoteType.KNIGHT,"knight", pane);
+        addAButton(PromotablePiece.QUEEN, "queen",pane);
+        addAButton(PromotablePiece.ROOK,"rook", pane);
+        addAButton(PromotablePiece.BISHOP,"bishop", pane);
+        addAButton(PromotablePiece.KNIGHT,"knight", pane);
     }
 
-    private void addAButton(final PromoteType promoteType,String name, Container container) {
+    private void addAButton(final PromotablePiece promotablePiece,String name, Container container) {
         // new button and set size
         JButton button = new JButton();
         button.setPreferredSize(new Dimension(150, 150));
@@ -93,7 +93,7 @@ public class pawnPromotion implements Runnable {
         {
             public void actionPerformed(ActionEvent e)
             {
-                promote(pawn,promoteType);
+                promote(promotablePiece);
                 frame.dispose();
             }
         });

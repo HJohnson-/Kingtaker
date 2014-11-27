@@ -1,11 +1,12 @@
 package ai;
 
+import pawnPromotion.PawnPromotion;
+import pawnPromotion.PromotablePiece;
 import variants.BasicChess.Pawn;
 import main.Board;
 import main.GameMode;
 import main.GameResult;
 import main.Location;
-import pawnPromotion.pawnPromotion;
 import pieces.ChessPiece;
 
 import java.util.LinkedList;
@@ -52,8 +53,8 @@ public class MinimaxAI extends ChessAI {
                         newBoard.getController().gameMode = GameMode.MULTIPLAYER_LOCAL;
                         newBoard.getController().attemptMove(piece.cords, l, false);
                         if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == board.numCols())) {
-                            pawnPromotion pp = new pawnPromotion(piece);
-                            pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
+                            PawnPromotion pp = new PawnPromotion(piece);
+                            pp.promote(PromotablePiece.QUEEN);
                         }
                         Searcher s = new Searcher(newBoard, !isWhite, move);
                         results.add(executor.submit(s));
@@ -143,8 +144,8 @@ public class MinimaxAI extends ChessAI {
 
                             newBoard.getController().attemptMove(piece.cords, l, checkingWhite != isWhite);
                             if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == b.numCols() - 1)) {
-                                pawnPromotion pp = new pawnPromotion(piece);
-                                pp.promote(piece, pawnPromotion.PromoteType.QUEEN);
+                                PawnPromotion pp = new PawnPromotion(piece);
+                                pp.promote(PromotablePiece.QUEEN);
                             }
 
                             if (isWhite == checkingWhite) {

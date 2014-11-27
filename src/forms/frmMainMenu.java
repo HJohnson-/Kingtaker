@@ -120,7 +120,7 @@ public class frmMainMenu {
                 g.drawString(s, x, y);
             }
         });
-        //timer.start();
+        timer.start();
 
         lblTitle.setText(" ");
     }

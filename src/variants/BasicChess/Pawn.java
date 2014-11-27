@@ -3,7 +3,7 @@ package variants.BasicChess;
 import main.Board;
 import main.Location;
 import main.PieceType;
-import pawnPromotion.pawnPromotion;
+import pawnPromotion.PawnPromotion;
 import pieces.ChessPiece;
 import pieces.EmptyPiece;
 
@@ -112,7 +112,7 @@ public class Pawn extends ChessPiece{
             boolean successful = super.executeMove(to);
             if ((to.getX() == 0 || to.getX() == board.numCols() - 1) && board.doDrawing) {
                 ExecutorService exe = Executors.newFixedThreadPool(1);
-                exe.submit(new pawnPromotion(this));
+                exe.submit(new PawnPromotion(this));
             }
             return successful;
         } else {

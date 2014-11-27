@@ -2,6 +2,9 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
+import com.sun.xml.internal.ws.util.StringUtils;
+import pawnPromotion.PawnPromotion;
+import pawnPromotion.PromotablePiece;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 import variants.BasicChess.King;
@@ -155,12 +158,26 @@ public class GameController {
     /**
      * Co-ordinates of move and optional extra field for pawn promotion.
      * Function is used to handle moves from a remote or AI user.
+     * Returns whether the move was accepted by the game controller.
      */
     public boolean handleRemoteMove(int oldX, int oldY, int newX, int newY, String extra) {
         Location oldL = new Location(oldX, oldY);
         Location newL = new Location(newX, newY);
 
-        return attemptMove(oldL, newL, false);
+        if (oldL.equals(newL) && extra != null) {
+            PromotablePiece promotablePiece;
+            //Attempt to parse extra as a pawn promotion argument
+            try {
+                promotablePiece = PromotablePiece.values()[Integer.parseInt(extra)];
+                PawnPromotion pawnPromotion = new PawnPromotion(board.getPiece(oldL));
+                pawnPromotion.promote(promotablePiece);
+            } catch (Exception e) {
+            }
+            return true;
+
+        } else {
+            return attemptMove(oldL, newL, false);
+        }
     }
 
 	/**

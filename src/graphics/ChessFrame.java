@@ -10,7 +10,7 @@ public abstract class ChessFrame extends JFrame {
 
     protected String title;
     protected int width, height;
-    protected ChessPanel panel;
+    protected JPanel panel;
     public boolean fullscreen = false;
 
     /**
@@ -28,6 +28,15 @@ public abstract class ChessFrame extends JFrame {
         initUI();
     }
 
+
+	public ChessFrame(String title, int width, int height, JPanel panel) {
+		this.title = title;
+		this.width = width;
+		this.height = height;
+		this.panel = panel;
+		initUI();
+	}
+
     /**
      * Part of initialising a JPanel, this function sets up the window.
      */
@@ -36,6 +45,8 @@ public abstract class ChessFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         add(panel);
+
+
 
         if (fullscreen) {
             setExtendedState(Frame.MAXIMIZED_BOTH);

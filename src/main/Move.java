@@ -17,8 +17,17 @@ public class Move {
         this.pieceType = pieceType;
     }
 
-    public Move(Location from, Location to, String pieceType, String pieceTakenType) {
+	public Location getFrom() {
+		return from;
+	}
+
+	public Location getTo() {
+		return to;
+	}
+
+	public Move(Location from, Location to, String pieceType, String pieceTakenType) {
         this(from, to, pieceType);
+
         this.pieceTakenType = pieceTakenType;
         this.take = true;
     }

@@ -217,7 +217,7 @@ public class GameController {
 	/**
 	 * set the game state to over
 	 */
-	protected void endGame() {
+	public void endGame() {
         gameResult = isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
         if (gameMode == GameMode.MULTIPLAYER_ONLINE) {
             GameLauncher.currentGameLauncher.broadcastEndGame();
@@ -227,7 +227,7 @@ public class GameController {
 	/**
 	 * @return true if turn player is in checkmate
 	 */
-	protected boolean checkMate() {
+	public boolean checkMate() {
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves(!isWhitesTurn);
 		for (Map.Entry<ChessPiece, List<Location>> entry : moves.entrySet()) {
 			if (!entry.getValue().isEmpty()) {
@@ -312,9 +312,14 @@ public class GameController {
 	/**
 	 * advances the turn,changes the turn player
 	 */
-	private void nextPlayersTurn() {
+	public void nextPlayersTurn() {
 		currentTurn++;
         isWhitesTurn = !isWhitesTurn;
+	}
+
+	public void previousTurn() {
+		currentTurn--;
+		isWhitesTurn = !isWhitesTurn;
 	}
 
 	/**

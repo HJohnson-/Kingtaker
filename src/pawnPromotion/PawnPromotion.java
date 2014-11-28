@@ -1,5 +1,6 @@
 package pawnPromotion;
 
+import main.GameController;
 import main.GameLauncher;
 import pieces.ChessPiece;
 import variants.BasicChess.*;
@@ -59,6 +60,13 @@ public class PawnPromotion implements Runnable {
             promotedPiece.graphics.panel.recalculateCellSize();
         }
 
+        GameController control = promotedPiece.board.getController();
+        control.previousTurn();
+        if (control.checkMate()) {
+            control.endGame();
+        } else {
+            control.nextPlayersTurn();
+        }
         promotedPiece.board.getController().promoting = false;
     }
 

@@ -113,7 +113,7 @@ public class Pawn extends ChessPiece{
             boolean successful = super.executeMove(to);
             if ((to.getX() == 0 || to.getX() == board.numCols() - 1) && board.doDrawing) {
 				board.getController().promoting = true;
-                ExecutorService exe = Executors.newFixedThreadPool(1);
+                ExecutorService exe = Executors.newSingleThreadExecutor();
                 exe.submit(new PawnPromotion(this));
 				exe.shutdown();
             }

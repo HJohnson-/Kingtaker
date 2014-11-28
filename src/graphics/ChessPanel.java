@@ -19,22 +19,23 @@ import java.util.concurrent.Executors;
  */
 public abstract class ChessPanel extends JPanel implements Runnable {
 
-    protected Board board;
+    public Board board;
     protected ChessPiece selectedPiece = null;
+
     protected int UIHeight = 100;
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
+    private Font mainFont;
+    private Font bigMainFont;
+
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
 	protected JButton undo = new JButton("Undo");
     protected JSlider difficulty = new JSlider();
+
     private String code;
-    private Font mainFont;
-    private Font bigMainFont;
-    private int fps;
-    private boolean drawFPS = true;
-	private static double lastLoad = 0;
+    private static double lastLoad = 0;
 
      /* This constructor sets up a listener to handle the user clicking on the screen.
      * @param board The board which information will be obtained from.
@@ -74,8 +75,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      */
     @Override
     public void paintComponent(Graphics g) {
-        long start = System.nanoTime();
-
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -90,9 +89,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         g2.setFont(mainFont);
 
         doDrawing(g2);
-
-        long elapsed = System.nanoTime() - start;
-        fps = (int) (Math.pow(10, 9) / elapsed);
     }
 
     protected Font createFont(int size) {
@@ -123,7 +119,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         int plyMarkX = (int) (end.getX() == 0 ? end.getX() : start.getX());
         g2.fillRect(plyMarkX, offset.getY(), offset.getX(), board.numRows() * cellHeight);
 
-        String gameResultString = getGameResultString(board.getController().getResult());
+        String gameResultString = getGameResultString();
         if (gameResultString != null) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
             g2.setColor(Color.GREEN);
@@ -334,7 +330,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
     //Returns the appropriate message to display based on the game's result
     //or null if the game is still in progress.
-    private String getGameResultString(GameResult gameResult) {
+    private String getGameResultString() {
         switch (board.getController().getResult()) {
             case DRAW:
                 return "Stalemate! It is a draw";

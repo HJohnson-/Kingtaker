@@ -24,6 +24,8 @@ public class KnightGraphicsControl extends GraphicsControl {
         int animationXStep = (int) Math.signum(endCords.getX() - curCords.getX());
         int animationYStep = (int) Math.signum(endCords.getY() - curCords.getY());
 
+        panel.board.getController().animating = true;
+
         while (!curCords.getX().equals(endCords.getX())) {
             curCords.incrX(animationXStep);
             try {
@@ -41,6 +43,8 @@ public class KnightGraphicsControl extends GraphicsControl {
                 e.printStackTrace();
             }
         }
+
+        panel.board.getController().animating = false;
     }
 
 }

@@ -2,7 +2,6 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
-import com.sun.xml.internal.ws.util.StringUtils;
 import pawnPromotion.PawnPromotion;
 import pawnPromotion.PromotablePiece;
 import pieces.ChessPiece;
@@ -72,7 +71,8 @@ public class GameController {
 		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+3;
 		endOfValue = code.indexOf('$', startOfValue);
-		gameID = Integer.decode(code.substring(startOfValue, endOfValue));
+        // modified!!!!!!!
+		gameID = 1;
 		startOfValue = endOfValue+1;
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);

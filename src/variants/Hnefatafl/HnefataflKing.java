@@ -1,6 +1,6 @@
-package Hnefatafl;
+package variants.Hnefatafl;
 
-import BasicChess.Rook;
+import variants.BasicChess.Rook;
 import main.Board;
 import main.Location;
 import main.PieceType;
@@ -23,6 +23,6 @@ public class HnefataflKing extends Rook {
 
 	@Override
 	public String getName() {
-		return "Hnefatafl King";
+		return "variants.Hnefatafl King";
 	}
 }

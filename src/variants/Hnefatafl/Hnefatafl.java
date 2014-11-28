@@ -1,6 +1,6 @@
-package Hnefatafl;
+package variants.Hnefatafl;
 
-import BasicChess.BasicChessFrame;
+import variants.BasicChess.BasicChessFrame;
 import main.ChessVariant;
 import main.GameController;
 import main.GameMode;
@@ -17,11 +17,11 @@ public class Hnefatafl extends ChessVariant {
 
 	@Override
 	public String getName() {
-		return "Hnefatafl";
+		return "variants/Hnefatafl";
 	}
 
 	@Override
-	public String getDescription() { return "[Hnefatafl rules]\n"; }
+	public String getDescription() { return "[variants.Hnefatafl rules]\n"; }
 
 	@Override
 	public PieceDecoder getDecoder() {
@@ -33,7 +33,7 @@ public class Hnefatafl extends ChessVariant {
 	}
 
 	public Hnefatafl(GameMode mode) {
-		game = new GameController(new HnefataflBoard(), "Hnefatafl", new HnefataflDecoder(), mode);
+		game = new GameController(new HnefataflBoard(), new HnefataflDecoder(),"variants/Hnefatafl", mode);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
@@ -45,7 +45,7 @@ public class Hnefatafl extends ChessVariant {
 
 	@Override
 	public boolean drawBoard() {
-		//graphics.tools.create(new HnefataflFrame("Hnefatafl", 700, 600, game.getBoard()));
+		//graphics.tools.create(new HnefataflFrame("variants.Hnefatafl", 700, 600, game.getBoard()));
 		return true;
 	}
 

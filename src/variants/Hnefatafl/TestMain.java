@@ -1,4 +1,4 @@
-package Hnefatafl;
+package variants.Hnefatafl;
 
 import javax.swing.*;
 
@@ -7,7 +7,7 @@ import javax.swing.*;
  */
 public class TestMain {
 	public static void main(String[] args) {
-		JFrame window = new HnefataflFrame("Hnefatafl",700,625,null);
+		JFrame window = new HnefataflFrame("variants/Hnefatafl",700,625,null);
 		window.setVisible(true);
 	}
 }

@@ -1,4 +1,4 @@
-package Hnefatafl;
+package variants.Hnefatafl;
 
 import javax.swing.*;
 import java.awt.*;

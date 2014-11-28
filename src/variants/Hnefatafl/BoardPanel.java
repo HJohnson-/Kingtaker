@@ -1,4 +1,4 @@
-package Hnefatafl;
+package variants.Hnefatafl;
 
 import graphics.tools;
 import main.Location;

@@ -1,9 +1,7 @@
-package Hnefatafl;
+package variants.Hnefatafl;
 
 import graphics.ChessFrame;
 import main.Board;
-
-import javax.swing.*;
 
 /**
  * Created by crix9 on 21/11/2014.

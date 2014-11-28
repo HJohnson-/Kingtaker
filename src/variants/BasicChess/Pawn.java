@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Default Pawn
@@ -113,6 +114,7 @@ public class Pawn extends ChessPiece{
             if ((to.getX() == 0 || to.getX() == board.numCols() - 1) && board.doDrawing) {
                 ExecutorService exe = Executors.newFixedThreadPool(1);
                 exe.submit(new PawnPromotion(this));
+				exe.shutdown();
             }
             return successful;
         } else {

@@ -176,8 +176,7 @@ public class BoardPanel extends JPanel implements ActionListener, MouseListener 
 		for(int row = 0; row < 11; row ++) {
 			for(int col = 0; col < 11; col++) {
 
-				if((row==0 && col==0) || (row==0 && col==10) ||
-				   (row==10 && col==0) || (row==10 && col==10) || row == 5 && col == 5)
+				if(isHostile(row, col))
 					g.setColor(Color.DARK_GRAY);
 				else if(row % 2 == col % 2)
 					g.setColor(tools.BOARD_BLACK);
@@ -189,7 +188,7 @@ public class BoardPanel extends JPanel implements ActionListener, MouseListener 
 				switch (board.getPiece(new Location(row,col)).type) {
 					case WHITE:
 
-						if(board.getPiece(new Location(row,col)) instanceof  King){
+						if(board.getPiece(new Location(row,col)) instanceof  HnefataflKing){
 							g.setColor(Color.WHITE);
 							g.fillOval(8 + col*40, 8 + row*40, 30, 30);
 							g.setColor(Color.BLACK);
@@ -232,6 +231,11 @@ public class BoardPanel extends JPanel implements ActionListener, MouseListener 
 				}
 			}
 		}
+	}
+
+	private boolean isHostile(int row, int col) {
+		return (row==0 && col==0) || (row==0 && col==10) ||
+		   (row==10 && col==0) || (row==10 && col==10) || row == 5 && col == 5;
 	}
 
 	public void mousePressed(MouseEvent evt) {

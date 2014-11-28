@@ -33,7 +33,7 @@ public class HnefataflBoard extends Board {
 
 		//King in the middle
 		Location location = new Location(5,5);
-		this.placePiece(location, new King(this, PieceType.WHITE, location));
+		this.placePiece(location, new HnefataflKing(this, PieceType.WHITE, location));
 
 		//defenders surrounding king
 		location = new Location(3,5);
@@ -148,7 +148,7 @@ public class HnefataflBoard extends Board {
 
 			if(isEnemyPiece(currentPlayerType,toPieceType) &&
 				move.getTo().getX()-1 != 0 && // cant capture this piece as it's not between two
-				!(toPiece instanceof King)) { //cannot take king if not surrounded in all 4 parts
+				!(toPiece instanceof HnefataflKing)) { //cannot take king if not surrounded in all 4 parts
 
 				Location loc2 = new Location(move.getTo().getX()-2,move.getTo().getY());
 				ChessPiece pieceUp2 = this.getPiece(loc2);
@@ -168,7 +168,7 @@ public class HnefataflBoard extends Board {
 
 			if(isEnemyPiece(currentPlayerType, toPieceType) &&
 			   move.getTo().getX()+1 != 10 &&
-			   !(toPiece instanceof King)) {
+			   !(toPiece instanceof HnefataflKing)) {
 
 				Location loc2 = new Location(move.getTo().getX()+2,move.getTo().getY());
 				ChessPiece pieceUp2 = this.getPiece(loc2);
@@ -189,7 +189,7 @@ public class HnefataflBoard extends Board {
 
 			if(isEnemyPiece(currentPlayerType, toPieceType) &&
 					move.getTo().getY()-1 != 0 &&
-					!(toPiece instanceof King)) {
+					!(toPiece instanceof HnefataflKing)) {
 
 				Location loc2 = new Location(move.getTo().getX(),move.getTo().getY()-2);
 				ChessPiece pieceUp2 = this.getPiece(loc2);
@@ -211,7 +211,7 @@ public class HnefataflBoard extends Board {
 
 			if(isEnemyPiece(currentPlayerType, toPieceType) &&
 					loc.getY() != 10 &&
-					!(toPiece instanceof King)) {
+					!(toPiece instanceof HnefataflKing)) {
 
 				Location loc2 = new Location(move.getTo().getX(),move.getTo().getY()+2);
 				ChessPiece pieceUp2 = this.getPiece(loc2);
@@ -272,8 +272,8 @@ public class HnefataflBoard extends Board {
 		loc = new Location(10,10);
 		ChessPiece bottomRightPiece = this.getPiece(loc);
 
-		return (topLeftPiece instanceof King) || (topRightPiece instanceof King)
-				|| (bottomLeftPiece instanceof King) || (bottomRightPiece instanceof King);
+		return (topLeftPiece instanceof HnefataflKing) || (topRightPiece instanceof HnefataflKing)
+				|| (bottomLeftPiece instanceof HnefataflKing) || (bottomRightPiece instanceof HnefataflKing);
 	}
 
 
@@ -281,7 +281,7 @@ public class HnefataflBoard extends Board {
 		for(int row = 0; row < this.numRows(); row++){
 			for (int col = 0; col <this.numCols(); col++){
 				Location loc = new Location(row, col);
-				if(this.getPiece(loc) instanceof King){
+				if(this.getPiece(loc) instanceof HnefataflKing){
 					return loc;
 				}
 			}
@@ -375,7 +375,7 @@ public class HnefataflBoard extends Board {
 				for(int col=0; col < 11; col++) {
 					if(this.getPiece(new Location(row,col)).type == pieceType) {
 						for(int a = (col+1); a < 11; a++) { //check right
-							if(this.getPiece(new Location(row,col)) instanceof  King && pieceType == PieceType.WHITE) {
+							if(this.getPiece(new Location(row,col)) instanceof  HnefataflKing && pieceType == PieceType.WHITE) {
 								if(isMoveLegal(pieceType, new Move(new Location(row, col), new Location(row, a), pieceType.string())))
 									moves.add(new Move(new Location(row,col), new Location( row, a),pieceType.string()));
 								else
@@ -392,7 +392,7 @@ public class HnefataflBoard extends Board {
 							}
 						}
 						for(int a = (col-1); a >= 0; a--) { //check left
-							if(this.getPiece(new Location(row,col)) instanceof  King && pieceType == PieceType.WHITE) {
+							if(this.getPiece(new Location(row,col)) instanceof  HnefataflKing && pieceType == PieceType.WHITE) {
 								if(isMoveLegal(pieceType, new Move(new Location(row, col), new Location(row, a), pieceType.string())))
 									moves.add(new Move(new Location(row,col), new Location( row, a),pieceType.string()));
 
@@ -411,7 +411,7 @@ public class HnefataflBoard extends Board {
 							}
 						}
 						for(int a = (row+1); a < 11; a++) { //check down
-							if(this.getPiece(new Location(row,col)) instanceof  King && pieceType == PieceType.WHITE) {
+							if(this.getPiece(new Location(row,col)) instanceof  HnefataflKing && pieceType == PieceType.WHITE) {
 								if(isMoveLegal(pieceType, new Move(new Location(row, col), new Location(a, col), pieceType.string())))
 									moves.add(new Move(new Location(row,col), new Location(a,col),pieceType.string()));
 								else
@@ -428,7 +428,7 @@ public class HnefataflBoard extends Board {
 							}
 						}
 						for(int a = (row-1); a >= 0; a--) { //check up
-							if(this.getPiece(new Location(row,col)) instanceof  King && pieceType == PieceType.WHITE) {
+							if(this.getPiece(new Location(row,col)) instanceof  HnefataflKing && pieceType == PieceType.WHITE) {
 								if(isMoveLegal(pieceType, new Move(new Location(row, col), new Location(a, col), pieceType.string())))
 									moves.add(new Move(new Location(row,col), new Location(a,col),pieceType.string()));
 								else

@@ -5,18 +5,24 @@ import main.Board;
 import main.Location;
 import main.PieceType;
 
+
 /**
  * Created by crix9 on 21/11/2014.
  */
-public class Attacker extends Rook{
+public class HnefataflKing extends Rook {
 
-	public Attacker(Board board, PieceType type, Location cords) {
+	public HnefataflKing(Board board, PieceType type, Location cords) {
+
 		super(board, type, cords);
 	}
 
+	@Override
+	public int returnValue() {
+		return 9999;
+	}
 
 	@Override
 	public String getName() {
-		return "Attacker";
+		return "Hnefatafl King";
 	}
 }

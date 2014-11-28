@@ -14,7 +14,6 @@ public class Attacker extends Rook{
 		super(board, type, cords);
 	}
 
-
 	@Override
 	public String getName() {
 		return "Attacker";

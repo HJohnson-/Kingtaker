@@ -228,20 +228,21 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
     protected void drawGrid(Graphics2D g2) {
         g2.setColor(tools.BOARD_BLACK);
-        for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
-            for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellHeight * 2) {
-                g2.fillRect(x, y, cellWidth, cellHeight);
-                g2.fillRect(x + cellWidth, y + cellHeight, cellWidth, cellHeight);
+        for (int x = 0; x < board.numCols(); x++) {
+            for (int y = 0; y < board.numRows(); y++) {
+                if ((x % 2) == 0 && (y % 2) == 0) {
+                    g2.setColor(tools.BOARD_BLACK);
+                } else if ((x % 2) == 1 && (y % 2) == 1) {
+                    g2.setColor(tools.BOARD_BLACK);
+                } else {
+                    g2.setColor(tools.BOARD_WHITE);
+                }
+                g2.fillRect((cellWidth * x) + offset.getX(), (cellHeight * y) + offset.getY(), cellWidth, cellHeight);
             }
         }
 
         g2.setColor(tools.BOARD_WHITE);
-        for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
-            for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellWidth * 2) {
-                g2.fillRect(x + cellWidth, y, cellWidth, cellHeight);
-                g2.fillRect(x, y + cellHeight, cellWidth, cellHeight);
-            }
-        }
+
     }
 
     /**

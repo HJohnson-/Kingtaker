@@ -8,6 +8,6 @@ import main.Board;
  */
 public class HnefataflFrame extends ChessFrame {
 	public HnefataflFrame(String title, int width, int height, Board board) {
-		super(title, width, height, new HnefataflPanel());
+		super(title, width, height, new HnefataflPanel(board));
 	}
 }

@@ -1,15 +1,15 @@
 package variants.Hnefatafl;
 
-import variants.BasicChess.BasicChessFrame;
 import main.ChessVariant;
 import main.GameController;
 import main.GameMode;
 import pieces.PieceDecoder;
+import variants.BasicChess.BasicChessFrame;
 
 /**
  * Created by crix9 on 21/11/2014.
  */
-public class Hnefatafl extends ChessVariant {
+public class Hnefataflvar extends ChessVariant {
 	@Override
 	public int getVariationID() {
 		return 3;
@@ -17,41 +17,41 @@ public class Hnefatafl extends ChessVariant {
 
 	@Override
 	public String getName() {
-		return "variants/Hnefatafl";
+		return "Hnefatafl";
 	}
 
 	@Override
-	public String getDescription() { return "[variants.Hnefatafl rules]\n"; }
+	public String getDescription() { return "[variants.Hnefataflvar rules]\n"; }
 
 	@Override
 	public PieceDecoder getDecoder() {
 		return new HnefataflDecoder();
 	}
 
-	public Hnefatafl() {
+	public Hnefataflvar() {
 		this(GameMode.MULTIPLAYER_LOCAL);
 	}
 
-	public Hnefatafl(GameMode mode) {
-		game = new GameController(new HnefataflBoard(), new HnefataflDecoder(),"variants/Hnefatafl", mode);
+	public Hnefataflvar(GameMode mode) {
+		game = new GameController(new HnefataflBoard(), 3, new HnefataflDecoder(), mode, GameController.defaultPIW);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
 
-	public Hnefatafl(GameController game) {
+	public Hnefataflvar(GameController game) {
 		this.game = game;
 		this.game.getBoard().setController(game);
 	}
 
 	@Override
 	public boolean drawBoard() {
-		//graphics.tools.create(new HnefataflFrame("variants.Hnefatafl", 700, 600, game.getBoard()));
+		graphics.tools.create(new HnefataflFrame("Hnefatafl", 700, 600, game.getBoard()));
 		return true;
 	}
 
 	@Override
 	public ChessVariant recreate(GameMode mode) {
-		return new Hnefatafl(mode);
+		return new Hnefataflvar(mode);
 	}
 
 

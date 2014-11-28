@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Default Pawn
@@ -89,7 +88,7 @@ public class Pawn extends ChessPiece{
 		if(toTake.type == type) {
 			return false;
 		}
-		if(toTake.lastTurnMovedOn != board.getController().getCurrentTurn() - 1) {
+		if (toTake.lastTurnMovedOn != board.getController().getCurrentTurn() - 1) {
 			return false;
 		}
 		return true;

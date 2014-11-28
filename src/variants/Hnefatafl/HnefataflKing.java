@@ -23,6 +23,6 @@ public class HnefataflKing extends Rook {
 
 	@Override
 	public String getName() {
-		return "variants.Hnefatafl King";
+		return "Hnefatafl King";
 	}
 }

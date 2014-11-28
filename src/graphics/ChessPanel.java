@@ -25,7 +25,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
-    public boolean animating = false;
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
 	protected JButton undo = new JButton("Undo");
@@ -316,7 +315,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      * Recalculated how large the board needs to be, based on the current size of the panel.
      */
     public void recalculateCellSize() {
-        while (animating) Thread.yield();
+        while (board.getController().animating) Thread.yield();
 
         int boardWidth = (int) getSize().getWidth() - offset.getX() * 2;
         int boardHeight = (int) getSize().getHeight() - UIHeight - offset.getY() * 2;
@@ -357,7 +356,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
          */
         @Override
         public void mousePressed(MouseEvent e) {
-            if (!animating && board.getController().getResult() == GameResult.IN_PROGRESS) {
+            if (!board.getController().animating && board.getController().getResult() == GameResult.IN_PROGRESS) {
                 int x = (e.getX() - offset.getX()) / cellWidth;
                 int y = (e.getY() - offset.getY()) / cellHeight;
                 Location l = new Location(x, y);
@@ -387,7 +386,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int targetFPS = gd.getDisplayMode().getRefreshRate();
         if (targetFPS == DisplayMode.REFRESH_RATE_UNKNOWN) {

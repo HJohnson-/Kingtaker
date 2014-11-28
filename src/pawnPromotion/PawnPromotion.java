@@ -53,12 +53,13 @@ public class PawnPromotion implements Runnable {
         promotedPiece.board.placePiece(promotedPiece.cords, promotedPiece);
         promotedPiece.lastTurnMovedOn = pawn.lastTurnMovedOn;
         GameLauncher.currentGameLauncher.broadcastMove(pawn.cords, pawn.cords, "" + promotablePiece.ordinal());
+
         if (promotedPiece.board.doDrawing) {
             promotedPiece.graphics.givePanel(pawn.graphics.panel);
             promotedPiece.graphics.panel.recalculateCellSize();
-            promotedPiece.graphics.panel.repaint();
         }
 
+        promotedPiece.board.getController().promoting = false;
     }
 
 

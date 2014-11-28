@@ -62,7 +62,7 @@ public class GraphicsControl implements Runnable {
         int animationXStep = (int) Math.signum(endCords.getX() - curCords.getX());
         int animationYStep = (int) Math.signum(endCords.getY() - curCords.getY());
 
-        panel.animating = true;
+        panel.board.getController().animating = true;
 
         while (!curCords.equals(endCords)) {
             curCords.incrX(animationXStep);
@@ -76,7 +76,7 @@ public class GraphicsControl implements Runnable {
 
         }
 
-        panel.animating = false;
+        panel.board.getController().animating = false;
     }
 
     @Override

@@ -32,6 +32,8 @@ public class GameController {
 	private ChessAI ai;
 	private boolean AIWorking = false;
 	private boolean playerIsWhite;
+	public boolean animating = false;
+	public boolean promoting = false;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
@@ -203,14 +205,10 @@ public class GameController {
         if (oldL.equals(newL) && extra != null) {
             PromotablePiece promotablePiece;
             //Attempt to parse extra as a pawn promotion argument
-            try {
-                promotablePiece = PromotablePiece.values()[Integer.parseInt(extra)];
-                PawnPromotion pawnPromotion = new PawnPromotion(board.getPiece(oldL));
-                pawnPromotion.promote(promotablePiece);
-            } catch (Exception e) {
-            }
+			promotablePiece = PromotablePiece.values()[Integer.parseInt(extra)];
+			PawnPromotion pawnPromotion = new PawnPromotion(board.getPiece(oldL));
+			pawnPromotion.promote(promotablePiece);
             return true;
-
         } else {
             return attemptMove(oldL, newL, false);
         }
@@ -378,6 +376,7 @@ public class GameController {
 
         @Override
         public void run() {
+			while (control.animating || control.promoting) Thread.yield();
             AIWorking = true;
             Location[] aiMove = control.ai.getBestMove(control.board);
             control.attemptMove(aiMove[0], aiMove[1], false);

@@ -25,6 +25,9 @@ public abstract class ChessFrame extends JFrame {
         this.width = width;
         this.height = height;
         this.panel = panel;
+//        this.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
         initUI();
     }
 
@@ -35,6 +38,7 @@ public abstract class ChessFrame extends JFrame {
 		this.height = height;
 		this.panel = panel;
 		initUI();
+
 	}
 
     /**
@@ -58,5 +62,6 @@ public abstract class ChessFrame extends JFrame {
         }
         setLocationRelativeTo(null);
     }
+
 
 }

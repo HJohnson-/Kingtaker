@@ -45,7 +45,7 @@ public class BasicChessvar extends ChessVariant {
 
 	//returns true if there was no errors
 	public boolean drawBoard() {
-        graphics.tools.create(new BasicChessFrame("Basic Chess", 600, 700, game.getBoard()));
+        graphics.tools.create(new BasicChessFrame("Basic Chess", 500, 700, game.getBoard()));
         return true;
 	}
 

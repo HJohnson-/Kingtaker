@@ -71,8 +71,7 @@ public class GameController {
 		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+3;
 		endOfValue = code.indexOf('$', startOfValue);
-        // modified!!!!!!!
-		gameID = 1;
+        gameID = Integer.decode(code.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+1;
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);

@@ -1,5 +1,6 @@
 package networking;
 
+import forms.frmJoinRequest;
 import main.GameController;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
@@ -23,12 +24,8 @@ public class MessageListener implements Runnable {
 
     private Thread thread;
 
-    private boolean acceptJoins = false;
+    public boolean acceptJoins = false;
     public boolean acceptMoves = false;
-
-    //For game set up
-    private int pieceCode = -1;
-    private String board = "";
 
     //For ingame move-swapping.
     private GameController gameController;
@@ -101,21 +98,14 @@ public class MessageListener implements Runnable {
             switch (clientToClientCode) {
                 case ClientToClientCode.JOIN_OPEN_GAME :
                     if (acceptJoins) {
+                        acceptJoins = false;
                         String joinerUsername = fields[1];
                         int joinerRating = Integer.valueOf(fields[2]);
 
-                        response = ResponseCode.OK + ResponseCode.DEL + pieceCode + ResponseCode.DEL + board;
-                        acceptJoins = false;
-                        remoteAddress = socket.getInetAddress();
+                        //Host will send OK message to confirm it has received the request.
                         OnlineGameLauncher launcher = (OnlineGameLauncher) GameLauncher.currentGameLauncher;
-                        launcher.setOpponent(remoteAddress, joinerUsername, joinerRating);
-                        launcher.setUserIsWhite(pieceCode == PieceType.WHITE.ordinal());
-
-                        GameLauncher.currentGameLauncher.launch();
-                        acceptMoves = true;
-
-                        GameLobby.getInstance().close();
-
+                        launcher.considerJoinRequest(socket.getInetAddress(), joinerUsername, joinerRating);
+                        return ResponseCode.OK + "";
                     } else {
                         response = ResponseCode.REFUSED + "";
                     }
@@ -152,10 +142,8 @@ public class MessageListener implements Runnable {
         this.remoteAddress = remoteAddress;
     }
 
-    public void hostOpenGame(int pieceCode, String board) {
+    public void hostOpenGame() {
         acceptJoins = true;
-        this.pieceCode = pieceCode;
-        this.board = board;
     }
 
     public void removeOpenGame() {

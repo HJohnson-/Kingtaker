@@ -32,7 +32,9 @@ public class LocalOpenGame {
                 + ClientCommandCode.DEL + variant.getVariationID(), true);
 
         int pieceTypeCode = pieceType.ordinal();
-        MessageListener.getInstance().hostOpenGame(pieceTypeCode, variant.game.toCode());
+        launcher.setUserIsWhite(pieceType == PieceType.WHITE);
+        launcher.setHostedGameCode(variant.game.toCode());
+        MessageListener.getInstance().hostOpenGame();
     }
 
     // Removes open game from server lobby.

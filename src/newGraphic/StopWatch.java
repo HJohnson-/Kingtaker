@@ -1,5 +1,7 @@
 package newGraphic;
 
+import graphics.tools;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,12 +11,14 @@ import java.awt.event.ActionListener;
  * Created by daniel on 14/11/28.
  */
 
-public class StopWatch implements Runnable {
+public class StopWatch extends Thread {
     public StopWatch(){
         super();
     }
 
     public static final JLabel time = new JLabel();
+
+//    public ImageIcon background =new ImageIcon("media/stopWatchLable.png");
 
     private int wCurrentSecond = 0;
     private int wMinute = 0;
@@ -26,24 +30,26 @@ public class StopWatch implements Runnable {
 
     public static boolean isRunning =true;
 
-    JFrame clockFrame = new JFrame("clock");
-    JPanel clockPanel = new JPanel();
-    JPanel clockPanel2 = new JPanel();
-    JButton stopTimer = new JButton("stop");
-    JButton startTimer = new JButton("start");
+    private JFrame clockFrame = new JFrame("clock");
+    private JPanel clockPanel = new JPanel();
+    public JPanel clockPanel2 = new JPanel();
+    private JButton stopTimer = new JButton("stop");
+    private JButton startTimer = new JButton("start");
     public Boolean isWhite = Boolean.TRUE;
 
 
     public JPanel buildStopWatch() {
-        time.setSize(800, 800);
+
+        time.setBackground(tools.BOARD_WHITE);
+        time.setOpaque(true);
         time.setHorizontalTextPosition(JLabel.CENTER);
         time.setVerticalTextPosition(JLabel.CENTER);
 
-        clockPanel2.add(time);
-
-        clockPanel2.setMinimumSize(new Dimension(800, 800));
-
-
+        clockPanel2.setLayout(new BorderLayout());
+        clockPanel2.setOpaque(true);
+        clockPanel2.setBackground(tools.BOARD_WHITE);
+        clockPanel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        clockPanel2.add(time, BorderLayout.CENTER);
 
         return clockPanel2;
     }

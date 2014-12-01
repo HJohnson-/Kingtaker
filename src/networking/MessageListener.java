@@ -1,10 +1,8 @@
 package networking;
 
-import forms.frmJoinRequest;
 import main.GameController;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
-import main.PieceType;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -26,6 +24,8 @@ public class MessageListener implements Runnable {
 
     public boolean acceptJoins = false;
     public boolean acceptMoves = false;
+
+    private String joinResponse = "";
 
     //For ingame move-swapping.
     private GameController gameController;
@@ -96,7 +96,7 @@ public class MessageListener implements Runnable {
             int clientToClientCode = Integer.valueOf(fields[0]);
 
             switch (clientToClientCode) {
-                case ClientToClientCode.JOIN_OPEN_GAME :
+                case ClientToClientCode.JOIN_OPEN_GAME_REQUEST:
                     if (acceptJoins) {
                         acceptJoins = false;
                         String joinerUsername = fields[1];
@@ -128,6 +128,12 @@ public class MessageListener implements Runnable {
                         response = ResponseCode.REFUSED + "";
                     }
                     break;
+
+                //Message will be picked up by getHostJoinResponse()
+                case ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK :
+                case ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO :
+                    joinResponse = message;
+                    return null;
             }
 
         } catch (Exception e) {
@@ -152,5 +158,20 @@ public class MessageListener implements Runnable {
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
+    }
+
+    //Warning: will block current thread for 10 seconds, or until a
+    //response is gotten.
+    public String getHostJoinResponse() {
+        String joinResponseOld = joinResponse;
+        long startTime = System.currentTimeMillis();
+
+        while (System.currentTimeMillis() - startTime < GameLobby.JOIN_GAME_TIMEOUT_MS) {
+            if (!joinResponseOld.equals(joinResponse)) {
+                return joinResponse;
+            }
+        }
+
+        return null;
     }
 }

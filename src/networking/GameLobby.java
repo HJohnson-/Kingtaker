@@ -20,6 +20,7 @@ public class GameLobby {
     private LocalUserAccount localUser;
 
     private static GameLobby instance;
+    public static long JOIN_GAME_TIMEOUT_MS = 10000;
 
     private GameLobbyFetcher gameLobbyFetcher;
     private Thread fetcherThread;

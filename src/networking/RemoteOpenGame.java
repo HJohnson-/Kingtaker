@@ -32,17 +32,13 @@ public class RemoteOpenGame {
     }
 
     public int attemptToJoin(LocalUserAccount localUser) {
-        String message = ClientToClientCode.JOIN_OPEN_GAME + ClientToClientCode.DEL + localUser.getUsername() + ClientToClientCode.DEL + localUser.getRating();
+        String message = ClientToClientCode.JOIN_OPEN_GAME_REQUEST + ClientToClientCode.DEL + localUser.getUsername() + ClientToClientCode.DEL + localUser.getRating();
         OpponentMessageSender oms = new OpponentMessageSender(ip);
         String response = oms.sendMessage(message, true);
 
-        if (response == null) {
-            //Due to timeout
-            return ResponseCode.EMPTY;
-        } else if (response.equals(ResponseCode.REFUSED + "")) {
-            //Game already joined by some other client (most likely).
-            return ResponseCode.REFUSED;
-        } else if (response.startsWith(ResponseCode.OK + ResponseCode.DEL)) {
+        int responseCode = Integer.parseInt(response);
+        if (responseCode == ResponseCode.OK) {
+            String secondResponse = MessageListener.getInstance().getHostJoinResponse();
 
             try {
                 String[] fields = response.split(ResponseCode.DEL);
@@ -65,8 +61,8 @@ public class RemoteOpenGame {
                 return ResponseCode.OK;
             } catch (Exception e) {
                 //Loading the game failed due to a malformed board state
+                return ResponseCode.REFUSED;
             }
-
         }
 
         //Response malformed/unexpected.

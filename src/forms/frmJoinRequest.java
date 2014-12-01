@@ -1,6 +1,7 @@
 package forms;
 
 import main.OnlineGameLauncher;
+import networking.GameLobby;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,7 +20,6 @@ public class frmJoinRequest {
     private JPanel panel1;
     private JFrame frame = new JFrame();
 
-    private final long JOIN_TIMEOUT_MS = 10000;
     private long creationTime = System.currentTimeMillis();
     private final String TITLE = "Request to Join - %d seconds left";
     private final String LBL_JOINER_TEXT = "%s (%d)";
@@ -55,7 +55,7 @@ public class frmJoinRequest {
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("joinTimeoutTimer" + System.currentTimeMillis());
                 long msPassed = System.currentTimeMillis() - creationTime;
-                if (msPassed < JOIN_TIMEOUT_MS) {
+                if (msPassed < GameLobby.JOIN_GAME_TIMEOUT_MS) {
                     frame.setTitle(String.format(TITLE, (int) (JOIN_TIMEOUT_MS - msPassed) / 1000));
                 } else {
                     launcher.rejectJoinToGame();

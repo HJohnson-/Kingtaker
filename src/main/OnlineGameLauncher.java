@@ -148,9 +148,9 @@ public class OnlineGameLauncher extends GameLauncher {
     //Called when user clicks the 'accept' button on the 'this person wants
     //to join your game' form, frmJoinRequest. Starts the game and tells opp.
     public void acceptJoinToGame() throws Exception {
-        String response = ResponseCode.OK + ResponseCode.DEL
-                + (localUserIsWhite ? "0" : "1")
-                + ResponseCode.DEL + hostedGameCode;
+        String acceptanceMessage = ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK
+                + ClientToClientCode.DEL + (localUserIsWhite ? "0" : "1")
+                + ClientToClientCode.DEL + hostedGameCode;
         setOpponent(pendingIP, pendingName, pendingRating);
 
         launch();
@@ -163,7 +163,7 @@ public class OnlineGameLauncher extends GameLauncher {
     public void rejectJoinToGame() {
         MessageListener.getInstance().acceptJoins = true;
 
-        String response = ResponseCode.REFUSED + "";
+        String response = ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO + "";
         OpponentMessageSender oms = new OpponentMessageSender(pendingIP);
         oms.sendMessage(response, false);
 

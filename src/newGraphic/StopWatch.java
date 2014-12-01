@@ -24,7 +24,7 @@ public class StopWatch implements Runnable {
     private int bMinute = 0;
     private int bHour = 0;
 
-    public static int isRunning =0;
+    public static boolean isRunning =true;
 
     JFrame clockFrame = new JFrame("clock");
     JPanel clockPanel = new JPanel();
@@ -35,29 +35,16 @@ public class StopWatch implements Runnable {
 
 
     public JPanel buildStopWatch() {
-//        clockFrame.setSize(500, 500);
         time.setSize(800, 800);
-
-//        init_buttons();
-//        clockPanel.add(stopTimer);
-//        clockPanel.add(startTimer);
+        time.setHorizontalTextPosition(JLabel.CENTER);
+        time.setVerticalTextPosition(JLabel.CENTER);
 
         clockPanel2.add(time);
 
-//        clockFrame.getContentPane().add(clockPanel,BorderLayout.SOUTH);
-//        clockFrame.setMinimumSize(new Dimension(20, 20));
-
-//        clockFrame.getContentPane().add(clockPanel2,BorderLayout.NORTH);
         clockPanel2.setMinimumSize(new Dimension(800, 800));
 
 
 
-//        clockFrame.pack();
-//        clockFrame.setVisible(true);
-//    if(isRunning==0) {
-//        this.run();
-//    isRunning =1;
-//    }
         return clockPanel2;
     }
 
@@ -105,7 +92,7 @@ public class StopWatch implements Runnable {
     @Override
     public void run() {
 
-        while (true) {
+        while (isRunning) {
 
             while (isWhite) {
 
@@ -139,6 +126,12 @@ public class StopWatch implements Runnable {
             }
 
         }
+        wHour =0;
+        wMinute=0;
+        wCurrentSecond=0;
+         bHour=0;
+        bMinute=0;
+        bCurrentSecond=0;
     }
 
 }

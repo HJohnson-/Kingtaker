@@ -2,6 +2,8 @@ package graphics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * A basic JFrame implementation, which handles displaying the window on the screen.
@@ -29,6 +31,12 @@ public abstract class ChessFrame extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         initUI();
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                ChessPanel.stopWatch.isRunning = false;
+            }
+        });
     }
 
 
@@ -62,6 +70,9 @@ public abstract class ChessFrame extends JFrame {
         }
         setLocationRelativeTo(null);
     }
+
+
+
 
 
 }

@@ -338,6 +338,9 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawPieces(Graphics2D g2) {
+        if(!stopWatch.isRunning){
+            resetTimer();
+        }
         LinkedList<ChessPiece> pieces = board.allPieces();
 
         for (ChessPiece p : pieces) {
@@ -465,6 +468,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
     }
 
+    public void resetTimer(){
+        this.stopWatch = new StopWatch();
+    }
+
     class ResizeAdapter extends ComponentAdapter {
         @Override
         public void componentResized(ComponentEvent e) {
@@ -485,14 +492,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
             /* new graphic */
         stopWatch.run();
-        int count = 0;
         while (true) {
-
             while ((System.currentTimeMillis() - lastDraw) < (1000 / targetFPS));
             repaint();
             lastDraw = System.currentTimeMillis();
-        System.out.println(count);
-            count++;
         }
     }
 

@@ -152,6 +152,8 @@ public class OnlineGameLauncher extends GameLauncher {
                 + ClientToClientCode.DEL + (localUserIsWhite ? "0" : "1")
                 + ClientToClientCode.DEL + hostedGameCode;
         setOpponent(pendingIP, pendingName, pendingRating);
+        OpponentMessageSender oms = new OpponentMessageSender(ipOpponent);
+        oms.sendMessage(acceptanceMessage, false);
 
         launch();
         MessageListener.getInstance().acceptMoves = true;

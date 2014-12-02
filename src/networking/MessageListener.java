@@ -49,8 +49,9 @@ public class MessageListener implements Runnable {
         try {
             sktListener = new ServerSocket(LISTENER_PORT);
         } catch (IOException e) {
+            //Just exit immediately if already running a listening server.
             e.printStackTrace();
-            return;
+            System.exit(1);
         }
         System.out.println("MessageListener running");
         //Run listening loop
@@ -167,6 +168,7 @@ public class MessageListener implements Runnable {
         long startTime = System.currentTimeMillis();
 
         while (System.currentTimeMillis() - startTime < GameLobby.JOIN_GAME_TIMEOUT_MS) {
+            System.out.println("joinResponse = " + joinResponse);
             if (!joinResponseOld.equals(joinResponse)) {
                 return joinResponse;
             }

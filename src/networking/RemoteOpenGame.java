@@ -41,7 +41,7 @@ public class RemoteOpenGame {
             String secondResponse = MessageListener.getInstance().getHostJoinResponse();
 
             try {
-                String[] fields = response.split(ResponseCode.DEL);
+                String[] fields = secondResponse.split(ResponseCode.DEL);
                 PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];
                 boolean localUserIsWhite = !remotePiece.equals(PieceType.WHITE);
                 String boardState = fields[2];

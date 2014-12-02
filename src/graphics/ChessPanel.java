@@ -32,7 +32,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
     protected JButton undo = new JButton("Undo");
-    public static StopWatch stopWatch = new StopWatch();
+    public static final StopWatch stopWatch = new StopWatch();
     protected JPanel time = stopWatch.buildStopWatch();
     protected JLabel turnLable = new JLabel();
     protected JPanel turn = new JPanel();
@@ -125,13 +125,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      */
     protected void drawUI(Graphics2D g2) {
 
-        if(!stopWatch.isRunning){
-            resetTimer();
-            this.remove(time);
-            this.time = stopWatch.buildStopWatch();
-            this.add(time);
-            stopWatch.run();
-        }
+
 
         int gapBetweenCol = 10;
         // size x
@@ -543,10 +537,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
     }
 
-    public void resetTimer(){
-        StopWatch sw= new StopWatch();
-        this.time = sw.buildStopWatch();
-    }
+
 
     class ResizeAdapter extends ComponentAdapter {
         @Override
@@ -570,6 +561,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         stopWatch.run();
         hasImplement = true;
         while (true) {
+            if(!stopWatch.isRunning){
+                stopWatch.isRunning = true;
+                stopWatch.run();
+            }
             while ((System.currentTimeMillis() - lastDraw) < (1000 / targetFPS));
             repaint();
             lastDraw = System.currentTimeMillis();

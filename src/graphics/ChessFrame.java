@@ -34,7 +34,10 @@ public abstract class ChessFrame extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
+
                 ChessPanel.stopWatch.isRunning = false;
+                ChessPanel.stopWatch.currentThread().interrupt();
+
             }
         });
     }
@@ -45,7 +48,15 @@ public abstract class ChessFrame extends JFrame {
 		this.width = width;
 		this.height = height;
 		this.panel = panel;
-		initUI();
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        initUI();
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                ChessPanel.stopWatch.isRunning = false;
+            }
+        });
 
 	}
 

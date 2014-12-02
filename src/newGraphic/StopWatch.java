@@ -29,6 +29,7 @@ public class StopWatch extends Thread {
     private int bHour = 0;
 
     public static boolean isRunning =true;
+    private boolean interrupted = false;
 
     private JFrame clockFrame = new JFrame("clock");
     private JPanel clockPanel = new JPanel();
@@ -97,10 +98,16 @@ public class StopWatch extends Thread {
 
     @Override
     public void run() {
+        wHour =0;
+        wMinute=0;
+        wCurrentSecond=0;
+        bHour=0;
+        bMinute=0;
+        bCurrentSecond=0;
 
         while (isRunning) {
 
-            while (isWhite) {
+            while (isWhite&&isRunning) {
 
                 if (wCurrentSecond == 60) {
                     calTime();
@@ -108,14 +115,29 @@ public class StopWatch extends Thread {
                 }
                 time.setText(String.format("<html>White : %02d:%02d:%02d <br> Black : %02d:%02d:%02d<html>", wHour, wMinute, wCurrentSecond, bHour, bMinute, bCurrentSecond));
                 try {
-                    Thread.sleep(1000);
+                    this.sleep(1000);
+                    System.out.println("white tick" + isRunning);
+                    if(!isRunning) {
+
+                        this.currentThread().interrupt();
+                    }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    interrupted=true;
+                    return;
                 }
                 wCurrentSecond++;
             }
+            if(interrupted){
+                wHour =0;
+                wMinute=0;
+                wCurrentSecond=0;
+                bHour=0;
+                bMinute=0;
+                bCurrentSecond=0;
+                interrupted=false;
+            }
 
-            while(!isWhite) {
+            while(!isWhite&&isRunning) {
 
                 if (bCurrentSecond == 60) {
                     calTime();
@@ -123,21 +145,32 @@ public class StopWatch extends Thread {
                 }
                 time.setText(String.format("<html>White : %02d:%02d:%02d <br> Black : %02d:%02d:%02d<html>", wHour, wMinute, wCurrentSecond, bHour, bMinute, bCurrentSecond));
                 try {
-                    Thread.sleep(1000);
+                   this.sleep(1000);
+                    System.out.println("black tick" + isRunning);
+                    if(!isRunning) {
+                        this.currentThread().interrupt();
+
+                    }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    interrupted=true;
+                    return;
                 }
 
                 bCurrentSecond++;
+
             }
 
         }
-        wHour =0;
-        wMinute=0;
-        wCurrentSecond=0;
-         bHour=0;
-        bMinute=0;
-        bCurrentSecond=0;
+        if(interrupted){
+            wHour =0;
+            wMinute=0;
+            wCurrentSecond=0;
+            bHour=0;
+            bMinute=0;
+            bCurrentSecond=0;
+            interrupted=false;
+        }
+
     }
 
 }

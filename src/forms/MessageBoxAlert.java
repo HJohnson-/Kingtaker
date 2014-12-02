@@ -72,7 +72,7 @@ public class MessageBoxAlert {
             case (ResponseCode.EMPTY) :
                 msg = "The other player is no longer online";
                 break;
-            case (ResponseCode.INVALID) :
+            case (ResponseCode.BAD_LOGIN) :
                 msg = "You can't join your own game";
                 break;
         }

@@ -40,33 +40,44 @@ public class RemoteOpenGame {
         if (responseCode == ResponseCode.OK) {
             String secondResponse = MessageListener.getInstance().getHostJoinResponse();
 
-            try {
-                String[] fields = secondResponse.split(ResponseCode.DEL);
-                PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];
-                boolean localUserIsWhite = !remotePiece.equals(PieceType.WHITE);
-                String boardState = fields[2];
-
-                OnlineGameLauncher launcher = new OnlineGameLauncher(
-                        VariantFactory.getInstance().getVariantByID(variantId),
-                        ip,
-                        hostUsername,
-                        hostRating
-                );
-                launcher.setGameBoardLayout(boardState);
-                launcher.setUserIsWhite(localUserIsWhite);
-                MessageListener.getInstance().acceptMoves = true;
-                MessageListener.getInstance().setRemoteAddress(ip);
-
-                GameLauncher.currentGameLauncher = launcher;
-                return ResponseCode.OK;
-            } catch (Exception e) {
-                //Loading the game failed due to a malformed board state
+            if (secondResponse == null) {
+                //Time out
+                return ResponseCode.EMPTY;
+            } else if (secondResponse.equals(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO + "")) {
                 return ResponseCode.REFUSED;
+            } else if (secondResponse.equals(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK + "")) {
+                try {
+                    String[] fields = secondResponse.split(ResponseCode.DEL);
+                    PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];
+                    boolean localUserIsWhite = !remotePiece.equals(PieceType.WHITE);
+                    String boardState = fields[2];
+
+                    OnlineGameLauncher launcher = new OnlineGameLauncher(
+                            VariantFactory.getInstance().getVariantByID(variantId),
+                            ip,
+                            hostUsername,
+                            hostRating
+                    );
+                    launcher.setGameBoardLayout(boardState);
+                    launcher.setUserIsWhite(localUserIsWhite);
+                    MessageListener.getInstance().acceptMoves = true;
+                    MessageListener.getInstance().setRemoteAddress(ip);
+
+                    GameLauncher.currentGameLauncher = launcher;
+                    return ResponseCode.OK;
+                } catch (Exception e) {
+                    //Loading the game failed due to a malformed board state
+                }
             }
+
+            //Report the hoster refused the join request otherwise.
+            return ResponseCode.REFUSED;
+        } else if (responseCode == ResponseCode.INVALID) {
+            //Game already started or deleted at host end.
         }
 
         //Response malformed/unexpected.
-        return ResponseCode.UNSPECIFIED_ERROR;
+        return responseCode;
 
     }
 }

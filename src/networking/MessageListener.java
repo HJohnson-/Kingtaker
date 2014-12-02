@@ -25,6 +25,7 @@ public class MessageListener implements Runnable {
     public boolean acceptJoins = false;
     public boolean acceptMoves = false;
 
+    private final long JOIN_REQUEST_TIMEOUT_MS = GameLobby.JOIN_GAME_TIMEOUT_MS + 1000;
     private String joinResponse = "";
 
     //For ingame move-swapping.
@@ -167,7 +168,12 @@ public class MessageListener implements Runnable {
         String joinResponseOld = joinResponse;
         long startTime = System.currentTimeMillis();
 
-        while (System.currentTimeMillis() - startTime < GameLobby.JOIN_GAME_TIMEOUT_MS) {
+        while (System.currentTimeMillis() - startTime < JOIN_REQUEST_TIMEOUT_MS) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("joinResponse = " + joinResponse);
             if (!joinResponseOld.equals(joinResponse)) {
                 return joinResponse;

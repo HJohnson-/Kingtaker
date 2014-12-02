@@ -37,7 +37,7 @@ public class MessageBoxAlert {
                 msg = "The username or password you entered is incorrect";
                 break;
             case (ResponseCode.REFUSED) :
-                msg = "Your account is currently suspended for" +
+                msg = "Your account is currently suspended for " +
                         "breaking the terms of service";
                 break;
         }

@@ -134,7 +134,9 @@ public class MessageListener implements Runnable {
                 //Message will be picked up by getHostJoinResponse()
                 case ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK :
                 case ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO :
+                    System.out.println(System.currentTimeMillis() +  message);
                     joinResponse = message;
+                    System.out.println(System.currentTimeMillis() +  message);
                     return null;
             }
 

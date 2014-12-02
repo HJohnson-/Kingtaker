@@ -371,6 +371,10 @@ public class GameController {
         this.ai = new MinimaxAI(!playerIsWhite, difficulty);
     }
 
+    public boolean isLocalsTurn() {
+        return gameMode == GameMode.MULTIPLAYER_LOCAL || playerIsWhite == isWhitesTurn;
+    }
+
     class DoAIMove implements Runnable {
 
         private GameController control;

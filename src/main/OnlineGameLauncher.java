@@ -129,6 +129,7 @@ public class OnlineGameLauncher extends GameLauncher {
     public void setOpponent(InetAddress remoteAddress, String opponentName,
                             int opponentRating) throws Exception {
         ipOpponent = remoteAddress;
+        MessageListener.getInstance().setRemoteAddress(ipOpponent);
         this.opponentRating = opponentRating;
         this.opponentName = opponentName;
     }

@@ -27,13 +27,6 @@ public class frmJoinRequest {
     public frmJoinRequest(String joinerName, int rating, final OnlineGameLauncher launcher) {
         lblJoiner.setText(String.format(LBL_JOINER_TEXT, joinerName, rating));
 
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent windowEvent) {
-                launcher.rejectJoinToGame();
-            }
-        });
-
         final Timer joinTimeoutTimer = new Timer(100, null);
         joinTimeoutTimer.addActionListener(new ActionListener() {
             @Override
@@ -50,6 +43,15 @@ public class frmJoinRequest {
             }
         });
         joinTimeoutTimer.start();
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                joinTimeoutTimer.stop();
+                launcher.rejectJoinToGame();
+                frame.dispose();
+            }
+        });
 
         btnAccept.addActionListener(new ActionListener() {
             @Override

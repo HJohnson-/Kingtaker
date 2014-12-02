@@ -67,7 +67,10 @@ public class MessageBoxAlert {
         String msg = "";
         switch (responseCode) {
             case (ResponseCode.REFUSED) :
-                msg = "This game has been removed or is already in session";
+                msg = "The other player refused your request to join their game";
+                break;
+            case (ResponseCode.INVALID) :
+                msg = "This game is now full or has been removed";
                 break;
             case (ResponseCode.EMPTY) :
                 msg = "The other player is no longer online";

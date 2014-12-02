@@ -31,7 +31,7 @@ public class GameController {
 	public final int initialDiff = 3;
 	private ChessAI ai;
 	private boolean AIWorking = false;
-	private boolean playerIsWhite;
+	public boolean playerIsWhite;
 	public boolean animating = false;
 	public boolean promoting = false;
 

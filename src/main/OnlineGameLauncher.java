@@ -57,6 +57,7 @@ public class OnlineGameLauncher extends GameLauncher {
     @Override
     public void setUserIsWhite(boolean localUserIsWhite) {
         this.localUserIsWhite = localUserIsWhite;
+        variant.game.playerIsWhite = localUserIsWhite;
     }
 
     @Override

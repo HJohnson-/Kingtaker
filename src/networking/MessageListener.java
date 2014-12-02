@@ -171,10 +171,7 @@ public class MessageListener implements Runnable {
         while (System.currentTimeMillis() - startTime < JOIN_REQUEST_TIMEOUT_MS) {
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("joinResponse = " + joinResponse);
+            } catch (InterruptedException e) {}
             if (!joinResponseOld.equals(joinResponse)) {
                 return joinResponse;
             }

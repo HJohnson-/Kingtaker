@@ -43,9 +43,9 @@ public class RemoteOpenGame {
             if (secondResponse == null) {
                 //Time out
                 return ResponseCode.EMPTY;
-            } else if (secondResponse.equals(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO + "")) {
+            } else if (secondResponse.startsWith(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO + "")) {
                 return ResponseCode.REFUSED;
-            } else if (secondResponse.equals(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK + "")) {
+            } else if (secondResponse.startsWith(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK + "")) {
                 try {
                     String[] fields = secondResponse.split(ResponseCode.DEL);
                     PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];

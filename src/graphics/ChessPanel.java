@@ -50,6 +50,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     Border blackline = BorderFactory.createLineBorder(Color.black);
     TitledBorder AItitle = BorderFactory.createTitledBorder(blackline, "AI Progress");
     TitledBorder Dtitle = BorderFactory.createTitledBorder(" difficulty ");
+    private int bordergap = 20;
 
     /* This constructor sets up a listener to handle the user clicking on the screen.
     * @param board The board which information will be obtained from.
@@ -129,7 +130,36 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             this.remove(time);
             this.time = stopWatch.buildStopWatch();
             this.add(time);
+            stopWatch.run();
         }
+
+        int gapBetweenCol = 10;
+        // size x
+        int threeWidth = (this.getWidth() - offset.getX()*2 - gapBetweenCol * 2) / 3;
+
+        // position x for 3 columns
+        int p3col1 = offset.getX();
+        int p3col2 = p3col1+threeWidth+gapBetweenCol;
+        int p3col3 = p3col2+threeWidth+gapBetweenCol;
+
+        // position y for 3 rows
+        int gapBetweenRow = 10;
+        int gapBetweenBoard = 30;
+
+        // size y for 3 rows
+        int threeHight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow*2-offset.getY()*2)/3;
+        int p3row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
+        int p3row2 = p3row1+threeHight+gapBetweenRow;
+        int p3row3 = p3row2+threeHight+gapBetweenRow;
+
+        // size y for 2 rows
+        int twoHight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow-offset.getY()*2)/2;
+        // position y for 2 rows
+        int p2row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
+        int p2row2 = p2row1+twoHight+gapBetweenRow;
+
+
+
 
         Color endCol = new Color(255, 255, 255, 0);
         Point2D start, end;
@@ -204,8 +234,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         turn.setBounds(1,1,1,1);
         turn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        turn.setLocation(x + cellWidth * 2 + 10, y + UIHeight / 7);
-        turn.setSize(cellWidth * 2, UIHeight / 2);
+        turn.setLocation(p3col2, p2row1);
+        turn.setSize(threeWidth,twoHight);
         /* new graphic */
 
 //        g2.drawString("Turn: " + board.getController().getCurrentTurn(), x + 30 + cellWidth * 2, y + 30);
@@ -217,20 +247,20 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
         //Save and load buttons.
-        save.setLocation(x, y + UIHeight / 2);
-        save.setSize(cellWidth * 2, UIHeight / 2);
+        save.setLocation(p3col1,p3row1);
+        save.setSize(threeWidth,threeHight);
 
-        load.setLocation(x, y);
-        load.setSize(cellWidth * 2, UIHeight / 2);
+        load.setLocation(p3col1, p3row2);
+        load.setSize(threeWidth,threeHight);
 
-        undo.setLocation(x, y + UIHeight);
-        undo.setSize(cellWidth * 2, UIHeight / 2);
+        undo.setLocation(p3col1, p3row3);
+        undo.setSize(threeWidth,threeHight);
 
         /* new graphic */
 
         time.setBounds(1,1,1,1);
-        time.setLocation(x + cellWidth * 2 + 10, y + 2 * UIHeight / 3);
-        time.setSize(cellWidth * 2, UIHeight / 2);
+        time.setLocation(p3col2,p2row2);
+        time.setSize(threeWidth,twoHight);
         StopWatch.time.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight()/5));
 
 
@@ -269,8 +299,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             pb.setStringPainted(true);
 
             pb.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            pb.setLocation(x + cellWidth * 4+80, y+ UIHeight / 5);
-            pb.setSize(4*barWidth/5,50);
+            pb.setLocation(p3col3,p3row1);
+            pb.setSize(threeWidth,threeHight);
 
 
 //            // fill
@@ -287,7 +317,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
             sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            sliderLabel.setSize(4*barWidth/5, 15);
+            sliderLabel.setSize(threeWidth,threeHight);
             difficulty.setBounds(1, 1, 1, 1 );
             difficulty.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -296,13 +326,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             difficulty.setPaintTicks(true);
             difficulty.setPaintLabels(true);
 
-            difficulty.setSize(4*barWidth/5, 20);
+            difficulty.setSize(threeWidth,threeHight);
 
             diffJpanel.add(sliderLabel);
             diffJpanel.add(difficulty);
 
-            diffJpanel.setLocation(x + cellWidth * 4+80, y+ UIHeight);
-            diffJpanel.setSize(4*barWidth/5, 60);
+            diffJpanel.setLocation(p3col3,p3row2);
+            diffJpanel.setSize(threeWidth,threeHight);
             diffJpanel.setBackground(new Color(85, 55, 29));
             diffJpanel.setOpaque(false);
 

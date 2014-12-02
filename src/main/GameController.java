@@ -162,8 +162,12 @@ public class GameController {
         //If the move was executed locally, it is sent to the remote player via launcher.
         if (beingMoved.executeMove(targetLocation)) {
             if (checkMate()) {
-				endGame();
-			} else {    //TODO: stalemate
+				endGame(false);
+			}
+			else if(staleMate()){//TODO: stalemate
+				endGame(true);
+			}
+			else {
                 nextPlayersTurn();
             }
 
@@ -179,6 +183,12 @@ public class GameController {
 		}
 
         return false;
+	}
+
+
+	private boolean staleMate(){
+		Map<ChessPiece, List<Location>> moves = getAllValidMoves(isWhitesTurn);
+		return moves.size() == 0;
 	}
 
 	public void undo() {
@@ -217,8 +227,12 @@ public class GameController {
 	/**
 	 * set the game state to over
 	 */
-	public void endGame() {
+	public void endGame(boolean isADraw) {
+		if(!isADraw)
         gameResult = isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
+
+		else gameResult = GameResult.DRAW;
+
         if (gameMode == GameMode.MULTIPLAYER_ONLINE) {
             GameLauncher.currentGameLauncher.broadcastEndGame();
         }

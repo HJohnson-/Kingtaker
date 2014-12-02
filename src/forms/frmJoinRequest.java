@@ -33,37 +33,44 @@ public class frmJoinRequest {
                 launcher.rejectJoinToGame();
             }
         });
-        btnAccept.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                try {
-                    launcher.acceptJoinToGame();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        btnReject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                launcher.rejectJoinToGame();
-            }
-        });
 
-        Timer joinTimeoutTimer = new Timer(100, new ActionListener() {
+        final Timer joinTimeoutTimer = new Timer(100, null);
+        joinTimeoutTimer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("joinTimeoutTimer" + System.currentTimeMillis());
                 long msPassed = System.currentTimeMillis() - creationTime;
                 if (msPassed < GameLobby.JOIN_GAME_TIMEOUT_MS) {
-                    frame.setTitle(String.format(TITLE, (int) (JOIN_TIMEOUT_MS - msPassed) / 1000));
+                    frame.setTitle(String.format(TITLE, (int) (GameLobby.JOIN_GAME_TIMEOUT_MS - msPassed) / 1000));
                 } else {
+                    joinTimeoutTimer.stop();
                     launcher.rejectJoinToGame();
                     frame.dispose();
                 }
             }
         });
         joinTimeoutTimer.start();
+
+        btnAccept.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                joinTimeoutTimer.stop();
+                try {
+                    launcher.acceptJoinToGame();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                frame.dispose();
+            }
+        });
+        btnReject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                joinTimeoutTimer.stop();
+                launcher.rejectJoinToGame();
+                frame.dispose();
+            }
+        });
 
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

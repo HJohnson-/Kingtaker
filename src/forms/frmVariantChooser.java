@@ -71,8 +71,8 @@ public class frmVariantChooser {
                     GameLauncher.currentGameLauncher = new OfflineGameLauncher(selectedVariant, GameMode.currentGameMode);
                     GameLauncher.currentGameLauncher.launch();
                 } else if (GameMode.currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
-                    GameLobby.getInstance().createLocalOpenGame(selectedVariant);
                     GameLauncher.currentGameLauncher = new OnlineGameLauncher(selectedVariant);
+                    GameLobby.getInstance().createLocalOpenGame(selectedVariant);
                 }
 
             }

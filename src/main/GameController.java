@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 public class GameController {
 	public static boolean defaultPIW = false; //TODO: Ask the player what colour they want to play.
 
-	private boolean isWhitesTurn = true; //white always starts
+	protected boolean isWhitesTurn = true; //white always starts
 	private int currentTurn;
     private GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
@@ -66,6 +66,8 @@ public class GameController {
 		}
     }
 
+
+
 	public GameController(Board board, PieceDecoder decoder, String code, GameMode mode) {
         this.board = board;
 		this.decoder = decoder;
@@ -87,6 +89,8 @@ public class GameController {
 			this.ai = new MinimaxAI(!playerIsWhite, initialDiff);
 		}
 	}
+
+
 
     public ChessAI getAI() {
         return ai;
@@ -141,6 +145,7 @@ public class GameController {
 
         //Cannot perform a move that violates the variant's rules.
         //Cannot move a black piece when it's white's turn, and vice versa.
+
 		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
             System.out.println("Invalid move: against rules, or it is not this colours turn");
             return false;
@@ -168,6 +173,7 @@ public class GameController {
 				endGame(true);
 			}
 			else {
+				checkForCapturedPieces(targetLocation);
                 nextPlayersTurn();
             }
 
@@ -185,8 +191,11 @@ public class GameController {
         return false;
 	}
 
+	protected void checkForCapturedPieces(Location targetLocation) {
+	}
 
-	private boolean staleMate(){
+
+	protected boolean staleMate(){
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves(isWhitesTurn);
 		return moves.size() == 0;
 	}

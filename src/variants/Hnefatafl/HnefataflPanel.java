@@ -35,6 +35,9 @@ public class HnefataflPanel extends ChessPanel {
 					new Rectangle(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight));
 			g2.setPaint(texture);
 			g2.fillRect(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight);
+
+
+
 		}
 
 		g2.setPaint(tools.CHECK);
@@ -47,7 +50,7 @@ public class HnefataflPanel extends ChessPanel {
 			g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
 					cellWidth, cellHeight);
 
-			java.util.List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
+			java.util.List<Location> moves = board.getController().movesForPiece(selectedPiece, false);
 			if (selectedPiece.isWhite() == board.getController().isWhitesTurn()) {
 				g2.setPaint(tools.CUR_MOVES);
 			} else {
@@ -60,29 +63,33 @@ public class HnefataflPanel extends ChessPanel {
 		}
 
 		g2.setStroke(oldstroke);
-
 	}
 
-/*
-	public HnefataflPanel() {
-
-		setLayout(null);
-
-		setBackground(new Color(85, 55, 29));
-
-		BoardPanel board = new BoardPanel();
-
-		add(board);
-		add(board.newGameButton);
-		add(board.abandonButton);
-		add(board.message);
-
-
-		//set positions and sizes
-		board.setBounds(20, 20, 448, 448);
-		board.newGameButton.setBounds(500, 60, 120, 30);
-		board.abandonButton.setBounds(500, 120, 120, 30);
-		board.message.setBounds(0, 520, 700, 30);
+	private boolean isHostile(int row, int col) {
+		return (row==0 && col==0) || (row==0 && col==10) ||
+				(row==10 && col==0) || (row==10 && col==10) || row == 5 && col == 5;
 	}
-	*/
+
+	@Override
+	protected void drawGrid(Graphics2D g2) {
+		g2.setColor(tools.BOARD_BLACK);
+		for (int x = 0; x < board.numCols(); x++) {
+			for (int y = 0; y < board.numRows(); y++) {
+				if(isHostile(y,x))
+					g2.setColor(Color.DARK_GRAY);
+
+				else if ((x % 2) == 0 && (y % 2) == 0) {
+					g2.setColor(tools.BOARD_BLACK);
+				} else if ((x % 2) == 1 && (y % 2) == 1) {
+					g2.setColor(tools.BOARD_BLACK);
+				} else {
+					g2.setColor(tools.BOARD_WHITE);
+				}
+				g2.fillRect((cellWidth * x) + offset.getX(), (cellHeight * y) + offset.getY(), cellWidth, cellHeight);
+			}
+		}
+
+		g2.setColor(tools.BOARD_WHITE);
+
+	}
 }

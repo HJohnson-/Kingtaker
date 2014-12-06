@@ -63,7 +63,7 @@ public class PawnPromotion implements Runnable {
         GameController control = promotedPiece.board.getController();
         control.previousTurn();
         if (control.checkMate()) {
-            control.endGame();
+            //control.endGame();
         } else {
             control.nextPlayersTurn();
         }

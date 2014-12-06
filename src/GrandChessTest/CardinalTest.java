@@ -1,4 +1,4 @@
-package variants.GrandChessTest;
+package GrandChessTest;
 
 import variants.GrandChess.Cardinal;
 import variants.GrandChess.GrandBoard;

@@ -21,7 +21,12 @@ public class Hnefataflvar extends ChessVariant {
 	}
 
 	@Override
-	public String getDescription() { return "[variants.Hnefataflvar rules]\n"; }
+	public String getDescription() {
+		return "Hnefatafl (or King’s Table, pronounced nef-ah-tah-fel) is a Viking strategic board game.\n\n" +
+			   "The defending side (white pieces) must get the king to one of the corner squares before he is surrounded by attackers. \n\n" +
+				"Attackers (black pieces) must kill the king for victory by surrounding him on four sides, either with attackers or a combination of boundaries and attackers. \n\n" +
+				"All pieces except the king are captured if they are sandwiched between two enemy pieces\n\n" +
+			   "For more, visit http://aagenielsen.dk/fetlar_rules_en.html"; }
 
 	@Override
 	public PieceDecoder getDecoder() {
@@ -33,7 +38,7 @@ public class Hnefataflvar extends ChessVariant {
 	}
 
 	public Hnefataflvar(GameMode mode) {
-		game = new GameController(new HnefataflBoard(), 3, new HnefataflDecoder(), mode, GameController.defaultPIW);
+		game = new HnefataflController(new HnefataflBoard(), 3, new HnefataflDecoder(), mode, GameController.defaultPIW);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}

@@ -40,7 +40,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      /* This constructor sets up a listener to handle the user clicking on the screen.
      * @param board The board which information will be obtained from.
      */
-    protected ChessPanel(Board board) {
+    protected ChessPanel(final Board board) {
         this.board = board;
         this.addMouseListener(new HitTestAdapter());
         this.addComponentListener(new ResizeAdapter());
@@ -64,6 +64,37 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             }
         });
 
+
+        load.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(System.currentTimeMillis()-300 > lastLoad) {
+                    lastLoad = System.currentTimeMillis();
+                    GameController gc = board.getController();
+                    gc.load(code);
+                    recalculateCellSize();
+                }
+            }
+        });
+
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(System.currentTimeMillis()-300 > lastLoad) {
+                    lastLoad = System.currentTimeMillis();
+                    GameController gc = board.getController();
+                    gc.undo();
+                    recalculateCellSize();
+                }
+            }
+        });
+
+        save.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                code = board.getController().toCode();
+            }
+        });
+
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
     }
@@ -77,7 +108,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
         final float[] FRACTIONS = {0.0f, 0.5f, 1.0f};
         final Color[] BG_COLOURS = {Color.WHITE.darker(), new Color(85, 55, 29), Color.DARK_GRAY};
@@ -176,35 +207,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             difficulty.setLocation(newX, y + barHeight + 20);
             difficulty.setSize(barWidth, 20);
         }
-
-        load.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-				if(System.currentTimeMillis()-300 > lastLoad) {
-					lastLoad = System.currentTimeMillis();
-					GameController gc = board.getController();
-					gc.load(code);
-					recalculateCellSize();
-				}
-            }
-        });
-
-		undo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(System.currentTimeMillis()-300 > lastLoad) {
-					lastLoad = System.currentTimeMillis();
-					GameController gc = board.getController();
-					gc.undo();
-					recalculateCellSize();
-				}
-			}
-		});
-
-        save.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                code = board.getController().toCode();
-            }
-        });
 
         if (load.getParent() == null) {
             this.add(load);
@@ -389,7 +391,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
         long lastDraw = System.currentTimeMillis();
         while (true) {
-            while ((System.currentTimeMillis() - lastDraw) < (1000 / targetFPS));
+            try {Thread.sleep(1000 / targetFPS);} catch (InterruptedException e) {}
             repaint();
             lastDraw = System.currentTimeMillis();
         }

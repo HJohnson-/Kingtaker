@@ -1,6 +1,7 @@
 package networking;
 
 import main.ChessVariant;
+import main.GameLauncher;
 import main.OnlineGameLauncher;
 import main.PieceType;
 import networking.NetworkingCodes.ClientCommandCode;
@@ -32,7 +33,10 @@ public class LocalOpenGame {
                 + ClientCommandCode.DEL + variant.getVariationID(), true);
 
         int pieceTypeCode = pieceType.ordinal();
-        MessageListener.getInstance().hostOpenGame(pieceTypeCode, variant.game.toCode());
+        launcher = (OnlineGameLauncher) GameLauncher.currentGameLauncher;
+        launcher.setUserIsWhite(pieceType == PieceType.WHITE);
+        launcher.setHostedGameCode(variant.game.toCode());
+        MessageListener.getInstance().hostOpenGame();
     }
 
     // Removes open game from server lobby.

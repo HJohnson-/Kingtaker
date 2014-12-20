@@ -235,7 +235,7 @@ public class frmLobby {
     }
 
     public void setBtnCreateRemoveGame(boolean gameExists) {
-        btnCreateRemoveGame.setText(gameExists ? BTN_REMOVEGAME_TEXT : BTN_REMOVEGAME_TEXT);
+        btnCreateRemoveGame.setText(gameExists ? BTN_REMOVEGAME_TEXT : BTN_CREATEGAME_TEXT);
     }
 
     // Called when form is instantiated to customise particular GUI controls.

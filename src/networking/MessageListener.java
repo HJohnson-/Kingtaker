@@ -3,7 +3,6 @@ package networking;
 import main.GameController;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
-import main.PieceType;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -23,12 +22,11 @@ public class MessageListener implements Runnable {
 
     private Thread thread;
 
-    private boolean acceptJoins = false;
+    public boolean acceptJoins = false;
     public boolean acceptMoves = false;
 
-    //For game set up
-    private int pieceCode = -1;
-    private String board = "";
+    private final long JOIN_REQUEST_TIMEOUT_MS = GameLobby.JOIN_GAME_TIMEOUT_MS + 1000;
+    private String joinResponse = "";
 
     //For ingame move-swapping.
     private GameController gameController;
@@ -52,13 +50,14 @@ public class MessageListener implements Runnable {
         try {
             sktListener = new ServerSocket(LISTENER_PORT);
         } catch (IOException e) {
+            //Just exit immediately if already running a listening server.
             e.printStackTrace();
-            return;
+            System.exit(1);
         }
         System.out.println("MessageListener running");
         //Run listening loop
         while (true) {
-            
+            System.out.println("acceptMoves = " + acceptMoves);
             try {
                 //The below 3 lines are dangerous ones, as they will block
                 //until a message has been sent or the socket is closed by
@@ -99,23 +98,16 @@ public class MessageListener implements Runnable {
             int clientToClientCode = Integer.valueOf(fields[0]);
 
             switch (clientToClientCode) {
-                case ClientToClientCode.JOIN_OPEN_GAME :
+                case ClientToClientCode.JOIN_OPEN_GAME_REQUEST:
                     if (acceptJoins) {
+                        acceptJoins = false;
                         String joinerUsername = fields[1];
                         int joinerRating = Integer.valueOf(fields[2]);
 
-                        response = ResponseCode.OK + ResponseCode.DEL + pieceCode + ResponseCode.DEL + board;
-                        acceptJoins = false;
-                        remoteAddress = socket.getInetAddress();
+                        //Host will send OK message to confirm it has received the request.
                         OnlineGameLauncher launcher = (OnlineGameLauncher) GameLauncher.currentGameLauncher;
-                        launcher.setOpponent(remoteAddress, joinerUsername, joinerRating);
-                        launcher.setUserIsWhite(pieceCode == PieceType.WHITE.ordinal());
-
-                        GameLauncher.currentGameLauncher.launch();
-                        acceptMoves = true;
-
-                        GameLobby.getInstance().close();
-
+                        launcher.considerJoinRequest(socket.getInetAddress(), joinerUsername, joinerRating);
+                        return ResponseCode.OK + "";
                     } else {
                         response = ResponseCode.REFUSED + "";
                     }
@@ -138,6 +130,14 @@ public class MessageListener implements Runnable {
                         response = ResponseCode.REFUSED + "";
                     }
                     break;
+
+                //Message will be picked up by getHostJoinResponse()
+                case ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK :
+                case ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO :
+                    System.out.println(System.currentTimeMillis() +  message);
+                    joinResponse = message;
+                    System.out.println(System.currentTimeMillis() +  message);
+                    return null;
             }
 
         } catch (Exception e) {
@@ -152,10 +152,8 @@ public class MessageListener implements Runnable {
         this.remoteAddress = remoteAddress;
     }
 
-    public void hostOpenGame(int pieceCode, String board) {
+    public void hostOpenGame() {
         acceptJoins = true;
-        this.pieceCode = pieceCode;
-        this.board = board;
     }
 
     public void removeOpenGame() {
@@ -164,5 +162,23 @@ public class MessageListener implements Runnable {
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
+    }
+
+    //Warning: will block current thread for 10 seconds, or until a
+    //response is gotten.
+    public String getHostJoinResponse() {
+        String joinResponseOld = joinResponse;
+        long startTime = System.currentTimeMillis();
+
+        while (System.currentTimeMillis() - startTime < JOIN_REQUEST_TIMEOUT_MS) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+            if (!joinResponseOld.equals(joinResponse)) {
+                return joinResponse;
+            }
+        }
+
+        return null;
     }
 }

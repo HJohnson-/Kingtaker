@@ -2,7 +2,6 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
-import com.sun.xml.internal.ws.util.StringUtils;
 import pawnPromotion.PawnPromotion;
 import pawnPromotion.PromotablePiece;
 import pieces.ChessPiece;
@@ -31,7 +30,7 @@ public class GameController {
 	public final int initialDiff = 3;
 	private ChessAI ai;
 	private boolean AIWorking = false;
-	private boolean playerIsWhite;
+	public boolean playerIsWhite;
 	public boolean animating = false;
 	public boolean promoting = false;
 
@@ -392,6 +391,10 @@ public class GameController {
     public void setDifficulty(int difficulty) {
         while (AIWorking) Thread.yield();
         this.ai = new MinimaxAI(!playerIsWhite, difficulty);
+    }
+
+    public boolean isLocalsTurn() {
+        return gameMode == GameMode.MULTIPLAYER_LOCAL || playerIsWhite == isWhitesTurn;
     }
 
     class DoAIMove implements Runnable {

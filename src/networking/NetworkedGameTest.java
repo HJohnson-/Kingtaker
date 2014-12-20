@@ -1,5 +1,6 @@
 package networking;
 
+import forms.frmLobby;
 import main.*;
 
 import java.io.IOException;
@@ -12,8 +13,9 @@ import java.util.Random;
  */
 public class NetworkedGameTest {
     public static void main(String[] args) throws Exception {
-        String host2 = "129.31.208.110";
-        String host1 = "line20.doc.ic.ac.uk";
+
+        String host2 = "MERCURY.lan";
+        String host1 = "macbook2011.lan";
         ChessVariant variant = VariantFactory.getInstance().getVariantByID(0);
 
         MessageListener.getInstance().acceptMoves = true;
@@ -37,7 +39,7 @@ public class NetworkedGameTest {
                 InetAddress.getByName(server), "playa" + (new Random()).nextInt(100000) + "", 1000);
         o.setUserIsWhite(isWhite);
         GameLauncher.currentGameLauncher = o;
-
+        frmLobby.showInstance(GameLobby.getInstance());
 
         o.launch();
     }

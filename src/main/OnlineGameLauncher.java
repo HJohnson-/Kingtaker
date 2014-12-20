@@ -1,6 +1,8 @@
 package main;
 
+import forms.frmJoinRequest;
 import forms.frmLobby;
+import networking.GameLobby;
 import networking.MessageListener;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ClientToClientCode;
@@ -19,6 +21,12 @@ public class OnlineGameLauncher extends GameLauncher {
     private String opponentName;
     private int opponentRating;
     private boolean localUserIsWhite;
+    private String hostedGameCode;
+
+    private String pendingName;
+    private int pendingRating;
+    private InetAddress pendingIP;
+
 
     public OnlineGameLauncher(ChessVariant variant) {
         this.variant = variant;
@@ -49,6 +57,7 @@ public class OnlineGameLauncher extends GameLauncher {
     @Override
     public void setUserIsWhite(boolean localUserIsWhite) {
         this.localUserIsWhite = localUserIsWhite;
+        variant.game.playerIsWhite = localUserIsWhite;
     }
 
     @Override
@@ -105,6 +114,7 @@ public class OnlineGameLauncher extends GameLauncher {
                 break;
         }
 
+        MessageListener.getInstance().acceptMoves = false;
 
         ServerMessageSender sms = new ServerMessageSender();
         sms.sendMessageAsync(ClientCommandCode.REPORT_GAME_RESULT +
@@ -119,6 +129,7 @@ public class OnlineGameLauncher extends GameLauncher {
     public void setOpponent(InetAddress remoteAddress, String opponentName,
                             int opponentRating) throws Exception {
         ipOpponent = remoteAddress;
+        MessageListener.getInstance().setRemoteAddress(ipOpponent);
         this.opponentRating = opponentRating;
         this.opponentName = opponentName;
     }
@@ -128,4 +139,46 @@ public class OnlineGameLauncher extends GameLauncher {
         System.out.println("Cannot connect to opponent!");
 
     }
+
+    public void considerJoinRequest(InetAddress ip, String user, int rating) {
+        pendingIP = ip;
+        pendingName = user;
+        pendingRating = rating;
+        frmJoinRequest frmJoinRequest = new frmJoinRequest(user, rating, this);
+    }
+
+    //Called when user clicks the 'accept' button on the 'this person wants
+    //to join your game' form, frmJoinRequest. Starts the game and tells opp.
+    public void acceptJoinToGame() throws Exception {
+        String acceptanceMessage = ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK
+                + ClientToClientCode.DEL + (localUserIsWhite ? "0" : "1")
+                + ClientToClientCode.DEL + hostedGameCode;
+        setOpponent(pendingIP, pendingName, pendingRating);
+        OpponentMessageSender oms = new OpponentMessageSender(ipOpponent);
+        oms.sendMessage(acceptanceMessage, false);
+
+        launch();
+        MessageListener.getInstance().acceptMoves = true;
+        GameLobby.getInstance().close();
+    }
+
+    //Called when user clicks the 'reject' button, closes the window or the
+    //timeout elapses on frmJoinRequest. Tells opponent they are rejected.
+    public void rejectJoinToGame() {
+        MessageListener.getInstance().acceptJoins = true;
+
+        String response = ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO + "";
+        OpponentMessageSender oms = new OpponentMessageSender(pendingIP);
+        oms.sendMessage(response, false);
+
+        pendingIP = null;
+        pendingName = null;
+        pendingRating = 0;
+    }
+
+    public void setHostedGameCode(String hostedGameCode) {
+        this.hostedGameCode = hostedGameCode;
+    }
+
+
 }

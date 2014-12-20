@@ -37,7 +37,7 @@ public class MessageBoxAlert {
                 msg = "The username or password you entered is incorrect";
                 break;
             case (ResponseCode.REFUSED) :
-                msg = "Your account is currently suspended for" +
+                msg = "Your account is currently suspended for " +
                         "breaking the terms of service";
                 break;
         }
@@ -67,12 +67,15 @@ public class MessageBoxAlert {
         String msg = "";
         switch (responseCode) {
             case (ResponseCode.REFUSED) :
-                msg = "This game has been removed or is already in session";
+                msg = "The other player refused your request to join their game";
+                break;
+            case (ResponseCode.INVALID) :
+                msg = "This game is now full or has been removed";
                 break;
             case (ResponseCode.EMPTY) :
                 msg = "The other player is no longer online";
                 break;
-            case (ResponseCode.INVALID) :
+            case (ResponseCode.BAD_LOGIN) :
                 msg = "You can't join your own game";
                 break;
         }

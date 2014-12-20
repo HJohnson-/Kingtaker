@@ -32,9 +32,6 @@ public class PawnPromotion implements Runnable {
 
     // chess piece promotion
     public void promote(PromotablePiece promotablePiece) {
-
-        //System.out.println("pawn cords" + pawn.cords+" clear space...");
-
         switch (promotablePiece) {
             case QUEEN:
                 promotedPiece = new Queen(pawn.board,pawn.type,pawn.cords);
@@ -53,7 +50,13 @@ public class PawnPromotion implements Runnable {
         pawn.board.clearSpace(pawn.cords);
         promotedPiece.board.placePiece(promotedPiece.cords, promotedPiece);
         promotedPiece.lastTurnMovedOn = pawn.lastTurnMovedOn;
-        GameLauncher.currentGameLauncher.broadcastMove(pawn.cords, pawn.cords, "" + promotablePiece.ordinal());
+
+        //Broadcast pawn promotion as a move (e.g. 0,2->0,2) with the enum
+        //ordinal of the piece it was promoted to. Do not broadcast if
+        //this pawn promotion occurred remotely.
+        if (promotedPiece.isWhite() == promotedPiece.board.getController().playerIsWhite) {
+            GameLauncher.currentGameLauncher.broadcastMove(pawn.cords, pawn.cords, "" + promotablePiece.ordinal());
+        }
 
         if (promotedPiece.board.doDrawing) {
             promotedPiece.graphics.givePanel(pawn.graphics.panel);

@@ -32,45 +32,52 @@ public class RemoteOpenGame {
     }
 
     public int attemptToJoin(LocalUserAccount localUser) {
-        String message = ClientToClientCode.JOIN_OPEN_GAME + ClientToClientCode.DEL + localUser.getUsername() + ClientToClientCode.DEL + localUser.getRating();
+        String message = ClientToClientCode.JOIN_OPEN_GAME_REQUEST + ClientToClientCode.DEL + localUser.getUsername() + ClientToClientCode.DEL + localUser.getRating();
         OpponentMessageSender oms = new OpponentMessageSender(ip);
         String response = oms.sendMessage(message, true);
 
-        if (response == null) {
-            //Due to timeout
-            return ResponseCode.EMPTY;
-        } else if (response.equals(ResponseCode.REFUSED + "")) {
-            //Game already joined by some other client (most likely).
-            return ResponseCode.REFUSED;
-        } else if (response.startsWith(ResponseCode.OK + ResponseCode.DEL)) {
+        int responseCode = Integer.parseInt(response);
+        if (responseCode == ResponseCode.OK) {
+            String secondResponse = MessageListener.getInstance().getHostJoinResponse();
 
-            try {
-                String[] fields = response.split(ResponseCode.DEL);
-                PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];
-                boolean localUserIsWhite = !remotePiece.equals(PieceType.WHITE);
-                String boardState = fields[2];
+            if (secondResponse == null) {
+                //Time out
+                return ResponseCode.EMPTY;
+            } else if (secondResponse.startsWith(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO + "")) {
+                return ResponseCode.REFUSED;
+            } else if (secondResponse.startsWith(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK + "")) {
+                try {
+                    String[] fields = secondResponse.split(ResponseCode.DEL);
+                    PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];
+                    boolean localUserIsWhite = !remotePiece.equals(PieceType.WHITE);
+                    String boardState = fields[2];
 
-                OnlineGameLauncher launcher = new OnlineGameLauncher(
-                        VariantFactory.getInstance().getVariantByID(variantId),
-                        ip,
-                        hostUsername,
-                        hostRating
-                );
-                launcher.setGameBoardLayout(boardState);
-                launcher.setUserIsWhite(localUserIsWhite);
-                MessageListener.getInstance().acceptMoves = true;
-                MessageListener.getInstance().setRemoteAddress(ip);
+                    OnlineGameLauncher launcher = new OnlineGameLauncher(
+                            VariantFactory.getInstance().getVariantByID(variantId),
+                            ip,
+                            hostUsername,
+                            hostRating
+                    );
+                    launcher.setGameBoardLayout(boardState);
+                    launcher.setUserIsWhite(localUserIsWhite);
+                    MessageListener.getInstance().acceptMoves = true;
+                    MessageListener.getInstance().setRemoteAddress(ip);
 
-                GameLauncher.currentGameLauncher = launcher;
-                return ResponseCode.OK;
-            } catch (Exception e) {
-                //Loading the game failed due to a malformed board state
+                    GameLauncher.currentGameLauncher = launcher;
+                    return ResponseCode.OK;
+                } catch (Exception e) {
+                    //Loading the game failed due to a malformed board state
+                }
             }
 
+            //Report the hoster refused the join request otherwise.
+            return ResponseCode.REFUSED;
+        } else if (responseCode == ResponseCode.INVALID) {
+            //Game already started or deleted at host end.
         }
 
         //Response malformed/unexpected.
-        return ResponseCode.UNSPECIFIED_ERROR;
+        return responseCode;
 
     }
 }

@@ -2,7 +2,6 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
-import com.sun.xml.internal.ws.util.StringUtils;
 import pawnPromotion.PawnPromotion;
 import pawnPromotion.PromotablePiece;
 import pieces.ChessPiece;

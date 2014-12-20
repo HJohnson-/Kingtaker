@@ -1,1 +1,1 @@
-line21.doc.ic.ac.uk:4444
+MERCURY:4444

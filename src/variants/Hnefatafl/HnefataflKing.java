@@ -1,10 +1,9 @@
 package variants.Hnefatafl;
 
-import pieces.ChessPiece;
-import variants.BasicChess.Rook;
 import main.Board;
 import main.Location;
 import main.PieceType;
+import pieces.ChessPiece;
 
 import java.util.LinkedList;
 import java.util.List;

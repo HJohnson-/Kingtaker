@@ -3,7 +3,11 @@ package pawnPromotion;
 import main.GameController;
 import main.GameLauncher;
 import pieces.ChessPiece;
-import variants.BasicChess.*;
+import variants.BasicChess.Bishop;
+import variants.BasicChess.Knight;
+import variants.BasicChess.Queen;
+import variants.BasicChess.Rook;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,12 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-
-/**
- * Created by daniel on 14/10/28.
- */
-
-
 
 public class PawnPromotion implements Runnable {
 

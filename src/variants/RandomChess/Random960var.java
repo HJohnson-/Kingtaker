@@ -1,10 +1,10 @@
 package variants.RandomChess;
 
-import variants.BasicChess.BasicChessvar;
 import main.GameController;
-import variants.BasicChess.BasicDecoder;
-import variants.BasicChess.BasicChessFrame;
 import main.GameMode;
+import variants.BasicChess.BasicChessFrame;
+import variants.BasicChess.BasicChessvar;
+import variants.BasicChess.BasicDecoder;
 
 /**
  * Implements the Random960 chess variant.

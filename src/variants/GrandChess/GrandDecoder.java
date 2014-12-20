@@ -1,10 +1,10 @@
 package variants.GrandChess;
 
-import variants.BasicChess.BasicDecoder;
 import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
+import variants.BasicChess.BasicDecoder;
 
 /**
  * A custom decoder for the grand chess game variant because it has custom pieces

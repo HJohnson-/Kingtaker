@@ -1,9 +1,10 @@
 package BasicChessTest;
 
-import variants.BasicChess.*;
 import main.Location;
 import main.PieceType;
 import org.junit.Test;
+import variants.BasicChess.BasicBoard;
+import variants.BasicChess.Pawn;
 
 import java.lang.reflect.Field;
 

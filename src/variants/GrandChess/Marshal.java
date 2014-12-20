@@ -1,11 +1,11 @@
 package variants.GrandChess;
 
-import variants.BasicChess.Knight;
-import variants.BasicChess.Rook;
 import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
+import variants.BasicChess.Knight;
+import variants.BasicChess.Rook;
 
 import java.util.List;
 

@@ -1,6 +1,8 @@
 package variants.BasicChess;
 
-import main.*;
+import main.ChessVariant;
+import main.GameController;
+import main.GameMode;
 import pieces.PieceDecoder;
 
 /**

@@ -12,9 +12,6 @@ import networking.ServerMessageSender;
 
 import java.net.InetAddress;
 
-/**
- * Created by jc4512 on 06/11/14.
- */
 public class OnlineGameLauncher extends GameLauncher {
     private InetAddress ipOpponent;
     private ChessVariant variant;

@@ -1,7 +1,6 @@
 package main;
 
 import forms.frmJoinRequest;
-import variants.BasicChess.*;
 
 /**
  * Primitive main function for running tests until a menu is added

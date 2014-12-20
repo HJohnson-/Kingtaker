@@ -1,10 +1,10 @@
 package GrandChessTest;
 
-import variants.GrandChess.Cardinal;
-import variants.GrandChess.GrandBoard;
 import main.Location;
 import main.PieceType;
 import org.junit.Test;
+import variants.GrandChess.Cardinal;
+import variants.GrandChess.GrandBoard;
 
 import java.util.List;
 

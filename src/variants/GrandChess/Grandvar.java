@@ -2,10 +2,10 @@ package variants.GrandChess;
 
 import main.ChessVariant;
 import main.GameController;
-import variants.BasicChess.BasicDecoder;
-import variants.BasicChess.BasicChessFrame;
 import main.GameMode;
 import pieces.PieceDecoder;
+import variants.BasicChess.BasicChessFrame;
+import variants.BasicChess.BasicDecoder;
 
 /**
  * The 'Grand Chess' variant. A 10x10 board with two new pieces on each side.

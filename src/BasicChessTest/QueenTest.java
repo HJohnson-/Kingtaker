@@ -1,11 +1,11 @@
 package BasicChessTest;
 
-import variants.BasicChess.BasicBoard;
-import variants.BasicChess.Queen;
 import main.Location;
 import main.PieceType;
 import org.junit.Test;
 import pieces.ChessPiece;
+import variants.BasicChess.BasicBoard;
+import variants.BasicChess.Queen;
 
 import java.util.List;
 

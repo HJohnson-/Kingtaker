@@ -7,9 +7,8 @@ import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
 
-import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.LinkedList;
 
 /**
  * Created by crix9 on 21/11/2014.

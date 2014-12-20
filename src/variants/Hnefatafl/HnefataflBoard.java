@@ -2,12 +2,10 @@ package variants.Hnefatafl;
 
 import main.Board;
 import main.Location;
-import main.Move;
 import main.PieceType;
 import pieces.ChessPiece;
 import pieces.EmptyPiece;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**

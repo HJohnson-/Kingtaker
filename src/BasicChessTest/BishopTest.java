@@ -1,10 +1,10 @@
 package BasicChessTest;
 
-import variants.BasicChess.BasicBoard;
-import variants.BasicChess.Bishop;
 import main.Location;
 import main.PieceType;
 import org.junit.Test;
+import variants.BasicChess.BasicBoard;
+import variants.BasicChess.Bishop;
 
 import java.util.List;
 

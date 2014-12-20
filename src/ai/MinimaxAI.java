@@ -1,13 +1,13 @@
 package ai;
 
-import pawnPromotion.PawnPromotion;
-import pawnPromotion.PromotablePiece;
-import variants.BasicChess.Pawn;
 import main.Board;
 import main.GameMode;
 import main.GameResult;
 import main.Location;
+import pawnPromotion.PawnPromotion;
+import pawnPromotion.PromotablePiece;
 import pieces.ChessPiece;
+import variants.BasicChess.Pawn;
 
 import java.util.LinkedList;
 import java.util.List;

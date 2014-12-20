@@ -1,10 +1,10 @@
 package variants.RandomChess;
 
-import variants.BasicChess.*;
 import main.Board;
 import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
+import variants.BasicChess.*;
 
 import java.util.Random;
 

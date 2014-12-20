@@ -1,8 +1,8 @@
 package networking;
 
-import variants.BasicChess.BasicChessvar;
 import junit.framework.TestCase;
 import networking.NetworkingCodes.ClientCommandCode;
+import variants.BasicChess.BasicChessvar;
 
 public class LocalOpenGameTest extends TestCase {
     private final String testPassword = "123 abc XYZ !$#";

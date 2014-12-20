@@ -1,8 +1,8 @@
 package forms;
 
 import main.ChessVariant;
-import main.VariantFactory;
 import main.GameLauncher;
+import main.VariantFactory;
 import networking.GameLobby;
 import networking.LocalUserAccount;
 import networking.NetworkingCodes.ResponseCode;

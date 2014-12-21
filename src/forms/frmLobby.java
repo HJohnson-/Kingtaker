@@ -252,7 +252,7 @@ public class frmLobby {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
+            }
         };
         tblLobby.setRowSorter(tblLobbySorter);
         tblLobby.setRowHeight(30);

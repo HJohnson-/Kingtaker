@@ -143,7 +143,7 @@ public class frmMainMenu {
 
     public static void main(String[] args) {
         frame.setContentPane(new frmMainMenu().panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);

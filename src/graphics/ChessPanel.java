@@ -9,9 +9,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -437,7 +434,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         long lastDraw = System.currentTimeMillis();
         long frameTime = 1000 / targetFPS;
         while (true) {
-            try {Thread.sleep(frameTime - (System.currentTimeMillis() - lastDraw));} catch (InterruptedException e) {}
+            try {Thread.sleep(frameTime - (System.currentTimeMillis() - lastDraw));} catch (InterruptedException e) {e.printStackTrace();}
             if (board.getController().isWhitesTurn()) {
                 whiteTime += System.currentTimeMillis() - lastDraw;
             } else {

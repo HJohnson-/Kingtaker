@@ -365,16 +365,7 @@ public class HnefataflController extends GameController {
 			//System.out.println("3");
 			return false;
 		} //only king can move to a corner and throne
-		else if(move.getFrom().getX() != move.getTo().getX() &&
-				move.getFrom().getY() != move.getTo().getY())
-		{
-			//System.out.println("5");
-			return false; //cannot make diagonal moves
-		}
-		else
-		{
-			//System.out.println("6");
-			return true;
-		}
+		else return !(move.getFrom().getX() != move.getTo().getX() &&
+					move.getFrom().getY() != move.getTo().getY());
 	}
 }

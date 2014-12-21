@@ -20,11 +20,7 @@ public class Marshal extends ChessPiece {
 
 	@Override
 	protected boolean validInState(Location to) {
-		if(cords.getX() == to.getX() || cords.getY() == to.getY()) {
-			return board.clearLine(cords, to);
-		} else {
-			return true;
-		}
+		return !(cords.getX() == to.getX() || cords.getY() == to.getY()) || board.clearLine(cords, to);
 	}
 
 	@Override

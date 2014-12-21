@@ -47,7 +47,7 @@ public class RandomBoard extends Board {
 		// queens
 		int QuPos = rowGen.nextInt(6);
 		for(int i = 0; i <= QuPos; i++) {
-			if(filled[i] == true) QuPos++;
+			if(filled[i]) QuPos++;
 		}
 		location = new Location(0, QuPos);
 		this.placePiece(location, new Queen(this, PieceType.BLACK, location));
@@ -58,7 +58,7 @@ public class RandomBoard extends Board {
 		//knights
 		int KnPos = rowGen.nextInt(5);
 		for(int i = 0; i <= KnPos; i++) {
-			if(filled[i] == true) KnPos++;
+			if(filled[i]) KnPos++;
 		}
 		location = new Location(0, KnPos);
 		this.placePiece(location, new Knight(this, PieceType.BLACK, location));
@@ -67,7 +67,7 @@ public class RandomBoard extends Board {
 		filled[KnPos] = true;
 		KnPos = rowGen.nextInt(4);
 		for(int i = 0; i <= KnPos; i++) {
-			if(filled[i] == true) KnPos++;
+			if(filled[i]) KnPos++;
 		}
 		location = new Location(0, KnPos);
 		this.placePiece(location, new Knight(this, PieceType.BLACK, location));
@@ -76,7 +76,7 @@ public class RandomBoard extends Board {
 		filled[KnPos] = true;
 
 		for(int i = 0; i < numRows(); i++) {
-			if(filled[i] == false) {
+			if(filled[i]) {
 				location = new Location(0, i);
 				this.placePiece(location, new Rook(this, PieceType.BLACK, location));
 				location = flip(location);
@@ -87,7 +87,7 @@ public class RandomBoard extends Board {
 		}
 
 		for(int i = 0; i < numRows(); i++) {
-			if(filled[i] == false) {
+			if(!filled[i]) {
 				location = new Location(0, i);
 				this.placePiece(location, new King(this, PieceType.BLACK, location));
 				location = flip(location);
@@ -98,7 +98,7 @@ public class RandomBoard extends Board {
 		}
 
 		for(int i = 0; i < numRows(); i++) {
-			if(filled[i] == false) {
+			if(!filled[i]) {
 				location = new Location(0, i);
 				this.placePiece(location, new Rook(this, PieceType.BLACK, location));
 				location = flip(location);

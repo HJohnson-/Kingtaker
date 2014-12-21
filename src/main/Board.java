@@ -146,11 +146,8 @@ abstract public class Board {
         if(x < 0 || y < 0){
             return false;
         }
-        if(x >= numCols() || y >= numRows()) {
-            return false;
-        }
-        return true;
-    }
+		return !(x >= numCols() || y >= numRows());
+	}
 
 	/**
 	 * @return number of rows on the board

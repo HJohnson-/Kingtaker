@@ -88,10 +88,7 @@ public class Pawn extends ChessPiece{
 		if(toTake.type == type) {
 			return false;
 		}
-		if (toTake.lastTurnMovedOn != board.getController().getCurrentTurn() - 1) {
-			return false;
-		}
-		return true;
+		return toTake.lastTurnMovedOn == board.getController().getCurrentTurn() - 1;
 	}
 
 	@Override

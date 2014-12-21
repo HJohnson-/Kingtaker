@@ -20,11 +20,7 @@ public class Cardinal extends ChessPiece {
 
 	@Override
 	protected boolean validInState(Location to) {
-		if(Math.abs(cords.getX() - to.getX()) == Math.abs(cords.getY() - to.getY())) {
-			return board.clearLine(cords, to);
-		} else {
-			return true;
-		}
+		return Math.abs(cords.getX() - to.getX()) != Math.abs(cords.getY() - to.getY()) || board.clearLine(cords, to);
 	}
 
 	@Override

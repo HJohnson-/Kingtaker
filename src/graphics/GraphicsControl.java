@@ -64,16 +64,37 @@ public class GraphicsControl implements Runnable {
 
         panel.board.getController().animating = true;
 
-        while (!curCords.equals(endCords)) {
-            curCords.incrX(animationXStep);
-            curCords.incrY(animationYStep);
-
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if ((animationXStep != 0) && (animationYStep != 0) &&
+                (Math.abs(endCords.getX() - curCords.getX()) != Math.abs(endCords.getY() - curCords.getY()))) {
+            while (!curCords.getX().equals(endCords.getX())) {
+                curCords.incrX(animationXStep);
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
+            while (!curCords.getY().equals(endCords.getY())) {
+                curCords.incrY(animationYStep);
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            while (!curCords.equals(endCords)) {
+                curCords.incrX(animationXStep);
+                curCords.incrY(animationYStep);
+
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
 
         panel.board.getController().animating = false;

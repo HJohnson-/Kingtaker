@@ -9,6 +9,9 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +25,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     public Board board;
     protected ChessPiece selectedPiece = null;
 
-    protected int UIHeight = 100;
+    protected int verticalUIOffset = 20;
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
@@ -33,6 +36,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected JButton save = new JButton("Save");
 	protected JButton undo = new JButton("Undo");
     protected JSlider difficulty = new JSlider();
+
+    protected long whiteTime = 0, blackTime = 0;
 
     private String code;
     private static double lastLoad = 0;
@@ -111,7 +116,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
         final float[] FRACTIONS = {0.0f, 0.5f, 1.0f};
-        final Color[] BG_COLOURS = {Color.WHITE.darker(), new Color(85, 55, 29), Color.DARK_GRAY};
+        final Color[] BG_COLOURS = {Color.WHITE.darker(), new Color(35, 36, 85), Color.BLUE.brighter()};
         MultipleGradientPaint BG_GRADIENT = new LinearGradientPaint(new Point2D.Double(0, 0),
                 new Point2D.Double(getSize().getWidth(), getSize().getHeight()), FRACTIONS, BG_COLOURS);
         g2.setPaint(BG_GRADIENT);
@@ -170,43 +175,75 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         g2.setPaint(Color.WHITE);
 
-        x = offset.getX();
-        y = offset.getY() * 2 + cellHeight * board.numRows();
+        x = offset.getX() * 2 + cellWidth * board.numCols();
+        y = offset.getY();
 
-        g2.drawString("Turn: " + board.getController().getCurrentTurn(), x + 10 + cellWidth * 2, y + 10);
+        Paint oldPaint = g2.getPaint();
 
-        //Save and load buttons.
-        save.setLocation(x, y + UIHeight / 2);
-        save.setSize(cellWidth * 2, UIHeight / 2);
+        Color c = board.getController().isWhitesTurn() ? tools.BOARD_WHITE : tools.BOARD_BLACK;
+        Point2D centre = new Point2D.Float(x + cellWidth, y + cellHeight);
+        float radius = Math.max(cellHeight, 1);
+        float[] fractions = {0.0f, 1.0f};
+        Color[] colours = {c, endCol};
+        RadialGradientPaint rgp = new RadialGradientPaint(centre, radius, fractions, colours);
 
-        load.setLocation(x, y);
-        load.setSize(cellWidth * 2, UIHeight / 2);
+        g2.setPaint(rgp);
+        g2.fillRect(x, y, 2 * cellWidth, 2 * cellHeight);
 
-		undo.setLocation(x + cellWidth * 2, y + UIHeight / 2);
-		undo.setSize(cellWidth * 2, UIHeight / 2);
+        g2.setPaint(oldPaint);
+
+        //Turn Number
+        drawCentreString("Turn: " + board.getController().getCurrentTurn(), new Location(x, y), 2 * cellWidth, cellHeight - verticalUIOffset, g2);
+
+        y += cellHeight;
+
+
+        //Turn Timers
+        g2.drawString("White: " + convertMilliseconds(whiteTime), x, y);
+        g2.drawString("Black: " + convertMilliseconds(blackTime), x, y + cellHeight / 2);
+
+        y += cellHeight;
+
 
         //AI progress bar and difficulty controller.
         if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
-            int newX = offset.getX() + (cellWidth * board.numCols() / 2);
-            int barWidth = cellWidth * board.numCols() / 2;
-            int barHeight = 30;
+            int barWidth = cellWidth * 2;
+            int barHeight = cellHeight / 2;
+            y += cellHeight / 4;
 
             g2.setPaint(Color.RED.darker().darker());
-            g2.fillRect(newX, y + 10, barWidth, barHeight);
+            g2.fillRect(x, y, barWidth, barHeight);
 
             double completed = board.getController().getAI().pcComplete();
             int total = board.getController().getAI().getTotal();
             int done = board.getController().getAI().getCompleted();
 
             g2.setPaint(Color.GREEN.darker());
-            g2.fillRect(newX, y + 10, (int) (barWidth * completed), barHeight);
+            g2.fillRect(x, y, (int) (barWidth * completed), barHeight);
 
             g2.setPaint(Color.BLUE.brighter());
-            drawCentreString(done + "/" + total, new Location(newX, y + 10), barWidth, barHeight, g2);
+            drawCentreString(done + "/" + total, new Location(x, y), barWidth, barHeight, g2);
 
-            difficulty.setLocation(newX, y + barHeight + 20);
-            difficulty.setSize(barWidth, 20);
+            y += cellHeight;
+            difficulty.setLocation(x, y);
+            difficulty.setSize(barWidth, cellHeight / 2);
+
+            y += cellHeight * 3 / 4;
         }
+
+        x += cellWidth * 0.25;
+
+
+        //Save and load buttons.
+        y += cellHeight * 0.1;
+        save.setLocation(x, y);
+        save.setSize((int) (cellWidth * 1.5), (int) (cellHeight * 0.8));
+
+        load.setLocation(x, y + cellHeight);
+        load.setSize((int) (cellWidth * 1.5), (int) (cellHeight * 0.8));
+
+        undo.setLocation(x, y + cellHeight * 2);
+        undo.setSize((int) (cellWidth * 1.5), (int) (cellHeight * 0.8));
 
         if (load.getParent() == null) {
             this.add(load);
@@ -214,6 +251,14 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 			this.add(undo);
             if (board.getController().gameMode == GameMode.SINGLE_PLAYER) this.add(difficulty);
         }
+    }
+
+    private String convertMilliseconds(long millis) {
+        long second = (millis / 1000) % 60;
+        long minute = (millis / (1000 * 60)) % 60;
+        long hour = (millis / (1000 * 60 * 60)) % 24;
+
+        return String.format("%01d:%02d:%02d", hour, minute, second);
     }
 
     protected void drawCentreString(String s, Location offset, int width, int height, Graphics2D g2) {
@@ -315,10 +360,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     public void recalculateCellSize() {
         while (board.getController().animating) Thread.yield();
 
-        int boardWidth = (int) getSize().getWidth() - offset.getX() * 2;
-        int boardHeight = (int) getSize().getHeight() - UIHeight - offset.getY() * 2;
+        int boardWidth = (int) getSize().getWidth() - offset.getX() * 3;
+        int boardHeight = (int) getSize().getHeight() - offset.getY() * 2;
 
-        cellWidth = Math.round(Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2;
+        cellWidth = Math.round(Math.min(boardHeight / board.numRows(), boardWidth / (board.numCols() + 2)) / 2) * 2;
         //noinspection SuspiciousNameCombination
         cellHeight = cellWidth;
 
@@ -390,10 +435,16 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             targetFPS = 120;
         }
         long lastDraw = System.currentTimeMillis();
+        long frameTime = 1000 / targetFPS;
         while (true) {
-            try {Thread.sleep(1000 / targetFPS);} catch (InterruptedException e) {}
-            repaint();
+            try {Thread.sleep(frameTime - (System.currentTimeMillis() - lastDraw));} catch (InterruptedException e) {}
+            if (board.getController().isWhitesTurn()) {
+                whiteTime += System.currentTimeMillis() - lastDraw;
+            } else {
+                blackTime += System.currentTimeMillis() - lastDraw;
+            }
             lastDraw = System.currentTimeMillis();
+            repaint();
         }
     }
 

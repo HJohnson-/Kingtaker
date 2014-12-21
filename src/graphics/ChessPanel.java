@@ -221,9 +221,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             g2.setPaint(Color.BLUE.brighter());
             drawCentreString(done + "/" + total, new Location(x, y), barWidth, barHeight, g2);
 
-            y += cellHeight;
+            y += cellHeight * 3 / 4;
+            g2.setPaint(Color.WHITE);
+            drawCentreString("AI Difficulty", new Location(x, y), barWidth, cellHeight / 2, g2);
+
+            y += cellHeight / 2;
             difficulty.setLocation(x, y);
-            difficulty.setSize(barWidth, cellHeight / 2);
+            difficulty.setSize(barWidth, cellHeight / 4);
 
             y += cellHeight * 3 / 4;
         }

@@ -37,8 +37,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 	protected JButton undo = new JButton("Undo");
     protected JSlider difficulty = new JSlider();
 
-    protected long ply1Time = 45, ply2Time = 127322;
-    protected final DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+    protected long whiteTime = 0, blackTime = 0;
 
     private String code;
     private static double lastLoad = 0;
@@ -200,10 +199,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
         //Turn Timers
-        Date d1 = new Date(ply1Time);
-        Date d2 = new Date(ply2Time);
-        g2.drawString("White: " + formatter.format(d1), x, y);
-        g2.drawString("Black: " + formatter.format(d2), x, y + cellHeight / 2);
+        g2.drawString("White: " + convertMilliseconds(whiteTime), x, y);
+        g2.drawString("Black: " + convertMilliseconds(blackTime), x, y + cellHeight / 2);
 
         y += cellHeight;
 
@@ -254,6 +251,14 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 			this.add(undo);
             if (board.getController().gameMode == GameMode.SINGLE_PLAYER) this.add(difficulty);
         }
+    }
+
+    private String convertMilliseconds(long millis) {
+        long second = (millis / 1000) % 60;
+        long minute = (millis / (1000 * 60)) % 60;
+        long hour = (millis / (1000 * 60 * 60)) % 24;
+
+        return String.format("%01d:%02d:%02d", hour, minute, second);
     }
 
     protected void drawCentreString(String s, Location offset, int width, int height, Graphics2D g2) {
@@ -433,6 +438,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         long frameTime = 1000 / targetFPS;
         while (true) {
             try {Thread.sleep(frameTime - (System.currentTimeMillis() - lastDraw));} catch (InterruptedException e) {}
+            if (board.getController().isWhitesTurn()) {
+                whiteTime += System.currentTimeMillis() - lastDraw;
+            } else {
+                blackTime += System.currentTimeMillis() - lastDraw;
+            }
             lastDraw = System.currentTimeMillis();
             repaint();
         }

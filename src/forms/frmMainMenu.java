@@ -3,19 +3,21 @@ package forms;
 import main.GameMode;
 import networking.GameLobby;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Random;
 
 /**
  * Created by jc4512 on 15/10/14.
  */
 public class frmMainMenu {
+    private static final int BACKDROP_PIECE_COUNT = 3000;
+    private static final String BACKDROP_PIECE_CHARACTERS = "♚♛♜♝♞♟";
+
     private JPanel panel1;
     private JButton btnSinglePlayer;
     private JButton btnLocalMP;
@@ -24,8 +26,6 @@ public class frmMainMenu {
     private JLabel lblTitle;
     private JPanel panButtons;
     private Timer timer;
-
-    private final String LBLTITLE_TEXT = "KingTaker";
 
     private static JFrame frame = new JFrame("KingTaker");
 
@@ -38,22 +38,25 @@ public class frmMainMenu {
                 toggleButtonsEnabled(!(frmVariantChooser.isVisible() || GameLobby.isOpen()));
             }
         });
-        
+
         btnSinglePlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                timer.start();
                 beginLocalSP();
             }
         });
         btnLocalMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                timer.start();
                 beginLocalMP();
             }
         });
         btnOnlineMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                timer.start();
                 showLobby();
             }
         });
@@ -64,67 +67,53 @@ public class frmMainMenu {
             }
         });
 
-
-        timer = new Timer(1, new ActionListener() {
-            int iteration = 0;
-            Graphics gr;
-            String characters = "♚♛♜♝♞♟";
-            Color color1 = new Color(181, 158, 122);
-            Color color2 = new Color(0, 0, 0);
-            Font pawnFont = new Font("", Font.PLAIN, 36);
-            Font titleFont1 = new Font("", Font.BOLD, 78);
-            Font titleFont2 = new Font("", Font.BOLD, 75);
-            BufferedImage panelImage;
-            Random r = new Random();
-
-            boolean initialised = false;
-
+        timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (!initialised && frame.getWidth() > 0) {
-                    //Graphics are first available
-                    panelImage = new BufferedImage(panel1.getWidth(), panel1.getHeight(),
-                            BufferedImage.TYPE_INT_RGB);
-                    initialised = true;
+                if (panel1.getWidth()!=0) {
+                    drawBackdrop();
+                    timer.stop();
                 }
 
-                if (initialised) {
-                    gr = panelImage.getGraphics();
-
-                    String piece = characters.charAt(r.nextInt(characters.length())) + "";
-                    gr.setFont(pawnFont);
-                    //gr.setColor(r.nextBoolean() ? color1 : color2);
-                    gr.setColor(new Color(iteration));
-                    gr.drawString(piece, r.nextInt(frame.getWidth())-20, r.nextInt(frame.getHeight()));
-
-                    gr.setFont(titleFont1);
-                    gr.setColor(Color.DARK_GRAY);
-                    drawCenteredString(LBLTITLE_TEXT, frame.getWidth(), 80, gr);
-                    gr.setFont(titleFont2);
-                    gr.setColor(Color.WHITE);
-                    drawCenteredString(LBLTITLE_TEXT, frame.getWidth(), 80, gr);
-
-                    panel1.getGraphics().drawImage(panelImage, 0, 0, null);
-
-                    btnSinglePlayer.updateUI();
-                    btnLocalMP.updateUI();
-                    btnOnlineMP.updateUI();
-                    btnExit.updateUI();
-
-                    iteration++;
-                }
-            }
-
-            public void drawCenteredString(String s, int w, int h, Graphics g) {
-                FontMetrics fm = g.getFontMetrics();
-                int x = (w - fm.stringWidth(s)) / 2;
-                int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
-                g.drawString(s, x, y);
             }
         });
-        //timer.start();
-
+        timer.start();
         lblTitle.setText(" ");
+    }
+
+    //Called when panel is first available - not on form initialisation
+    private void drawBackdrop() {
+        Random r = new Random();
+        BufferedImage panelImage = new BufferedImage(panel1.getWidth(),
+                panel1.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics gr = panelImage.getGraphics();
+        gr.setFont(new Font("", Font.PLAIN, 36));
+
+        //  Draws pieces in backdrop
+        for (int i = 0; i < BACKDROP_PIECE_COUNT; i++) {
+            String piece = BACKDROP_PIECE_CHARACTERS.charAt(
+                    r.nextInt(BACKDROP_PIECE_CHARACTERS.length())) + "";
+            gr.setColor(new Color(r.nextInt()));
+            gr.drawString(piece, r.nextInt(frame.getWidth()) - 20,
+                    r.nextInt(frame.getHeight()));
+        }
+
+        panel1.getGraphics().drawImage(panelImage, 0, 0, null);
+
+        //Draw KingTaker title graphic
+        try {
+            BufferedImage titleImage = ImageIO.read(new File("media/title.png"));
+            panel1.getGraphics().drawImage(titleImage, 0, 0,
+                    panel1.getWidth(), 106, null);
+        } catch (Exception e) {
+        }
+
+        //Bring buttons to the front (otherwise they'd be invisible
+        //behind the graphics drawn.
+        btnExit.updateUI();
+        btnLocalMP.updateUI();
+        btnOnlineMP.updateUI();
+        btnSinglePlayer.updateUI();
     }
 
     private void showLobby() {

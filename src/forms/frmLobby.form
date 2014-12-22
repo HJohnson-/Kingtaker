@@ -25,7 +25,9 @@
             <constraints>
               <splitpane position="left"/>
             </constraints>
-            <properties/>
+            <properties>
+              <enabled value="false"/>
+            </properties>
             <border type="none"/>
             <children>
               <splitpane id="c096b">
@@ -75,6 +77,7 @@
                       <splitpane position="right"/>
                     </constraints>
                     <properties>
+                      <enabled value="false"/>
                       <orientation value="0"/>
                     </properties>
                     <border type="none"/>
@@ -128,7 +131,7 @@
                       <splitpane position="left"/>
                     </constraints>
                     <properties>
-                      <dividerLocation value="30"/>
+                      <dividerLocation value="31"/>
                       <dividerSize value="0"/>
                       <enabled value="false"/>
                       <orientation value="0"/>

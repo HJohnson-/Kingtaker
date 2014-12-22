@@ -134,7 +134,8 @@ public class OnlineGameLauncher extends GameLauncher {
     //TODO: handle this properly. Send a report to the server and offer to complete the game with AI?
     private void handleRemoteUserDisconnection() {
         System.out.println("Cannot connect to opponent!");
-
+        variant.game.gameMode = GameMode.SINGLE_PLAYER;
+        variant.game.makeAIMove();
     }
 
     public void considerJoinRequest(InetAddress ip, String user, int rating) {

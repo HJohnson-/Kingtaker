@@ -22,12 +22,18 @@ public class MinimaxAI extends ChessAI {
     private final int WIN_SCORE = 10000;
     private final int LOSS_SCORE = -10000;
     private final int DRAW_SCORE = -5000;
+    public static final int DEFAULT_AI_LEVEL = 3;
     private double numMoves = 1;
     private double completed = 0;
 
     public MinimaxAI(boolean isWhite, int depth) {
         super(isWhite);
         this.maxDepth = depth;
+    }
+    
+    public MinimaxAI(boolean isWhite) {
+        super(isWhite);
+        this.maxDepth = DEFAULT_AI_LEVEL;
     }
 
     @Override

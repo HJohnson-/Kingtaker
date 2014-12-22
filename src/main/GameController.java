@@ -82,11 +82,11 @@ public class GameController {
         return ai;
     }
 
-    private void initialiseAI(int difficulty) {
+    public void initialiseAI(int difficulty) {
         this.ai = new MinimaxAI(!playerIsWhite, difficulty);
     }
 
-    private void initialiseAI() {
+    public void initialiseAI() {
         this.ai = new MinimaxAI(!playerIsWhite);
     }
 
@@ -178,7 +178,7 @@ public class GameController {
                 nextPlayersTurn();
             }
 
-            if (local) {
+            if (local && gameMode == GameMode.MULTIPLAYER_ONLINE) {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
 

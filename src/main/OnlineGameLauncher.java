@@ -1,5 +1,6 @@
 package main;
 
+import forms.MessageBoxAlert;
 import forms.frmJoinRequest;
 import forms.frmLobby;
 import networking.GameLobby;
@@ -81,12 +82,9 @@ public class OnlineGameLauncher extends GameLauncher {
         message.append(extra);
         String response = oms.sendMessage(message.toString(), true);
 
-        if (response == null) {
+        if (response == null || !response.equals(ResponseCode.OK + "")) {
+            System.out.println("Other client rejected move or disconnected!");
             handleRemoteUserDisconnection();
-            return;
-        }
-        if (!response.equals(ResponseCode.OK + "")) {
-            System.out.println("Other client rejected move!");
         }
     }
 
@@ -134,8 +132,10 @@ public class OnlineGameLauncher extends GameLauncher {
     //TODO: handle this properly. Send a report to the server and offer to complete the game with AI?
     private void handleRemoteUserDisconnection() {
         System.out.println("Cannot connect to opponent!");
+        variant.game.initialiseAI(1);
         variant.game.gameMode = GameMode.SINGLE_PLAYER;
-        variant.game.makeAIMove();
+        (new MessageBoxAlert()).showDisconnectedOpponent(opponentName);
+
     }
 
     public void considerJoinRequest(InetAddress ip, String user, int rating) {

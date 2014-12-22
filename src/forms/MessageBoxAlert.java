@@ -17,6 +17,10 @@ public class MessageBoxAlert {
         this.parent = parent;
     }
 
+    public MessageBoxAlert() {
+        this.parent = null;
+    }
+
     //Opens a small GUI form with a single OK button, title "KingTaker",
     // with specified message. 0-length messages are replaced with an.
     // 'unspecified error' message.
@@ -79,6 +83,13 @@ public class MessageBoxAlert {
                 msg = "You can't join your own game";
                 break;
         }
+        showMessage(msg);
+    }
+
+    public void showDisconnectedOpponent(String opponent) {
+        String msg = opponent + " has disconnected.\n" +
+                "Close the game window or continue the game with the AI.\n" +
+                "This will not affect your rating.";
         showMessage(msg);
     }
 }

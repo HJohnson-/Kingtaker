@@ -28,7 +28,6 @@ public class GameController {
 	public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
 	private PieceDecoder decoder;
 
-	public final int initialDiff = 3;
 	private ChessAI ai;
 	private boolean AIWorking = false;
 	public boolean playerIsWhite;
@@ -46,9 +45,7 @@ public class GameController {
         this.board = board;
     }
 
-	/**
-	 * @param board board
-	 */
+	//Used for local multiplayer and single player games.
 	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode, boolean playerIsWhite) {
         currentTurn = 1;
 		this.board = board;
@@ -59,41 +56,46 @@ public class GameController {
 		this.playerIsWhite = playerIsWhite;
 
 		if (mode == GameMode.SINGLE_PLAYER) {
-			this.ai = new MinimaxAI(!playerIsWhite, initialDiff);
-			if (!playerIsWhite) {
-				executor.submit(new DoAIMove(this));
-			}
+			initialiseAI();
+			makeAIMove();
 		}
     }
 
-
-
-	public GameController(Board board, PieceDecoder decoder, String code, GameMode mode) {
+    //Used exclusively by OnlineGameLauncher.
+	public GameController(Board board, PieceDecoder decoder, String boardLayoutCode, GameMode mode) {
         this.board = board;
 		this.decoder = decoder;
 		int startOfValue = 4;
-		int endOfValue = code.indexOf('~', startOfValue);
-		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
+		int endOfValue = boardLayoutCode.indexOf('~', startOfValue);
+		currentTurn = Integer.decode(boardLayoutCode.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+3;
-		endOfValue = code.indexOf('$', startOfValue);
-		gameID = Integer.decode(code.substring(startOfValue, endOfValue));
+		endOfValue = boardLayoutCode.indexOf('$', startOfValue);
+		gameID = Integer.decode(boardLayoutCode.substring(startOfValue, endOfValue));
 		startOfValue = endOfValue+1;
-		endOfValue = code.indexOf('#', startOfValue);
-		String pieces = code.substring(startOfValue, endOfValue);
+		endOfValue = boardLayoutCode.indexOf('#', startOfValue);
+		String pieces = boardLayoutCode.substring(startOfValue, endOfValue);
 		board.populateFromCode(pieces, decoder);
         this.gameMode = mode;
 		previousTurns = new ArrayList<String>();
-		//TODO: Save whether the player is playing white or black, for singleplayer.
-
-		if (mode == GameMode.SINGLE_PLAYER) {
-			this.ai = new MinimaxAI(!playerIsWhite, initialDiff);
-		}
 	}
-
-
 
     public ChessAI getAI() {
         return ai;
+    }
+
+    public void initialiseAI(int difficulty) {
+        this.ai = new MinimaxAI(!playerIsWhite, difficulty);
+    }
+
+    public void initialiseAI() {
+        this.ai = new MinimaxAI(!playerIsWhite);
+    }
+
+    public void makeAIMove() {
+        if ( (ai != null) && (isWhitesTurn != playerIsWhite)
+                && (gameMode == GameMode.SINGLE_PLAYER)) {
+            executor.submit(new DoAIMove(this));
+        }
     }
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean whitePieces) {
@@ -173,17 +175,15 @@ public class GameController {
 				endGame(true);
 			}
 			else {
-				checkForCapturedPieces(targetLocation);
+				checkForCapturedPieces(targetLocation); //No effect if not Hf
                 nextPlayersTurn();
             }
 
-            if (local) {
+            if (local && gameMode == GameMode.MULTIPLAYER_ONLINE) {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
 
-            if ((isWhitesTurn != playerIsWhite) && (gameMode == GameMode.SINGLE_PLAYER)) {
-                executor.submit(new DoAIMove(this));
-            }
+            makeAIMove(); //No effect if not single player.
 
 			return true;
 		}
@@ -194,7 +194,7 @@ public class GameController {
 	protected void checkForCapturedPieces(Location targetLocation) {
 	}
 
-
+    //TODO: all stalemate conditions
 	protected boolean staleMate(){
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves(isWhitesTurn);
 		return moves.size() == 0;
@@ -389,9 +389,10 @@ public class GameController {
 		board.populateFromCode(pieces, decoder);
 	}
 
+    //Wait until the AI has moved before recreating it with a new difficulty.
     public void setDifficulty(int difficulty) {
         while (AIWorking) Thread.yield();
-        this.ai = new MinimaxAI(!playerIsWhite, difficulty);
+        initialiseAI(difficulty);
     }
 
     public boolean isLocalsTurn() {

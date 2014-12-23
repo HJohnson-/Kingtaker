@@ -58,7 +58,7 @@ public class MinimaxAI extends ChessAI {
                         newBoard.doDrawing = false;
                         newBoard.getController().gameMode = GameMode.MULTIPLAYER_LOCAL;
                         newBoard.getController().attemptMove(piece.cords, l, false);
-                        if (piece instanceof Pawn && (l.getX() == 0 || l.getX() == board.numCols())) {
+                        if (piece instanceof Pawn && (piece.cords.getX() == 0 || piece.cords.getX() == newBoard.numCols() - 1)) {
                             PawnPromotion pp = new PawnPromotion(piece);
                             pp.promote(PromotablePiece.QUEEN);
                         }

@@ -7,6 +7,7 @@ import pawnPromotion.PromotablePiece;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 import variants.BasicChess.King;
+import variants.BasicChess.Pawn;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -412,6 +413,11 @@ public class GameController {
             AIWorking = true;
             Location[] aiMove = control.ai.getBestMove(control.board);
             control.attemptMove(aiMove[0], aiMove[1], false);
+			ChessPiece movedPiece = control.board.getPiece(aiMove[1]);
+			if (movedPiece instanceof Pawn && (movedPiece.cords.getX() == 0 || movedPiece.cords.getX() == control.board.numCols() - 1)) {
+				PawnPromotion pp = new PawnPromotion(movedPiece);
+				pp.promote(PromotablePiece.QUEEN);
+			}
             //System.out.println(aiMove[0] + " -> " + aiMove[1]);
             AIWorking = false;
         }

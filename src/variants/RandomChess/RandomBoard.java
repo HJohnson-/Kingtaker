@@ -76,7 +76,7 @@ public class RandomBoard extends Board {
 		filled[KnPos] = true;
 
 		for(int i = 0; i < numRows(); i++) {
-			if(filled[i]) {
+			if(!filled[i]) {
 				location = new Location(0, i);
 				this.placePiece(location, new Rook(this, PieceType.BLACK, location));
 				location = flip(location);

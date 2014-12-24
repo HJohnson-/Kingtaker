@@ -3,13 +3,10 @@ package main;
 import forms.MessageBoxAlert;
 import forms.frmJoinRequest;
 import forms.frmLobby;
-import networking.GameLobby;
-import networking.MessageListener;
+import networking.*;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
-import networking.OpponentMessageSender;
-import networking.ServerMessageSender;
 
 import java.net.InetAddress;
 
@@ -112,8 +109,18 @@ public class OnlineGameLauncher extends GameLauncher {
         MessageListener.getInstance().acceptMoves = false;
 
         ServerMessageSender sms = new ServerMessageSender();
-        sms.sendMessageAsync(ClientCommandCode.REPORT_GAME_RESULT +
-                ClientCommandCode.DEL + winnerParameter + opponentName);
+        String response = sms.sendMessage(ClientCommandCode.REPORT_GAME_RESULT +
+                ClientCommandCode.DEL + winnerParameter + opponentName, true);
+        if (response != null) {
+            String newRatingStr = response.replace("0,","");
+            if (newRatingStr.matches("\\d+")) {
+                int newRating = Integer.valueOf(newRatingStr);
+                LocalUserAccount localUser = GameLobby.getInstance().getUser();
+                MessageBoxAlert mba = new MessageBoxAlert();
+                mba.showNewRating(localUser.getUsername(), localUser.getRating(), newRating);
+                localUser.setRating(newRating);
+            }
+        }
     }
 
     public void setGameBoardLayout(String boardState) {

@@ -66,4 +66,8 @@ public class LocalUserAccount {
         return u != null && pw != null &&
                 u.matches(USERNAME_REGEX) && pw.matches(PASSWORD_REGEX);
     }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 }

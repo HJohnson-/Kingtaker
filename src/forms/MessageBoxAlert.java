@@ -10,7 +10,6 @@ public class MessageBoxAlert {
     private String MSGBOX_TITLE = "KingTaker";
 
     private final String UNSPECIFIED_ERROR_MSG = "An unspecified error occurred";
-
     private JFrame parent;
 
     public MessageBoxAlert(JFrame parent) {
@@ -90,6 +89,14 @@ public class MessageBoxAlert {
         String msg = opponent + " has disconnected.\n" +
                 "Close the game window or continue the game with the AI.\n" +
                 "This will not affect your rating.";
+        showMessage(msg);
+    }
+
+    public void showNewRating(String username, int oldRating, int newRating) {
+        String msg = username + "'s ELO rating has been changed.\n" +
+                "Old Rating: " + oldRating + "\n" +
+                "New Rating: " + newRating + "\n" +
+                "Change: " + (newRating - oldRating);
         showMessage(msg);
     }
 }

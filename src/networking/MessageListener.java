@@ -124,9 +124,11 @@ public class MessageListener implements Runnable {
                                 Integer.valueOf(fields[3]), Integer.valueOf(fields[4]),
                                 extraField);
 
-                        //Just disconnect the game and replace opponent with AI if they are trying to cheat.
+                        //Disconnect the game and replace opponent with AI if they are trying to cheat.
+                        //or their client is funky. Also report them to the server.
                         if (!successfulMove) {
                             OnlineGameLauncher launcher = (OnlineGameLauncher) GameLauncher.currentGameLauncher;
+                            launcher.reportOpponent();
                             launcher.handleRemoteUserDisconnection();
                         }
                         response = (successfulMove ? ResponseCode.OK : ResponseCode.INVALID) + "";

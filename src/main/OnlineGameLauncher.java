@@ -22,7 +22,6 @@ public class OnlineGameLauncher extends GameLauncher {
     private int pendingRating;
     private InetAddress pendingIP;
 
-
     public OnlineGameLauncher(ChessVariant variant) {
         this.variant = variant;
         variant.game.gameMode = GameMode.MULTIPLAYER_ONLINE;
@@ -61,7 +60,8 @@ public class OnlineGameLauncher extends GameLauncher {
     }
 
     //When the player locally makes a move, this method is called so that the
-    //remote player is told of this move.
+    //remote player is told of this move. If they reject it or are unreachable,
+    //the game will be converted into single player mode.
     @Override
     public void broadcastMove(Location oldL, Location newL, String extra) {
         OpponentMessageSender oms = new OpponentMessageSender(ipOpponent);
@@ -79,9 +79,12 @@ public class OnlineGameLauncher extends GameLauncher {
         message.append(extra);
         String response = oms.sendMessage(message.toString(), true);
 
-
-        if (response == null || !response.equals(ResponseCode.OK + "")) {
-            System.out.println("Other client rejected move or disconnected!");
+        if (response == null) {
+            System.out.println("Other client disconnected!");
+            reportOpponent();
+            handleRemoteUserDisconnection();
+        } else if (!response.equals(ResponseCode.OK + "")) {
+            System.out.println("Other client rejected my move!");
             handleRemoteUserDisconnection();
         }
     }
@@ -189,5 +192,9 @@ public class OnlineGameLauncher extends GameLauncher {
         this.hostedGameCode = hostedGameCode;
     }
 
+    public void reportOpponent() {
+        ServerMessageSender sms = new ServerMessageSender();
+        sms.sendMessageAsync(ClientCommandCode.REPORT_PLAYER + ClientCommandCode.DEL + opponentName);
+    }
 
 }

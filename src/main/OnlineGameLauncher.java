@@ -79,6 +79,7 @@ public class OnlineGameLauncher extends GameLauncher {
         message.append(extra);
         String response = oms.sendMessage(message.toString(), true);
 
+
         if (response == null || !response.equals(ResponseCode.OK + "")) {
             System.out.println("Other client rejected move or disconnected!");
             handleRemoteUserDisconnection();
@@ -136,13 +137,16 @@ public class OnlineGameLauncher extends GameLauncher {
         this.opponentName = opponentName;
     }
 
-    //TODO: handle this properly. Send a report to the server and offer to complete the game with AI?
-    private void handleRemoteUserDisconnection() {
+    //Connection to opponent is lost. The opponent is replaced with the AI
+    //and the user is told the same via a message box.
+    //This is also called if cheating is detected, though to avoid breaking
+    //friendships, this is disguised as a "connection has been lost" error
+    public void handleRemoteUserDisconnection() {
         System.out.println("Cannot connect to opponent!");
         variant.game.initialiseAI(1);
         variant.game.gameMode = GameMode.SINGLE_PLAYER;
-        (new MessageBoxAlert()).showDisconnectedOpponent(opponentName);
 
+        (new MessageBoxAlert()).showDisconnectedOpponent(opponentName);
     }
 
     public void considerJoinRequest(InetAddress ip, String user, int rating) {

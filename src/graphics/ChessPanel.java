@@ -1,7 +1,6 @@
 package graphics;
 
 import main.*;
-import newGraphic.StopWatch;
 import pieces.ChessPiece;
 
 import javax.swing.*;

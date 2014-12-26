@@ -1,7 +1,5 @@
 package graphics;
 
-import newGraphic.StopWatch;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;

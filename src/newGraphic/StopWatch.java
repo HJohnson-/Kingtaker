@@ -74,6 +74,16 @@ public class StopWatch extends Thread {
         }
     }
 
+    public void resetTime() {
+        wCurrentSecond = 0;
+        wMinute = 0;
+        wHour = 0;
+
+        bCurrentSecond = 0;
+        bMinute = 0;
+        bHour = 0;
+    }
+
     public void init_buttons() {
 
         startTimer.addActionListener(new ActionListener() {
@@ -87,7 +97,6 @@ public class StopWatch extends Thread {
             public void actionPerformed(ActionEvent e) {
                 isWhite = Boolean.FALSE;
                 time.setBackground(Color.red);
-                System.out.println("stop!" + isWhite);
             }
         });
 
@@ -111,12 +120,10 @@ public class StopWatch extends Thread {
 
                 if (wCurrentSecond == 60) {
                     calTime();
-                    System.out.println("reset");
                 }
                 time.setText(String.format("<html>White : %02d:%02d:%02d <br> Black : %02d:%02d:%02d<html>", wHour, wMinute, wCurrentSecond, bHour, bMinute, bCurrentSecond));
                 try {
                     this.sleep(1000);
-                    System.out.println("white tick" + isRunning);
                     if(!isRunning) {
 
                         this.currentThread().interrupt();
@@ -141,12 +148,10 @@ public class StopWatch extends Thread {
 
                 if (bCurrentSecond == 60) {
                     calTime();
-                    System.out.println("reset");
                 }
                 time.setText(String.format("<html>White : %02d:%02d:%02d <br> Black : %02d:%02d:%02d<html>", wHour, wMinute, wCurrentSecond, bHour, bMinute, bCurrentSecond));
                 try {
                    this.sleep(1000);
-                    System.out.println("black tick" + isRunning);
                     if(!isRunning) {
                         this.currentThread().interrupt();
 

@@ -32,8 +32,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
     protected JButton undo = new JButton("Undo");
-    public static final StopWatch stopWatch = new StopWatch();
-    protected JPanel time = stopWatch.buildStopWatch();
+    public   StopWatch stopWatch ;
+    protected  JPanel time;
     protected JLabel turnLable = new JLabel();
     protected JPanel turn = new JPanel();
     protected JLabel sliderLabel = new JLabel("Difficulty", JLabel.CENTER);
@@ -78,7 +78,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 ChessPanel.this.board.getController().setDifficulty(difficulty.getValue());
             }
         });
-
+        if(stopWatch==null) {
+            stopWatch = new StopWatch();
+            time = stopWatch.buildStopWatch();
+//            synchronized (stopWatch);
+        }else{
+            stopWatch.resetTime();
+        }
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
     }
@@ -172,7 +178,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 //        int plyMarkX = (int) (end.getX() == 0 ? end.getX() : start.getX());
 //        g2.fillRect(plyMarkX, offset.getY(), offset.getX(), board.numRows() * cellHeight);
 
-        if (board.getController().isWhitesTurn()) {
+        if ( board.getController().isWhitesTurn()) {
             stopWatch.isWhite = Boolean.TRUE;
             stopWatch.time.setBackground(tools.BOARD_WHITE);
             stopWatch.clockPanel2.setBackground(tools.BOARD_WHITE);
@@ -208,7 +214,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
         /* new graphic */
-            turnLable.setText(String.format("<html>Num of Turn <br> %04d<html>", board.getController().getCurrentTurn()));
+            turnLable.setText(String.format("<html>NUM OF TURNS <br> %04d<html>", board.getController().getCurrentTurn()));
             turnLable.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight() / 4));
 
             turnLable.setBackground(tools.CUR_PIECE);
@@ -230,14 +236,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         turn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         turn.setLocation(p3col2, p2row1);
         turn.setSize(threeWidth,twoHight);
-        /* new graphic */
-
-//        g2.drawString("Turn: " + board.getController().getCurrentTurn(), x + 30 + cellWidth * 2, y + 30);
-
-                /* new graphic */
-
-
-
 
 
         //Save and load buttons.
@@ -268,46 +266,21 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             int barWidth = 2 * cellWidth * board.numCols() / 5;
             int barHeight = 20;
 
-
-            // background
-//            g2.setPaint(Color.RED.darker().darker());
-//            g2.fillRect(newX, y + 10, barWidth, barHeight);
-
-
             double completed = board.getController().getAI().pcComplete();
             int total = board.getController().getAI().getTotal();
             int done = board.getController().getAI().getCompleted();
 
-//            pb = progressBarForAI.build(done,total);
             pb.setMaximum(total);
 
             pb.setValue(done);
 
-
-
             AItitle.setTitleJustification(TitledBorder.CENTER);
 
             pb.setBorder(AItitle);
-
-
             pb.setStringPainted(true);
-
             pb.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             pb.setLocation(p3col3,p3row1);
             pb.setSize(threeWidth,threeHight);
-
-
-//            // fill
-//            g2.setPaint(Color.GREEN.darker());
-//            g2.fillRect(newX, y + 10, (int) (barWidth * completed), barHeight);
-//
-//            //text
-//            g2.setPaint(Color.BLUE.brighter());
-//            drawCentreString(done + "/" + total, new Location(newX, y + 10), barWidth, barHeight, g2);
-
-
-//            Dtitle.setTitleJustification(TitledBorder.CENTER);
-//            difficulty.setBorder(Dtitle);
 
 
             sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -315,7 +288,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             difficulty.setBounds(1, 1, 1, 1 );
             difficulty.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            difficulty.setMajorTickSpacing(10);
+            difficulty.setMajorTickSpacing(5);
             difficulty.setMinorTickSpacing(1);
             difficulty.setPaintTicks(true);
             difficulty.setPaintLabels(true);
@@ -329,9 +302,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             diffJpanel.setSize(threeWidth,threeHight);
             diffJpanel.setBackground(new Color(85, 55, 29));
             diffJpanel.setOpaque(false);
-
-//            difficulty.setLocation(x + cellWidth * 4+80, y+ UIHeight);
-
 
 
         }
@@ -370,9 +340,12 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 this.add(save);
                 this.add(undo);
             /* new graphic */
+
                 this.add(time);
                 this.add(turn);
-                this.add(pb);
+                if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
+                    this.add(pb);
+                }
             /* new graphic */
                 if (board.getController().gameMode == GameMode.SINGLE_PLAYER) this.add(diffJpanel);
             }
@@ -558,12 +531,12 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
             /* new graphic */
-        stopWatch.run();
+            stopWatch.start();
         hasImplement = true;
         while (true) {
             if(!stopWatch.isRunning){
                 stopWatch.isRunning = true;
-                stopWatch.run();
+                stopWatch.start();
             }
             while ((System.currentTimeMillis() - lastDraw) < (1000 / targetFPS));
             repaint();

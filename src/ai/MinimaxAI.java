@@ -4,8 +4,8 @@ import main.Board;
 import main.GameMode;
 import main.GameResult;
 import main.Location;
-import pawnPromotion.PawnPromotion;
-import pawnPromotion.PromotablePiece;
+import pieces.PawnPromotion;
+import pieces.PromotablePiece;
 import pieces.ChessPiece;
 import variants.BasicChess.Pawn;
 

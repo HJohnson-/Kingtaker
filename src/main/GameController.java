@@ -2,8 +2,8 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
-import pawnPromotion.PawnPromotion;
-import pawnPromotion.PromotablePiece;
+import pieces.PawnPromotion;
+import pieces.PromotablePiece;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
 import variants.BasicChess.King;

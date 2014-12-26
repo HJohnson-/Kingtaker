@@ -3,7 +3,7 @@ package variants.BasicChess;
 import main.Board;
 import main.Location;
 import main.PieceType;
-import pawnPromotion.PawnPromotion;
+import pieces.PawnPromotion;
 import pieces.ChessPiece;
 import pieces.EmptyPiece;
 

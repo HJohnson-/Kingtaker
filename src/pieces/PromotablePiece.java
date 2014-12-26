@@ -1,4 +1,4 @@
-package pawnPromotion;
+package pieces;
 
 /**
  * Created by jc4512 on 27/11/14.

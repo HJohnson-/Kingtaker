@@ -1,8 +1,7 @@
-package pawnPromotion;
+package pieces;
 
 import main.GameController;
 import main.GameLauncher;
-import pieces.ChessPiece;
 import variants.BasicChess.Bishop;
 import variants.BasicChess.Knight;
 import variants.BasicChess.Queen;

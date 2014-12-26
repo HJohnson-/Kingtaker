@@ -1,5 +1,6 @@
 package variants.RandomChess;
 
+import graphics.GraphicsTools;
 import main.GameController;
 import main.GameMode;
 import variants.BasicChess.BasicChessFrame;
@@ -43,7 +44,7 @@ public class Random960var extends BasicChessvar {
 
     @Override
     public boolean drawBoard() {
-        graphics.tools.create(new BasicChessFrame("Random Chess", 500,700, game.getBoard()));
+        GraphicsTools.create(new BasicChessFrame("Random Chess", 500, 700, game.getBoard()));
         return true;
     }
 

@@ -194,7 +194,7 @@ public class OnlineGameLauncher extends GameLauncher {
 
     public void reportOpponent() {
         ServerMessageSender sms = new ServerMessageSender();
-        sms.sendMessageAsync(ClientCommandCode.REPORT_PLAYER + ClientCommandCode.DEL + opponentName);
+        sms.sendMessage(ClientCommandCode.REPORT_PLAYER + ClientCommandCode.DEL + opponentName, false);
     }
 
 }

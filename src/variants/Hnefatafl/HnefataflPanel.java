@@ -1,7 +1,7 @@
 package variants.Hnefatafl;
 
 import graphics.ChessPanel;
-import graphics.tools;
+import graphics.GraphicsTools;
 import main.Board;
 import main.Location;
 import main.PieceType;
@@ -27,10 +27,10 @@ public class HnefataflPanel extends ChessPanel {
 			String imgName = p.image;
 			if (p.type == PieceType.BLACK) imgName += "Black";
 
-			if (tools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
+			if (GraphicsTools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
 
 
-			TexturePaint texture = new TexturePaint(tools.imageMap.get(imgName),
+			TexturePaint texture = new TexturePaint(GraphicsTools.imageMap.get(imgName),
 					new Rectangle(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight));
 			g2.setPaint(texture);
 			g2.fillRect(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight);
@@ -39,19 +39,19 @@ public class HnefataflPanel extends ChessPanel {
 
 		}
 
-		g2.setPaint(tools.CHECK);
+		g2.setPaint(GraphicsTools.CHECK);
 		Stroke oldstroke = g2.getStroke();
 		g2.setStroke(new BasicStroke(4));
 
 		if (selectedPiece != null) {
 			g2.setStroke(new BasicStroke(2));
-			g2.setPaint(tools.CUR_PIECE);
+			g2.setPaint(GraphicsTools.CUR_PIECE);
 			g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
 					cellWidth, cellHeight);
 
 			java.util.List<Location> moves = board.getController().movesForPiece(selectedPiece, false);
 			if (selectedPiece.isWhite() == board.getController().isWhitesTurn()) {
-				g2.setPaint(tools.CUR_MOVES);
+				g2.setPaint(GraphicsTools.CUR_MOVES);
 			} else {
 				g2.setPaint(Color.RED.darker());
 			}
@@ -71,24 +71,24 @@ public class HnefataflPanel extends ChessPanel {
 
 	@Override
 	protected void drawGrid(Graphics2D g2) {
-		g2.setColor(tools.BOARD_BLACK);
+		g2.setColor(GraphicsTools.BOARD_BLACK);
 		for (int x = 0; x < board.numCols(); x++) {
 			for (int y = 0; y < board.numRows(); y++) {
 				if(isHostile(y,x))
 					g2.setColor(Color.DARK_GRAY);
 
 				else if ((x % 2) == 0 && (y % 2) == 0) {
-					g2.setColor(tools.BOARD_BLACK);
+					g2.setColor(GraphicsTools.BOARD_BLACK);
 				} else if ((x % 2) == 1 && (y % 2) == 1) {
-					g2.setColor(tools.BOARD_BLACK);
+					g2.setColor(GraphicsTools.BOARD_BLACK);
 				} else {
-					g2.setColor(tools.BOARD_WHITE);
+					g2.setColor(GraphicsTools.BOARD_WHITE);
 				}
 				g2.fillRect((cellWidth * x) + offset.getX(), (cellHeight * y) + offset.getY(), cellWidth, cellHeight);
 			}
 		}
 
-		g2.setColor(tools.BOARD_WHITE);
+		g2.setColor(GraphicsTools.BOARD_WHITE);
 
 	}
 }

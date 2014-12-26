@@ -1,5 +1,6 @@
 package variants.BasicChess;
 
+import graphics.GraphicsTools;
 import main.ChessVariant;
 import main.GameController;
 import main.GameMode;
@@ -47,7 +48,7 @@ public class BasicChessvar extends ChessVariant {
 
 	//returns true if there was no errors
 	public boolean drawBoard() {
-        graphics.tools.create(new BasicChessFrame("Basic Chess", 500, 700, game.getBoard()));
+        GraphicsTools.create(new BasicChessFrame("Basic Chess", 500, 700, game.getBoard()));
         return true;
 	}
 

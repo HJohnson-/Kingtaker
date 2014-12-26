@@ -121,14 +121,14 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         });
 
         // turn Lable
-        turnLable.setBackground(tools.CUR_PIECE);
+        turnLable.setBackground(GraphicsTools.CUR_PIECE);
         turnLable.setOpaque(true);
         turnLable.setHorizontalTextPosition(JLabel.CENTER);
         turnLable.setVerticalTextPosition(JLabel.CENTER);
 
         turn.setLayout(new BorderLayout());
         turn.setOpaque(true);
-        turn.setBackground(tools.CUR_PIECE);
+        turn.setBackground(GraphicsTools.CUR_PIECE);
         turn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         turn.setBounds(1, 1, 1, 1);
         turn.add(turnLable, BorderLayout.CENTER);
@@ -237,12 +237,12 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         if ( board.getController().isWhitesTurn()) {
             stopWatch.isWhite = Boolean.TRUE;
-            stopWatch.time.setBackground(tools.BOARD_WHITE);
-            stopWatch.clockPanel2.setBackground(tools.BOARD_WHITE);
+            stopWatch.time.setBackground(GraphicsTools.BOARD_WHITE);
+            stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_WHITE);
         } else {
             stopWatch.isWhite = Boolean.FALSE;
-            stopWatch.time.setBackground(tools.BOARD_BLACK);
-            stopWatch.clockPanel2.setBackground(tools.BOARD_BLACK);
+            stopWatch.time.setBackground(GraphicsTools.BOARD_BLACK);
+            stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_BLACK);
         }
 
 
@@ -351,7 +351,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     }
 
     protected void drawGrid(Graphics2D g2) {
-        g2.setColor(tools.BOARD_BLACK);
+        g2.setColor(GraphicsTools.BOARD_BLACK);
         for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
             for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellHeight * 2) {
                 g2.fillRect(x, y, cellWidth, cellHeight);
@@ -359,7 +359,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             }
         }
 
-        g2.setColor(tools.BOARD_WHITE);
+        g2.setColor(GraphicsTools.BOARD_WHITE);
         for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
             for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellWidth * 2) {
                 g2.fillRect(x + cellWidth, y, cellWidth, cellHeight);
@@ -381,16 +381,16 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             String imgName = p.image;
             if (p.type == PieceType.BLACK) imgName += "Black";
 
-            if (tools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
+            if (GraphicsTools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
 
 
-            TexturePaint texture = new TexturePaint(tools.imageMap.get(imgName),
+            TexturePaint texture = new TexturePaint(GraphicsTools.imageMap.get(imgName),
                     new Rectangle(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight));
             g2.setPaint(texture);
             g2.fillRect(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight);
         }
 
-        g2.setPaint(tools.CHECK);
+        g2.setPaint(GraphicsTools.CHECK);
         Stroke oldstroke = g2.getStroke();
         g2.setStroke(new BasicStroke(4));
 
@@ -406,13 +406,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         if (selectedPiece != null) {
             g2.setStroke(new BasicStroke(2));
-            g2.setPaint(tools.CUR_PIECE);
+            g2.setPaint(GraphicsTools.CUR_PIECE);
             g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
                     cellWidth, cellHeight);
 
             List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
             if (selectedPiece.isWhite() == board.getController().isWhitesTurn()) {
-                g2.setPaint(tools.CUR_MOVES);
+                g2.setPaint(GraphicsTools.CUR_MOVES);
             } else {
                 g2.setPaint(Color.RED.darker());
             }
@@ -530,12 +530,14 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 stopWatch.isRunning = true;
                 stopWatch.start();
             }
+        // while ((System.currentTimeMillis() - lastDraw) < (1000 / targetFPS));
 
         while (true) {
             try {Thread.sleep((1000 / targetFPS) - (System.currentTimeMillis() - lastDraw));} catch (InterruptedException e) {e.printStackTrace();}
             lastDraw = System.currentTimeMillis();
             repaint();
         }
+
         }
     }
 

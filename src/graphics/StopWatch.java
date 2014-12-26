@@ -1,7 +1,5 @@
 package graphics;
 
-import graphics.tools;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -41,14 +39,14 @@ public class StopWatch extends Thread {
 
     public JPanel buildStopWatch() {
 
-        time.setBackground(tools.BOARD_WHITE);
+        time.setBackground(GraphicsTools.BOARD_WHITE);
         time.setOpaque(true);
         time.setHorizontalTextPosition(JLabel.CENTER);
         time.setVerticalTextPosition(JLabel.CENTER);
 
         clockPanel2.setLayout(new BorderLayout());
         clockPanel2.setOpaque(true);
-        clockPanel2.setBackground(tools.BOARD_WHITE);
+        clockPanel2.setBackground(GraphicsTools.BOARD_WHITE);
         clockPanel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         clockPanel2.add(time, BorderLayout.CENTER);
 
@@ -107,12 +105,7 @@ public class StopWatch extends Thread {
 
     @Override
     public void run() {
-        wHour =0;
-        wMinute=0;
-        wCurrentSecond=0;
-        bHour=0;
-        bMinute=0;
-        bCurrentSecond=0;
+        resetTime();
 
         while (isRunning) {
 
@@ -135,12 +128,7 @@ public class StopWatch extends Thread {
                 wCurrentSecond++;
             }
             if(interrupted){
-                wHour =0;
-                wMinute=0;
-                wCurrentSecond=0;
-                bHour=0;
-                bMinute=0;
-                bCurrentSecond=0;
+                resetTime();
                 interrupted=false;
             }
 
@@ -167,12 +155,7 @@ public class StopWatch extends Thread {
 
         }
         if(interrupted){
-            wHour =0;
-            wMinute=0;
-            wCurrentSecond=0;
-            bHour=0;
-            bMinute=0;
-            bCurrentSecond=0;
+            resetTime();
             interrupted=false;
         }
 

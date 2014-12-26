@@ -1,5 +1,6 @@
 package graphics;
 
+import ai.MinimaxAI;
 import main.*;
 import pieces.ChessPiece;
 
@@ -69,7 +70,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         difficulty.setMinimum(0);
         difficulty.setMaximum(5);
-        difficulty.setValue(board.getController().initialDiff);
+        difficulty.setValue(MinimaxAI.DEFAULT_AI_LEVEL);
         difficulty.addChangeListener(new ChangeListener() {
 
             @Override

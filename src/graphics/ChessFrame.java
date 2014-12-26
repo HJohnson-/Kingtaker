@@ -24,7 +24,7 @@ public abstract class ChessFrame extends JFrame {
      */
 
 
-	public ChessFrame(String title, int width, int height, JPanel panel) {
+    public ChessFrame(String title, int width, int height, final ChessPanel panel) {
         this.title = title;
         this.width = width;
         this.height = height;
@@ -43,7 +43,7 @@ public abstract class ChessFrame extends JFrame {
 
             }
         });
-	}
+    }
 
     /**
      * Part of initialising a JPanel, this function sets up the window.

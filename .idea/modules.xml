@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kingtaker.iml" filepath="$PROJECT_DIR$/Kingtaker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Intellij/Test.iml" filepath="$PROJECT_DIR$/../Intellij/Test.iml" />
     </modules>
   </component>
 </project>
+

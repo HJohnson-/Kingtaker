@@ -47,9 +47,9 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     private boolean drawFPS = true;
     private static double lastLoad = 0;
     private boolean hasImplement = false;
-    Border blackline = BorderFactory.createLineBorder(Color.black);
-    TitledBorder AItitle = BorderFactory.createTitledBorder(blackline, "AI Progress");
-    TitledBorder Dtitle = BorderFactory.createTitledBorder(" difficulty ");
+    private Border blackline = BorderFactory.createLineBorder(Color.black);
+    private TitledBorder AItitle = BorderFactory.createTitledBorder(blackline, "AI Progress");
+    private TitledBorder Dtitle = BorderFactory.createTitledBorder(" difficulty ");
     private int bordergap = 20;
 
     /* This constructor sets up a listener to handle the user clicking on the screen.
@@ -175,16 +175,16 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         int gapBetweenBoard = 30;
 
         // size y for 3 rows
-        int threeHight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow*2-offset.getY()*2)/3;
+        int threeHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow*2-offset.getY()*2)/3;
         int p3row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
-        int p3row2 = p3row1+threeHight+gapBetweenRow;
-        int p3row3 = p3row2+threeHight+gapBetweenRow;
+        int p3row2 = p3row1+threeHeight+gapBetweenRow;
+        int p3row3 = p3row2+threeHeight+gapBetweenRow;
 
         // size y for 2 rows
-        int twoHight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow-offset.getY()*2)/2;
+        int twoHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow-offset.getY()*2)/2;
         // position y for 2 rows
         int p2row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
-        int p2row2 = p2row1+twoHight+gapBetweenRow;
+        int p2row2 = p2row1+twoHeight+gapBetweenRow;
 
 
 
@@ -263,24 +263,24 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         turn.setBounds(1,1,1,1);
         turn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         turn.setLocation(p3col2, p2row1);
-        turn.setSize(threeWidth,twoHight);
+        turn.setSize(threeWidth,twoHeight);
 
 
         //Save and load buttons.
         save.setLocation(p3col1,p3row1);
-        save.setSize(threeWidth,threeHight);
+        save.setSize(threeWidth,threeHeight);
 
         load.setLocation(p3col1, p3row2);
-        load.setSize(threeWidth,threeHight);
+        load.setSize(threeWidth,threeHeight);
 
         undo.setLocation(p3col1, p3row3);
-        undo.setSize(threeWidth,threeHight);
+        undo.setSize(threeWidth,threeHeight);
 
         /* new graphic */
 
         time.setBounds(1,1,1,1);
         time.setLocation(p3col2,p2row2);
-        time.setSize(threeWidth,twoHight);
+        time.setSize(threeWidth,twoHeight);
         StopWatch.time.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight()/5));
 
         /* new graphic */
@@ -306,11 +306,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             pb.setStringPainted(true);
             pb.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             pb.setLocation(p3col3,p3row1);
-            pb.setSize(threeWidth,threeHight);
+            pb.setSize(threeWidth,threeHeight);
 
 
             sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            sliderLabel.setSize(threeWidth,threeHight);
+            sliderLabel.setSize(threeWidth,threeHeight);
             difficulty.setBounds(1, 1, 1, 1 );
             difficulty.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -319,13 +319,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             difficulty.setPaintTicks(true);
             difficulty.setPaintLabels(true);
 
-            difficulty.setSize(threeWidth,threeHight);
+            difficulty.setSize(threeWidth,threeHeight);
 
             diffJpanel.add(sliderLabel);
             diffJpanel.add(difficulty);
 
             diffJpanel.setLocation(p3col3,p3row2);
-            diffJpanel.setSize(threeWidth,threeHight);
+            diffJpanel.setSize(threeWidth,threeHeight);
             diffJpanel.setBackground(new Color(85, 55, 29));
             diffJpanel.setOpaque(false);
 
@@ -518,7 +518,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+        Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int targetFPS = gd.getDisplayMode().getRefreshRate();
         if (targetFPS == DisplayMode.REFRESH_RATE_UNKNOWN) {
@@ -535,7 +535,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 stopWatch.isRunning = true;
                 stopWatch.start();
             }
-            while ((System.currentTimeMillis() - lastDraw) < (1000 / targetFPS));
+
+            try {
+                Thread.sleep(1000 / targetFPS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             repaint();
             lastDraw = System.currentTimeMillis();
         }

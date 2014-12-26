@@ -85,10 +85,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         // Stop Watch
         if(stopWatch==null) {
             stopWatch = new StopWatch();
-            time = stopWatch.buildStopWatch();
+            time = stopWatch.buildStopWatch(board);
         }else{
             stopWatch.resetTime();
         }
+
+        stopWatch.time.setBackground(GraphicsTools.BOARD_BLACK);
+        stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_BLACK);
 
         // Button listener
         load.addActionListener(new ActionListener() {
@@ -232,17 +235,21 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
 
-        Color endCol = new Color(255, 255, 255, 0);
-        Point2D start, end;
+//        Color endCol = new Color(255, 255, 255, 0);
+//        Point2D start, end;
 
         if ( board.getController().isWhitesTurn()) {
             stopWatch.isWhite = Boolean.TRUE;
-            stopWatch.time.setBackground(GraphicsTools.BOARD_WHITE);
-            stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_WHITE);
+            stopWatch.playerAFontColour = "lime";
+            stopWatch.playerBFontColour = "black";
+
+//            stopWatch.time.setBackground(GraphicsTools.BOARD_WHITE);
+//            stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_WHITE);
+//            stopWatch.time.setForeground(Color.RED);
         } else {
             stopWatch.isWhite = Boolean.FALSE;
-            stopWatch.time.setBackground(GraphicsTools.BOARD_BLACK);
-            stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_BLACK);
+            stopWatch.playerAFontColour = "black";
+            stopWatch.playerBFontColour = "lime";
         }
 
 

@@ -1,6 +1,10 @@
 package graphics;
 
+import main.Board;
+import main.GameMode;
+
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,11 +40,28 @@ public class StopWatch extends Thread {
     private JButton startTimer = new JButton("start");
     public Boolean isWhite = Boolean.TRUE;
 
-    public String playerA = "WHITE_AI";
-    public String playerB = "YOU";
+    public String playerA ;
+    public String playerB ;
+    public String playerAFontColour= "lime";
+    public String playerBFontColour= "black";
 
 
-    public JPanel buildStopWatch() {
+    public JPanel buildStopWatch(Board board) {
+
+        if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
+            playerA = "WHITE";
+            playerB = "YOU";
+        }else{
+            if (board.getController().gameMode == GameMode.MULTIPLAYER_LOCAL) {
+                playerA = "WHITE";
+                playerB = "BLACK";
+            }else{
+                if (board.getController().gameMode == GameMode.MULTIPLAYER_ONLINE) {
+                    playerA = "WHITE";
+                    playerB = "BLACK";
+                }
+            }
+        }
 
         time.setBackground(GraphicsTools.BOARD_WHITE);
         time.setOpaque(true);
@@ -117,7 +138,7 @@ public class StopWatch extends Thread {
                 if (wCurrentSecond == 60) {
                     calTime();
                 }
-                time.setText(String.format("<html>%s : %02d:%02d:%02d <br> %s : %02d:%02d:%02d<html>",playerA, wHour, wMinute, wCurrentSecond, playerB,bHour, bMinute, bCurrentSecond));
+                time.setText(String.format("<html> <font color=%s> %s : %02d:%02d:%02d </font> <html> <br> <html> <font color=%s>%s : %02d:%02d:%02d </font> <html>",playerAFontColour,playerA, wHour, wMinute, wCurrentSecond,playerBFontColour, playerB,bHour, bMinute, bCurrentSecond));
                 try {
                     this.sleep(1000);
                     if(!isRunning) {
@@ -140,7 +161,8 @@ public class StopWatch extends Thread {
                 if (bCurrentSecond == 60) {
                     calTime();
                 }
-                time.setText(String.format("<html>%s : %02d:%02d:%02d <br> %s : %02d:%02d:%02d<html>",playerA, wHour, wMinute, wCurrentSecond, playerB,bHour, bMinute, bCurrentSecond));
+
+                time.setText(String.format("<html> <font color=%s> %s : %02d:%02d:%02d </font> <html> <br> <html> <font color=%s>%s : %02d:%02d:%02d </font> <html>",playerAFontColour,playerA, wHour, wMinute, wCurrentSecond,playerBFontColour, playerB,bHour, bMinute, bCurrentSecond));
                 try {
                    this.sleep(1000);
                     if(!isRunning) {

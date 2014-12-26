@@ -23,7 +23,7 @@ public class HnefataflKing extends ChessPiece {
 	@Override
 	protected boolean validInState(Location to) {
 
-		return board.clearLine(cords, to); //todo: check they cannot go through the throne
+		return board.clearLine(cords, to);
 	}
 
 	@Override
@@ -50,6 +50,6 @@ public class HnefataflKing extends ChessPiece {
 
 	@Override
 	public String getName() {
-		return "Hnefatafl King";
+		return "HnefataflKing";
 	}
 }

@@ -97,6 +97,26 @@ abstract public class Board {
 	}
 
 	/**
+	 * @param from checked location on the board
+	 * @param to checked location on the board
+	 * @return true if the path from from to to include the throne (5,5), false otherwise
+	 */
+
+	public boolean goesThroughThrone(Location from, Location to) {
+
+		int horizontalMovement = to.getX().compareTo(from.getX());
+		int verticalMovement = to.getY().compareTo(from.getY());
+		for(int i = from.getX() + horizontalMovement, j = from.getY() + verticalMovement;
+			i != to.getX() || j != to.getY();
+			i += horizontalMovement, j+= verticalMovement) {
+			if(i == 5 && j == 5) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * @param from location containing piece to be moved, to end empty
 	 * @param to location to contain piece after function, previous piece annihilated
 	 */

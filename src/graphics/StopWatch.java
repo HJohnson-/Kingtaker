@@ -36,6 +36,9 @@ public class StopWatch extends Thread {
     private JButton startTimer = new JButton("start");
     public Boolean isWhite = Boolean.TRUE;
 
+    public String playerA = "WHITE_AI";
+    public String playerB = "YOU";
+
 
     public JPanel buildStopWatch() {
 
@@ -114,7 +117,7 @@ public class StopWatch extends Thread {
                 if (wCurrentSecond == 60) {
                     calTime();
                 }
-                time.setText(String.format("<html>White : %02d:%02d:%02d <br> Black : %02d:%02d:%02d<html>", wHour, wMinute, wCurrentSecond, bHour, bMinute, bCurrentSecond));
+                time.setText(String.format("<html>%s : %02d:%02d:%02d <br> %s : %02d:%02d:%02d<html>",playerA, wHour, wMinute, wCurrentSecond, playerB,bHour, bMinute, bCurrentSecond));
                 try {
                     this.sleep(1000);
                     if(!isRunning) {
@@ -137,7 +140,7 @@ public class StopWatch extends Thread {
                 if (bCurrentSecond == 60) {
                     calTime();
                 }
-                time.setText(String.format("<html>White : %02d:%02d:%02d <br> Black : %02d:%02d:%02d<html>", wHour, wMinute, wCurrentSecond, bHour, bMinute, bCurrentSecond));
+                time.setText(String.format("<html>%s : %02d:%02d:%02d <br> %s : %02d:%02d:%02d<html>",playerA, wHour, wMinute, wCurrentSecond, playerB,bHour, bMinute, bCurrentSecond));
                 try {
                    this.sleep(1000);
                     if(!isRunning) {

@@ -1,5 +1,6 @@
 package variants.Hnefatafl;
 
+import graphics.GraphicsTools;
 import main.ChessVariant;
 import main.GameController;
 import main.GameMode;
@@ -49,7 +50,7 @@ public class Hnefataflvar extends ChessVariant {
 
 	@Override
 	public boolean drawBoard() {
-		graphics.tools.create(new HnefataflFrame("Hnefatafl", 700, 600, game.getBoard()));
+		GraphicsTools.create(new HnefataflFrame("Hnefatafl", 700, 600, game.getBoard()));
 		return true;
 	}
 

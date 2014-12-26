@@ -1,5 +1,6 @@
 package variants.GrandChess;
 
+import graphics.GraphicsTools;
 import main.ChessVariant;
 import main.GameController;
 import main.GameMode;
@@ -48,7 +49,7 @@ public class Grandvar extends ChessVariant {
 
 	@Override
 	public boolean drawBoard() {
-		graphics.tools.create(new BasicChessFrame("Grand Chess", 500, 700, game.getBoard()));
+		GraphicsTools.create(new BasicChessFrame("Grand Chess", 500, 700, game.getBoard()));
 		return true;
 	}
 

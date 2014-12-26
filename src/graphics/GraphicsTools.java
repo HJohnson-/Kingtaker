@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * A collection of various static graphics tools, which are re-used in multiple scenarios.
  */
-public class tools {
+public class GraphicsTools {
 
     //These are all the colours used by the program. The idea is that by declaring them as variables it will be easier
     //to implement some sort of settings menu.

@@ -14,6 +14,7 @@ import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,7 +66,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
 
         mainFont = createFont(24);
-        bigMainFont = createFont(70);
+        bigMainFont = createFont(50);
         recalculateCellSize();
 
         difficulty.setMinimum(0);
@@ -116,6 +117,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }else{
             stopWatch.resetTime();
         }
+
+        drawUI(null);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
     }
@@ -127,8 +130,12 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      */
     @Override
     public void paintComponent(Graphics g) {
-        long start = System.nanoTime();
+//        if (Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)) {
+//            return;
+//        }
+//        System.out.println(fps);
 
+        long start = System.nanoTime();
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -137,6 +144,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         final Color[] BG_COLOURS = {Color.WHITE.darker(), new Color(85, 55, 29), Color.DARK_GRAY};
         MultipleGradientPaint BG_GRADIENT = new LinearGradientPaint(new Point2D.Double(0, 0),
                 new Point2D.Double(getSize().getWidth(), getSize().getHeight()), FRACTIONS, BG_COLOURS);
+
         g2.setPaint(BG_GRADIENT);
         g2.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
 
@@ -192,28 +200,14 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         Color endCol = new Color(255, 255, 255, 0);
         Point2D start, end;
 
-
-//        if (board.getController().isWhitesTurn()) {
-//            start = new Point2D.Double(offset.getX() + board.numCols() * cellWidth, offset.getY());
-//            end = new Point2D.Double(start.getX() + offset.getX(), offset.getY());
-//        } else {
-//            start = new Point2D.Double(offset.getX(), offset.getY());
-//            end = new Point2D.Double(0, offset.getY());
-//        }
-//
-//        GradientPaint plyPaint = new GradientPaint(start, Color.WHITE, end, endCol);
-//        g2.setPaint(plyPaint);
-//        int plyMarkX = (int) (end.getX() == 0 ? end.getX() : start.getX());
-//        g2.fillRect(plyMarkX, offset.getY(), offset.getX(), board.numRows() * cellHeight);
-
         if ( board.getController().isWhitesTurn()) {
             stopWatch.isWhite = Boolean.TRUE;
-            stopWatch.time.setBackground(tools.BOARD_WHITE);
-            stopWatch.clockPanel2.setBackground(tools.BOARD_WHITE);
+            stopWatch.time.setBackground(GraphicsTools.BOARD_WHITE);
+            stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_WHITE);
         } else {
             stopWatch.isWhite = Boolean.FALSE;
-            stopWatch.time.setBackground(tools.BOARD_BLACK);
-            stopWatch.clockPanel2.setBackground(tools.BOARD_BLACK);
+            stopWatch.time.setBackground(GraphicsTools.BOARD_BLACK);
+            stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_BLACK);
         }
 
 
@@ -235,8 +229,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         int x, y;
 
-        g2.setPaint(Color.WHITE);
-
         x = offset.getX();
         y = offset.getY() * 2 + cellHeight * board.numRows();
 
@@ -245,7 +237,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         turnLabel.setText(String.format("<html>NUM OF TURNS <br> %04d<html>", board.getController().getCurrentTurn()));
         turnLabel.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight() / 4));
 
-        turnLabel.setBackground(tools.CUR_PIECE);
+        turnLabel.setBackground(GraphicsTools.CUR_PIECE);
         turnLabel.setOpaque(true);
 
         turnLabel.setHorizontalTextPosition(JLabel.CENTER);
@@ -253,7 +245,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         turn.setLayout(new BorderLayout());
         turn.setOpaque(true);
-        turn.setBackground(tools.CUR_PIECE);
+        turn.setBackground(GraphicsTools.CUR_PIECE);
         turn.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
         turn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         turn.add(turnLabel, BorderLayout.CENTER);
@@ -336,14 +328,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             this.add(load);
             this.add(save);
             this.add(undo);
-        /* new graphic */
 
             this.add(time);
             this.add(turn);
             if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
                 this.add(pb);
             }
-        /* new graphic */
+
             if (board.getController().gameMode == GameMode.SINGLE_PLAYER) this.add(diffJpanel);
         }
     }
@@ -356,7 +347,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     }
 
     protected void drawGrid(Graphics2D g2) {
-        g2.setColor(tools.BOARD_BLACK);
+        g2.setColor(GraphicsTools.BOARD_BLACK);
         for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
             for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellHeight * 2) {
                 g2.fillRect(x, y, cellWidth, cellHeight);
@@ -364,7 +355,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             }
         }
 
-        g2.setColor(tools.BOARD_WHITE);
+        g2.setColor(GraphicsTools.BOARD_WHITE);
         for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
             for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellWidth * 2) {
                 g2.fillRect(x + cellWidth, y, cellWidth, cellHeight);
@@ -386,16 +377,16 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             String imgName = p.image;
             if (p.type == PieceType.BLACK) imgName += "Black";
 
-            if (tools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
+            if (GraphicsTools.imageMap.get(imgName) == null) System.err.println(imgName + " is null.");
 
 
-            TexturePaint texture = new TexturePaint(tools.imageMap.get(imgName),
+            TexturePaint texture = new TexturePaint(GraphicsTools.imageMap.get(imgName),
                     new Rectangle(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight));
             g2.setPaint(texture);
             g2.fillRect(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight);
         }
 
-        g2.setPaint(tools.CHECK);
+        g2.setPaint(GraphicsTools.CHECK);
         Stroke oldstroke = g2.getStroke();
         g2.setStroke(new BasicStroke(4));
 
@@ -411,13 +402,13 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         if (selectedPiece != null) {
             g2.setStroke(new BasicStroke(2));
-            g2.setPaint(tools.CUR_PIECE);
+            g2.setPaint(GraphicsTools.CUR_PIECE);
             g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
                     cellWidth, cellHeight);
 
             List<Location> moves = board.getController().movesForPiece(selectedPiece, true);
             if (selectedPiece.isWhite() == board.getController().isWhitesTurn()) {
-                g2.setPaint(tools.CUR_MOVES);
+                g2.setPaint(GraphicsTools.CUR_MOVES);
             } else {
                 g2.setPaint(Color.RED.darker());
             }
@@ -518,7 +509,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+        //Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int targetFPS = gd.getDisplayMode().getRefreshRate();
         if (targetFPS == DisplayMode.REFRESH_RATE_UNKNOWN) {

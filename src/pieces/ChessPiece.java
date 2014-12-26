@@ -1,7 +1,7 @@
 package pieces;
 
 import graphics.GraphicsControl;
-import graphics.tools;
+import graphics.GraphicsTools;
 import main.Board;
 import main.Location;
 import main.PieceType;
@@ -26,8 +26,8 @@ abstract public class ChessPiece {
         this.board = board;
         this.cords = cords;
         this.image = img;
-        if (!tools.imageMap.containsKey(img)) {
-            tools.loadPiece(img);
+        if (!GraphicsTools.imageMap.containsKey(img)) {
+            GraphicsTools.loadPiece(img);
         }
 		lastTurnMovedOn = 0;
 

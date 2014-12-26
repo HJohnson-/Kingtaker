@@ -46,7 +46,7 @@ public abstract class ChessFrame extends JFrame {
     }
 
     /**
-     * Part of initialising a JPanel, this function sets up the window.
+     * Part of initialising a JPanel, this function sets UP the window.
      */
     protected void initUI() {
         setTitle(title);

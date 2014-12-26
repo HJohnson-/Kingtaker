@@ -2,6 +2,8 @@ package graphics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * A basic JFrame implementation, which handles displaying the window on the screen.
@@ -20,12 +22,27 @@ public abstract class ChessFrame extends JFrame {
      * @param height The height of the window.
      * @param panel The panel of the chess variant, which is drawn into the window.
      */
+
+
 	public ChessFrame(String title, int width, int height, JPanel panel) {
-		this.title = title;
-		//this.width = width;
-		//this.height = height;
-		this.panel = panel;
-		initUI();
+        this.title = title;
+        this.width = width;
+        this.height = height;
+        this.panel = panel;
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        initUI();
+
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+
+                StopWatch.isRunning = false;
+                panel.stopWatch.interrupt();
+                panel.time.setVisible(false);
+
+            }
+        });
 	}
 
     /**
@@ -35,7 +52,7 @@ public abstract class ChessFrame extends JFrame {
         setTitle(title);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        add(panel);
+        this.getContentPane().add(panel);
 
 
 
@@ -49,5 +66,6 @@ public abstract class ChessFrame extends JFrame {
         }
         setLocationRelativeTo(null);
     }
+
 
 }

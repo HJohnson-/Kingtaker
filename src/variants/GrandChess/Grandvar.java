@@ -48,7 +48,7 @@ public class Grandvar extends ChessVariant {
 
 	@Override
 	public boolean drawBoard() {
-		graphics.tools.create(new BasicChessFrame("Grand Chess", 700, 600, game.getBoard()));
+		graphics.tools.create(new BasicChessFrame("Grand Chess", 500, 700, game.getBoard()));
 		return true;
 	}
 

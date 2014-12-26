@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Random;
 
@@ -107,6 +106,7 @@ public class frmMainMenu {
                 gr.setColor(new Color(r.nextInt()));
                 gr.drawString(piece, r.nextInt(frame.getWidth()) - 20,
                         r.nextInt(frame.getHeight()));
+
             }
 
             //Draw KingTaker title graphic

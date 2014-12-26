@@ -32,9 +32,9 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
     protected JButton undo = new JButton("Undo");
-    public   StopWatch stopWatch ;
+    public StopWatch stopWatch ;
     protected  JPanel time;
-    protected JLabel turnLable = new JLabel();
+    protected JLabel turnLabel = new JLabel();
     protected JPanel turn = new JPanel();
     protected JLabel sliderLabel = new JLabel("Difficulty", JLabel.CENTER);
     protected JProgressBar pb = new JProgressBar(0,100);
@@ -55,7 +55,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     /* This constructor sets up a listener to handle the user clicking on the screen.
     * @param board The board which information will be obtained from.
     */
-    protected ChessPanel(Board board) {
+    protected ChessPanel(final Board board) {
         this.board = board;
         this.addMouseListener(new HitTestAdapter());
         this.addComponentListener(new ResizeAdapter());
@@ -78,6 +78,37 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 ChessPanel.this.board.getController().setDifficulty(difficulty.getValue());
             }
         });
+
+
+        load.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (System.currentTimeMillis() - 300 > lastLoad) {
+                    lastLoad = System.currentTimeMillis();
+                    GameController gc = board.getController();
+                    gc.load(code);
+                    recalculateCellSize();
+                }
+            }
+        });
+
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (System.currentTimeMillis() - 300 > lastLoad) {
+                    lastLoad = System.currentTimeMillis();
+                    GameController gc = board.getController();
+                    gc.undo();
+                    recalculateCellSize();
+                }
+            }
+        });
+
+        save.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                code = board.getController().toCode();
+            }
+        });
+
         if(stopWatch==null) {
             stopWatch = new StopWatch();
             time = stopWatch.buildStopWatch();
@@ -130,9 +161,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {
-
-
-
         int gapBetweenCol = 10;
         // size x
         int threeWidth = (this.getWidth() - offset.getX()*2 - gapBetweenCol * 2) / 3;
@@ -214,23 +242,23 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
         /* new graphic */
-            turnLable.setText(String.format("<html>NUM OF TURNS <br> %04d<html>", board.getController().getCurrentTurn()));
-            turnLable.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight() / 4));
+        turnLabel.setText(String.format("<html>NUM OF TURNS <br> %04d<html>", board.getController().getCurrentTurn()));
+        turnLabel.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight() / 4));
 
-            turnLable.setBackground(tools.CUR_PIECE);
-            turnLable.setOpaque(true);
+        turnLabel.setBackground(tools.CUR_PIECE);
+        turnLabel.setOpaque(true);
 
-            turnLable.setHorizontalTextPosition(JLabel.CENTER);
-            turnLable.setVerticalTextPosition(JLabel.CENTER);
+        turnLabel.setHorizontalTextPosition(JLabel.CENTER);
+        turnLabel.setVerticalTextPosition(JLabel.CENTER);
 
-            turn.setLayout(new BorderLayout());
-            turn.setOpaque(true);
-            turn.setBackground(tools.CUR_PIECE);
-            turn.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-            turn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            turn.add(turnLable, BorderLayout.CENTER);
+        turn.setLayout(new BorderLayout());
+        turn.setOpaque(true);
+        turn.setBackground(tools.CUR_PIECE);
+        turn.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+        turn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        turn.add(turnLabel, BorderLayout.CENTER);
 
-            turn.add(turnLable);
+        turn.add(turnLabel);
 
         turn.setBounds(1,1,1,1);
         turn.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -254,8 +282,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         time.setLocation(p3col2,p2row2);
         time.setSize(threeWidth,twoHight);
         StopWatch.time.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight()/5));
-
-
 
         /* new graphic */
 
@@ -306,49 +332,20 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         }
 
-        load.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (System.currentTimeMillis() - 300 > lastLoad) {
-                    lastLoad = System.currentTimeMillis();
-                    GameController gc = board.getController();
-                    gc.load(code);
-                    recalculateCellSize();
-                }
-            }
-        });
+        if (load.getParent() == null) {
+            this.add(load);
+            this.add(save);
+            this.add(undo);
+        /* new graphic */
 
-        undo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (System.currentTimeMillis() - 300 > lastLoad) {
-                    lastLoad = System.currentTimeMillis();
-                    GameController gc = board.getController();
-                    gc.undo();
-                    recalculateCellSize();
-                }
+            this.add(time);
+            this.add(turn);
+            if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
+                this.add(pb);
             }
-        });
-
-        save.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                code = board.getController().toCode();
-            }
-        });
-
-            if (load.getParent() == null) {
-                this.add(load);
-                this.add(save);
-                this.add(undo);
-            /* new graphic */
-
-                this.add(time);
-                this.add(turn);
-                if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
-                    this.add(pb);
-                }
-            /* new graphic */
-                if (board.getController().gameMode == GameMode.SINGLE_PLAYER) this.add(diffJpanel);
-            }
+        /* new graphic */
+            if (board.getController().gameMode == GameMode.SINGLE_PLAYER) this.add(diffJpanel);
+        }
     }
 
     protected void drawCentreString(String s, Location offset, int width, int height, Graphics2D g2) {

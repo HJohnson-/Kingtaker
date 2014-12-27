@@ -14,9 +14,13 @@ import java.util.Random;
 public class NetworkedGameTest {
     public static void main(String[] args) throws Exception {
 
-        String host2 = "MERCURY.lan";
-        String host1 = "macbook2011.lan";
+        String host2 = "MERCURY";
+        String host1 = "macbook2011";
         ChessVariant variant = VariantFactory.getInstance().getVariantByID(0);
+
+        //Test requires server to be running!
+        GameLobby.getInstance().attemptRegister(InetAddress.getLocalHost().getHostName() + "_" + System.currentTimeMillis() % 100000,
+                "stupid".toCharArray());
 
         MessageListener.getInstance().acceptMoves = true;
 

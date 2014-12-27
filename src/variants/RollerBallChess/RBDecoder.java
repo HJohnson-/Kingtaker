@@ -17,6 +17,8 @@ public class RBDecoder extends BasicDecoder {
 					return new RBBishop(board, type, cords);
 				case RBPawn:
 					return new RBPawn(board, type, cords);
+				case RBKing:
+					return new RBKing(board, type, cords);
 				case Basic:
 					return super.generate(board, type, cords, name);
 				default:
@@ -31,6 +33,8 @@ public class RBDecoder extends BasicDecoder {
 			return RBPieces.RBBishop;
 		} else if(string.equals("RBPawn")) {
 			return RBPieces.RBPawn;
+		} else if(string.equals("RBKing")){
+			return RBPieces.RBKing;
 		} else {
 			return RBPieces.Basic;
 		}
@@ -38,7 +42,7 @@ public class RBDecoder extends BasicDecoder {
 }
 
 enum RBPieces {
-	RBRook, RBBishop, RBPawn, Basic
+	RBRook, RBBishop, RBPawn,RBKing, Basic
 }
 
 

@@ -25,7 +25,7 @@ public class StopWatch extends Thread {
         "</html></HTML>";
 
     private final String AI_NAME = "KingTaker AI";
-    private final String NUMAN_NAME = "You";
+    private final String HUMAN_NAME = "You";
     private final String TURN_INDICATOR = "&#x21D2;";
 
     public static final JLabel time = new JLabel();
@@ -60,8 +60,8 @@ public class StopWatch extends Thread {
 
         switch (gc.gameMode) {
             case SINGLE_PLAYER:
-                wPlayerName = gc.playerIsWhite ? NUMAN_NAME : AI_NAME;
-                bPlayerName = !gc.playerIsWhite ? NUMAN_NAME : AI_NAME;
+                wPlayerName = gc.playerIsWhite ? HUMAN_NAME : AI_NAME;
+                bPlayerName = !gc.playerIsWhite ? HUMAN_NAME : AI_NAME;
                 break;
             case MULTIPLAYER_LOCAL:
                 wPlayerName = "White";
@@ -143,6 +143,7 @@ public class StopWatch extends Thread {
     @Override
     public void run() {
         resetTime();
+        isRunning = true;
 
         while (isRunning) {
 

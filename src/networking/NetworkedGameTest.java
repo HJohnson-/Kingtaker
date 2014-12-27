@@ -24,8 +24,8 @@ public class NetworkedGameTest {
 
         MessageListener.getInstance().acceptMoves = true;
 
-        boolean isWhite = InetAddress.getLocalHost().getHostName().equals(host1);
-        String server = InetAddress.getLocalHost().getHostName().equals(host1) ? host2 : host1;
+        boolean isWhite = InetAddress.getLocalHost().getHostName().startsWith(host1);
+        String server = InetAddress.getLocalHost().getHostName().startsWith(host1) ? host2 : host1;
         Socket socket = null;
         while (socket == null) {
             try {
@@ -40,7 +40,7 @@ public class NetworkedGameTest {
 
         GameMode.currentGameMode = GameMode.MULTIPLAYER_ONLINE;
         OnlineGameLauncher o = new OnlineGameLauncher(variant,
-                InetAddress.getByName(server), "playa" + (new Random()).nextInt(100000) + "", 1000);
+                InetAddress.getByName(server), "imposs2know", 1000);
         o.setUserIsWhite(isWhite);
         GameLauncher.currentGameLauncher = o;
         frmLobby.showInstance(GameLobby.getInstance());

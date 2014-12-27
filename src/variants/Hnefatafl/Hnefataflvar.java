@@ -38,7 +38,7 @@ public class Hnefataflvar extends ChessVariant {
 	}
 
 	public Hnefataflvar(GameMode mode) {
-		game = new HnefataflController(new HnefataflBoard(), 3, new HnefataflDecoder(), mode, GameController.defaultPIW);
+		game = new HnefataflController(new HnefataflBoard(), getVariationID(), new HnefataflDecoder(), mode, GameController.defaultPIW);
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}
@@ -50,7 +50,7 @@ public class Hnefataflvar extends ChessVariant {
 
 	@Override
 	public boolean drawBoard() {
-		GraphicsTools.create(new HnefataflFrame("Hnefatafl", 700, 600, game.getBoard()));
+		GraphicsTools.create(new HnefataflFrame(getName(), 700, 600, game.getBoard()));
 		return true;
 	}
 

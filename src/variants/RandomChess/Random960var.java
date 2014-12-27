@@ -34,7 +34,7 @@ public class Random960var extends BasicChessvar {
 	}
 
     public Random960var(GameMode mode) {
-        game = new GameController(new RandomBoard(), 1, new BasicDecoder(), mode, new Random().nextBoolean());
+        game = new GameController(new RandomBoard(), getVariationID(), new BasicDecoder(), mode, new Random().nextBoolean());
         game.getBoard().setController(game);
         game.getBoard().initializeBoard();
     }
@@ -46,7 +46,7 @@ public class Random960var extends BasicChessvar {
 
     @Override
     public boolean drawBoard() {
-        GraphicsTools.create(new BasicChessFrame("Random Chess", 500, 700, game.getBoard()));
+        GraphicsTools.create(new BasicChessFrame(getName(), 500, 700, game.getBoard()));
         return true;
     }
 

@@ -111,6 +111,11 @@ public class RandomBoard extends Board {
 		return true;
 	}
 
+	@Override
+	public int getVariationID() {
+		return 1;
+	}
+
     @Override
     public Board clone() {
         RandomBoard b = new RandomBoard();

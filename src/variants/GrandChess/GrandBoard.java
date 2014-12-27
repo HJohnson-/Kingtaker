@@ -25,6 +25,11 @@ public class GrandBoard extends Board {
 		}
 	}
 
+	@Override
+	public int getVariationID() {
+		return 2;
+	}
+
     @Override
 	public boolean initializeBoard() {
 		// black pawns

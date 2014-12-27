@@ -200,6 +200,8 @@ abstract public class Board {
     @Override
     abstract public Board clone();
 
+	abstract public int getVariationID();
+
     public void setPieces(ChessPiece[][] newPieces) {
         this.pieces = newPieces;
     }

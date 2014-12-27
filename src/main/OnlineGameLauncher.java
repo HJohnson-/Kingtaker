@@ -1,5 +1,6 @@
 package main;
 
+import ai.MinimaxAI;
 import forms.MessageBoxAlert;
 import forms.frmJoinRequest;
 import forms.frmLobby;
@@ -150,8 +151,9 @@ public class OnlineGameLauncher extends GameLauncher {
     //friendships, this is disguised as a "connection has been lost" error
     public void handleRemoteUserDisconnection() {
         System.out.println("Cannot connect to opponent!");
-        variant.game.initialiseAI(1);
         variant.game.gameMode = GameMode.SINGLE_PLAYER;
+        variant.game.initialiseAI(MinimaxAI.DEFAULT_AI_LEVEL);
+        MessageListener.getInstance().acceptMoves = false;
 
         (new MessageBoxAlert()).showDisconnectedOpponent(opponentName);
     }

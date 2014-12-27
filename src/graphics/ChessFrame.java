@@ -29,7 +29,7 @@ public abstract class ChessFrame extends JFrame {
         this.width = width;
         this.height = height;
         this.panel = panel;
-        this.setResizable(false);
+//        this.setResizable(false);
         this.setLocationRelativeTo(null);
         initUI();
 

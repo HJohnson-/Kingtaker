@@ -83,7 +83,12 @@ public class BasicBoard extends Board {
 		return false;
 	}
 
-    @Override
+	@Override
+	public int getVariationID() {
+		return 0;
+	}
+
+	@Override
     public Board clone() {
         BasicBoard b = new BasicBoard();
 

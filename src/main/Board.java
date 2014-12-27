@@ -195,6 +195,9 @@ abstract public class Board {
 		}
 	}
 
+
+	abstract public int getVariationID();
+
     @Override
     abstract public Board clone();
 

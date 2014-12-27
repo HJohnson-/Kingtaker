@@ -25,6 +25,11 @@ public class HnefataflBoard extends Board {
 	}
 
 	@Override
+	public int getVariationID() {
+		return 3;
+	}
+
+	@Override
 	public boolean initializeBoard() {
 
 		emptyBoard();

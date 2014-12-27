@@ -39,7 +39,7 @@ public abstract class ChessFrame extends JFrame {
 
                 StopWatch.isRunning = false;
                 panel.stopWatch.interrupt();
-                panel.time.setVisible(false);
+                panel.panelStopwatch.setVisible(false);
 
             }
         });

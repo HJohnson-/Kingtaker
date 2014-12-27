@@ -27,17 +27,17 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     public int cellWidth;
     public int cellHeight;
     public boolean animating = false;
-    protected JButton btnLoad = new JButton("Load");
-    protected JButton btnSave = new JButton("Save");
-    protected JButton btnUndo = new JButton("Undo");
+    protected JButton btnLoad = new JButton("Load State");
+    protected JButton btnSave = new JButton("Save State");
+    protected JButton btnUndo = new JButton("Undo Last Move");
     public StopWatch stopWatch ;
-    protected JPanel time;
+    protected JPanel panelStopwatch;
     protected JLabel turnLabel = new JLabel();
     protected JPanel panelTurn = new JPanel();
-    protected JLabel lblDifficultySlider = new JLabel("Difficulty", JLabel.CENTER);
+    protected JLabel lblDifficultySlider;
     protected JProgressBar pbAIProgress = new JProgressBar(0,100);
     protected JSlider sliderAIDifficulty = new JSlider();
-    protected JPanel panelAIDifficulty = new JPanel();
+    protected JPanel panelAI;
     private String savedBoardCodeString = null;
     private Font fontGameOver = new Font("", Font.BOLD, 24);
     private static double lastLoad = 0;
@@ -74,7 +74,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         });
 
         stopWatch = new StopWatch();
-        time = stopWatch.buildStopWatch(board);
+        panelStopwatch = stopWatch.buildStopWatch(board);
 
         btnLoad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -106,7 +106,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         turnLabel.setOpaque(true);
         turnLabel.setHorizontalTextPosition(JLabel.CENTER);
         turnLabel.setVerticalTextPosition(JLabel.CENTER);
-        turnLabel.setFont(new Font(time.getFont().getName(), Font.PLAIN, 12));
+        turnLabel.setFont(new Font(panelStopwatch.getFont().getName(), Font.PLAIN, 12));
 
         panelTurn.setLayout(new BorderLayout());
         panelTurn.setOpaque(true);
@@ -115,24 +115,27 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         panelTurn.setBounds(1, 1, 1, 1);
         panelTurn.add(turnLabel, BorderLayout.CENTER);
 
-        time.setBounds(1,1,1,1);
+        panelStopwatch.setBounds(1, 1, 1, 1);
 
         pbAIProgress.setStringPainted(true);
         pbAIProgress.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-
+        lblDifficultySlider = new JLabel("Difficulty", JLabel.CENTER);
+        lblDifficultySlider.setForeground(Color.BLACK);
         lblDifficultySlider.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        sliderAIDifficulty.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        //sliderAIDifficulty.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         sliderAIDifficulty.setMajorTickSpacing(5);
         sliderAIDifficulty.setMinorTickSpacing(1);
         sliderAIDifficulty.setPaintTicks(true);
         sliderAIDifficulty.setPaintLabels(true);
 
-        panelAIDifficulty.add(lblDifficultySlider);
-        panelAIDifficulty.add(sliderAIDifficulty);
-        panelAIDifficulty.setBackground(new Color(85, 55, 29));
-        panelAIDifficulty.setOpaque(false);
+        panelAI = new JPanel(new GridLayout(0,1));
+        panelAI.add(sliderAIDifficulty);
+        panelAI.add(lblDifficultySlider);
+        panelAI.add(pbAIProgress);
+        panelAI.setBackground(Color.WHITE);
+        panelAI.setOpaque(true);
 
 
         drawSwingComponents();
@@ -365,7 +368,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
         long lastDraw = System.currentTimeMillis();
 
-
             /* new graphic */
             stopWatch.start(); //todo REMOVE
         while (true) {
@@ -382,8 +384,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                         KeyEvent.VK_CAPS_LOCK)) {
                     drawSwingComponents();
                     repaint();
-                } else {
-                    board.getController().endGame(false);
                 }
 
             }
@@ -400,7 +400,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         int p3col2 = p3col1+threeWidth+gapBetweenCol;
         int p3col3 = p3col2+threeWidth+gapBetweenCol;
 
-
+        int oneHeight = this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-offset.getY()*2;
 
         // size y for 3 rows
         int threeHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow*2-offset.getY()*2)/3;
@@ -441,10 +441,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         /* new graphic */
 
 
-        time.setLocation(p3col2, p3row2);
-        time.setSize(threeWidth, gapBetweenRow + threeHeight * 2);
+        panelStopwatch.setLocation(p3col2, p3row2);
+        panelStopwatch.setSize(threeWidth, gapBetweenRow + threeHeight * 2);
 
-        time.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight()/5));
+        panelStopwatch.setFont(new Font(panelStopwatch.getFont().getName(), Font.PLAIN, panelStopwatch.getHeight()/5));
 
 
 
@@ -464,16 +464,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             pbAIProgress.setMaximum(total);
             pbAIProgress.setValue(done);
 
-            pbAIProgress.setLocation(p3col3, p3row1);
-            pbAIProgress.setSize(threeWidth, threeHeight);
-
-            lblDifficultySlider.setSize(threeWidth, threeHeight);
-
-            sliderAIDifficulty.setBounds(1, 1, 1, 1);
-            sliderAIDifficulty.setSize(threeWidth, threeHeight);
-
-            panelAIDifficulty.setLocation(p3col3, p3row2);
-            panelAIDifficulty.setSize(threeWidth, threeHeight);
+            panelAI.setLocation(p3col3, p3row1);
+            panelAI.setSize(threeWidth, oneHeight);
 
         }
 
@@ -483,11 +475,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 this.add(btnSave);
                 this.add(btnUndo);
             }
-            this.add(time);
+            this.add(panelStopwatch);
             this.add(panelTurn);
             if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
-                this.add(pbAIProgress);
-                this.add(panelAIDifficulty);
+                //this.add(pbAIProgress);
+                this.add(panelAI);
             }
         }
     }

@@ -34,7 +34,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected JPanel panelStopwatch;
     protected JLabel turnLabel = new JLabel();
     protected JPanel panelTurn = new JPanel();
-    protected JLabel lblDifficultySlider;
     protected JProgressBar pbAIProgress = new JProgressBar(0,100);
     protected JSlider sliderAIDifficulty = new JSlider();
     protected JPanel panelAI;
@@ -120,25 +119,28 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         pbAIProgress.setStringPainted(true);
         pbAIProgress.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        lblDifficultySlider = new JLabel("Difficulty", JLabel.CENTER);
-        lblDifficultySlider.setForeground(Color.BLACK);
-        lblDifficultySlider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel lblAIDifficultySlider = new JLabel("AI Difficulty", JLabel.CENTER);
+        lblAIDifficultySlider.setVerticalAlignment(JLabel.TOP);
+        lblAIDifficultySlider.setForeground(Color.BLACK);
+        lblAIDifficultySlider.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //sliderAIDifficulty.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        sliderAIDifficulty.setMajorTickSpacing(5);
-        sliderAIDifficulty.setMinorTickSpacing(1);
+        sliderAIDifficulty.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        sliderAIDifficulty.setMajorTickSpacing(1);
         sliderAIDifficulty.setPaintTicks(true);
         sliderAIDifficulty.setPaintLabels(true);
+        sliderAIDifficulty.setOpaque(false);
+        sliderAIDifficulty.setToolTipText("AI Difficulty");
 
         panelAI = new JPanel(new GridLayout(0,1));
-        panelAI.add(sliderAIDifficulty);
-        panelAI.add(lblDifficultySlider);
         panelAI.add(pbAIProgress);
-        panelAI.setBackground(Color.WHITE);
+        panelAI.add(sliderAIDifficulty);
+        panelAI.add(lblAIDifficultySlider);
         panelAI.setOpaque(true);
+        panelAI.setBackground(Color.GRAY);
 
 
-        drawSwingComponents();
+        //drawSwingComponents();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
@@ -466,7 +468,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
             panelAI.setLocation(p3col3, p3row1);
             panelAI.setSize(threeWidth, oneHeight);
-
         }
 
         if (btnLoad.getParent() == null) {

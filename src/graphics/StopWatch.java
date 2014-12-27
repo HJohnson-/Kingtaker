@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class StopWatch extends Thread {
     public static final String STOPWATCH_DISPLAY_HTML =
         "<HTML><html>\n" +
-        "<table width=\"120\">\n" +
+        "<table width=\"1000\">\n" +
         " <tr>\n" +
         "  <td valign=top style='background:#C4BC96'>\n" +
         "  <p>%s %s<br>%02d:%02d:%02d</p>\n" +
@@ -77,15 +77,14 @@ public class StopWatch extends Thread {
                 break;
         }
 
-        time.setBackground(GraphicsTools.BOARD_WHITE);
-        time.setOpaque(true);
+        //time.setBackground(GraphicsTools.BOARD_WHITE);
+        //time.setOpaque(true);
         time.setHorizontalTextPosition(JLabel.CENTER);
         time.setVerticalTextPosition(JLabel.CENTER);
 
         clockPanel2.setLayout(new BorderLayout());
-        clockPanel2.setOpaque(true);
-        clockPanel2.setBackground(GraphicsTools.BOARD_WHITE);
-        clockPanel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        clockPanel2.setOpaque(false);
+        //clockPanel2.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         clockPanel2.add(time, BorderLayout.CENTER);
 
         return clockPanel2;

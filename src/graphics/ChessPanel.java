@@ -32,7 +32,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected JButton load = new JButton("Load");
     protected JButton save = new JButton("Save");
     protected JButton undo = new JButton("Undo");
-    public   StopWatch stopWatch ;
+    public StopWatch stopWatch ;
     protected  JPanel time;
     protected JLabel turnLabel = new JLabel();
     protected JPanel turn = new JPanel();
@@ -90,9 +90,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             stopWatch.resetTime();
         }
 
-        stopWatch.time.setBackground(GraphicsTools.BOARD_BLACK);
-        stopWatch.clockPanel2.setBackground(GraphicsTools.BOARD_BLACK);
-
         // Button listener
         load.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -123,7 +120,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             }
         });
 
-        // turn Lable
         turnLabel.setBackground(GraphicsTools.CUR_PIECE);
         turnLabel.setOpaque(true);
         turnLabel.setHorizontalTextPosition(JLabel.CENTER);
@@ -206,10 +202,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {
-
-
-
-
         // size x
         int threeWidth = (this.getWidth() - offset.getX()*2 - gapBetweenCol * 2) / 3;
 
@@ -221,16 +213,16 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
         // size y for 3 rows
-        int threeHight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow*2-offset.getY()*2)/3;
+        int threeHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow*2-offset.getY()*2)/3;
         int p3row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
-        int p3row2 = p3row1+threeHight+gapBetweenRow;
-        int p3row3 = p3row2+threeHight+gapBetweenRow;
+        int p3row2 = p3row1+threeHeight+gapBetweenRow;
+        int p3row3 = p3row2+threeHeight+gapBetweenRow;
 
         // size y for 2 rows
-        int twoHight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow-offset.getY()*2)/2;
+        int twoHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow-offset.getY()*2)/2;
         // position y for 2 rows
         int p2row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
-        int p2row2 = p2row1+twoHight+gapBetweenRow;
+        int p2row2 = p2row1+twoHeight+gapBetweenRow;
 
         stopWatch.isWhite = board.getController().isWhitesTurn();
 
@@ -265,24 +257,24 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
         turn.setLocation(p3col2, p2row1);
-        turn.setSize(threeWidth,threeHight);
+        turn.setSize(threeWidth, threeHeight);
 
 
         //Save and load buttons.
         save.setLocation(p3col1,p3row1);
-        save.setSize(threeWidth,threeHight);
+        save.setSize(threeWidth,threeHeight);
 
         load.setLocation(p3col1, p3row2);
-        load.setSize(threeWidth,threeHight);
+        load.setSize(threeWidth,threeHeight);
 
         undo.setLocation(p3col1, p3row3);
-        undo.setSize(threeWidth,threeHight);
+        undo.setSize(threeWidth, threeHeight);
 
         /* new graphic */
 
 
         time.setLocation(p3col2, p3row2);
-        time.setSize(threeWidth, gapBetweenRow + threeHight * 2);
+        time.setSize(threeWidth, gapBetweenRow + threeHeight * 2);
 
         time.setFont(new Font(time.getFont().getName(), Font.PLAIN, time.getHeight()/5));
 
@@ -305,15 +297,15 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             pb.setValue(done);
 
             pb.setLocation(p3col3,p3row1);
-            pb.setSize(threeWidth,threeHight);
+            pb.setSize(threeWidth,threeHeight);
 
-            sliderLabel.setSize(threeWidth, threeHight);
+            sliderLabel.setSize(threeWidth, threeHeight);
 
             difficulty.setBounds(1, 1, 1, 1 );
-            difficulty.setSize(threeWidth,threeHight);
+            difficulty.setSize(threeWidth,threeHeight);
 
             diffJpanel.setLocation(p3col3,p3row2);
-            diffJpanel.setSize(threeWidth,threeHight);
+            diffJpanel.setSize(threeWidth,threeHeight);
 
         }
 

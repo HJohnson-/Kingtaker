@@ -20,6 +20,7 @@ public class RBKing extends King{
         super(board, type, location);
     }
     private static int REALLY_HIGH_NUMBER = 999999;
+    private RollBallRulesHelper h = new RollBallRulesHelper();
 
     public int returnValue() {
         return REALLY_HIGH_NUMBER;
@@ -128,7 +129,7 @@ public class RBKing extends King{
             return false;
         } else if (takingOwnPiece(board.getPiece(to))) {
             return false;
-        } else if(RollBallRulesHelper.isInMiddle(to.getX(), to.getY())){
+        } else if(h.isInMiddle(to.getX(), to.getY())){
             return false;
         } else {
             if (careAboutCheck) {
@@ -145,7 +146,7 @@ public class RBKing extends King{
 
     @Override
     protected boolean validInState(Location to) {
-        return validCastleAttempt(to) || adjacent(to) || RollBallRulesHelper.isInMiddle(to);
+        return validCastleAttempt(to) || adjacent(to) || h.isInMiddle(to);
     }
 
     @Override
@@ -158,13 +159,13 @@ public class RBKing extends King{
             for (int j = -1; j <= 1; j++) {
                 int newY = cords.getY() + j;
                 if (newY < 0 || newY >= board.numRows()) continue;
-                if(!RollBallRulesHelper.isInMiddle(newX, newY))
+                if(!h.isInMiddle(newX, newY))
                 moves.add(new Location(newX, newY));
             }
             if (lastTurnMovedOn == 0) {
-                if(!RollBallRulesHelper.isInMiddle(cords.getX(), cords.getY() + 2))
+                if(!h.isInMiddle(cords.getX(), cords.getY() + 2))
                 moves.add(new Location(cords.getX(), cords.getY() + 2));
-                if(!RollBallRulesHelper.isInMiddle(cords.getX(), cords.getY() - 2))
+                if(!h.isInMiddle(cords.getX(), cords.getY() - 2))
                 moves.add(new Location(cords.getX(), cords.getY() - 2));
             }
         }

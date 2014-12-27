@@ -140,6 +140,10 @@ public class OnlineGameLauncher extends GameLauncher {
         this.opponentName = opponentName;
     }
 
+    public String getOpponentString() {
+        return String.format("%s (%d)", opponentName, opponentRating);
+    }
+
     //Connection to opponent is lost. The opponent is replaced with the AI
     //and the user is told the same via a message box.
     //This is also called if cheating is detected, though to avoid breaking

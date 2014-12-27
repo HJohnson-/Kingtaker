@@ -8,6 +8,8 @@ import pieces.PieceDecoder;
 import variants.BasicChess.BasicChessFrame;
 import variants.BasicChess.BasicDecoder;
 
+import java.util.Random;
+
 /**
  * The 'Grand Chess' variant. A 10x10 board with two new pieces on each side.
  */
@@ -37,7 +39,7 @@ public class Grandvar extends ChessVariant {
     }
 
     public Grandvar(GameMode mode) {
-		game = new GameController(new GrandBoard(), 2, new BasicDecoder(), mode, GameController.defaultPIW);
+		game = new GameController(new GrandBoard(), 2, new BasicDecoder(), mode, new Random().nextBoolean());
 		game.getBoard().setController(game);
 		game.getBoard().initializeBoard();
 	}

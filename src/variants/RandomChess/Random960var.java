@@ -7,6 +7,8 @@ import variants.BasicChess.BasicChessFrame;
 import variants.BasicChess.BasicChessvar;
 import variants.BasicChess.BasicDecoder;
 
+import java.util.Random;
+
 /**
  * Implements the Random960 chess variant.
  */
@@ -32,7 +34,7 @@ public class Random960var extends BasicChessvar {
 	}
 
     public Random960var(GameMode mode) {
-        game = new GameController(new RandomBoard(), 1, new BasicDecoder(), mode, GameController.defaultPIW);
+        game = new GameController(new RandomBoard(), 1, new BasicDecoder(), mode, new Random().nextBoolean());
         game.getBoard().setController(game);
         game.getBoard().initializeBoard();
     }

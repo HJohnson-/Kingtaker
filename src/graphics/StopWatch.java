@@ -55,9 +55,18 @@ public class StopWatch extends Thread {
         super();
     }
 
-    public JPanel buildStopWatch(Board board) {
-        GameController gc = board.getController();
+    public JPanel buildStopWatch() {
+        time.setHorizontalTextPosition(JLabel.CENTER);
+        time.setVerticalTextPosition(JLabel.CENTER);
 
+        clockPanel2.setLayout(new BorderLayout());
+        clockPanel2.setOpaque(false);
+        clockPanel2.add(time, BorderLayout.CENTER);
+
+        return clockPanel2;
+    }
+
+    public void setPlayerNames(GameController gc) {
         switch (gc.gameMode) {
             case SINGLE_PLAYER:
                 wPlayerName = gc.playerIsWhite ? HUMAN_NAME : AI_NAME;
@@ -76,20 +85,7 @@ public class StopWatch extends Thread {
                 bPlayerName = !gc.playerIsWhite ? localName : remoteName;
                 break;
         }
-
-        //time.setBackground(GraphicsTools.BOARD_WHITE);
-        //time.setOpaque(true);
-        time.setHorizontalTextPosition(JLabel.CENTER);
-        time.setVerticalTextPosition(JLabel.CENTER);
-
-        clockPanel2.setLayout(new BorderLayout());
-        clockPanel2.setOpaque(false);
-        //clockPanel2.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        clockPanel2.add(time, BorderLayout.CENTER);
-
-        return clockPanel2;
     }
-
 
     private void calTime() {
         if (isWhite) {

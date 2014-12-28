@@ -25,11 +25,6 @@ public class HnefataflBoard extends Board {
 	}
 
 	@Override
-	public int getVariationID() {
-		return 3;
-	}
-
-	@Override
 	public boolean initializeBoard() {
 
 		emptyBoard();
@@ -113,6 +108,11 @@ public class HnefataflBoard extends Board {
 		for (ChessPiece[] row : pieces) {
 			Arrays.fill(row, new EmptyPiece(this, null));
 		}
+	}
+
+	@Override
+	public int getVariationID() {
+		return 3;
 	}
 
 	@Override

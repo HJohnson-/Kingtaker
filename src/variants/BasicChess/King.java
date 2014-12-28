@@ -146,6 +146,7 @@ public class King extends ChessPiece {
                 moves.add(new Location(cords.getX(), cords.getY() - 2));
             }
         }
+
         return moves;
     }
 

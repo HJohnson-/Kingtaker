@@ -127,7 +127,7 @@ public class RBRook extends ChessPiece {
             Location conner = h.findOuterConnerByLoc(cords);
 
             board.clearSpace(cords);
-            board.placePiece(conner, this);
+            board.placePiece(targetLocation, this);
 
             if (board.doDrawing) graphics.setGoal(conner);
             if (board.doDrawing) graphics.setGoal(targetLocation);

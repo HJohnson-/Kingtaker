@@ -111,6 +111,11 @@ public class HnefataflBoard extends Board {
 	}
 
 	@Override
+	public int getVariationID() {
+		return 3;
+	}
+
+	@Override
 	public Board clone() {
 		HnefataflBoard b = new HnefataflBoard();
 

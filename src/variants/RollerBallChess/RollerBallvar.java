@@ -6,14 +6,11 @@ import main.GameController;
 import main.GameMode;
 import pieces.PieceDecoder;
 import variants.BasicChess.BasicChessFrame;
+import variants.BasicChess.BasicChessvar;
 
-<<<<<<< HEAD
 import java.util.Random;
 
 public class RollerBallvar extends BasicChessvar {
-=======
-public class RollerBallvar extends ChessVariant {
->>>>>>> FETCH_HEAD
 
     @Override
     public int getVariationID() {

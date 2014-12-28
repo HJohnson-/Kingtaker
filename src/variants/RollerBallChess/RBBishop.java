@@ -11,8 +11,11 @@ import java.util.List;
  * Created by daniel on 14/12/26.
  */
 public class RBBishop extends ChessPiece {
+
+    private RollBallRulesHelper h = new RollBallRulesHelper();
+    
     public RBBishop(Board board, PieceType type, Location cords) {
-        super(board, type, cords, "RBBishop");
+        super(board, type, cords, "Bishop");
     }
 
     @Override

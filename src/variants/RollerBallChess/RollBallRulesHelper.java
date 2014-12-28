@@ -2,6 +2,9 @@ package variants.RollerBallChess;
 
 import main.Location;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by daniel on 14/12/27.
  */
@@ -97,6 +100,63 @@ public class RollBallRulesHelper {
             if(y==5) return "L";
 
         return "ERROR";
+    }
+    public boolean isValidedLoc(Location currentPos){
+        int x = currentPos.getX();
+        int y = currentPos.getY();
+
+        return (x>=0 && x<=6 && y>=0 && y<=6 && !isInMiddle(currentPos));
+    }
+
+    public List<Location> containOuterCorner(List<Location> moves){
+        Location newLoc = new Location(0,0);
+
+        // contains the current outer conner and the next outer conner
+        LinkedList<Location> returnPair = new LinkedList<Location>();
+
+        if(moves.contains(newLoc)){
+            returnPair.add(newLoc);
+            returnPair.add(new Location(6,0));
+        }
+
+        newLoc = new Location(0,6);
+        if(moves.contains(newLoc)){
+            returnPair.add(newLoc);
+            returnPair.add(new Location(0,0));
+        }
+
+        newLoc = new Location(6,0);
+        if(moves.contains(newLoc)){
+            returnPair.add(newLoc);
+            returnPair.add(new Location(6,6));
+        }
+
+        newLoc = new Location(6,6);
+        if(moves.contains(newLoc)){
+            returnPair.add(newLoc);
+            returnPair.add(new Location(0,6));
+        }
+
+        return returnPair;
+    }
+
+    public Location findOuterConnerByLoc(Location currentLoc){
+        int x = currentLoc.getX();
+        int y = currentLoc.getY();
+
+        String dir = getClockWiseDir(currentLoc);
+
+        if(dir.equals("U")){
+            return new Location(0,0);
+        }
+        if(dir.equals("D")){
+            return new Location(6,6);
+        }
+        if(dir.equals("L")){
+            return new Location(0,6);
+        }
+//        if(dir.equals("U")){
+            return new Location(6,0);
     }
 
 //    public boolean isClockWiseDir(Location from, Location to){

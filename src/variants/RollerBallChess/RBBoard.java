@@ -35,12 +35,12 @@ public class RBBoard extends Board {
 
   //   	// Top pieces rook
      	Location location;
-//		location = new Location(2,0);
-		// this.placePiece(location, new RBRook(this, PieceType.BLACK, location));
+		location = new Location(2,0);
+		this.placePiece(location, new RBRook(this, PieceType.BLACK, location));
 
 
-  //   	 location = new Location(2,1);
-		// this.placePiece(location, new RBRook(this, PieceType.BLACK, location));
+     	 location = new Location(2,1);
+		this.placePiece(location, new RBRook(this, PieceType.BLACK, location));
 
 		// //Top pieces bishop
 
@@ -61,13 +61,13 @@ public class RBBoard extends Board {
 
 
 
-		// // Bot pieces rook
-  //   	 location = new Location(2,5);
-		// this.placePiece(location, new RBRook(this, PieceType.WHITE, location));
+		// Bot pieces rook
+     	 location = new Location(4,5);
+		this.placePiece(location, new RBRook(this, PieceType.WHITE, location));
 
 
-  //   	 location = new Location(2,6);
-		// this.placePiece(location, new RBRook(this, PieceType.WHITE, location));
+     	 location = new Location(4,6);
+		this.placePiece(location, new RBRook(this, PieceType.WHITE, location));
 
 		// //Bot pieces bishop
 

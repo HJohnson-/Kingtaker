@@ -20,15 +20,15 @@ public class GameController {
 	public static boolean defaultPIW = false; //TODO: Ask the player what colour they want to play.
 
 	protected boolean isWhitesTurn = true; //white always starts
-	private int currentTurn;
-    private GameResult gameResult = GameResult.IN_PROGRESS;
+	protected int currentTurn;
+    protected GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
 
-	private int gameID;
+	protected int gameID;
 	public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
-	private PieceDecoder decoder;
+	protected PieceDecoder decoder;
 
-	private ChessAI ai;
+	protected ChessAI ai;
 	private boolean AIWorking = false;
 	public boolean playerIsWhite;
 	public boolean animating = false;
@@ -36,8 +36,9 @@ public class GameController {
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
+    public long lastMoveTime = System.currentTimeMillis();
 
-	public Board getBoard() {
+    public Board getBoard() {
 		return board;
 	}
 
@@ -170,11 +171,9 @@ public class GameController {
         if (beingMoved.executeMove(targetLocation)) {
             if (checkMate()) {
 				endGame(false);
-			}
-			else if(staleMate()){//TODO: stalemate
+			} else if (staleMate()) {
 				endGame(true);
-			}
-			else {
+			} else {
 				checkForCapturedPieces(targetLocation); //No effect if not Hf
                 nextPlayersTurn();
             }
@@ -182,6 +181,8 @@ public class GameController {
             if (local && gameMode == GameMode.MULTIPLAYER_ONLINE) {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
+
+            lastMoveTime = System.currentTimeMillis();
 
             makeAIMove(); //No effect if not single player.
 

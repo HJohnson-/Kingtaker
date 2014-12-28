@@ -29,7 +29,7 @@ public abstract class ChessFrame extends JFrame {
         this.width = width;
         this.height = height;
         this.panel = panel;
-//        this.setResizable(false);
+        this.setResizable(true);
         this.setLocationRelativeTo(null);
         initUI();
 
@@ -39,7 +39,7 @@ public abstract class ChessFrame extends JFrame {
 
                 StopWatch.isRunning = false;
                 panel.stopWatch.interrupt();
-                panel.time.setVisible(false);
+                panel.panelStopwatch.setVisible(false);
 
             }
         });

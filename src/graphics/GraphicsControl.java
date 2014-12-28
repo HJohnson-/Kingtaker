@@ -2,6 +2,9 @@ package graphics;
 
 import main.Location;
 
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -10,9 +13,11 @@ import java.util.concurrent.Executors;
  */
 public class GraphicsControl implements Runnable {
 
-    protected Location curCords, endCords;
+    protected Location curCords;
+    protected Queue<Location> endCords;
     protected int animationTime = 1000;
     public ChessPanel panel;
+    ExecutorService pool = Executors.newFixedThreadPool(1);
 
     /**
      * Converts the given locations from board co-ordinates to graphics co-ordinates.
@@ -22,7 +27,7 @@ public class GraphicsControl implements Runnable {
      */
     public GraphicsControl(Location cur, Location end) {
         curCords = cur;
-        endCords = end;
+        endCords = new ConcurrentLinkedQueue<Location>();
     }
 
     public int getX() {
@@ -38,11 +43,8 @@ public class GraphicsControl implements Runnable {
      * @param l The location which the piece will end up on, when the animation concludes.
      */
     public void setGoal(Location l) {
-        while (panel.board.getController().animating) Thread.yield();
-        panel.board.getController().animating = true;
-        endCords = new Location(l.getX() * panel.cellWidth + panel.offset.getX(),
-                l.getY() * panel.cellHeight + panel.offset.getY());
-        ExecutorService pool = Executors.newFixedThreadPool(1);
+        endCords.add(new Location(l.getX() * panel.cellWidth + panel.offset.getX(),
+                                l.getY() * panel.cellHeight + panel.offset.getY()));
         pool.submit(this);
     }
 
@@ -58,43 +60,51 @@ public class GraphicsControl implements Runnable {
     @Override
     public void run() {
 
-        float maxDistance = Math.max(Math.abs(endCords.getX() - curCords.getX()), Math.abs(endCords.getY() - curCords.getY()));
-        int sleepTime = (int) Math.ceil(animationTime / maxDistance);
+        panel.board.getController().animating = false;
+        
+        while (!endCords.isEmpty()) {
+            
+            Location end = endCords.poll();
 
-        int animationXStep = (int) Math.signum(endCords.getX() - curCords.getX());
-        int animationYStep = (int) Math.signum(endCords.getY() - curCords.getY());
+            float maxDistance = Math.max(Math.abs(end.getX() - curCords.getX()), Math.abs(end.getY() - curCords.getY()));
+            int sleepTime = (int) Math.ceil(animationTime / maxDistance);
 
-        if ((animationXStep != 0) && (animationYStep != 0) &&
-                (Math.abs(endCords.getX() - curCords.getX()) != Math.abs(endCords.getY() - curCords.getY()))) {
-            while (!curCords.getX().equals(endCords.getX())) {
-                curCords.incrX(animationXStep);
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            int animationXStep = (int) Math.signum(end.getX() - curCords.getX());
+            int animationYStep = (int) Math.signum(end.getY() - curCords.getY());
+
+            if ((animationXStep != 0) && (animationYStep != 0) &&
+                    (Math.abs(end.getX() - curCords.getX()) != Math.abs(end.getY() - curCords.getY()))) {
+                while (!curCords.getX().equals(end.getX())) {
+                    curCords.incrX(animationXStep);
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                while (!curCords.getY().equals(end.getY())) {
+                    curCords.incrY(animationYStep);
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                while (!curCords.equals(end)) {
+                    curCords.incrX(animationXStep);
+                    curCords.incrY(animationYStep);
+
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
 
-            while (!curCords.getY().equals(endCords.getY())) {
-                curCords.incrY(animationYStep);
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            while (!curCords.equals(endCords)) {
-                curCords.incrX(animationXStep);
-                curCords.incrY(animationYStep);
-
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
         }
 
         panel.board.getController().animating = false;

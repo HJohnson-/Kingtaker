@@ -89,7 +89,9 @@ abstract public class Board {
 		for(int i = from.getX() + horizontalMovement, j = from.getY() + verticalMovement;
 			i != to.getX() || j != to.getY();
 			i += horizontalMovement, j+= verticalMovement) {
-			if(getPiece(new Location(i, j)).type != PieceType.EMPTY) {
+            ChessPiece piece = getPiece(new Location(i, j));
+			assert piece != null; //TODO: this sometimes fails.
+            if (piece != null && piece.type != PieceType.EMPTY) {
 				return false;
 			}
 		}
@@ -195,11 +197,10 @@ abstract public class Board {
 		}
 	}
 
-
-	abstract public int getVariationID();
-
     @Override
     abstract public Board clone();
+
+	abstract public int getVariationID();
 
     public void setPieces(ChessPiece[][] newPieces) {
         this.pieces = newPieces;

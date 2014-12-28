@@ -434,7 +434,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             p.graphics.givePanel(this);
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth + offset.getX(),
                     p.cords.getY() * cellHeight + offset.getY());
-            p.graphics.endCords = p.graphics.curCords.clone();
         }
     }
 

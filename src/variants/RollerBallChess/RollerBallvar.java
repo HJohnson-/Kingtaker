@@ -1,13 +1,13 @@
 package variants.RollerBallChess;
 
 import graphics.GraphicsTools;
+import main.ChessVariant;
 import main.GameController;
 import main.GameMode;
 import pieces.PieceDecoder;
 import variants.BasicChess.BasicChessFrame;
-import variants.BasicChess.BasicChessvar;
 
-public class RollerBallvar extends BasicChessvar {
+public class RollerBallvar extends ChessVariant {
 
     @Override
     public int getVariationID() {

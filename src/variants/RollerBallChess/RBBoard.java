@@ -14,7 +14,6 @@ public class RBBoard extends Board {
 	public RBBoard(){
 		this(7,7);
 	}
-
 	
 	public RBBoard(int rows, int cols){
 		pieces = new ChessPiece[rows][cols];

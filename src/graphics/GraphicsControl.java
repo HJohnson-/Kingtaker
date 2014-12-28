@@ -22,12 +22,10 @@ public class GraphicsControl implements Runnable {
     /**
      * Converts the given locations from board co-ordinates to graphics co-ordinates.
      * @param cur The current position of the piece.
-     * @param end The position the piece will be in at the end of the animation. NB this will equal current piece
-     *            when a piece is first created or when a piece is not moving.
      */
-    public GraphicsControl(Location cur, Location end) {
+    public GraphicsControl(Location cur) {
         curCords = cur;
-        endCords = new ConcurrentLinkedQueue<Location>();
+        endCords = new ConcurrentLinkedQueue<>();
     }
 
     public int getX() {

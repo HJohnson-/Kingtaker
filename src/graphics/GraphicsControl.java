@@ -60,7 +60,7 @@ public class GraphicsControl implements Runnable {
     @Override
     public void run() {
 
-        panel.board.getController().animating = false;
+        panel.board.getController().animating = true;
         
         while (!endCords.isEmpty()) {
             

@@ -381,7 +381,15 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             g2.drawOval(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(), cellWidth, cellHeight);
         }
 
+        drawMovesForSelectedPiece(g2);
+
+        g2.setStroke(oldStroke);
+
+    }
+
+    protected void drawMovesForSelectedPiece(Graphics2D g2) {
         if (selectedPiece != null) {
+            GameController gc = board.getController();
             g2.setStroke(new BasicStroke(2));
             g2.setPaint(GraphicsTools.CUR_PIECE);
             g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
@@ -398,10 +406,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                         cellWidth, cellHeight);
             }
         }
-
-        g2.setStroke(oldStroke);
-
     }
+
 
     /**
      * This handles drawing the pieces and UI, which all chess variants will need (although it can be overridden).

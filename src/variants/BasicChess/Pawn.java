@@ -1,6 +1,7 @@
 package variants.BasicChess;
 
 import main.Board;
+import main.GameMode;
 import main.Location;
 import main.PieceType;
 import pieces.PawnPromotion;

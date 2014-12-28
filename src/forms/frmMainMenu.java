@@ -25,7 +25,6 @@ public class frmMainMenu {
     private JButton btnExit;
     private JLabel lblTitle;
     private JPanel panButtons;
-    private Timer timer;
 
     private BufferedImage backdrop;
 
@@ -44,21 +43,21 @@ public class frmMainMenu {
         btnSinglePlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                drawBackdrop();
+                //drawBackdrop();
                 beginLocalSP();
             }
         });
         btnLocalMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                drawBackdrop();
+                //drawBackdrop();
                 beginLocalMP();
             }
         });
         btnOnlineMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                drawBackdrop();
+                //drawBackdrop();
                 showLobby();
             }
         });
@@ -68,31 +67,12 @@ public class frmMainMenu {
                 System.exit(0);
             }
         });
-
-        timer = new Timer(100, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (panel1.getWidth()!=0) {
-                    panel1.repaint();
-
-
-                    btnExit.repaint();
-                    btnLocalMP.repaint();
-                    btnOnlineMP.repaint();
-                    btnSinglePlayer.repaint();
-
-                    timer.setDelay(500);
-                }
-
-            }
-        });
         panButtons.setOpaque(false);
-        timer.start();
         lblTitle.setText(" ");
     }
 
     //Called when panel is first available - not on form initialisation
-    private void drawBackdrop() {
+    private void drawBackdrop(Graphics g) {
         if (backdrop == null) {
             Random r = new Random();
             backdrop = new BufferedImage(frame.getWidth(),
@@ -115,20 +95,15 @@ public class frmMainMenu {
                 BufferedImage titleImage = ImageIO.read(new File("media/title.png"));
                 gr.drawImage(titleImage, 0, 0,
                         panel1.getWidth(), 106, null);
-                //lblTitle.setIcon(new ImageIcon(titleImage));
             } catch (Exception e) {
             }
         }
 
-        panel1.getGraphics().drawImage(backdrop, 0, 0, null);
-
-        //Bring buttons to the front (otherwise they'd be invisible
-        //behind the graphics drawn.
+        g.drawImage(backdrop, 0, 0, null);
 
     }
 
     private void showLobby() {
-        //toggleButtonsEnabled(false);
         GameMode.currentGameMode = GameMode.MULTIPLAYER_ONLINE;
         GameLobby.getInstance().open();
     }
@@ -161,23 +136,19 @@ public class frmMainMenu {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         panel1 = new BackdropPanel();
     }
 
     private class BackdropPanel extends JPanel {
         @Override
-        protected void paintComponent(Graphics g) {
+        public void paint(Graphics g) {
             //super.paintComponent(g);
-            drawBackdrop();
-        }
+            drawBackdrop(g);
 
-        @Override
-        public void repaint() {
-            //super.repaint();
-            if (getWidth() != 0){
-                drawBackdrop();
-            }
+            btnExit.repaint();
+            btnLocalMP.repaint();
+            btnOnlineMP.repaint();
+            btnSinglePlayer.repaint();
         }
     }
 }

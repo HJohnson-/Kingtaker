@@ -38,6 +38,8 @@ public class GraphicsControl implements Runnable {
      * @param l The location which the piece will end up on, when the animation concludes.
      */
     public void setGoal(Location l) {
+        while (panel.board.getController().animating) Thread.yield();
+        panel.board.getController().animating = true;
         endCords = new Location(l.getX() * panel.cellWidth + panel.offset.getX(),
                                 l.getY() * panel.cellHeight + panel.offset.getY());
         ExecutorService pool = Executors.newFixedThreadPool(1);
@@ -61,8 +63,6 @@ public class GraphicsControl implements Runnable {
 
         int animationXStep = (int) Math.signum(endCords.getX() - curCords.getX());
         int animationYStep = (int) Math.signum(endCords.getY() - curCords.getY());
-
-        panel.board.getController().animating = true;
 
         if ((animationXStep != 0) && (animationYStep != 0) &&
                 (Math.abs(endCords.getX() - curCords.getX()) != Math.abs(endCords.getY() - curCords.getY()))) {

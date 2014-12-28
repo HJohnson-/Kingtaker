@@ -43,23 +43,24 @@ public class HnefataflPanel extends ChessPanel {
 		Stroke oldstroke = g2.getStroke();
 		g2.setStroke(new BasicStroke(4));
 
-		if (selectedPiece != null) {
-			g2.setStroke(new BasicStroke(2));
-			g2.setPaint(GraphicsTools.CUR_PIECE);
-			g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
-					cellWidth, cellHeight);
-
-			java.util.List<Location> moves = board.getController().movesForPiece(selectedPiece, false);
-			if (selectedPiece.isWhite() == board.getController().isWhitesTurn()) {
-				g2.setPaint(GraphicsTools.CUR_MOVES);
-			} else {
-				g2.setPaint(Color.RED.darker());
-			}
-			for (Location l : moves) {
-				g2.drawRect(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(),
-						cellWidth, cellHeight);
-			}
-		}
+        drawMovesForSelectedPiece(g2);
+//		if (selectedPiece != null) {
+//			g2.setStroke(new BasicStroke(2));
+//			g2.setPaint(GraphicsTools.CUR_PIECE);
+//			g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
+//					cellWidth, cellHeight);
+//
+//			java.util.List<Location> moves = board.getController().movesForPiece(selectedPiece, false);
+//			if (selectedPiece.isWhite() == board.getController().isWhitesTurn()) {
+//				g2.setPaint(GraphicsTools.CUR_MOVES);
+//			} else {
+//				g2.setPaint(Color.RED.darker());
+//			}
+//			for (Location l : moves) {
+//				g2.drawRect(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(),
+//						cellWidth, cellHeight);
+//			}
+//		}
 
 		g2.setStroke(oldstroke);
 	}

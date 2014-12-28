@@ -116,18 +116,29 @@ public class HnefataflBoard extends Board {
 	}
 
 	@Override
+	public int getVariationID() {
+		return 3;
+	}
+
+	@Override
 	public Board clone() {
 		HnefataflBoard b = new HnefataflBoard();
-		b.pieces = this.pieces;
-		b.setController(this.getController().clone());
-		b.doDrawing = doDrawing;
-		for (int i = 0; i < b.pieces.length; i++) {
-			for (int j = 0; j < b.pieces.length; j++) {
-				b.pieces[i][j] = b.pieces[i][j].clone();
-				b.pieces[i][j].board = b;
+
+		ChessPiece[][] newPieces = new ChessPiece[this.pieces.length][this.pieces[0].length];
+		for (int i = 0; i < pieces.length; i++) {
+			for (int j = 0; j < pieces[i].length; j++) {
+				newPieces[i][j] = pieces[i][j].clone();
+				newPieces[i][j].board = b;
 			}
 		}
+		b.pieces = newPieces;
+
+		b.setController(this.getController().clone());
+		b.getController().setBoard(b);
+
+		b.doDrawing = this.doDrawing;
+
 		return b;
 	}
-}
 
+}

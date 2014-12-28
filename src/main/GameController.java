@@ -76,9 +76,6 @@ public class GameController {
 	}
 
 
-    public Board getBoard() {
-        return board;
-    }
 
     public void setBoard(Board board) {
         this.board = board;
@@ -372,7 +369,7 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        GameController newGame = new GameController();
+        GameController newGame = new GameController(null, gameID, decoder, gameMode, playerIsWhite);
         newGame.gameID = gameID;
         newGame.decoder = decoder;
         newGame.gameMode = gameMode;

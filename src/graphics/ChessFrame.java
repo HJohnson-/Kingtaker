@@ -32,7 +32,6 @@ public abstract class ChessFrame extends JFrame {
         this.setLocationRelativeTo(null);
         initUI();
 
-
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
 

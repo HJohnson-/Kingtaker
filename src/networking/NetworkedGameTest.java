@@ -19,9 +19,6 @@ public class NetworkedGameTest {
         ChessVariant variant = VariantFactory.getInstance().getVariantByID(0);
 
         //Test requires server to be running!
-        GameLobby.getInstance().attemptRegister(InetAddress.getLocalHost().getHostName() + "_" + System.currentTimeMillis() % 100000,
-                "stupid".toCharArray());
-
         MessageListener.getInstance().acceptMoves = true;
 
         boolean isWhite = InetAddress.getLocalHost().getHostName().startsWith(host1);
@@ -44,7 +41,7 @@ public class NetworkedGameTest {
 
         GameMode.currentGameMode = GameMode.MULTIPLAYER_ONLINE;
         OnlineGameLauncher o = new OnlineGameLauncher(variant,
-                InetAddress.getByName(server), "imposs2know", 1000);
+                InetAddress.getByName(server), server, 1000);
         o.setUserIsWhite(isWhite);
         GameLauncher.currentGameLauncher = o;
         frmLobby.showInstance(GameLobby.getInstance());

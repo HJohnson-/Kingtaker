@@ -23,10 +23,16 @@ public class MessageBoxAlert {
     //Opens a small GUI form with a single OK button, title "KingTaker",
     // with specified message. 0-length messages are replaced with an.
     // 'unspecified error' message.
-    private void showMessage(String msg) {
+    private void showMessage(final String msg) {
         if (msg != null && msg.length() > 0) {
-            JOptionPane.showMessageDialog(parent, msg,
-                    MSGBOX_TITLE, JOptionPane.INFORMATION_MESSAGE);
+            Thread msgBoxThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    JOptionPane.showMessageDialog(parent, msg,
+                            MSGBOX_TITLE, JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
+
         } else {
             JOptionPane.showMessageDialog(parent, UNSPECIFIED_ERROR_MSG,
                     MSGBOX_TITLE, JOptionPane.INFORMATION_MESSAGE);

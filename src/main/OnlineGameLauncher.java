@@ -117,7 +117,7 @@ public class OnlineGameLauncher extends GameLauncher {
         String response = sms.sendMessage(ClientCommandCode.REPORT_GAME_RESULT +
                 ClientCommandCode.DEL + winnerParameter +
                 ClientCommandCode.DEL + opponentName, true);
-        if (response != null) {
+        if (response != null && response.startsWith("0,")) {
             String newRatingStr = response.replace("0,","");
             if (newRatingStr.matches("\\d+")) {
                 int newRating = Integer.valueOf(newRatingStr);

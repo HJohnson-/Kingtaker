@@ -32,6 +32,7 @@ public class MessageBoxAlert {
                             MSGBOX_TITLE, JOptionPane.INFORMATION_MESSAGE);
                 }
             });
+            msgBoxThread.start();
 
         } else {
             JOptionPane.showMessageDialog(parent, UNSPECIFIED_ERROR_MSG,

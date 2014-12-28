@@ -16,7 +16,7 @@ public class NetworkedGameTest {
 
         String host2 = "MERCURY";
         String host1 = "macbook2011";
-        ChessVariant variant = VariantFactory.getInstance().getVariantByID(3);
+        ChessVariant variant = VariantFactory.getInstance().getVariantByID(0);
 
         //Test requires server to be running!
         GameLobby.getInstance().attemptRegister(InetAddress.getLocalHost().getHostName() + "_" + System.currentTimeMillis() % 100000,
@@ -26,6 +26,10 @@ public class NetworkedGameTest {
 
         boolean isWhite = InetAddress.getLocalHost().getHostName().startsWith(host1);
         String server = InetAddress.getLocalHost().getHostName().startsWith(host1) ? host2 : host1;
+
+        String toAuth = InetAddress.getLocalHost().getHostName().startsWith(host1) ? host1 : host2;
+        GameLobby.getInstance().attemptLogin(toAuth, "stupid".toCharArray());
+
         Socket socket = null;
         while (socket == null) {
             try {

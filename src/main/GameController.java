@@ -41,10 +41,6 @@ public class GameController {
 		return board;
 	}
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
 	//Used for local multiplayer and single player games.
 	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode, boolean playerIsWhite) {
         currentTurn = 1;
@@ -78,6 +74,15 @@ public class GameController {
         this.gameMode = mode;
 		previousTurns = new ArrayList<String>();
 	}
+
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
     public ChessAI getAI() {
         return ai;
@@ -367,7 +372,12 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        GameController newGame = new GameController(null, gameID, decoder, gameMode, playerIsWhite);
+        GameController newGame = new GameController();
+        newGame.gameID = gameID;
+        newGame.decoder = decoder;
+        newGame.gameMode = gameMode;
+        newGame.previousTurns = new ArrayList<String>();
+        newGame.playerIsWhite = playerIsWhite;
         newGame.isWhitesTurn = this.isWhitesTurn;
         newGame.currentTurn = this.currentTurn;
         newGame.gameResult = this.gameResult;
@@ -418,7 +428,7 @@ public class GameController {
 				PawnPromotion pp = new PawnPromotion(movedPiece);
 				pp.promote(PromotablePiece.QUEEN);
 			}
-            //System.out.println(aiMove[0] + " -> " + aiMove[1]);
+
             AIWorking = false;
         }
 

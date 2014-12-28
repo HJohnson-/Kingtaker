@@ -6,6 +6,7 @@ import main.GameController;
 import main.GameMode;
 import pieces.PieceDecoder;
 import variants.BasicChess.BasicChessFrame;
+import variants.BasicChess.BasicChessvar;
 
 public class RollerBallvar extends ChessVariant {
 

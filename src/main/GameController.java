@@ -20,15 +20,15 @@ public class GameController {
 	public static boolean defaultPIW = false; //TODO: Ask the player what colour they want to play.
 
 	protected boolean isWhitesTurn = true; //white always starts
-	private int currentTurn;
-    private GameResult gameResult = GameResult.IN_PROGRESS;
+	protected int currentTurn;
+    protected GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
 
-	private int gameID;
+	protected int gameID;
 	public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
-	private PieceDecoder decoder;
+	protected PieceDecoder decoder;
 
-	private ChessAI ai;
+	protected ChessAI ai;
 	private boolean AIWorking = false;
 	public boolean playerIsWhite;
 	public boolean animating = false;

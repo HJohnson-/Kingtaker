@@ -74,6 +74,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         stopWatch = new StopWatch();
         panelStopwatch = stopWatch.buildStopWatch();
 
+        recalculateCellSize();
+
         btnLoad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (savedBoardCodeString != null &&
@@ -108,7 +110,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         turnLabel.setOpaque(true);
         turnLabel.setHorizontalTextPosition(JLabel.CENTER);
         turnLabel.setVerticalTextPosition(JLabel.CENTER);
-        turnLabel.setFont(new Font(panelStopwatch.getFont().getName(), Font.PLAIN, 12));
+        turnLabel.setText(String.format("<html>Turn Number: %d<html>", board.getController().getCurrentTurn()));
 
         panelTurn.setLayout(new BorderLayout());
         panelTurn.setOpaque(true);
@@ -141,8 +143,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         panelAI.setOpaque(true);
         panelAI.setBackground(Color.GRAY);
 
-        recalculateCellSize();
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
     }
@@ -160,7 +160,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         GameController gc = board.getController();
         stopWatch.isWhite = gc.isWhitesTurn();
 
-        turnLabel.setText(String.format("<html>Turn Number: %04d<html>", gc.getCurrentTurn()));
+        turnLabel.setText(String.format("<html>Turn Number: %d<html>", gc.getCurrentTurn()));
         stopWatch.setPlayerNames(gc);
 
         //If in multiplayer mode, stretch stopwatch and turn count panels.

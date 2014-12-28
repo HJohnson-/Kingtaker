@@ -34,9 +34,10 @@ public class Random960var extends BasicChessvar {
 	}
 
     public Random960var(GameMode mode) {
-        game = new GameController(new RandomBoard(), getVariationID(), new BasicDecoder(), mode, new Random().nextBoolean());
+        RandomBoard board = new RandomBoard();
+        board.initializeBoard();
+        game = new GameController(board, getVariationID(), new BasicDecoder(), mode, new Random().nextBoolean());
         game.getBoard().setController(game);
-        game.getBoard().initializeBoard();
     }
 
 	public Random960var(GameController game) {

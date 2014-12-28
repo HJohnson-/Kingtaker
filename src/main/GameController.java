@@ -6,7 +6,9 @@ import pieces.PawnPromotion;
 import pieces.PromotablePiece;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
+import variants.BasicChess.Bishop;
 import variants.BasicChess.King;
+import variants.BasicChess.Knight;
 import variants.BasicChess.Pawn;
 
 import java.util.*;
@@ -198,7 +200,68 @@ public class GameController {
     //TODO: all stalemate conditions
 	protected boolean staleMate(){
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves(isWhitesTurn);
-		return moves.size() == 0;
+		return moves.size() == 0 || isCheckMateImpossible();
+	}
+
+	private boolean isCheckMateImpossible(){
+		LinkedList<ChessPiece> chessPieces = board.allPieces();
+
+		if(chessPieces.size() == 2){
+			if(chessPieces.get(0) instanceof King &&
+			   chessPieces.get(1) instanceof King ){
+				return true;
+			}
+		}
+
+		if(chessPieces.size() == 3){
+			int kings = 0;
+			int bishop = 0;
+			int knight = 0;
+			for(ChessPiece piece : chessPieces){
+				if(piece instanceof King) ++kings;
+				else if(piece instanceof Knight) ++knight;
+				else if(piece instanceof Bishop) ++bishop;
+			}
+
+			return kings == 2 && (bishop == 1 || knight == 1);
+		}
+
+		if(chessPieces.size() == 4){
+			int kings = 0;
+			int bishops = 0;
+			int whiteBishop = 0;
+
+			LinkedList<Location> bishopLocations = new LinkedList<Location>();
+
+
+			for(ChessPiece piece : chessPieces){
+				if(piece instanceof King) ++kings;
+				else if(piece instanceof Bishop){
+					++bishops;
+					bishopLocations.add(piece.cords);
+					if(piece.type == PieceType.WHITE) ++whiteBishop;
+				}
+			}
+
+			boolean onSameColour;
+			if(bishopLocations.size() != 2) return false;
+			else{
+				Location loc1 = bishopLocations.get(0);
+				Location loc2 = bishopLocations.get(1);
+
+				onSameColour = (loc1.getX() % 2 == loc2.getX() % 2 &&
+						       loc1.getY() % 2 == loc2.getY() % 2) ||
+						       (loc1.getX() % 2 != loc2.getX() % 2 &&
+							    loc1.getY() % 2 != loc2.getY() % 2);
+			}
+
+
+			return kings == 2 && bishops == 2 && whiteBishop == 1 && onSameColour ;
+		}
+
+
+
+		return  false;
 	}
 
 	public void undo() {

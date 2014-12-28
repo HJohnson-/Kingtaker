@@ -7,7 +7,13 @@ import main.GameMode;
 import pieces.PieceDecoder;
 import variants.BasicChess.BasicChessFrame;
 
+<<<<<<< HEAD
+import java.util.Random;
+
+public class RollerBallvar extends BasicChessvar {
+=======
 public class RollerBallvar extends ChessVariant {
+>>>>>>> FETCH_HEAD
 
     @Override
     public int getVariationID() {
@@ -34,9 +40,11 @@ public class RollerBallvar extends ChessVariant {
     }
 
     public RollerBallvar(GameMode mode) {
-        game = new GameController(new RBBoard(), 4, new RBDecoder(), mode, GameController.defaultPIW);
+        RBBoard board = new RBBoard();
+        board.initializeBoard();
+        game = new GameController(board, getVariationID(), new RBDecoder(), mode, new Random().nextBoolean());
+
         game.getBoard().setController(game);
-        game.getBoard().initializeBoard();
     }
 
     public RollerBallvar(GameController game) {

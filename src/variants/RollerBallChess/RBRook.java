@@ -70,6 +70,7 @@ public class RBRook extends ChessPiece {
             }
         }
 
+        // move in special case in inner loop
         if(cords.getX() == 1 && cords.getY()==6 ||cords.getX() == 0 && cords.getY()==1 ||cords.getX() == 5 && cords.getY()==0 ||cords.getX() == 6 && cords.getY()==5 ){
             Location conner = h.findOuterConnerByLoc(cords);
             dir = h.getClockWiseDir(conner);

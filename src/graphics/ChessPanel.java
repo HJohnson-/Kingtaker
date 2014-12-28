@@ -28,9 +28,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
-    private final int gapBetweenCol = 10;
-    private final int gapBetweenRow = 10;
-    private final int gapBetweenBoard = 30;
+    private final int UISpacing = 10;
 
     public StopWatch stopWatch;
     protected JPanel panelStopwatch;
@@ -61,8 +59,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         for (ChessPiece p : board.allPieces()) {
             p.graphics.givePanel(ChessPanel.this);
         }
-
-        recalculateCellSize();
 
         sliderAIDifficulty.setMinimum(0);
         sliderAIDifficulty.setMaximum(5);
@@ -145,24 +141,21 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         panelAI.setOpaque(true);
         panelAI.setBackground(Color.GRAY);
 
+        recalculateCellSize();
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
     }
 
 
     private void drawSwingComponents() {
-        // size x
-        int width = cellWidth * 2;
+        int width = (int) (0.2 * getSize().getWidth());
+        int height = ((board.numRows() * cellHeight) - UISpacing * 8) / 9;
 
-        // position x for 3 columns
-        int p3col1 = cellWidth * board.numCols() + offset.getX() * 2;
-
-        int totalHeight = cellHeight * board.numRows();
-
-        int height = (int) (cellHeight * 0.9);
+        int heightIncrease = height + UISpacing;
 
         int x = offset.getX() * 2 + cellWidth * board.numCols();
-        int y = offset.getY() + (int) (cellHeight * 0.05);
+        int y = offset.getY();
 
         GameController gc = board.getController();
         stopWatch.isWhite = gc.isWhitesTurn();
@@ -172,26 +165,40 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         //If in multiplayer mode, stretch stopwatch and turn count panels.
         if (gc.gameMode == GameMode.MULTIPLAYER_ONLINE) {
-            panelTurn.setLocation(p3col1, p3row1);
-            panelTurn.setSize(getWidth() - offset.getX()*2, threeHeight);
+            panelTurn.setLocation(x, y);
+            panelTurn.setSize(width, height * 3 + UISpacing * 2);
 
-            panelStopwatch.setLocation(p3col1, p3row2);
-            panelStopwatch.setSize(getWidth() - offset.getX()*2, gapBetweenRow + threeHeight * 2);
+            y += heightIncrease * 3;
+
+            panelStopwatch.setLocation(x, y);
+            panelStopwatch.setSize(width, height * 3 + UISpacing * 2);
+
+            y += heightIncrease * 3;
         } else {
-            btnSave.setLocation(p3col1, p3row1);
-            btnSave.setSize(cellWidth, height);
+            btnSave.setLocation(x, y);
+            btnSave.setSize(width, height);
 
-            btnLoad.setLocation(p3col1, p3row2);
-            btnLoad.setSize(cellWidth, height);
+            y += heightIncrease;
 
-            btnUndo.setLocation(p3col1, p3row3);
-            btnUndo.setSize(cellWidth, height);
+            btnLoad.setLocation(x, y);
+            btnLoad.setSize(width, height);
 
-            panelTurn.setLocation(p3col2, p2row1);
-            panelTurn.setSize(cellWidth, height + cellHeight);
+            y += heightIncrease;
 
-            panelStopwatch.setLocation(p3col2, p3row2);
-            panelStopwatch.setSize(cellWidth, gapBetweenRow + threeHeight * 2);
+            btnUndo.setLocation(x, y);
+            btnUndo.setSize(width, height);
+
+            y += heightIncrease;
+
+            panelTurn.setLocation(x, y);
+            panelTurn.setSize(width, height * 2 + UISpacing);
+
+            y += heightIncrease * 2;
+
+            panelStopwatch.setLocation(x, y);
+            panelStopwatch.setSize(width, height * 2 + UISpacing);
+
+            y += heightIncrease * 2;
         }
 
 
@@ -202,8 +209,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 pbAIProgress.setValue(gc.getAI().getCompleted());
             }
 
-            panelAI.setLocation(p3col3, p3row1);
-            panelAI.setSize(threeWidth, oneHeight);
+            panelAI.setLocation(x, y);
+            panelAI.setSize(width, height * 2 + UISpacing);
         }
 
         if (btnLoad.getParent() == null) {
@@ -405,10 +412,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      * Recalculated how large the board needs to be, based on the current size of the panel.
      */
     public void recalculateCellSize() {
-        int boardWidth = (int) getSize().getWidth() - offset.getX() * 3;
+        int boardWidth = (int) (0.8 * getSize().getWidth()) - offset.getX() * 2;
         int boardHeight = (int) getSize().getHeight() - offset.getY() * 2;
 
-        cellWidth = Math.round(Math.min(boardHeight / board.numRows(), boardWidth / (board.numCols() + 2)) / 2) * 2;
+        cellWidth = Math.round(Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2;
         //noinspection SuspiciousNameCombination
         cellHeight = cellWidth;
 
@@ -418,6 +425,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                     p.cords.getY() * cellHeight + offset.getY());
             p.graphics.endCords = p.graphics.curCords.clone();
         }
+
+        turnLabel.setFont(new Font(panelStopwatch.getFont().getName(), Font.PLAIN, cellHeight * board.numRows() / 27));
     }
 
     //Returns the appropriate message to display based on the game's result

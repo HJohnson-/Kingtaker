@@ -19,12 +19,7 @@ public class RBKing extends King{
     public RBKing(Board board, PieceType type, Location location) {
         super(board, type, location);
     }
-    private static int REALLY_HIGH_NUMBER = 999999;
     private RollBallRulesHelper h = new RollBallRulesHelper();
-
-    public int returnValue() {
-        return REALLY_HIGH_NUMBER;
-    }
 
     /*To castle:
     - The target space must be two squares from the King
@@ -43,73 +38,6 @@ public class RBKing extends King{
     If a new piece moves in an especially unusual way, the variant might need to override the king piece with something
     that can check for it and undo a failed castle attempt correctly for the new situations
      */
-    private boolean validCastleAttempt(Location to) {
-        boolean debugS = to.equals(new Location(7,2));
-        int rookY = (to.getY() > cords.getY() ? board.numRows() - 1 : 0 );
-        ChessPiece targetRook = board.getPiece(new Location(cords.getX(), rookY));
-
-        if(Math.abs(cords.getY() - to.getY()) != 2) {
-            return false;
-        }
-        if (Math.abs(cords.getX() - to.getX()) != 0) {
-            return false;
-        }
-
-        if(!(targetRook instanceof Rook)) {
-            return false;
-        }
-
-        if(lastTurnMovedOn != 0 || targetRook.lastTurnMovedOn != 0) {
-            return false;
-        }
-
-        if(!board.clearLine(cords, to)) {
-            return false;
-        }
-
-        if(board.getController().isInCheck(this.type)) {
-            return false;
-        }
-
-		/*for(int i = cords.getY(); i != to.getY(); i += movementDirection) {
-			if(testIfMoveEndsInCheck(cords, new Location(cords.getX(), i))) {
-				return false;
-			}
-		}*/
-
-        return true;
-    }
-
-    @Override
-    public boolean executeMove(Location to) {
-        if(validCastleAttempt(to)) {
-            int kingDirection = (int) Math.signum(to.getY() - cords.getY());
-            int rookY = (kingDirection == 1 ? board.numRows() - 1 : 0 );
-            Location rookCurrent = new Location(cords.getX(), rookY);
-            Location rookTarget = new Location(cords.getX(), cords.getY() + kingDirection);
-
-            if (board.doDrawing) {
-                ChessPiece rook = board.getPiece(rookCurrent);
-                rook.graphics.setGoal(rookTarget);
-            }
-
-            board.movePiece(rookCurrent, rookTarget);
-
-            return super.executeMove(to);
-        } else {
-            return super.executeMove(to);
-        }
-    }
-
-
-
-    protected boolean validInStateNoCastle(Location to) {
-        return adjacent(to);
-    }
-
-    private boolean adjacent(Location to) {
-        return Math.abs(cords.getX() - to.getX()) < 2 && Math.abs(cords.getY() - to.getY()) < 2;
-    }
 
 
 
@@ -146,7 +74,8 @@ public class RBKing extends King{
 
     @Override
     protected boolean validInState(Location to) {
-        return validCastleAttempt(to) || adjacent(to) || h.isInMiddle(to);
+        King k = new King(board, type, cords.clone());
+        return (k.validCastleAttempt(to) || adjacent(to))&& !h.isInMiddle(to);
     }
 
     @Override
@@ -169,7 +98,6 @@ public class RBKing extends King{
                 moves.add(new Location(cords.getX(), cords.getY() - 2));
             }
         }
-        System.out.println(moves);
         return moves;
     }
 

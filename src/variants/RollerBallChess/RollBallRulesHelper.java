@@ -96,6 +96,6 @@ public class RollBallRulesHelper {
             if(y==1) return "R";
             if(y==5) return "L";
 
-        return "error";
+        return "ERROR";
     }
 }

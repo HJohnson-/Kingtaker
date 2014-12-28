@@ -40,7 +40,7 @@ public class King extends ChessPiece {
 	If a new piece moves in an especially unusual way, the variant might need to override the king piece with something
 	that can check for it and undo a failed castle attempt correctly for the new situations
 	 */
-	private boolean validCastleAttempt(Location to) {
+	public boolean validCastleAttempt(Location to) {
 		boolean debugS = to.equals(new Location(7,2));
 		int rookY = (to.getY() > cords.getY() ? board.numRows() - 1 : 0 );
 		ChessPiece targetRook = board.getPiece(new Location(cords.getX(), rookY));
@@ -126,7 +126,7 @@ public class King extends ChessPiece {
 		return validCastleAttempt(to) || adjacent(to);
 	}
 
-	private boolean adjacent(Location to) {
+	public boolean adjacent(Location to) {
 		return Math.abs(cords.getX() - to.getX()) < 2 && Math.abs(cords.getY() - to.getY()) < 2;
 	}
 

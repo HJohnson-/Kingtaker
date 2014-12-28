@@ -34,9 +34,10 @@ public class RollerBallvar extends ChessVariant {
     }
 
     public RollerBallvar(GameMode mode) {
-        game = new GameController(new RBBoard(), 4, new RBDecoder(), mode, GameController.defaultPIW);
+        RBBoard board = new RBBoard();
+        board.initializeBoard();
+        game = new GameController(board, getVariationID(), new RBDecoder(), mode, GameController.defaultPIW);
         game.getBoard().setController(game);
-        game.getBoard().initializeBoard();
     }
 
     public RollerBallvar(GameController game) {

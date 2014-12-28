@@ -1,44 +1,36 @@
 package graphics;
 
-import main.*;
-import networking.GameLobby;
+import main.Board;
+import main.GameMode;
+
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Created by daniel on 14/11/28.
+ */
+
 public class StopWatch extends Thread {
-    public static final String STOPWATCH_DISPLAY_HTML =
-        "<HTML><html>\n" +
-        "<table width=\"1000\">\n" +
-        " <tr>\n" +
-        "  <td valign=top style='background:#C4BC96'>\n" +
-        "  <p>%s %s<br>%02d:%02d:%02d</p>\n" +
-        "  </td>\n" +
-        " </tr>\n" +
-        " <tr>\n" +
-        "  <td valign=top style='background:black'>\n" +
-        "  <p><span style='color:white'>%s %s<br>%02d:%02d:%02d</span></p>\n" +
-        "  </td>\n" +
-        " </tr>\n" +
-        "</table>\n" +
-        "</html></HTML>";
+    public StopWatch(){
+        super();
+    }
 
-    private final String AI_NAME = "KingTaker AI";
-    private final String HUMAN_NAME = "You";
-    private final String TURN_INDICATOR = "&#x21D2;";
+    public static final JLabel time = new JLabel();
 
-    public final JLabel time = new JLabel();
+//    public ImageIcon background =new ImageIcon("media/stopWatchLable.png");
 
-    private int wSecond = 0;
+    private int wCurrentSecond = 0;
     private int wMinute = 0;
     private int wHour = 0;
 
-    private int bSecond = 0;
+    private int bCurrentSecond = 0;
     private int bMinute = 0;
     private int bHour = 0;
 
-    public static boolean isRunning = true;
+    public static boolean isRunning =true;
     private boolean interrupted = false;
 
     private JFrame clockFrame = new JFrame("clock");
@@ -48,55 +40,54 @@ public class StopWatch extends Thread {
     private JButton startTimer = new JButton("start");
     public Boolean isWhite = Boolean.TRUE;
 
-    public String wPlayerName;
-    public String bPlayerName;
+    public String playerA ;
+    public String playerB ;
+    public String playerAFontColour= "lime";
+    public String playerBFontColour= "black";
 
-    public StopWatch(){
-        super();
-    }
 
-    public JPanel buildStopWatch() {
+    public JPanel buildStopWatch(Board board) {
+
+        if (board.getController().gameMode == GameMode.SINGLE_PLAYER) {
+            playerA = "WHITE";
+            playerB = "YOU";
+        }else{
+            if (board.getController().gameMode == GameMode.MULTIPLAYER_LOCAL) {
+                playerA = "WHITE";
+                playerB = "BLACK";
+            }else{
+                if (board.getController().gameMode == GameMode.MULTIPLAYER_ONLINE) {
+                    playerA = "WHITE";
+                    playerB = "BLACK";
+                }
+            }
+        }
+
+        time.setBackground(GraphicsTools.BOARD_WHITE);
+        time.setOpaque(true);
         time.setHorizontalTextPosition(JLabel.CENTER);
         time.setVerticalTextPosition(JLabel.CENTER);
 
         clockPanel2.setLayout(new BorderLayout());
-        clockPanel2.setOpaque(false);
+        clockPanel2.setOpaque(true);
+        clockPanel2.setBackground(GraphicsTools.BOARD_WHITE);
+        clockPanel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         clockPanel2.add(time, BorderLayout.CENTER);
 
         return clockPanel2;
     }
 
-    public void setPlayerNames(GameController gc) {
-        switch (gc.gameMode) {
-            case SINGLE_PLAYER:
-                wPlayerName = gc.playerIsWhite ? HUMAN_NAME : AI_NAME;
-                bPlayerName = !gc.playerIsWhite ? HUMAN_NAME : AI_NAME;
-                break;
-            case MULTIPLAYER_LOCAL:
-                wPlayerName = "White";
-                bPlayerName = "Black";
-                break;
-            case MULTIPLAYER_ONLINE:
-                String localName =
-                        GameLobby.getInstance().getUser().getUserString();
-                String remoteName = ((OnlineGameLauncher)
-                        GameLauncher.currentGameLauncher).getOpponentString();
-                wPlayerName = gc.playerIsWhite ? localName : remoteName;
-                bPlayerName = !gc.playerIsWhite ? localName : remoteName;
-                break;
-        }
-    }
 
     private void calTime() {
         if (isWhite) {
-            wSecond = 0;
+            wCurrentSecond = 0;
             wMinute++;
             if (wMinute == 60) {
                 wHour++;
                 wMinute = 0;
             }
         } else {
-            bSecond = 0;
+            bCurrentSecond = 0;
             bMinute++;
             if (bMinute == 60) {
                 bHour++;
@@ -106,11 +97,11 @@ public class StopWatch extends Thread {
     }
 
     public void resetTime() {
-        wSecond = 0;
+        wCurrentSecond = 0;
         wMinute = 0;
         wHour = 0;
 
-        bSecond = 0;
+        bCurrentSecond = 0;
         bMinute = 0;
         bHour = 0;
     }
@@ -139,64 +130,58 @@ public class StopWatch extends Thread {
     @Override
     public void run() {
         resetTime();
-        isRunning = true;
 
         while (isRunning) {
 
-            while (isWhite && isRunning) {
+            while (isWhite&&isRunning) {
 
-                if (wSecond == 60) {
+                if (wCurrentSecond == 60) {
                     calTime();
                 }
-                time.setText(String.format(STOPWATCH_DISPLAY_HTML,
-                        TURN_INDICATOR, wPlayerName, wHour, wMinute, wSecond,
-                        "", bPlayerName, bHour, bMinute, bSecond));
-
+                time.setText(String.format("<html> <font color=%s> %s : %02d:%02d:%02d </font> <html> <br> <html> <font color=%s>%s : %02d:%02d:%02d </font> <html>",playerAFontColour,playerA, wHour, wMinute, wCurrentSecond,playerBFontColour, playerB,bHour, bMinute, bCurrentSecond));
                 try {
                     this.sleep(1000);
-                    if (!isRunning) {
+                    if(!isRunning) {
+
                         this.currentThread().interrupt();
                     }
                 } catch (InterruptedException e) {
-                    interrupted = true;
+                    interrupted=true;
                     return;
                 }
-                wSecond++;
+                wCurrentSecond++;
             }
-            if (interrupted) {
+            if(interrupted){
                 resetTime();
-                interrupted = false;
+                interrupted=false;
             }
 
-            while(!isWhite && isRunning) {
+            while(!isWhite&&isRunning) {
 
-                if (bSecond == 60) {
+                if (bCurrentSecond == 60) {
                     calTime();
                 }
 
-                time.setText(String.format(STOPWATCH_DISPLAY_HTML,
-                        "", wPlayerName, wHour, wMinute, wSecond,
-                        TURN_INDICATOR, bPlayerName, bHour, bMinute, bSecond));
-
+                time.setText(String.format("<html> <font color=%s> %s : %02d:%02d:%02d </font> <html> <br> <html> <font color=%s>%s : %02d:%02d:%02d </font> <html>",playerAFontColour,playerA, wHour, wMinute, wCurrentSecond,playerBFontColour, playerB,bHour, bMinute, bCurrentSecond));
                 try {
                    this.sleep(1000);
-                    if (!isRunning) {
+                    if(!isRunning) {
                         this.currentThread().interrupt();
+
                     }
                 } catch (InterruptedException e) {
-                    interrupted = true;
+                    interrupted=true;
                     return;
                 }
 
-                bSecond++;
+                bCurrentSecond++;
 
             }
 
         }
-
-        if (interrupted){
+        if(interrupted){
             resetTime();
-            interrupted = false;
+            interrupted=false;
         }
 
     }

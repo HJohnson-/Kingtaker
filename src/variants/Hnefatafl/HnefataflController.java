@@ -16,17 +16,8 @@ public class HnefataflController extends GameController {
 		isWhitesTurn = false;
 	}
 
-	@Override
-	public GameController clone() {
-		HnefataflController newGame = new HnefataflController(null, gameID, decoder, gameMode, playerIsWhite);
-		newGame.isWhitesTurn = this.isWhitesTurn;
-		newGame.currentTurn = this.currentTurn;
-		newGame.gameResult = this.gameResult;
-		newGame.ai = null;
-		return newGame;
-	}
-
 	//Check whether any opponent pieces has been captured by the move before swapping turns
+
 	@Override
 	protected void checkForCapturedPieces(Location location) {
 

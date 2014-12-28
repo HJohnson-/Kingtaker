@@ -110,7 +110,7 @@ public class RBRook extends ChessPiece {
 
     @Override
     public int returnValue() {
-        return 5;
+        return 10;
     }
 
     @Override

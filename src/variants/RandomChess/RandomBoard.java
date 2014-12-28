@@ -116,7 +116,7 @@ public class RandomBoard extends Board {
 		return 1;
 	}
 
-    @Override
+	@Override
     public Board clone() {
         RandomBoard b = new RandomBoard();
 

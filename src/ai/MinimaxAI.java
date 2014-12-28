@@ -69,8 +69,6 @@ public class MinimaxAI extends ChessAI {
             }
         }
 
-        assert numMoves > 0; //if not board is likely uninitialised.
-
         completed = 0;
         int maxScore = Integer.MIN_VALUE;
         List<Location[]> moves = new LinkedList<Location[]>();

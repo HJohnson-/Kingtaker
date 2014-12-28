@@ -2,7 +2,6 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
-import graphics.GraphicsTools;
 import pieces.PawnPromotion;
 import pieces.PromotablePiece;
 import pieces.ChessPiece;
@@ -21,15 +20,15 @@ public class GameController {
 	public static boolean defaultPIW = false; //TODO: Ask the player what colour they want to play.
 
 	protected boolean isWhitesTurn = true; //white always starts
-	protected int currentTurn;
-    protected GameResult gameResult = GameResult.IN_PROGRESS;
+	private int currentTurn;
+    private GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
 
-	protected int gameID;
+	private int gameID;
 	public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
-	protected PieceDecoder decoder;
+	private PieceDecoder decoder;
 
-	protected ChessAI ai;
+	private ChessAI ai;
 	private boolean AIWorking = false;
 	public boolean playerIsWhite;
 	public boolean animating = false;
@@ -37,9 +36,8 @@ public class GameController {
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
-    public long lastMoveTime = System.currentTimeMillis();
 
-    public Board getBoard() {
+	public Board getBoard() {
 		return board;
 	}
 
@@ -141,8 +139,8 @@ public class GameController {
 	 * @return if the move was successful and the game-state modified
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
-        //Cannot make moves once the game has ended or waiting on other player to promote.
-        if (gameResult != GameResult.IN_PROGRESS || promoting) return false;
+        //Cannot make moves once the game has ended.
+        if (gameResult != GameResult.IN_PROGRESS) return false;
 
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);
@@ -172,9 +170,11 @@ public class GameController {
         if (beingMoved.executeMove(targetLocation)) {
             if (checkMate()) {
 				endGame(false);
-			} else if (staleMate()) {
+			}
+			else if(staleMate()){//TODO: stalemate
 				endGame(true);
-			} else {
+			}
+			else {
 				checkForCapturedPieces(targetLocation); //No effect if not Hf
                 nextPlayersTurn();
             }
@@ -182,8 +182,6 @@ public class GameController {
             if (local && gameMode == GameMode.MULTIPLAYER_ONLINE) {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
-
-            lastMoveTime = System.currentTimeMillis();
 
             makeAIMove(); //No effect if not single player.
 

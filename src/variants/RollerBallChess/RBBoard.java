@@ -43,8 +43,8 @@ public class RBBoard extends Board {
 
 		// //Top pieces bishop
 
-  //   	 location = new Location(3,0);
-		// this.placePiece(location, new RBBishop(this, PieceType.BLACK, location));
+     	 location = new Location(3,0);
+		this.placePiece(location, new RBBishop(this, PieceType.BLACK, location));
 
 		// //Top pieces king
 		location = new Location(3,1);
@@ -70,8 +70,8 @@ public class RBBoard extends Board {
 
 		// //Bot pieces bishop
 
-  //   	 location = new Location(3,5);
-		// this.placePiece(location, new RBBishop(this, PieceType.WHITE, location));
+     	 location = new Location(3,6);
+		this.placePiece(location, new RBBishop(this, PieceType.WHITE, location));
 
 		//Bot pieces king
 		 location = new Location(3,5);

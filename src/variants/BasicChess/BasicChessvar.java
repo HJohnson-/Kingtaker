@@ -6,8 +6,6 @@ import main.GameController;
 import main.GameMode;
 import pieces.PieceDecoder;
 
-import java.util.Random;
-
 /**
  * The Chess we all know and love.
  */
@@ -38,10 +36,9 @@ public class BasicChessvar extends ChessVariant {
     }
 
     public BasicChessvar(GameMode mode) {
-        BasicBoard board = new BasicBoard();
-        board.initializeBoard();
-		game = new GameController(board, getVariationID(), new BasicDecoder(), mode, new Random().nextBoolean());
+		game = new GameController(new BasicBoard(), 0, new BasicDecoder(), mode, GameController.defaultPIW);
 		game.getBoard().setController(game);
+		game.getBoard().initializeBoard();
 	}
 
 	public BasicChessvar(GameController game) {
@@ -51,7 +48,7 @@ public class BasicChessvar extends ChessVariant {
 
 	//returns true if there was no errors
 	public boolean drawBoard() {
-        GraphicsTools.create(new BasicChessFrame(getName(), 500, 700, game.getBoard()));
+        GraphicsTools.create(new BasicChessFrame("Basic Chess", 500, 700, game.getBoard()));
         return true;
 	}
 

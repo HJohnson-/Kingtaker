@@ -32,25 +32,20 @@ public class RemoteOpenGame {
     }
 
     public int attemptToJoin(LocalUserAccount localUser) {
-        String message = ClientToClientCode.JOIN_OPEN_GAME_REQUEST +
-                ClientToClientCode.DEL + localUser.getUsername() +
-                ClientToClientCode.DEL + localUser.getRating();
+        String message = ClientToClientCode.JOIN_OPEN_GAME_REQUEST + ClientToClientCode.DEL + localUser.getUsername() + ClientToClientCode.DEL + localUser.getRating();
         OpponentMessageSender oms = new OpponentMessageSender(ip);
         String response = oms.sendMessage(message, true);
 
         int responseCode = Integer.parseInt(response);
         if (responseCode == ResponseCode.OK) {
-            String secondResponse =
-                    MessageListener.getInstance().getHostJoinResponse();
+            String secondResponse = MessageListener.getInstance().getHostJoinResponse();
 
             if (secondResponse == null) {
                 //Time out
                 return ResponseCode.EMPTY;
-            } else if (secondResponse.startsWith(
-                    ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO + "")) {
+            } else if (secondResponse.startsWith(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_NO + "")) {
                 return ResponseCode.REFUSED;
-            } else if (secondResponse.startsWith(
-                    ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK + "")) {
+            } else if (secondResponse.startsWith(ClientToClientCode.JOIN_OPEN_GAME_REQUEST_OK + "")) {
                 try {
                     String[] fields = secondResponse.split(ResponseCode.DEL);
                     PieceType remotePiece = PieceType.values()[Integer.valueOf(fields[1])];

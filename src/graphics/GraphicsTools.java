@@ -1,15 +1,12 @@
 package graphics;
 
-import pieces.ChessPiece;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,14 +50,6 @@ public class GraphicsTools {
             e.printStackTrace();
             System.exit(2);
         }
-    }
-
-    public static String printAllLocations(List<ChessPiece> pieces) {
-        String info = "";
-        for (ChessPiece piece : pieces) {
-            info += (piece.graphics.curCords.toString() + ",");
-        }
-        return info;
     }
 
 }

@@ -32,7 +32,7 @@ abstract public class ChessPiece {
 		lastTurnMovedOn = 0;
 
         if (cords != null) {
-            graphics = new GraphicsControl(cords);
+            graphics = new GraphicsControl(cords, cords);
         }
     }
 
@@ -45,7 +45,7 @@ abstract public class ChessPiece {
 		lastTurnMovedOn = 0;
 
 		if (cords != null) {
-			graphics = new GraphicsControl(cords);
+			graphics = new GraphicsControl(cords, cords);
 		}
 	}
 

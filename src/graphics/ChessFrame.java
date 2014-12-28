@@ -29,16 +29,17 @@ public abstract class ChessFrame extends JFrame {
         this.width = width;
         this.height = height;
         this.panel = panel;
-        this.setResizable(true);
+//        this.setResizable(false);
         this.setLocationRelativeTo(null);
         initUI();
+
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
 
                 StopWatch.isRunning = false;
                 panel.stopWatch.interrupt();
-                panel.panelStopwatch.setVisible(false);
+                panel.time.setVisible(false);
 
             }
         });

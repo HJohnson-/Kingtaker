@@ -159,6 +159,67 @@ public class RollBallRulesHelper {
             return new Location(6,0);
     }
 
+    public List<Location> findBouncingLoc(String dir, List<Location> moves) {
+        List<Location> bouncingLocs = new LinkedList<Location>();
+        // int mini or max
+        int mm;
+        if(dir.equals("U")||dir.equals("L")){
+            mm=100;
+        } else{
+            mm=-100;
+        }
+
+        // find max or min of x or y
+        for(Location move:moves) {
+            if (dir.equals("U")) {
+                if (move.getY() < mm) {
+                    mm = move.getY();
+                }
+            }
+            if (dir.equals("D")) {
+                if (move.getY() > mm) {
+                    mm = move.getY();
+                }
+            }
+            if (dir.equals("L")) {
+                if (move.getX() < mm) {
+                    mm = move.getY();
+                }
+            }
+            if (dir.equals("R")) {
+                if (move.getX() > mm) {
+                    mm = move.getY();
+                }
+            }
+        }
+            // build return list
+
+            for (Location move : moves) {
+                if (dir.equals("U")) {
+                    if (move.getY() == mm) {
+                        bouncingLocs.add(move);
+                    }
+                }
+                if (dir.equals("D")) {
+                    if (move.getY() == mm) {
+                        bouncingLocs.add(move);
+                    }
+                }
+                if (dir.equals("L")) {
+                    if (move.getX() == mm) {
+                        bouncingLocs.add(move);
+                    }
+                }
+                if (dir.equals("R")) {
+                    if (move.getX() == mm) {
+                        bouncingLocs.add(move);
+                    }
+                }
+            }
+
+        return bouncingLocs;
+    }
+
 //    public boolean isClockWiseDir(Location from, Location to){
 //        String fDir = getClockWiseDir(from);
 //    }

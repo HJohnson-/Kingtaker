@@ -140,8 +140,8 @@ public class GameController {
 	 * @return if the move was successful and the game-state modified
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
-        //Cannot make moves once the game has ended.
-        if (gameResult != GameResult.IN_PROGRESS) return false;
+        //Cannot make moves once the game has ended or waiting on other player to promote.
+        if (gameResult != GameResult.IN_PROGRESS || promoting) return false;
 
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);

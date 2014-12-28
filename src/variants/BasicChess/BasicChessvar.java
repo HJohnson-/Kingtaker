@@ -38,9 +38,10 @@ public class BasicChessvar extends ChessVariant {
     }
 
     public BasicChessvar(GameMode mode) {
-		game = new GameController(new BasicBoard(), getVariationID(), new BasicDecoder(), mode, new Random().nextBoolean());
+        BasicBoard board = new BasicBoard();
+        board.initializeBoard();
+		game = new GameController(board, getVariationID(), new BasicDecoder(), mode, new Random().nextBoolean());
 		game.getBoard().setController(game);
-		game.getBoard().initializeBoard();
 	}
 
 	public BasicChessvar(GameController game) {

@@ -209,8 +209,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
         if (gc.gameMode == GameMode.SINGLE_PLAYER) {
-            pbAIProgress.setMaximum(gc.getAI().getTotal());
-            pbAIProgress.setValue(gc.getAI().getCompleted());
+            if (gc.getAI().getTotal() != 0) {
+                pbAIProgress.setMaximum(gc.getAI().getTotal());
+                pbAIProgress.setValue(gc.getAI().getCompleted());
+            }
 
             panelAI.setLocation(p3col3, p3row1);
             panelAI.setSize(threeWidth, oneHeight);

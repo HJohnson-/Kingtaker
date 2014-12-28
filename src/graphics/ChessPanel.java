@@ -145,8 +145,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
-
-        board.getController().animating = false;
     }
 
 

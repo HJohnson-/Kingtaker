@@ -32,7 +32,7 @@ public class GameController {
 	protected ChessAI ai;
 	private boolean AIWorking = false;
 	public boolean playerIsWhite;
-	public boolean animating = true;
+	public boolean animating = false;
 	public boolean promoting = false;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -420,10 +420,8 @@ public class GameController {
 				PawnPromotion pp = new PawnPromotion(movedPiece);
 				pp.promote(PromotablePiece.QUEEN);
 			}
-            System.out.println(aiMove[0] + " -> " + aiMove[1]);
+            //System.out.println(aiMove[0] + " -> " + aiMove[1]);
             AIWorking = false;
-			System.out.println("After: ");
-			System.out.println(GraphicsTools.printAllLocations(control.board.allPieces()));
         }
 
     }

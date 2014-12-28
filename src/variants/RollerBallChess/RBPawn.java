@@ -5,7 +5,6 @@ import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
 import variants.BasicChess.King;
-import variants.BasicChess.Pawn;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class RBPawn extends ChessPiece {
     protected boolean validInState(Location to) {
         King k = new King(board, type, cords);
         return k.validInState(to) && !h.isInMiddle(to);
-         }
+    }
 
     @Override
     public List<Location> allPieceMoves() {

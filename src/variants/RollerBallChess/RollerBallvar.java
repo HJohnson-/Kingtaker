@@ -1,15 +1,19 @@
 package variants.RollerBallChess;
 
 import graphics.GraphicsTools;
+import main.ChessVariant;
 import main.GameController;
 import main.GameMode;
 import pieces.PieceDecoder;
 import variants.BasicChess.BasicChessFrame;
-import variants.BasicChess.BasicChessvar;
 
+<<<<<<< HEAD
 import java.util.Random;
 
 public class RollerBallvar extends BasicChessvar {
+=======
+public class RollerBallvar extends ChessVariant {
+>>>>>>> FETCH_HEAD
 
     @Override
     public int getVariationID() {
@@ -39,6 +43,7 @@ public class RollerBallvar extends BasicChessvar {
         RBBoard board = new RBBoard();
         board.initializeBoard();
         game = new GameController(board, getVariationID(), new RBDecoder(), mode, new Random().nextBoolean());
+
         game.getBoard().setController(game);
     }
 

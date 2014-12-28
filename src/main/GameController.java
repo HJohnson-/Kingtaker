@@ -2,6 +2,7 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
+import graphics.GraphicsTools;
 import pieces.PawnPromotion;
 import pieces.PromotablePiece;
 import pieces.ChessPiece;

@@ -51,12 +51,12 @@ public class RBBoard extends Board {
 		location = new Location(3,1);
 		this.placePiece(location, new RBKing(this, PieceType.BLACK, location));
 
-		// //Top pieces Pawn
-		//  location = new Location(4,0);
-		// this.placePiece(location, new RBPawn(this, PieceType.BLACK, location));
+		//Top pieces Pawn
+		  location = new Location(4,0);
+		this.placePiece(location, new RBPawn(this, PieceType.BLACK, location));
 
-		//  location = new Location(4,1);
-		// this.placePiece(location, new RBPawn(this, PieceType.BLACK, location));
+		  location = new Location(4,1);
+		this.placePiece(location, new RBPawn(this, PieceType.BLACK, location));
 
 
 
@@ -78,12 +78,12 @@ public class RBBoard extends Board {
 		 location = new Location(3,5);
 		this.placePiece(location, new RBKing(this, PieceType.WHITE, location));
 
-		// //Bot pieces Pawn
-		//  location = new Location(4,5);
-		// this.placePiece(location, new RBPawn(this, PieceType.WHITE, location));
+		//Bot pieces Pawn
+		  location = new Location(2,5);
+		this.placePiece(location, new RBPawn(this, PieceType.WHITE, location));
 
-		//  location = new Location(4,6);
-		// this.placePiece(location, new RBPawn(this, PieceType.WHITE, location));
+		  location = new Location(2,6);
+		this.placePiece(location, new RBPawn(this, PieceType.WHITE, location));
 
         return true;
     }

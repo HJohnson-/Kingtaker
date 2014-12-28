@@ -11,13 +11,13 @@ public class RBDecoder extends BasicDecoder {
     protected ChessPiece generate(Board board, PieceType type, Location cords, String name) {
         RBPieces piece = stringToPiece(name);
 			switch(piece) {
-				case RBRook:
+				case Rook:
 					return new RBRook(board, type, cords);
-				case RBBishop:
+				case Bishop:
 					return new RBBishop(board, type, cords);
-				case RBPawn:
+				case Pawn:
 					return new RBPawn(board, type, cords);
-				case RBKing:
+				case King:
 					return new RBKing(board, type, cords);
 				case Basic:
 					return super.generate(board, type, cords, name);
@@ -27,14 +27,14 @@ public class RBDecoder extends BasicDecoder {
 		}
 
 	private RBPieces stringToPiece(String string) {
-		if(string.equals("RBRook")) {
-			return RBPieces.RBRook;
-		} else if (string.equals("RBBishop")) {
-			return RBPieces.RBBishop;
-		} else if(string.equals("RBPawn")) {
-			return RBPieces.RBPawn;
-		} else if(string.equals("RBKing")){
-			return RBPieces.RBKing;
+		if(string.equals("Rook")) {
+			return RBPieces.Rook;
+		} else if (string.equals("Bishop")) {
+			return RBPieces.Bishop;
+		} else if(string.equals("Pawn")) {
+			return RBPieces.Pawn;
+		} else if(string.equals("King")){
+			return RBPieces.King;
 		} else {
 			return RBPieces.Basic;
 		}
@@ -42,7 +42,7 @@ public class RBDecoder extends BasicDecoder {
 }
 
 enum RBPieces {
-	RBRook, RBBishop, RBPawn,RBKing, Basic
+	Rook, Bishop, Pawn,King, Basic
 }
 
 

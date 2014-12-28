@@ -30,7 +30,7 @@ public class Pawn extends ChessPiece{
 	}
 
 	@Override
-	protected boolean validInState(Location to) {
+	public boolean validInState(Location to) {
 		return validBasicPawnMove(to) || validBasicPawnTake(to) || validPawnDoubleMove(to) || validEnPassant(to);
 	}
 

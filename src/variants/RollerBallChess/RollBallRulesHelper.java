@@ -55,9 +55,9 @@ public class RollBallRulesHelper {
 
 
 // R = right, L = Left, U = Up, D = Down
-    public String getClockWiseDir(Location to){
-        int x = to.getX();
-        int y = to.getY();
+    public String getClockWiseDir(Location currentPos){
+        int x = currentPos.getX();
+        int y = currentPos.getY();
 
         // outer conner
         if((x==0&&y==0))
@@ -98,4 +98,8 @@ public class RollBallRulesHelper {
 
         return "ERROR";
     }
+
+//    public boolean isClockWiseDir(Location from, Location to){
+//        String fDir = getClockWiseDir(from);
+//    }
 }

@@ -43,7 +43,7 @@ public class RBKing extends King{
 
     @Override
     public String getName() {
-        return "RBKing";
+        return "King";
     }
 
     @Override
@@ -73,7 +73,7 @@ public class RBKing extends King{
     }
 
     @Override
-    protected boolean validInState(Location to) {
+    public boolean validInState(Location to) {
         King k = new King(board, type, cords.clone());
         return (k.validCastleAttempt(to) || adjacent(to))&& !h.isInMiddle(to);
     }
@@ -101,5 +101,9 @@ public class RBKing extends King{
         return moves;
     }
 
+    @Override
+    public int returnValue() {
+        return 9999;
+    }
 
 }

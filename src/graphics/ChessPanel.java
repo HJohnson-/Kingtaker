@@ -76,8 +76,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         btnLoad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (System.currentTimeMillis() - 300 > lastStateLoad) {
+                if (savedBoardCodeString != null &&
+                        System.currentTimeMillis() - 300 > lastStateLoad) {
                     lastStateLoad = System.currentTimeMillis();
+                    lastClickTime = System.currentTimeMillis();
                     board.getController().load(savedBoardCodeString);
                     recalculateCellSize();
                 }
@@ -88,6 +90,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             public void actionPerformed(ActionEvent e) {
                 if (System.currentTimeMillis() - 300 > lastStateLoad) {
                     lastStateLoad = System.currentTimeMillis();
+                    lastClickTime = System.currentTimeMillis();
                     board.getController().undo();
                     recalculateCellSize();
                 }
@@ -97,6 +100,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 savedBoardCodeString = board.getController().toCode();
+                lastClickTime = System.currentTimeMillis();
             }
         });
 
@@ -233,7 +237,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
         final float[] FRACTIONS = {0.0f, 0.5f, 1.0f};
         final Color[] BG_COLOURS = {Color.WHITE.darker(), new Color(85, 55, 29), Color.DARK_GRAY};
@@ -487,7 +491,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         if (targetFPS == DisplayMode.REFRESH_RATE_UNKNOWN) {
             targetFPS = 120;
         }
-
         stopWatch.start();
 
         //Draw graphics at 60fps only if a click or move event occurred in the

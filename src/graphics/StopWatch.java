@@ -28,7 +28,7 @@ public class StopWatch extends Thread {
     private final String HUMAN_NAME = "You";
     private final String TURN_INDICATOR = "&#x21D2;";
 
-    public static final JLabel time = new JLabel();
+    public final JLabel time = new JLabel();
 
     private int wSecond = 0;
     private int wMinute = 0;

@@ -32,19 +32,15 @@ public class GameController {
 	protected ChessAI ai;
 	private boolean AIWorking = false;
 	public boolean playerIsWhite;
-	public boolean animating = true;
+	public boolean animating = false;
 	public boolean promoting = false;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
     public long lastMoveTime = System.currentTimeMillis();
 
-    public Board getBoard() {
-		return board;
-	}
+    public GameController() {
 
-    public void setBoard(Board board) {
-        this.board = board;
     }
 
 	//Used for local multiplayer and single player games.
@@ -80,6 +76,15 @@ public class GameController {
         this.gameMode = mode;
 		previousTurns = new ArrayList<String>();
 	}
+
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
     public ChessAI getAI() {
         return ai;
@@ -369,7 +374,12 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        GameController newGame = new GameController(null, gameID, decoder, gameMode, playerIsWhite);
+        GameController newGame = new GameController();
+        newGame.gameID = gameID;
+        newGame.decoder = decoder;
+        newGame.gameMode = gameMode;
+        newGame.previousTurns = new ArrayList<String>();
+        newGame.playerIsWhite = playerIsWhite;
         newGame.isWhitesTurn = this.isWhitesTurn;
         newGame.currentTurn = this.currentTurn;
         newGame.gameResult = this.gameResult;
@@ -420,10 +430,7 @@ public class GameController {
 				PawnPromotion pp = new PawnPromotion(movedPiece);
 				pp.promote(PromotablePiece.QUEEN);
 			}
-            System.out.println(aiMove[0] + " -> " + aiMove[1]);
             AIWorking = false;
-			System.out.println("After: ");
-			System.out.println(GraphicsTools.printAllLocations(control.board.allPieces()));
         }
 
     }

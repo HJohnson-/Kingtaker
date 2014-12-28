@@ -145,8 +145,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
-
-        board.getController().animating = false;
     }
 
 
@@ -488,7 +486,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
 
-    class ResizeAdapter extends ComponentAdapter {
+    protected class ResizeAdapter extends ComponentAdapter {
         @Override
         public void componentResized(ComponentEvent e) {
             ChessPanel.this.recalculateCellSize();

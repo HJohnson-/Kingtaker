@@ -20,6 +20,8 @@ import java.util.concurrent.Executors;
  */
 public abstract class ChessPanel extends JPanel implements Runnable {
 
+    private final int MAXIMUM_DRAW_INTERVAL_MS = 100;
+    private final int HIGH_SPEED_DRAW_TIME_MS = 2000;
     public Board board;
     protected ChessPiece selectedPiece = null;
     protected int UIHeight = 100;
@@ -493,6 +495,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
         stopWatch.start();
 
+
         //Draw graphics at 60fps only if a click or move event occurred in the
         //last 2 seconds, or there has been no drawing for 5 seconds.
         long lastDrawTime = 0;
@@ -501,7 +504,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                    Math.max(board.getController().lastMoveTime, lastClickTime);
             long timeSinceLastDraw = System.currentTimeMillis() - lastDrawTime;
 
-            if (timeSinceLastEvent < 2000 || timeSinceLastDraw > 5000) {
+            if (timeSinceLastEvent < HIGH_SPEED_DRAW_TIME_MS ||
+                    timeSinceLastDraw > MAXIMUM_DRAW_INTERVAL_MS) {
                 drawSwingComponents();
                 repaint();
                 lastDrawTime = System.currentTimeMillis();

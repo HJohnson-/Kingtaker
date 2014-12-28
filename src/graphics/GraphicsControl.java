@@ -27,7 +27,7 @@ public class GraphicsControl implements Runnable {
      */
     public GraphicsControl(Location cur, Location end) {
         curCords = cur;
-        endCords = new ConcurrentLinkedQueue<>();
+        endCords = new ConcurrentLinkedQueue<Location>();
     }
 
     public int getX() {

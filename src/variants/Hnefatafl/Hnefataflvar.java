@@ -51,7 +51,7 @@ public class Hnefataflvar extends ChessVariant {
 
 	@Override
 	public boolean drawBoard() {
-		GraphicsTools.create(new HnefataflFrame(getName(), 700, 600, game.getBoard()));
+		GraphicsTools.create(new HnefataflFrame(getName(), 500, 700, game.getBoard()));
 		return true;
 	}
 

@@ -41,7 +41,7 @@ public class Grandvar extends ChessVariant {
     public Grandvar(GameMode mode) {
         GrandBoard board = new GrandBoard();
         board.initializeBoard();
-		game = new GameController(board, getVariationID(), new BasicDecoder(), mode, new Random().nextBoolean());
+		game = new GameController(board, getVariationID(), new GrandDecoder(), mode, new Random().nextBoolean());
 		game.getBoard().setController(game);
 	}
 

@@ -49,7 +49,7 @@ public class BasicBoard extends Board {
 
 		// white pawns
 		for(int j = 0; j < 8; j++){
-			Location location = new Location(2,j);
+			Location location = new Location(6,j);
 			this.placePiece(location, new Pawn(this, PieceType.WHITE, location));
 		}
 

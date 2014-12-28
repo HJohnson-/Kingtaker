@@ -16,9 +16,10 @@ import java.util.Random;
  */
 public class frmMainMenu {
     private static final int BACKDROP_PIECE_COUNT = 3000;
-    private static final String BACKDROP_PIECE_CHARACTERS = "♚♛♜♝♞♟";
+    private static final String BACKDROP_PIECE_CHARACTERS = "♚♛♜♝♞♟"; //"♖♘♗♕♔";
+    public static final String TITLE_PICTURE_PATH = "media/title.png";
 
-    private JPanel panel1;
+    private JPanel panMain;
     private JButton btnSinglePlayer;
     private JButton btnLocalMP;
     private JButton btnOnlineMP;
@@ -43,21 +44,18 @@ public class frmMainMenu {
         btnSinglePlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //drawBackdrop();
                 beginLocalSP();
             }
         });
         btnLocalMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //drawBackdrop();
                 beginLocalMP();
             }
         });
         btnOnlineMP.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //drawBackdrop();
                 showLobby();
             }
         });
@@ -67,7 +65,6 @@ public class frmMainMenu {
                 System.exit(0);
             }
         });
-        panButtons.setOpaque(false);
         lblTitle.setText(" ");
     }
 
@@ -92,9 +89,9 @@ public class frmMainMenu {
 
             //Draw KingTaker title graphic
             try {
-                BufferedImage titleImage = ImageIO.read(new File("media/title.png"));
+                BufferedImage titleImage = ImageIO.read(new File(TITLE_PICTURE_PATH));
                 gr.drawImage(titleImage, 0, 0,
-                        panel1.getWidth(), 106, null);
+                        panMain.getWidth(), 106, null);
             } catch (Exception e) {
             }
         }
@@ -128,7 +125,7 @@ public class frmMainMenu {
     }
 
     public static void main(String[] args) {
-        frame.setContentPane(new frmMainMenu().panel1);
+        frame.setContentPane(new frmMainMenu().panMain);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -136,13 +133,12 @@ public class frmMainMenu {
     }
 
     private void createUIComponents() {
-        panel1 = new BackdropPanel();
+        panMain = new BackdropPanel();
     }
 
     private class BackdropPanel extends JPanel {
         @Override
         public void paint(Graphics g) {
-            //super.paintComponent(g);
             drawBackdrop(g);
 
             btnExit.repaint();

@@ -26,7 +26,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
-    public boolean animating = false;
     protected JButton btnLoad = new JButton("Load State");
     protected JButton btnSave = new JButton("Save State");
     protected JButton btnUndo = new JButton("Undo Last Move");
@@ -39,9 +38,9 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     protected JPanel panelAI;
     private String savedBoardCodeString = null;
     private Font fontGameOver = new Font("", Font.BOLD, 24);
-    private static double lastLoad = 0;
+    private long lastStateLoad = 0;
+    private long lastClickTime;
     private final int gapBetweenCol = 10;
-    // position y for 3 rows
     private final int gapBetweenRow = 10;
     private final int gapBetweenBoard = 30;
 
@@ -68,7 +67,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
             @Override
             public void stateChanged(ChangeEvent e) {
-                ChessPanel.this.board.getController().setDifficulty(sliderAIDifficulty.getValue());
+                board.getController().setDifficulty(sliderAIDifficulty.getValue());
             }
         });
 
@@ -77,8 +76,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         btnLoad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (System.currentTimeMillis() - 300 > lastLoad) {
-                    lastLoad = System.currentTimeMillis();
+                if (System.currentTimeMillis() - 300 > lastStateLoad) {
+                    lastStateLoad = System.currentTimeMillis();
                     board.getController().load(savedBoardCodeString);
                     recalculateCellSize();
                 }
@@ -87,8 +86,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         btnUndo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (System.currentTimeMillis() - 300 > lastLoad) {
-                    lastLoad = System.currentTimeMillis();
+                if (System.currentTimeMillis() - 300 > lastStateLoad) {
+                    lastStateLoad = System.currentTimeMillis();
                     board.getController().undo();
                     recalculateCellSize();
                 }
@@ -140,6 +139,89 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
+    }
+
+
+    private void drawSwingComponents() {
+        // size x
+        int threeWidth = (this.getWidth() - offset.getX()*2 - gapBetweenCol * 2) / 3;
+
+        // position x for 3 columns
+        int p3col1 = offset.getX();
+        int p3col2 = p3col1+threeWidth+gapBetweenCol;
+        int p3col3 = p3col2+threeWidth+gapBetweenCol;
+
+        int oneHeight = this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-offset.getY()*2;
+
+        // size y for 3 rows
+        int threeHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow*2-offset.getY()*2)/3;
+        int p3row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
+        int p3row2 = p3row1+threeHeight+gapBetweenRow;
+        int p3row3 = p3row2+threeHeight+gapBetweenRow;
+
+        // size y for 2 rows
+        int twoHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow-offset.getY()*2)/2;
+        // position y for 2 rows
+        int p2row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
+        int p2row2 = p2row1+twoHeight+gapBetweenRow;
+
+        GameController gc = board.getController();
+        stopWatch.isWhite = gc.isWhitesTurn();
+
+        int x, y;
+
+        x = offset.getX();
+        y = offset.getY() * 2 + cellHeight * board.numRows();
+
+        turnLabel.setText(String.format("<html>Turn Number: %04d<html>", gc.getCurrentTurn()));
+        stopWatch.setPlayerNames(gc);
+
+        //If in multiplayer mode, stretch stopwatch and turn count panels.
+        if (gc.gameMode == GameMode.MULTIPLAYER_ONLINE) {
+            panelTurn.setLocation(p3col1, p3row1);
+            panelTurn.setSize(getWidth() - offset.getX()*2, threeHeight);
+
+            panelStopwatch.setLocation(p3col1, p3row2);
+            panelStopwatch.setSize(getWidth() - offset.getX()*2, gapBetweenRow + threeHeight * 2);
+        } else {
+            btnSave.setLocation(p3col1, p3row1);
+            btnSave.setSize(threeWidth, threeHeight);
+
+            btnLoad.setLocation(p3col1, p3row2);
+            btnLoad.setSize(threeWidth, threeHeight);
+
+            btnUndo.setLocation(p3col1, p3row3);
+            btnUndo.setSize(threeWidth, threeHeight);
+
+            panelTurn.setLocation(p3col2, p2row1);
+            panelTurn.setSize(threeWidth, threeHeight);
+
+            panelStopwatch.setLocation(p3col2, p3row2);
+            panelStopwatch.setSize(threeWidth, gapBetweenRow + threeHeight * 2);
+        }
+
+
+
+        if (gc.gameMode == GameMode.SINGLE_PLAYER) {
+            pbAIProgress.setMaximum(gc.getAI().getTotal());
+            pbAIProgress.setValue(gc.getAI().getCompleted());
+
+            panelAI.setLocation(p3col3, p3row1);
+            panelAI.setSize(threeWidth, oneHeight);
+        }
+
+        if (btnLoad.getParent() == null) {
+            if (gc.gameMode != GameMode.MULTIPLAYER_ONLINE) {
+                this.add(btnLoad);
+                this.add(btnSave);
+                this.add(btnUndo);
+            }
+            this.add(panelStopwatch);
+            this.add(panelTurn);
+            if (gc.gameMode == GameMode.SINGLE_PLAYER) {
+                this.add(panelAI);
+            }
+        }
     }
 
     /**
@@ -327,8 +409,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      * Recalculated how large the board needs to be, based on the current size of the panel.
      */
     public void recalculateCellSize() {
-        while (animating) Thread.yield();
-
         int boardWidth = (int) getSize().getWidth() - offset.getX() * 2;
         int boardHeight = (int) getSize().getHeight() - UIHeight - offset.getY() * 2;
 
@@ -368,7 +448,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
          */
         @Override
         public void mousePressed(MouseEvent e) {
-            if (!animating && board.getController().getResult() == GameResult.IN_PROGRESS) {
+            lastClickTime = System.currentTimeMillis();
+            if (board.getController().getResult() == GameResult.IN_PROGRESS) {
                 int x = (e.getX() - offset.getX()) / cellWidth;
                 int y = (e.getY() - offset.getY()) / cellHeight;
                 Location l = new Location(x, y);
@@ -408,102 +489,22 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
 
         stopWatch.start();
-        while (true) {
 
-            while (true) {
-                try {Thread.sleep((1000 / targetFPS));} catch (InterruptedException e) {}
+        //Draw graphics at 60fps only if a click or move event occurred in the
+        //last 2 seconds, or there has been no drawing for 5 seconds.
+        long lastDrawTime = 0;
+        while (true) {
+            long timeSinceLastEvent = System.currentTimeMillis() -
+                   Math.max(board.getController().lastMoveTime, lastClickTime);
+            long timeSinceLastDraw = System.currentTimeMillis() - lastDrawTime;
+
+            if (timeSinceLastEvent < 2000 || timeSinceLastDraw > 5000) {
                 drawSwingComponents();
                 repaint();
-
-                if (!Toolkit.getDefaultToolkit().getLockingKeyState(
-                        KeyEvent.VK_CAPS_LOCK)) {
-                }
-
+                lastDrawTime = System.currentTimeMillis();
             }
 
+            try {Thread.sleep(1000 / targetFPS);} catch (Exception e) {}
         }
     }
-
-    private void drawSwingComponents() {
-        // size x
-        int threeWidth = (this.getWidth() - offset.getX()*2 - gapBetweenCol * 2) / 3;
-
-        // position x for 3 columns
-        int p3col1 = offset.getX();
-        int p3col2 = p3col1+threeWidth+gapBetweenCol;
-        int p3col3 = p3col2+threeWidth+gapBetweenCol;
-
-        int oneHeight = this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-offset.getY()*2;
-
-        // size y for 3 rows
-        int threeHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow*2-offset.getY()*2)/3;
-        int p3row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
-        int p3row2 = p3row1+threeHeight+gapBetweenRow;
-        int p3row3 = p3row2+threeHeight+gapBetweenRow;
-
-        // size y for 2 rows
-        int twoHeight = (this.getHeight()-board.numRows()* cellHeight-gapBetweenBoard-gapBetweenRow-offset.getY()*2)/2;
-        // position y for 2 rows
-        int p2row1 = board.numRows()* cellHeight + offset.getY()+gapBetweenBoard;
-        int p2row2 = p2row1+twoHeight+gapBetweenRow;
-
-        GameController gc = board.getController();
-        stopWatch.isWhite = gc.isWhitesTurn();
-
-        int x, y;
-
-        x = offset.getX();
-        y = offset.getY() * 2 + cellHeight * board.numRows();
-
-        turnLabel.setText(String.format("<html>Turn Number: %04d<html>", gc.getCurrentTurn()));
-        stopWatch.setPlayerNames(gc);
-
-        //If in multiplayer mode, stretch stopwatch and turn count panels.
-        if (gc.gameMode == GameMode.MULTIPLAYER_ONLINE) {
-            panelTurn.setLocation(p3col1, p3row1);
-            panelTurn.setSize(getWidth() - offset.getX()*2, threeHeight);
-
-            panelStopwatch.setLocation(p3col1, p3row2);
-            panelStopwatch.setSize(getWidth() - offset.getX()*2, gapBetweenRow + threeHeight * 2);
-        } else {
-            btnSave.setLocation(p3col1, p3row1);
-            btnSave.setSize(threeWidth, threeHeight);
-
-            btnLoad.setLocation(p3col1, p3row2);
-            btnLoad.setSize(threeWidth, threeHeight);
-
-            btnUndo.setLocation(p3col1, p3row3);
-            btnUndo.setSize(threeWidth, threeHeight);
-            
-            panelTurn.setLocation(p3col2, p2row1);
-            panelTurn.setSize(threeWidth, threeHeight);
-
-            panelStopwatch.setLocation(p3col2, p3row2);
-            panelStopwatch.setSize(threeWidth, gapBetweenRow + threeHeight * 2);
-        }
-
-
-
-        if (gc.gameMode == GameMode.SINGLE_PLAYER) {
-            pbAIProgress.setMaximum(gc.getAI().getTotal());
-            pbAIProgress.setValue(gc.getAI().getCompleted());
-
-            panelAI.setLocation(p3col3, p3row1);
-            panelAI.setSize(threeWidth, oneHeight);
-        }
-
-        if (btnLoad.getParent() == null) {
-            if (gc.gameMode != GameMode.MULTIPLAYER_ONLINE) {
-                this.add(btnLoad);
-                this.add(btnSave);
-                this.add(btnUndo);
-            }
-            this.add(panelStopwatch);
-            this.add(panelTurn);
-            if (gc.gameMode == GameMode.SINGLE_PLAYER) {
-                this.add(panelAI);
-            }
-        }
-    }
-
 }

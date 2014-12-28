@@ -149,6 +149,25 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
     private void drawSwingComponents() {
+        GameController gc = board.getController();
+        stopWatch.isWhite = gc.isWhitesTurn();
+
+        if (btnLoad.getParent() == null) {
+            if (gc.gameMode != GameMode.MULTIPLAYER_ONLINE) {
+                this.add(btnLoad);
+                this.add(btnSave);
+                this.add(btnUndo);
+            }
+            this.add(panelStopwatch);
+            this.add(panelTurn);
+            if (gc.gameMode == GameMode.SINGLE_PLAYER) {
+                this.add(panelAI);
+            }
+        }
+
+        turnLabel.setText(String.format("<html>Turn Number: %d<html>", gc.getCurrentTurn()));
+        stopWatch.setPlayerNames(gc);
+
         int width = (int) (0.2 * getSize().getWidth());
         int height = ((board.numRows() * cellHeight) - UISpacing * 8) / 9;
 
@@ -156,12 +175,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         int x = offset.getX() * 2 + cellWidth * board.numCols();
         int y = offset.getY();
-
-        GameController gc = board.getController();
-        stopWatch.isWhite = gc.isWhitesTurn();
-
-        turnLabel.setText(String.format("<html>Turn Number: %d<html>", gc.getCurrentTurn()));
-        stopWatch.setPlayerNames(gc);
 
         //If in multiplayer mode, stretch stopwatch and turn count panels.
         if (gc.gameMode == GameMode.MULTIPLAYER_ONLINE) {
@@ -201,8 +214,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             y += heightIncrease * 2;
         }
 
-
-
         if (gc.gameMode == GameMode.SINGLE_PLAYER) {
             if (gc.getAI().getTotal() != 0) {
                 pbAIProgress.setMaximum(gc.getAI().getTotal());
@@ -213,18 +224,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             panelAI.setSize(width, height * 2 + UISpacing);
         }
 
-        if (btnLoad.getParent() == null) {
-            if (gc.gameMode != GameMode.MULTIPLAYER_ONLINE) {
-                this.add(btnLoad);
-                this.add(btnSave);
-                this.add(btnUndo);
-            }
-            this.add(panelStopwatch);
-            this.add(panelTurn);
-            if (gc.gameMode == GameMode.SINGLE_PLAYER) {
-                this.add(panelAI);
-            }
-        }
     }
 
     /**

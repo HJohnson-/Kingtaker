@@ -2,6 +2,7 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
+import graphics.GraphicsTools;
 import pieces.PawnPromotion;
 import pieces.PromotablePiece;
 import pieces.ChessPiece;
@@ -31,7 +32,7 @@ public class GameController {
 	protected ChessAI ai;
 	private boolean AIWorking = false;
 	public boolean playerIsWhite;
-	public boolean animating = false;
+	public boolean animating = true;
 	public boolean promoting = false;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -419,8 +420,10 @@ public class GameController {
 				PawnPromotion pp = new PawnPromotion(movedPiece);
 				pp.promote(PromotablePiece.QUEEN);
 			}
-            //System.out.println(aiMove[0] + " -> " + aiMove[1]);
+            System.out.println(aiMove[0] + " -> " + aiMove[1]);
             AIWorking = false;
+			System.out.println("After: ");
+			System.out.println(GraphicsTools.printAllLocations(control.board.allPieces()));
         }
 
     }

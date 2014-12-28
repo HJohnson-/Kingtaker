@@ -91,19 +91,19 @@ public class RBBoard extends Board {
     public Board clone() {
    		RBBoard b = new RBBoard();
 		ChessPiece[][] newPieces = new ChessPiece[this.pieces.length][this.pieces[0].length];
-	        for (int i = 0; i < pieces.length; i++) {
-	            for (int j = 0; j < pieces[i].length; j++) {
-	                newPieces[i][j] = pieces[i][j].clone();
-	                newPieces[i][j].board = b;
-	            }
-	        }
-	        b.pieces = newPieces;
+		for (int i = 0; i < pieces.length; i++) {
+			for (int j = 0; j < pieces[i].length; j++) {
+				newPieces[i][j] = pieces[i][j].clone();
+				newPieces[i][j].board = b;
+			}
+		}
+		b.pieces = newPieces;
 
-	        b.setController(this.getController().clone());
-	        b.getController().setBoard(b);
+		b.setController(this.getController().clone());
+		b.getController().setBoard(b);
 
-	        b.doDrawing = this.doDrawing;
+		b.doDrawing = this.doDrawing;
 
-	        return b;
+		return b;
     }
 }

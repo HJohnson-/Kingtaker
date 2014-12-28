@@ -145,6 +145,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
+
+        board.getController().animating = false;
     }
 
 
@@ -435,6 +437,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             p.graphics.curCords = new Location(p.cords.getX() * cellWidth + offset.getX(),
                     p.cords.getY() * cellHeight + offset.getY());
         }
+
     }
 
     //Returns the appropriate message to display based on the game's result

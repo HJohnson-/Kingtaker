@@ -161,8 +161,13 @@ public class RollBallRulesHelper {
         return new Location(6, 0);
     }
 
-    public List<Location> findBouncingLoc(String dir, List<Location> moves) {
+
+    // for bishop
+    public List<Location> findBouncingLoc(String dir, List<Location> moves, Location cords) {
         List<Location> bouncingLocs = new LinkedList<Location>();
+        int x = cords.getX();
+        int y = cords.getY();
+
         // int mini or max
         int mm;
         if (dir.equals("U") || dir.equals("L")) {
@@ -218,6 +223,22 @@ public class RollBallRulesHelper {
                     bouncingLocs.add(move);
                 }
             }
+        }
+
+        if(x==1&&y==2){
+            bouncingLocs.add(new Location(0,1));
+        }
+
+        if(x==4&&y==1){
+            bouncingLocs.add(new Location(5,0));
+        }
+
+        if(x==5&&y==4){
+            bouncingLocs.add(new Location(6,5));
+        }
+
+        if(x==2&&y==5){
+            bouncingLocs.add(new Location(1,6));
         }
 
         return bouncingLocs;

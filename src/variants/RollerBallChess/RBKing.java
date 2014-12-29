@@ -99,7 +99,7 @@ public class RBKing extends King{
 
     @Override
     public int returnValue() {
-        return 9999;
+        return 9999999;
     }
 
 }

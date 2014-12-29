@@ -110,7 +110,7 @@ public class RBRook extends ChessPiece {
 
     @Override
     public int returnValue() {
-        return 10;
+        return 6;
     }
 
     @Override
@@ -122,9 +122,9 @@ public class RBRook extends ChessPiece {
     public boolean executeMove(Location targetLocation) {
 
 
+
+        // graphic for bouncing rook
         if(h.inOuterRing(cords) && (cords.getX()-targetLocation.getX())!=0 && (cords.getY()-targetLocation.getY())!=0){
-
-
             Location conner = h.findOuterConnerByLoc(cords);
 
             board.clearSpace(cords);
@@ -132,11 +132,15 @@ public class RBRook extends ChessPiece {
 
             if (board.doDrawing) graphics.setGoal(conner);
             if (board.doDrawing) graphics.setGoal(targetLocation);
-            return true;
+
+        }else {
+
+            // graphic for non bouncing rook
+            if (board.doDrawing) graphics.setGoal(targetLocation);
         }
+
         board.clearSpace(cords);
         board.placePiece(targetLocation, this);
-        if (board.doDrawing) graphics.setGoal(targetLocation);
         this.lastTurnMovedOn = board.getController().getCurrentTurn();
         return true;
     }

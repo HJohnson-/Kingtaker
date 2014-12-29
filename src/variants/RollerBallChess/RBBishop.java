@@ -35,6 +35,7 @@ public class RBBishop extends ChessPiece {
                     result = result&&board.clearLine(cords,to);
                 }
             }
+            return result;
         }
 
         if(cords.getX()==4 && cords.getY()==1){
@@ -48,6 +49,7 @@ public class RBBishop extends ChessPiece {
                     result = result&&board.clearLine(cords,to);
                 }
             }
+            return result;
         }
 
         if(cords.getX()==5 && cords.getY()==4){
@@ -61,6 +63,7 @@ public class RBBishop extends ChessPiece {
                     result = result&&board.clearLine(cords,to);
                 }
             }
+            return result;
         }
 
         if(cords.getX()==2 && cords.getY()==5){
@@ -74,6 +77,7 @@ public class RBBishop extends ChessPiece {
                     result = result&&board.clearLine(cords,to);
                 }
             }
+            return result;
         }
 
         // rest
@@ -94,8 +98,7 @@ public class RBBishop extends ChessPiece {
             }
         }
 
-//        if(h.findBouncingLoc(dir,moves).isEmpty()){return result;}
-        Location bouncingLoc = h.findBouncingLoc(dir,moves).get(0);
+        Location bouncingLoc = h.findBouncingLoc(dir,moves,cords).get(0);
          dir = h.getClockWiseDir(bouncingLoc);
 
         if (dir.equals("U")) {
@@ -134,8 +137,6 @@ public class RBBishop extends ChessPiece {
             }
         }
 
-
-
     return result;
     }
 
@@ -162,8 +163,8 @@ public class RBBishop extends ChessPiece {
             }
         }
 
-        bouncingLocs = h.findBouncingLoc(dir,moves);
-
+        bouncingLocs = h.findBouncingLoc(dir,moves,cords);
+//        System.out.println(bouncingLocs.size());
 
         // bounce on edge
         for(Location boundcingLoc:bouncingLocs){
@@ -208,11 +209,173 @@ public class RBBishop extends ChessPiece {
 
     @Override
     public int returnValue() {
-        return 5;
+        return 3;
     }
 
     @Override
     public String getName() {
         return "RBBishop";
+    }
+
+
+    @Override
+    public boolean executeMove(Location targetLocation) {
+
+//        if(h.inOuterRing(cords) && (cords.getX()-targetLocation.getX())!=0 && (cords.getY()-targetLocation.getY())!=0){
+//
+//
+//            Location conner = h.findOuterConnerByLoc(cords);
+//
+//            board.clearSpace(cords);
+//            board.placePiece(targetLocation, this);
+//
+//            if (board.doDrawing) graphics.setGoal(conner);
+//            if (board.doDrawing) graphics.setGoal(targetLocation);
+//            return true;
+//        }
+//        board.clearSpace(cords);
+//        board.placePiece(targetLocation, this);
+//        if (board.doDrawing) graphics.setGoal(targetLocation);
+//        this.lastTurnMovedOn = board.getController().getCurrentTurn();
+//
+
+
+
+        List<Location> bouncingLocs;
+
+        Bishop b = new Bishop(board, type, cords);
+        List<Location> moves = new LinkedList<Location>();
+        String cordsdir = h.getClockWiseDir(cords);
+
+        // basic clockwise move
+        for(Location move:b.allPieceMoves()){
+            if(!h.isInMiddle(move)) {
+                if(cordsdir.equals("U")&&(move.getY()<cords.getY()) ||
+                        cordsdir.equals("D")&&(move.getY()>cords.getY())||
+                        cordsdir.equals("L")&&(move.getX()<cords.getX())||
+                        cordsdir.equals("R")&&(move.getX()>cords.getX())){
+                    if(!moves.contains(move))
+                        moves.add(move);
+                }
+            }
+        }
+
+        bouncingLocs = h.findBouncingLoc(cordsdir,moves,cords);
+
+
+        // for the location that only have two possible bouncing location
+        // bouncingLocs.get(1) is the closer bouncing location, bouncingLocs.get(0) is the farther bouncing location
+
+        if(bouncingLocs.size()==2) {
+            // four special position
+            if (cords.getX() == 1 && cords.getY() == 2) {
+                if (targetLocation.getX() == 1 && targetLocation.getY() == 0) {
+                    if (board.doDrawing) graphics.setGoal(bouncingLocs.get(1));
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                } else {
+                    if (targetLocation.getX() > 3) {
+                        if (board.doDrawing) graphics.setGoal(bouncingLocs.get(0));
+                        if (board.doDrawing) graphics.setGoal(targetLocation);
+                    }else{
+                        if (board.doDrawing) graphics.setGoal(targetLocation);
+                    }
+                }
+            }
+
+            if (cords.getX() == 4 && cords.getY() == 1) {
+                if (targetLocation.getX() == 6 && targetLocation.getY() == 1) {
+                    if (board.doDrawing) graphics.setGoal(bouncingLocs.get(1));
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                } else {
+                    if (targetLocation.getY() > 3) {
+                        if (board.doDrawing) graphics.setGoal(bouncingLocs.get(0));
+                        if (board.doDrawing) graphics.setGoal(targetLocation);
+                    }else{
+                        if (board.doDrawing) graphics.setGoal(targetLocation);
+                    }
+                }
+            }
+
+            if (cords.getX() == 5 && cords.getY() == 4) {
+                if (targetLocation.getX() == 5 && targetLocation.getY() == 6) {
+                    if (board.doDrawing) graphics.setGoal(bouncingLocs.get(1));
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                } else {
+                    if (targetLocation.getX() < 3) {
+                        if (board.doDrawing) graphics.setGoal(bouncingLocs.get(0));
+                        if (board.doDrawing) graphics.setGoal(targetLocation);
+                    }else{
+                        if (board.doDrawing) graphics.setGoal(targetLocation);
+                    }
+                }
+            }
+
+            if (cords.getX() == 2 && cords.getY() == 5) {
+                if (targetLocation.getX() == 0 && targetLocation.getY() == 5) {
+                    if (board.doDrawing) graphics.setGoal(bouncingLocs.get(1));
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                } else {
+                    if (targetLocation.getY() < 3) {
+                        if (board.doDrawing) graphics.setGoal(bouncingLocs.get(0));
+                        if (board.doDrawing) graphics.setGoal(targetLocation);
+                    }else{
+                        if (board.doDrawing) graphics.setGoal(targetLocation);
+                    }
+                }
+            }
+
+            board.clearSpace(cords);
+            board.placePiece(targetLocation, this);
+            this.lastTurnMovedOn = board.getController().getCurrentTurn();
+            return true;
+        }
+
+        // for the location that only have one possible bouncing location
+
+        if(bouncingLocs.size()==1) {
+            Location bouncingLoc = h.findBouncingLoc(cordsdir, moves, cords).get(0);
+            String bouncedir = h.getClockWiseDir(bouncingLoc);
+
+            if (bouncedir.equals("U")) {
+                if (targetLocation.getY() < bouncingLoc.getY()) {
+                    if (board.doDrawing) graphics.setGoal(bouncingLoc);
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                } else {
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                }
+            }
+
+            if (bouncedir.equals("D")) {
+                if (targetLocation.getY() > bouncingLoc.getY()) {
+                    if (board.doDrawing) graphics.setGoal(bouncingLoc);
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                } else {
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                }
+            }
+
+            if (bouncedir.equals("L")) {
+                if (targetLocation.getX() < bouncingLoc.getX()) {
+                    if (board.doDrawing) graphics.setGoal(bouncingLoc);
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                } else {
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                }
+            }
+
+            if (bouncedir.equals("R")) {
+                if (targetLocation.getX() > bouncingLoc.getX()) {
+                    if (board.doDrawing) graphics.setGoal(bouncingLoc);
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                } else {
+                    if (board.doDrawing) graphics.setGoal(targetLocation);
+                }
+            }
+            board.clearSpace(cords);
+            board.placePiece(targetLocation, this);
+            this.lastTurnMovedOn = board.getController().getCurrentTurn();
+            return true;
+        }
+        return false;
     }
 }

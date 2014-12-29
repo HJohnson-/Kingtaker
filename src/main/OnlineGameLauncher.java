@@ -1,5 +1,6 @@
 package main;
 
+import ai.MinimaxAI;
 import forms.MessageBoxAlert;
 import forms.frmJoinRequest;
 import forms.frmLobby;
@@ -114,8 +115,9 @@ public class OnlineGameLauncher extends GameLauncher {
 
         ServerMessageSender sms = new ServerMessageSender();
         String response = sms.sendMessage(ClientCommandCode.REPORT_GAME_RESULT +
-                ClientCommandCode.DEL + winnerParameter + opponentName, true);
-        if (response != null) {
+                ClientCommandCode.DEL + winnerParameter +
+                ClientCommandCode.DEL + opponentName, true);
+        if (response != null && response.startsWith("0,")) {
             String newRatingStr = response.replace("0,","");
             if (newRatingStr.matches("\\d+")) {
                 int newRating = Integer.valueOf(newRatingStr);
@@ -140,14 +142,19 @@ public class OnlineGameLauncher extends GameLauncher {
         this.opponentName = opponentName;
     }
 
+    public String getOpponentString() {
+        return String.format("%s (%d)", opponentName, opponentRating);
+    }
+
     //Connection to opponent is lost. The opponent is replaced with the AI
     //and the user is told the same via a message box.
     //This is also called if cheating is detected, though to avoid breaking
     //friendships, this is disguised as a "connection has been lost" error
     public void handleRemoteUserDisconnection() {
         System.out.println("Cannot connect to opponent!");
-        variant.game.initialiseAI(1);
         variant.game.gameMode = GameMode.SINGLE_PLAYER;
+        variant.game.initialiseAI(MinimaxAI.DEFAULT_AI_LEVEL);
+        MessageListener.getInstance().acceptMoves = false;
 
         (new MessageBoxAlert()).showDisconnectedOpponent(opponentName);
     }

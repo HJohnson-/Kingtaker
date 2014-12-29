@@ -88,7 +88,7 @@ public class BasicBoard extends Board {
 		return 0;
 	}
 
-	@Override
+    @Override
     public Board clone() {
         BasicBoard b = new BasicBoard();
 

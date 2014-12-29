@@ -17,7 +17,7 @@ public class RBPawn extends ChessPiece {
     private RollBallRulesHelper h = new RollBallRulesHelper();
 
     public RBPawn(Board board, PieceType type, Location cords) {
-        super(board, type, cords, "Pawn");
+        super(board, type, cords, "pawn");
     }
 
     @Override
@@ -52,6 +52,6 @@ public class RBPawn extends ChessPiece {
 
     @Override
     public String getName() {
-        return "Pawn";
+        return "RBPawn";
     }
 }

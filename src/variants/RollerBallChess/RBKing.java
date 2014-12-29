@@ -16,8 +16,8 @@ import java.util.List;
 public class RBKing extends King{
 
 
-    public RBKing(Board board, PieceType type, Location location) {
-        super(board, type, location);
+    public RBKing(Board board, PieceType type, Location cords) {
+        super(board, type, cords);
     }
     private RollBallRulesHelper h = new RollBallRulesHelper();
 
@@ -43,17 +43,13 @@ public class RBKing extends King{
 
     @Override
     public String getName() {
-        return "King";
-    }
-
-    @Override
-    public ChessPiece clone() {
-        return new RBKing(board, type, cords.clone());
+        return "RBKing";
     }
 
     @Override
     public boolean isValidMove(Location to, boolean careAboutCheck) {
-        if (careAboutCheck ? !validInState(to) : !validInStateNoCastle(to)) {
+        King k = new King(board,type,cords);
+        if (careAboutCheck ? !validInState(to) : !k.validInStateNoCastle(to)) {
             return false;
         } else if (takingOwnPiece(board.getPiece(to))) {
             return false;
@@ -75,7 +71,7 @@ public class RBKing extends King{
     @Override
     public boolean validInState(Location to) {
         King k = new King(board, type, cords.clone());
-        return (k.validCastleAttempt(to) || adjacent(to))&& !h.isInMiddle(to);
+        return (k.validCastleAttempt(to) || k.adjacent(to))&& !h.isInMiddle(to);
     }
 
     @Override

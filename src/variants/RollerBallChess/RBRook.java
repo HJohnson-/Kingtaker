@@ -17,7 +17,7 @@ public class RBRook extends ChessPiece {
     private RollBallRulesHelper h = new RollBallRulesHelper();
 
     public RBRook(Board board, PieceType type, Location cords) {
-        super(board, type, cords, "Rook");
+        super(board, type, cords, "rook");
     }
 
     @Override
@@ -115,7 +115,7 @@ public class RBRook extends ChessPiece {
 
     @Override
     public String getName() {
-        return "Rook";
+        return "RBRook";
     }
 
     @Override

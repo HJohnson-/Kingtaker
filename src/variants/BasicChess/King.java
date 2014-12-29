@@ -117,7 +117,7 @@ public class King extends ChessPiece {
 		}
 	}
 
-	protected boolean validInStateNoCastle(Location to) {
+	public boolean validInStateNoCastle(Location to) {
 		return adjacent(to);
 	}
 

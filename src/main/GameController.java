@@ -2,6 +2,7 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
+import graphics.GraphicsTools;
 import pieces.PawnPromotion;
 import pieces.PromotablePiece;
 import pieces.ChessPiece;
@@ -20,15 +21,15 @@ public class GameController {
 	public static boolean defaultPIW = false; //TODO: Ask the player what colour they want to play.
 
 	protected boolean isWhitesTurn = true; //white always starts
-	private int currentTurn;
-    private GameResult gameResult = GameResult.IN_PROGRESS;
+	protected int currentTurn;
+    protected GameResult gameResult = GameResult.IN_PROGRESS;
 	private Board board;
 
-	private int gameID;
+	protected int gameID;
 	public GameMode gameMode = GameMode.MULTIPLAYER_LOCAL;
-	private PieceDecoder decoder;
+	protected PieceDecoder decoder;
 
-	private ChessAI ai;
+	protected ChessAI ai;
 	private boolean AIWorking = false;
 	public boolean playerIsWhite;
 	public boolean animating = false;
@@ -36,10 +37,11 @@ public class GameController {
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
+    public long lastMoveTime = System.currentTimeMillis();
 
-	public Board getBoard() {
-		return board;
-	}
+    public GameController() {
+
+    }
 
 	//Used for local multiplayer and single player games.
 	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode, boolean playerIsWhite) {
@@ -76,6 +78,9 @@ public class GameController {
 	}
 
 
+    public Board getBoard() {
+        return board;
+    }
 
     public void setBoard(Board board) {
         this.board = board;
@@ -172,11 +177,9 @@ public class GameController {
         if (beingMoved.executeMove(targetLocation)) {
             if (checkMate()) {
 				endGame(false);
-			}
-			else if(staleMate()){//TODO: stalemate
+			} else if (staleMate()) {
 				endGame(true);
-			}
-			else {
+			} else {
 				checkForCapturedPieces(targetLocation); //No effect if not Hf
                 nextPlayersTurn();
             }
@@ -184,6 +187,8 @@ public class GameController {
             if (local && gameMode == GameMode.MULTIPLAYER_ONLINE) {
                 GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
+
+            lastMoveTime = System.currentTimeMillis();
 
             makeAIMove(); //No effect if not single player.
 
@@ -369,7 +374,7 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        GameController newGame = new GameController(null, gameID, decoder, gameMode, playerIsWhite);
+        GameController newGame = new GameController();
         newGame.gameID = gameID;
         newGame.decoder = decoder;
         newGame.gameMode = gameMode;
@@ -425,7 +430,6 @@ public class GameController {
 				PawnPromotion pp = new PawnPromotion(movedPiece);
 				pp.promote(PromotablePiece.QUEEN);
 			}
-
             AIWorking = false;
         }
 

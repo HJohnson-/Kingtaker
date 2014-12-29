@@ -17,7 +17,7 @@ public class RBBishop extends ChessPiece {
     private RollBallRulesHelper h = new RollBallRulesHelper();
     
     public RBBishop(Board board, PieceType type, Location cords) {
-        super(board, type, cords, "Bishop");
+        super(board, type, cords, "bishop");
     }
 
     @Override
@@ -213,6 +213,6 @@ public class RBBishop extends ChessPiece {
 
     @Override
     public String getName() {
-        return "Bishop";
+        return "RBBishop";
     }
 }

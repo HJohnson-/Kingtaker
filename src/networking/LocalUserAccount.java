@@ -70,4 +70,8 @@ public class LocalUserAccount {
     public void setRating(int rating) {
         this.rating = rating;
     }
+
+    public String getUserString() {
+        return String.format("%s (%d)", username, rating);
+    }
 }

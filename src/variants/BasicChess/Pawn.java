@@ -1,6 +1,7 @@
 package variants.BasicChess;
 
 import main.Board;
+import main.GameMode;
 import main.Location;
 import main.PieceType;
 import pieces.PawnPromotion;
@@ -107,11 +108,14 @@ public class Pawn extends ChessPiece{
 
         if (valid) {
             boolean successful = super.executeMove(to);
-            if ((to.getX() == 0 || to.getX() == board.numCols() - 1) && board.doDrawing && board.getController().isLocalsTurn()) {
+
+            if ((to.getX() == 0 || to.getX() == board.numCols() - 1) && board.doDrawing) {
+                if (board.getController().isLocalsTurn()) {
+                    ExecutorService exe = Executors.newSingleThreadExecutor();
+                    exe.submit(new PawnPromotion(this));
+                    exe.shutdown();
+                }
 				board.getController().promoting = true;
-                ExecutorService exe = Executors.newSingleThreadExecutor();
-                exe.submit(new PawnPromotion(this));
-				exe.shutdown();
             }
             return successful;
         } else {

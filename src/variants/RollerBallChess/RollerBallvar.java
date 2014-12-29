@@ -7,6 +7,7 @@ import main.GameMode;
 import pieces.PieceDecoder;
 import variants.BasicChess.BasicChessFrame;
 import variants.BasicChess.BasicChessvar;
+import java.util.Random;
 
 public class RollerBallvar extends ChessVariant {
 
@@ -37,8 +38,7 @@ public class RollerBallvar extends ChessVariant {
     public RollerBallvar(GameMode mode) {
         RBBoard board = new RBBoard();
         board.initializeBoard();
-        game = new GameController(board, getVariationID(), new RBDecoder(), mode, GameController.defaultPIW);
-
+        game = new GameController(board, getVariationID(), new RBDecoder(), mode,new Random().nextBoolean() );
         game.getBoard().setController(game);
     }
 
@@ -49,7 +49,7 @@ public class RollerBallvar extends ChessVariant {
 
     @Override
     public boolean drawBoard() {
-        GraphicsTools.create(new RBFrame("Roller Ball Chess", 500, 700, game.getBoard()));
+        GraphicsTools.create(new BasicChessFrame(getName(), 500, 700, game.getBoard()));
         return true;
     }
 

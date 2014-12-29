@@ -7,42 +7,40 @@ import pieces.ChessPiece;
 import variants.BasicChess.BasicDecoder;
 
 public class RBDecoder extends BasicDecoder {
-    @Override
-    protected ChessPiece generate(Board board, PieceType type, Location cords, String name) {
-        RBPieces piece = stringToPiece(name);
-			switch(piece) {
-				case Rook:
+  		@Override
+		protected ChessPiece generate (Board board, PieceType type, Location cords, String name) {
+			RBPieces piece = stringToPiece(name);
+		switch(piece) {
+				case RBRook:
 					return new RBRook(board, type, cords);
-				case Bishop:
+				case RBBishop:
 					return new RBBishop(board, type, cords);
-				case Pawn:
+				case RBPawn:
 					return new RBPawn(board, type, cords);
-				case King:
+				case RBKing:
 					return new RBKing(board, type, cords);
-				case Basic:
-					return super.generate(board, type, cords, name);
 				default:
 					throw new Error("HOW DID YOU EVEN REACH THIS CASE!?");
 			}
 		}
 
 	private RBPieces stringToPiece(String string) {
-		if(string.equals("Rook")) {
-			return RBPieces.Rook;
-		} else if (string.equals("Bishop")) {
-			return RBPieces.Bishop;
-		} else if(string.equals("Pawn")) {
-			return RBPieces.Pawn;
-		} else if(string.equals("King")){
-			return RBPieces.King;
+		if(string.equals("RBRook")) {
+			return RBPieces.RBRook;
+		} else if (string.equals("RBBishop")) {
+			return RBPieces.RBBishop;
+		} else if(string.equals("RBPawn")) {
+			return RBPieces.RBPawn;
+		} else if(string.equals("RBKing")){
+			return RBPieces.RBKing;
 		} else {
-			return RBPieces.Basic;
+			throw new Error("MALFORMED PIECE STRING ERROR ERROR DO NOT GIVE BAD STRINGS ANGRY ERROR");
 		}
 	}
 }
 
 enum RBPieces {
-	Rook, Bishop, Pawn,King, Basic
+	RBRook, RBBishop, RBPawn, RBKing
 }
 
 

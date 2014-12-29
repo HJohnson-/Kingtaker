@@ -22,8 +22,10 @@ public class GraphicsControl implements Runnable {
     /**
      * Converts the given locations from board co-ordinates to graphics co-ordinates.
      * @param cur The current position of the piece.
+     * @param end The position the piece will be in at the end of the animation. NB this will equal current piece
+     *            when a piece is first created or when a piece is not moving.
      */
-    public GraphicsControl(Location cur) {
+    public GraphicsControl(Location cur, Location end) {
         curCords = cur;
         endCords = new ConcurrentLinkedQueue<Location>();
     }
@@ -43,7 +45,6 @@ public class GraphicsControl implements Runnable {
      */
     public void setGoal(Location l) {
         while (panel.cellWidth < 0) Thread.yield();
-
         endCords.add(new Location(l.getX() * panel.cellWidth + panel.offset.getX(),
                                 l.getY() * panel.cellHeight + panel.offset.getY()));
         pool.submit(this);

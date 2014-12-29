@@ -32,7 +32,7 @@ abstract public class ChessPiece {
 		lastTurnMovedOn = 0;
 
         if (cords != null) {
-            graphics = new GraphicsControl(cords);
+            graphics = new GraphicsControl(cords, cords);
         }
     }
 
@@ -45,7 +45,7 @@ abstract public class ChessPiece {
 		lastTurnMovedOn = 0;
 
 		if (cords != null) {
-			graphics = new GraphicsControl(cords);
+			graphics = new GraphicsControl(cords, cords);
 		}
 	}
 
@@ -58,11 +58,9 @@ abstract public class ChessPiece {
 	 * @return if move was successful.
 	 */
 	public boolean executeMove(Location targetLocation) {
-        board.clearSpace(cords);
+		board.clearSpace(cords);
 		board.placePiece(targetLocation, this);
-        if (board.doDrawing) {
-            graphics.setGoal(targetLocation);
-        }
+        if (board.doDrawing) graphics.setGoal(targetLocation);
 		this.lastTurnMovedOn = board.getController().getCurrentTurn();
 		return true;
 	}

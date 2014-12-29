@@ -2,12 +2,13 @@ package main;
 
 import ai.ChessAI;
 import ai.MinimaxAI;
-import graphics.GraphicsTools;
 import pieces.PawnPromotion;
 import pieces.PromotablePiece;
 import pieces.ChessPiece;
 import pieces.PieceDecoder;
+import variants.BasicChess.Bishop;
 import variants.BasicChess.King;
+import variants.BasicChess.Knight;
 import variants.BasicChess.Pawn;
 
 import java.util.*;
@@ -39,8 +40,12 @@ public class GameController {
 	private List<String> previousTurns;
     public long lastMoveTime = System.currentTimeMillis();
 
-    public GameController() {
+    public Board getBoard() {
+		return board;
+	}
 
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
 	//Used for local multiplayer and single player games.
@@ -76,15 +81,6 @@ public class GameController {
         this.gameMode = mode;
 		previousTurns = new ArrayList<String>();
 	}
-
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
 
     public ChessAI getAI() {
         return ai;
@@ -146,8 +142,8 @@ public class GameController {
 	 * @return if the move was successful and the game-state modified
 	 */
 	public boolean attemptMove(Location pieceLocation, Location targetLocation, boolean local) {
-        //Cannot make moves once the game has ended.
-        if (gameResult != GameResult.IN_PROGRESS) return false;
+        //Cannot make moves once the game has ended or waiting on other player to promote.
+        if (gameResult != GameResult.IN_PROGRESS || promoting) return false;
 
 		ChessPiece beingMoved = board.getPiece(pieceLocation);
 		ChessPiece movedOnto = board.getPiece(targetLocation);
@@ -204,7 +200,139 @@ public class GameController {
     //TODO: all stalemate conditions
 	protected boolean staleMate(){
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves(isWhitesTurn);
-		return moves.size() == 0;
+		LinkedList<ChessPiece> chessPieces = board.allPieces();
+		return moves.size() == 0 || isCheckMateImpossible(chessPieces) || fiftyMoves(chessPieces) || threefoldRepetition();
+	}
+
+	//true if no capture has been made and no pawn has been moved in the last fifty moves
+	//a move consisting of both players completing their turn
+	private boolean fiftyMoves(LinkedList<ChessPiece> chessPieces){
+
+		if(currentTurn < 100) return false;
+		int size = chessPieces.size();
+		boolean noCaptures = true;
+		boolean noPawnMoved = true;
+
+		List<String> boardPositions = previousTurns;
+		boardPositions.add(toCode()); //adding board state after current turn
+
+
+		//getting pawns and their state on the board
+		String[] nextStateSplit = toCode().split("\\|");
+		ArrayList<String> next = new ArrayList<String>();
+		for(String v : nextStateSplit){
+			if(v.startsWith("N:Pawn")) next.add(v);
+		}
+		HashSet<String> pawns = new HashSet<String>();
+		for(String pawn : next){
+			pawns.add(pawn.substring(0,22));
+		}
+
+
+		for(int i = boardPositions.size() - 1; i >= boardPositions.size() - 100 ; --i){
+			String boardState = boardPositions.get(i);
+
+			String[] ts = boardState.split("\\|");
+			ArrayList<String> pieces = new ArrayList<String>();
+			for(String v : ts){
+				if(v.startsWith("N")) pieces.add(v);
+			}
+
+			noCaptures = noCaptures && size == pieces.size();
+			if(!noCaptures) return false;
+
+
+			for(String piece : pieces){
+				if(piece.startsWith("N:Pawn")){
+					noPawnMoved = noPawnMoved && pawns.contains(piece.substring(0,22));
+					if(!noPawnMoved) return false;
+				}
+			}
+
+
+
+		}
+
+		return noCaptures && noPawnMoved;
+
+	}
+
+	//true if the same position occurs three time, no progress is being made
+	private boolean threefoldRepetition(){
+		HashMap<String, Integer> occurrences = new HashMap<String, Integer>();
+
+		for(String position : previousTurns){
+
+			if(occurrences.containsKey(position)){
+				occurrences.put(position, occurrences.get(position) + 1);
+			}else {
+				occurrences.put(position, 1);
+			}
+		}
+
+		for(String position : occurrences.keySet()){
+			if(occurrences.get(position) >= 3) return true;
+		}
+
+		return false;
+	}
+
+	private boolean isCheckMateImpossible(LinkedList<ChessPiece> chessPieces){
+
+
+		if(chessPieces.size() == 2){
+			if(chessPieces.get(0) instanceof King &&
+			   chessPieces.get(1) instanceof King ){
+				return true;
+			}
+		}
+
+		if(chessPieces.size() == 3){
+			int kings = 0;
+			int bishop = 0;
+			int knight = 0;
+			for(ChessPiece piece : chessPieces){
+				if(piece instanceof King) ++kings;
+				else if(piece instanceof Knight) ++knight;
+				else if(piece instanceof Bishop) ++bishop;
+			}
+
+			return kings == 2 && (bishop == 1 || knight == 1);
+		}
+
+		if(chessPieces.size() == 4){
+			int kings = 0;
+			int bishops = 0;
+			int whiteBishop = 0;
+
+			LinkedList<Location> bishopLocations = new LinkedList<Location>();
+
+			for(ChessPiece piece : chessPieces){
+				if(piece instanceof King) ++kings;
+				else if(piece instanceof Bishop){
+					++bishops;
+					bishopLocations.add(piece.cords);
+					if(piece.type == PieceType.WHITE) ++whiteBishop;
+				}
+			}
+
+			boolean bishopsOnSameColour;
+			if(bishopLocations.size() != 2) return false;
+			else{
+				Location loc1 = bishopLocations.get(0);
+				Location loc2 = bishopLocations.get(1);
+
+				bishopsOnSameColour = (loc1.getX() % 2 == loc2.getX() % 2 &&
+						       loc1.getY() % 2 == loc2.getY() % 2) ||
+						       (loc1.getX() % 2 != loc2.getX() % 2 &&
+							    loc1.getY() % 2 != loc2.getY() % 2);
+			}
+
+
+			return kings == 2 && bishops == 2 && whiteBishop == 1 && bishopsOnSameColour ;
+		}
+
+		return  false;
 	}
 
 	public void undo() {
@@ -374,12 +502,7 @@ public class GameController {
 
     @Override
     public GameController clone() {
-        GameController newGame = new GameController();
-        newGame.gameID = gameID;
-        newGame.decoder = decoder;
-        newGame.gameMode = gameMode;
-        newGame.previousTurns = new ArrayList<String>();
-        newGame.playerIsWhite = playerIsWhite;
+        GameController newGame = new GameController(null, gameID, decoder, gameMode, playerIsWhite);
         newGame.isWhitesTurn = this.isWhitesTurn;
         newGame.currentTurn = this.currentTurn;
         newGame.gameResult = this.gameResult;
@@ -430,6 +553,7 @@ public class GameController {
 				PawnPromotion pp = new PawnPromotion(movedPiece);
 				pp.promote(PromotablePiece.QUEEN);
 			}
+            //System.out.println(aiMove[0] + " -> " + aiMove[1]);
             AIWorking = false;
         }
 

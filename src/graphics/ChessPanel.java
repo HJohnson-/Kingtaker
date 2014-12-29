@@ -147,7 +147,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         executor.submit(this);
     }
 
-
     private void drawSwingComponents() {
         GameController gc = board.getController();
         stopWatch.isWhite = gc.isWhitesTurn();
@@ -168,6 +167,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         turnLabel.setText(String.format("<html>Turn Number: %d<html>", gc.getCurrentTurn()));
         stopWatch.setPlayerNames(gc);
 
+        drawVerticalUI(gc);
+
+    }
+
+    private void drawVerticalUI(GameController gc) {
         int width = (int) (0.2 * getSize().getWidth());
         int height = ((board.numRows() * cellHeight) - UISpacing * 8) / 9;
 
@@ -223,7 +227,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             panelAI.setLocation(x, y);
             panelAI.setSize(width, height * 2 + UISpacing);
         }
-
     }
 
     /**

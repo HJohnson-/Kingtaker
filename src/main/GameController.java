@@ -200,11 +200,85 @@ public class GameController {
     //TODO: all stalemate conditions
 	protected boolean staleMate(){
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves(isWhitesTurn);
-		return moves.size() == 0 || isCheckMateImpossible();
+		LinkedList<ChessPiece> chessPieces = board.allPieces();
+		return moves.size() == 0 || isCheckMateImpossible(chessPieces) || fiftyMoves(chessPieces) || threefoldRepetition();
 	}
 
-	private boolean isCheckMateImpossible(){
-		LinkedList<ChessPiece> chessPieces = board.allPieces();
+	//true if no capture has been made and no pawn has been moved in the last fifty moves
+	//a move consisting of both players completing their turn
+	private boolean fiftyMoves(LinkedList<ChessPiece> chessPieces){
+
+		if(currentTurn < 100) return false;
+		int size = chessPieces.size();
+		boolean noCaptures = true;
+		boolean noPawnMoved = true;
+
+		List<String> boardPositions = previousTurns;
+		boardPositions.add(toCode()); //adding board state after current turn
+
+
+		//getting pawns and their state on the board
+		String[] nextStateSplit = toCode().split("\\|");
+		ArrayList<String> next = new ArrayList<String>();
+		for(String v : nextStateSplit){
+			if(v.startsWith("N:Pawn")) next.add(v);
+		}
+		HashSet<String> pawns = new HashSet<String>();
+		for(String pawn : next){
+			pawns.add(pawn.substring(0,22));
+		}
+
+
+		for(int i = boardPositions.size() - 1; i >= boardPositions.size() - 100 ; --i){
+			String boardState = boardPositions.get(i);
+
+			String[] ts = boardState.split("\\|");
+			ArrayList<String> pieces = new ArrayList<String>();
+			for(String v : ts){
+				if(v.startsWith("N")) pieces.add(v);
+			}
+
+			noCaptures = noCaptures && size == pieces.size();
+			if(!noCaptures) return false;
+
+
+			for(String piece : pieces){
+				if(piece.startsWith("N:Pawn")){
+					noPawnMoved = noPawnMoved && pawns.contains(piece.substring(0,22));
+					if(!noPawnMoved) return false;
+				}
+			}
+
+
+
+		}
+
+		return noCaptures && noPawnMoved;
+
+	}
+
+	//true if the same position occurs three time, no progress is being made
+	private boolean threefoldRepetition(){
+		HashMap<String, Integer> occurrences = new HashMap<String, Integer>();
+
+		for(String position : previousTurns){
+
+			if(occurrences.containsKey(position)){
+				occurrences.put(position, occurrences.get(position) + 1);
+			}else {
+				occurrences.put(position, 1);
+			}
+		}
+
+		for(String position : occurrences.keySet()){
+			if(occurrences.get(position) >= 3) return true;
+		}
+
+		return false;
+	}
+
+	private boolean isCheckMateImpossible(LinkedList<ChessPiece> chessPieces){
+
 
 		if(chessPieces.size() == 2){
 			if(chessPieces.get(0) instanceof King &&
@@ -233,7 +307,6 @@ public class GameController {
 
 			LinkedList<Location> bishopLocations = new LinkedList<Location>();
 
-
 			for(ChessPiece piece : chessPieces){
 				if(piece instanceof King) ++kings;
 				else if(piece instanceof Bishop){
@@ -243,23 +316,21 @@ public class GameController {
 				}
 			}
 
-			boolean onSameColour;
+			boolean bishopsOnSameColour;
 			if(bishopLocations.size() != 2) return false;
 			else{
 				Location loc1 = bishopLocations.get(0);
 				Location loc2 = bishopLocations.get(1);
 
-				onSameColour = (loc1.getX() % 2 == loc2.getX() % 2 &&
+				bishopsOnSameColour = (loc1.getX() % 2 == loc2.getX() % 2 &&
 						       loc1.getY() % 2 == loc2.getY() % 2) ||
 						       (loc1.getX() % 2 != loc2.getX() % 2 &&
 							    loc1.getY() % 2 != loc2.getY() % 2);
 			}
 
 
-			return kings == 2 && bishops == 2 && whiteBishop == 1 && onSameColour ;
+			return kings == 2 && bishops == 2 && whiteBishop == 1 && bishopsOnSameColour ;
 		}
-
-
 
 		return  false;
 	}

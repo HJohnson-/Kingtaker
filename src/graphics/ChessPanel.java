@@ -61,6 +61,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
 
         recalculateCellSize();
+        final GameController gc = board.getController();
 
         sliderAIDifficulty.setMinimum(0);
         sliderAIDifficulty.setMaximum(5);
@@ -69,7 +70,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
             @Override
             public void stateChanged(ChangeEvent e) {
-                board.getController().setDifficulty(sliderAIDifficulty.getValue());
+                gc.setDifficulty(sliderAIDifficulty.getValue());
             }
         });
 
@@ -79,10 +80,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         btnLoad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (savedBoardCodeString != null &&
+                        gc.getResult() == GameResult.IN_PROGRESS &&
                         System.currentTimeMillis() - 300 > lastStateLoad) {
                     lastStateLoad = System.currentTimeMillis();
                     lastClickTime = System.currentTimeMillis();
-                    board.getController().load(savedBoardCodeString);
+                    gc.load(savedBoardCodeString);
                     recalculateCellSize();
                 }
             }
@@ -90,10 +92,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         btnUndo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (System.currentTimeMillis() - 300 > lastStateLoad) {
+                if (gc.getResult() == GameResult.IN_PROGRESS &&
+                        System.currentTimeMillis() - 300 > lastStateLoad) {
                     lastStateLoad = System.currentTimeMillis();
                     lastClickTime = System.currentTimeMillis();
-                    board.getController().undo();
+                    gc.undo();
                     recalculateCellSize();
                 }
             }
@@ -101,7 +104,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                savedBoardCodeString = board.getController().toCode();
+                savedBoardCodeString = gc.toCode();
                 lastClickTime = System.currentTimeMillis();
             }
         });
@@ -250,14 +253,12 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         g2.setPaint(BG_GRADIENT);
         g2.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
 
-        //g2.setFont(mainFont);
-
         doDrawing(g2);
     }
 
     /**
-     * This function draws all the UI elements which are not part of the board, such as the current turn and
-     * turn counter.
+     * This function draws all the UI graphics elements which are not part of the board
+     * Currently, only the game result overlay.
      * @param g2 This is the graphics object which is being drawn to.
      */
     protected void drawUI(Graphics2D g2) {

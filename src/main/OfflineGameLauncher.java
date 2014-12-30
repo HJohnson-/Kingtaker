@@ -13,11 +13,12 @@ public class OfflineGameLauncher extends GameLauncher {
     public OfflineGameLauncher(ChessVariant variant, GameMode mode) {
         this.mode = mode;
         this.variant = variant;
-        localUserIsWhite = new Random().nextInt(2) == 0;
+        localUserIsWhite = new Random().nextBoolean();
     }
 
     @Override
     public void launch() {
+        //TODO: refactor this recreate business.
         ChessVariant newVariant = variant.recreate(mode);
         newVariant.drawBoard();
         if (mode == GameMode.SINGLE_PLAYER) {

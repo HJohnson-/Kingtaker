@@ -48,9 +48,7 @@ public class GameController {
         this.board = board;
     }
 
-	//Base constructor - used for cloning
-	public GameController() {
-	}
+	public GameController() {}
 
 	//Used for local multiplayer and single player games.
 	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode, boolean playerIsWhite) {
@@ -200,7 +198,6 @@ public class GameController {
 	protected void checkForCapturedPieces(Location targetLocation) {
 	}
 
-    //TODO: all stalemate conditions
 	protected boolean staleMate(){
 		Map<ChessPiece, List<Location>> moves = getAllValidMoves(isWhitesTurn);
 		LinkedList<ChessPiece> chessPieces = board.allPieces();

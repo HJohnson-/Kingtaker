@@ -81,6 +81,10 @@ abstract public class Board {
 	 * @return if all spaces between to and from were empty, false if an input was invalid.
 	 */
 	public boolean clearLine(Location from, Location to) {
+		//There is a bug here, often with playing with AI. Keep these debug statements until fixed plz.
+//		System.out.println("Clearline: from = [" + from + "], to = [" + to + "]");
+//		Thread.dumpStack();
+
 		if(!onBoard(from) || !onBoard(to)) {
 			return false;
 		}
@@ -90,7 +94,11 @@ abstract public class Board {
 			i != to.getX() || j != to.getY();
 			i += horizontalMovement, j+= verticalMovement) {
             ChessPiece piece = getPiece(new Location(i, j));
-			assert piece != null; //TODO: this sometimes fails.
+
+			if (piece == null) {
+				throw new Error("piece in clearLine was null. Not good");
+			}
+
             if (piece != null && piece.type != PieceType.EMPTY) {
 				return false;
 			}

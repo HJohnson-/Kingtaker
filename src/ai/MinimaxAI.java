@@ -23,8 +23,8 @@ public class MinimaxAI extends ChessAI {
     private final int LOSS_SCORE = -10000;
     private final int DRAW_SCORE = -5000;
     public static final int DEFAULT_AI_LEVEL = 1;
-    private double numMoves = 1;
-    private double completed = 0;
+    private int numMoves = 1;
+    private int completed = 0;
 
     public MinimaxAI(boolean isWhite, int depth) {
         super(isWhite);
@@ -69,7 +69,9 @@ public class MinimaxAI extends ChessAI {
             }
         }
 
-        assert numMoves > 0; //if not board is likely uninitialised.
+        if (numMoves == 0) {
+            throw new Error("AI found no possible moves. Possibly the board is uninitialised.");
+        }
 
         completed = 0;
         int maxScore = Integer.MIN_VALUE;

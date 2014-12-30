@@ -48,6 +48,10 @@ public class GameController {
         this.board = board;
     }
 
+	//Base constructor - used for cloning
+	public GameController() {
+	}
+
 	//Used for local multiplayer and single player games.
 	public GameController(Board board, int gameID, PieceDecoder decoder, GameMode mode, boolean playerIsWhite) {
         currentTurn = 1;
@@ -503,9 +507,13 @@ public class GameController {
     @Override
     public GameController clone() {
         GameController newGame = new GameController(null, gameID, decoder, gameMode, playerIsWhite);
-        newGame.isWhitesTurn = this.isWhitesTurn;
-        newGame.currentTurn = this.currentTurn;
-        newGame.gameResult = this.gameResult;
+		newGame.gameID = gameID;
+		newGame.decoder = decoder;
+		newGame.gameMode = gameMode;
+		newGame.playerIsWhite = playerIsWhite;
+        newGame.isWhitesTurn = isWhitesTurn;
+        newGame.currentTurn = currentTurn;
+        newGame.gameResult = gameResult;
         newGame.ai = null;
         return newGame;
     }

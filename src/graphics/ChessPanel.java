@@ -485,7 +485,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
 
 
-    class ResizeAdapter extends ComponentAdapter {
+    protected class ResizeAdapter extends ComponentAdapter {
         @Override
         public void componentResized(ComponentEvent e) {
             ChessPanel.this.recalculateCellSize();

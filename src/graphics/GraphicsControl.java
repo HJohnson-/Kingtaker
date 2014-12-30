@@ -40,9 +40,11 @@ public class GraphicsControl implements Runnable {
 
     /**
      * Converts the given co-ordinates from chess square (i.e. 0-7 for basic chess) to a graphics position.
+     * Yields thread until the panel has been drawn.
      * @param l The location which the piece will end up on, when the animation concludes.
      */
     public void setGoal(Location l) {
+        while (panel.cellWidth < 0) Thread.yield();
         endCords.add(new Location(l.getX() * panel.cellWidth + panel.offset.getX(),
                                 l.getY() * panel.cellHeight + panel.offset.getY()));
         pool.submit(this);

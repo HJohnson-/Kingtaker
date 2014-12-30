@@ -20,6 +20,9 @@ public class OfflineGameLauncher extends GameLauncher {
     public void launch() {
         ChessVariant newVariant = variant.recreate(mode);
         newVariant.drawBoard();
+        if (mode == GameMode.SINGLE_PLAYER) {
+            newVariant.game.makeAIMove();
+        }
     }
 
     @Override

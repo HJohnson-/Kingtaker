@@ -64,7 +64,6 @@ public class GameController {
 
 		if (mode == GameMode.SINGLE_PLAYER) {
 			initialiseAI();
-			makeAIMove();
 		}
     }
 

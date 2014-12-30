@@ -62,24 +62,25 @@ public class GraphicsControl implements Runnable {
     @Override
     public void run() {
 
+        int moveCount = endCords.size();
         panel.board.getController().animating = true;
-        
         while (!endCords.isEmpty()) {
             
             Location end = endCords.poll();
 
             float maxDistance = Math.max(Math.abs(end.getX() - curCords.getX()), Math.abs(end.getY() - curCords.getY()));
-            int sleepTime = (int) Math.ceil(animationTime / maxDistance);
+            int sleepTime = (int) Math.ceil((animationTime/moveCount) / maxDistance);
 
             int animationXStep = (int) Math.signum(end.getX() - curCords.getX());
             int animationYStep = (int) Math.signum(end.getY() - curCords.getY());
 
+            int stepsRequired = Math.abs(animationXStep) + Math.abs(animationYStep);
             if ((animationXStep != 0) && (animationYStep != 0) &&
                     (Math.abs(end.getX() - curCords.getX()) != Math.abs(end.getY() - curCords.getY()))) {
                 while (!curCords.getX().equals(end.getX())) {
                     curCords.incrX(animationXStep);
                     try {
-                        Thread.sleep(sleepTime);
+                        Thread.sleep(sleepTime / stepsRequired);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -88,7 +89,7 @@ public class GraphicsControl implements Runnable {
                 while (!curCords.getY().equals(end.getY())) {
                     curCords.incrY(animationYStep);
                     try {
-                        Thread.sleep(sleepTime);
+                        Thread.sleep(sleepTime / stepsRequired);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

@@ -4,9 +4,6 @@ import main.Location;
 import main.PieceType;
 import pieces.ChessPiece;
 
-/**
- * Created by crix9 on 15/10/2014.
- */
 public class BasicBoard extends Board {
 
 	//returns true if human player goes first in offline mode or the lobby host goes first in online mode.

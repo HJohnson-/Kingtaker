@@ -39,6 +39,8 @@ public class GameController {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
     public long lastMoveTime = System.currentTimeMillis();
+	private boolean cachedInCheckStatus;
+	private int cachedInCheckMoveNum = -1;
 
     public Board getBoard() {
 		return board;
@@ -172,12 +174,12 @@ public class GameController {
 		//If checkmate is detected, the game ends, otherwise the active player is switched.
         //If the move was executed locally, it is sent to the remote player via launcher.
         if (beingMoved.executeMove(targetLocation)) {
-            if (checkMate()) {
-				endGame(false);
-			} else if (staleMate()) {
-				endGame(true);
+            if (testForCheckmateOrStalemate()) {
+				endGame();
 			} else {
-				checkForCapturedPieces(targetLocation); //No effect if not Hf
+				//Used by some variants to remove pieces from the board after a move.
+				removeCapturedPieces(targetLocation);
+
                 nextPlayersTurn();
             }
 
@@ -195,13 +197,39 @@ public class GameController {
         return false;
 	}
 
-	protected void checkForCapturedPieces(Location targetLocation) {
+	protected void removeCapturedPieces(Location targetLocation) {
 	}
 
-	protected boolean staleMate(){
-		Map<ChessPiece, List<Location>> moves = getAllValidMoves(isWhitesTurn);
+	//Tests if the game state is equivalent to checkmate or stalemate
+	//Sets gameResult accordingly and returns true if the game is over
+	public boolean testForCheckmateOrStalemate() {
+		//Checkmate testing
+		Map<ChessPiece, List<Location>> opponentsMoves = getAllValidMoves(!isWhitesTurn);
+		boolean checkMate = true;
+		for (Map.Entry<ChessPiece, List<Location>> entry : opponentsMoves.entrySet()) {
+			if (!entry.getValue().isEmpty()) {
+				checkMate = false;
+				break;
+			}
+		}
+		if (checkMate) {
+			gameResult = isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
+			return true;
+		}
+
+		//Stalemate testing
+		Map<ChessPiece, List<Location>> playersMoves = getAllValidMoves(isWhitesTurn);
 		LinkedList<ChessPiece> chessPieces = board.allPieces();
-		return moves.size() == 0 || isCheckMateImpossible(chessPieces) || fiftyMoves(chessPieces) || threefoldRepetition();
+		if (playersMoves.size() == 0 ||
+				isCheckMateImpossible(chessPieces) ||
+				fiftyMoves(chessPieces) ||
+				threefoldRepetition()) {
+			gameResult = GameResult.DRAW;
+			return true;
+		}
+
+		//No checkmate or stalemate detected.
+		return false;
 	}
 
 	//true if no capture has been made and no pawn has been moved in the last fifty moves
@@ -371,28 +399,10 @@ public class GameController {
 	/**
 	 * set the game state to over
 	 */
-	public void endGame(boolean isADraw) {
-		if(!isADraw)
-        gameResult = isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
-
-		else gameResult = GameResult.DRAW;
-
+	public void endGame() {
         if (gameMode == GameMode.MULTIPLAYER_ONLINE) {
             GameLauncher.currentGameLauncher.broadcastEndGame();
         }
-	}
-
-	/**
-	 * @return true if turn player is in checkmate
-	 */
-	public boolean checkMate() {
-		Map<ChessPiece, List<Location>> moves = getAllValidMoves(!isWhitesTurn);
-		for (Map.Entry<ChessPiece, List<Location>> entry : moves.entrySet()) {
-			if (!entry.getValue().isEmpty()) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -428,13 +438,22 @@ public class GameController {
 	 * @return if that player's in check
 	 */
 	public boolean isInCheck(boolean checkingForWhite) {
+		if (cachedInCheckMoveNum == previousTurns.size()) {
+			return cachedInCheckStatus;
+		}
+
+		cachedInCheckStatus = false;
+		cachedInCheckMoveNum = previousTurns.size();
+
 		Location kingLocation = findKing(checkingForWhite);
 		for(List<Location> targets : getAllValidMoves(false, !checkingForWhite).values()) {
 			if(targets.contains(kingLocation)) {
-				return true;
+				cachedInCheckStatus = true;
+				break;
 			}
 		}
-		return false;
+
+		return cachedInCheckStatus;
 	}
 
 	public boolean isInCheck(PieceType type) {

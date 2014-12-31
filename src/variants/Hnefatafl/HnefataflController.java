@@ -28,10 +28,9 @@ public class HnefataflController extends GameController {
 
 	//Check whether any opponent pieces has been captured by the move before swapping turns
 	@Override
-	protected void checkForCapturedPieces(Location location) {
+	protected void removeCapturedPieces(Location location) {
 
 		PieceType currentPlayerType = isWhitesTurn() ? PieceType.WHITE : PieceType.BLACK;
-
 
 		//Check whether move results in a capture of opponent's piece
 
@@ -127,23 +126,23 @@ public class HnefataflController extends GameController {
 				(opp == PieceType.WHITE && curr == PieceType.BLACK);
 	}
 
-	//does the current player have no legal moves
 	@Override
-	protected boolean staleMate(){
-		PieceType type = isWhitesTurn() ? PieceType.WHITE : PieceType.BLACK;
-		Move[] legalMoves = getPlayerLegalMoves(type);
+	public boolean testForCheckmateOrStalemate() {
+		//Check mate
+		if (checkWhiteWins() || checkBlackWins()) {
+			gameResult = isWhitesTurn ? GameResult.WHITE_WIN : GameResult.WHITE_LOSS;
+			return true;
+		}
 
-		return type == null || legalMoves.length == 0;
+		//Stale mate
+		if (getPlayerLegalMoves(isWhitesTurn ? PieceType.WHITE : PieceType.BLACK).length == 0) {
+			gameResult = GameResult.DRAW;
+			return true;
+		}
+
+		//No mate
+		return false;
 	}
-
-	//this methods checks if one of the player has won,
-	// the king is either in one of the corner or has been captured
-	@Override
-	public boolean checkMate(){
-
-		return checkWhiteWins() || checkBlackWins() ;
-	}
-
 
 	//WHITE wins if the king is one of the 4 corners
 	boolean checkWhiteWins() {

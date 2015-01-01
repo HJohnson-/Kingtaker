@@ -13,12 +13,13 @@ import java.util.List;
 /**
  * Created by daniel on 14/12/27.
  */
-public class RBKing extends King{
+public class RBKing extends King {
 
 
     public RBKing(Board board, PieceType type, Location cords) {
         super(board, type, cords);
     }
+
     private RollBallRulesHelper h = new RollBallRulesHelper();
 
     /*To castle:
@@ -40,7 +41,6 @@ public class RBKing extends King{
      */
 
 
-
     @Override
     public String getName() {
         return "RBKing";
@@ -48,12 +48,12 @@ public class RBKing extends King{
 
     @Override
     public boolean isValidMove(Location to, boolean careAboutCheck) {
-        King k = new King(board,type,cords);
+        King k = new King(board, type, cords);
         if (careAboutCheck ? !validInState(to) : !k.validInStateNoCastle(to)) {
             return false;
         } else if (takingOwnPiece(board.getPiece(to))) {
             return false;
-        } else if(h.isInMiddle(to.getX(), to.getY())){
+        } else if (h.isInMiddle(to.getX(), to.getY())) {
             return false;
         } else {
             if (careAboutCheck) {
@@ -71,7 +71,7 @@ public class RBKing extends King{
     @Override
     public boolean validInState(Location to) {
         King k = new King(board, type, cords.clone());
-        return (k.validCastleAttempt(to) || k.adjacent(to))&& !h.isInMiddle(to);
+        return (k.validCastleAttempt(to) || k.adjacent(to)) && !h.isInMiddle(to);
     }
 
     @Override
@@ -84,14 +84,14 @@ public class RBKing extends King{
             for (int j = -1; j <= 1; j++) {
                 int newY = cords.getY() + j;
                 if (newY < 0 || newY >= board.numRows()) continue;
-                if(!h.isInMiddle(newX, newY))
-                moves.add(new Location(newX, newY));
+                if (!h.isInMiddle(newX, newY))
+                    moves.add(new Location(newX, newY));
             }
             if (lastTurnMovedOn == 0) {
-                if(!h.isInMiddle(cords.getX(), cords.getY() + 2))
-                moves.add(new Location(cords.getX(), cords.getY() + 2));
-                if(!h.isInMiddle(cords.getX(), cords.getY() - 2))
-                moves.add(new Location(cords.getX(), cords.getY() - 2));
+                if (!h.isInMiddle(cords.getX(), cords.getY() + 2))
+                    moves.add(new Location(cords.getX(), cords.getY() + 2));
+                if (!h.isInMiddle(cords.getX(), cords.getY() - 2))
+                    moves.add(new Location(cords.getX(), cords.getY() - 2));
             }
         }
         return moves;

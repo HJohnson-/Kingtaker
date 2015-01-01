@@ -31,13 +31,13 @@ public class RBPawn extends ChessPiece {
         King k = new King(board, type, cords);
         List<Location> moves = new LinkedList<Location>();
         String dir = h.getClockWiseDir(cords);
-        
-        for(Location move:k.allPieceMoves()){
-            if(!h.isInMiddle(move)) {
-                if(dir.equals("U")&&(move.getY()==cords.getY()-1) ||
-                        dir.equals("D")&&(move.getY()==cords.getY()+1)||
-                        dir.equals("L")&&(move.getX()==cords.getX()-1)||
-                        dir.equals("R")&&(move.getX()==cords.getX()+1)){
+
+        for (Location move : k.allPieceMoves()) {
+            if (!h.isInMiddle(move)) {
+                if (dir.equals("U") && (move.getY() == cords.getY() - 1) ||
+                        dir.equals("D") && (move.getY() == cords.getY() + 1) ||
+                        dir.equals("L") && (move.getX() == cords.getX() - 1) ||
+                        dir.equals("R") && (move.getX() == cords.getX() + 1)) {
                     moves.add(move);
                 }
             }

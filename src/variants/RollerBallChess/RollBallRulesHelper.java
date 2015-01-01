@@ -1,7 +1,11 @@
 package variants.RollerBallChess;
 
+import main.Board;
 import main.Location;
+import main.PieceType;
+import pieces.ChessPiece;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -162,87 +166,119 @@ public class RollBallRulesHelper {
     }
 
 
-    // for bishop
-    public List<Location> findBouncingLoc(String dir, List<Location> moves, Location cords) {
-        List<Location> bouncingLocs = new LinkedList<Location>();
-        int x = cords.getX();
-        int y = cords.getY();
+//    for bishop
+//    public Location findBouncingLoc(String dir, List<Location> moves, Location cords) {
+//        int x = cords.getX();
+//        int y = cords.getY();
+//
+//        // int mini or max
+//        int mm;
+//        if (dir.equals("U") || dir.equals("L")) {
+//            mm = 100;
+//        } else {
+//            mm = -100;
+//        }
+//
+//        // find max or min of x or y
+//        for (Location move : moves) {
+//            if (dir.equals("U")) {
+//                if (move.getY() < mm) {
+//                    mm = move.getY();
+//                }
+//            }
+//            if (dir.equals("D")) {
+//                if (move.getY() > mm) {
+//                    mm = move.getY();
+//                }
+//            }
+//            if (dir.equals("L")) {
+//                if (move.getX() < mm) {
+//                    mm = move.getX();
+//                }
+//            }
+//            if (dir.equals("R")) {
+//                if (move.getX() > mm) {
+//                    mm = move.getX();
+//                }
+//            }
+//        }
+//
+//        for (Location move : moves) {
+//            if ((dir.equals("U")||dir.equals("D")) && move.getY() == mm) {
+//                    return move;
+//            }
+//            if ((dir.equals("L")||dir.equals("R"))&& move.getX() == mm) {
+//                if (move.getX() == mm) {
+//                    return move;
+//                }
+//            }
+//        }
+//
+//        // should no be here
+//        return null;
+//    }
 
-        // int mini or max
-        int mm;
-        if (dir.equals("U") || dir.equals("L")) {
-            mm = 100;
-        } else {
-            mm = -100;
+
+    public Location findBouncingLoc(List<Location> moves, Location cords) {
+        moves.add(0, cords);
+
+        Iterator<Location> iter = moves.iterator();
+
+        Location pre = iter.next();
+        Location next = iter.next();
+        Location result = next;
+
+        int x = pre.getX() - next.getX();
+        int y = pre.getY() - next.getY();
+        while (iter.hasNext()) {
+            pre = next;
+            next = iter.next();
+            if ((pre.getX() - next.getX() == x) && (pre.getY() - next.getY() == y)) {
+                result = next;
+            } else {
+                return result;
+            }
         }
+        return moves.get(moves.size() - 1);
+    }
 
-        // find max or min of x or y
-        for (Location move : moves) {
-            if (dir.equals("U")) {
-                if (move.getY() < mm) {
-                    mm = move.getY();
-                }
-            }
-            if (dir.equals("D")) {
-                if (move.getY() > mm) {
-                    mm = move.getY();
-                }
-            }
-            if (dir.equals("L")) {
-                if (move.getX() < mm) {
-                    mm = move.getX();
-                }
-            }
-            if (dir.equals("R")) {
-                if (move.getX() > mm) {
-                    mm = move.getX();
-                }
+    // the loc is the location of bouncing location
+    public boolean isEmpltySpace(Location loc, Board board) {
+
+        ChessPiece piece = board.getPiece(loc);
+        return piece.type == PieceType.EMPTY;
+    }
+
+    public boolean bounceableClearline(Location from, Location to, Board board) {
+        Boolean result = true;
+        result = result && isEmpltySpace(from, board);
+        result = result && rbClearLine(from, to, board);
+        return result;
+    }
+
+    public boolean rbClearLine(Location from, Location to, Board board) {
+        if (!board.onBoard(from) || !board.onBoard(to)) {
+            return false;
+        }
+        int horizontalMovement = to.getX().compareTo(from.getX());
+        int verticalMovement = to.getY().compareTo(from.getY());
+        for (int i = from.getX() + horizontalMovement, j = from.getY() + verticalMovement;
+             i != to.getX() || j != to.getY();
+             i += horizontalMovement, j += verticalMovement) {
+            ChessPiece piece = board.getPiece(new Location(i, j));
+            assert piece != null;
+            if (piece != null && piece.type != PieceType.EMPTY || isInMiddle(new Location(i, j))) {
+                return false;
             }
         }
+        return true;
+    }
 
-        // build return list
-
-        for (Location move : moves) {
-            if (dir.equals("U")) {
-                if (move.getY() == mm) {
-                    bouncingLocs.add(move);
-                }
-            }
-            if (dir.equals("D")) {
-                if (move.getY() == mm) {
-                    bouncingLocs.add(move);
-                }
-            }
-            if (dir.equals("L")) {
-                if (move.getX() == mm) {
-                    bouncingLocs.add(move);
-                }
-            }
-            if (dir.equals("R")) {
-                if (move.getX() == mm) {
-                    bouncingLocs.add(move);
-                }
-            }
+    public List<Location> listClone(List<Location> origin) {
+        List<Location> copy = new LinkedList<Location>();
+        for (Location m : origin) {
+            copy.add(m);
         }
-
-        if(x==1&&y==2){
-            bouncingLocs.add(new Location(0,1));
-        }
-
-        if(x==4&&y==1){
-            bouncingLocs.add(new Location(5,0));
-        }
-
-        if(x==5&&y==4){
-            bouncingLocs.add(new Location(6,5));
-        }
-
-        if(x==2&&y==5){
-            bouncingLocs.add(new Location(1,6));
-        }
-
-        return bouncingLocs;
-
-
+        return copy;
     }
 }

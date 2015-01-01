@@ -7,6 +7,7 @@ import main.GameMode;
 import pieces.PieceDecoder;
 import variants.BasicChess.BasicChessFrame;
 import variants.BasicChess.BasicChessvar;
+
 import java.util.Random;
 
 public class RollerBallvar extends ChessVariant {
@@ -31,14 +32,14 @@ public class RollerBallvar extends ChessVariant {
         return new RBDecoder();
     }
 
-    public RollerBallvar(){
+    public RollerBallvar() {
         this(GameMode.MULTIPLAYER_LOCAL);
     }
 
     public RollerBallvar(GameMode mode) {
         RBBoard board = new RBBoard();
         board.initializeBoard();
-        game = new GameController(board, getVariationID(), new RBDecoder(), mode,new Random().nextBoolean() );
+        game = new GameController(board, getVariationID(), new RBDecoder(), mode, new Random().nextBoolean());
         game.getBoard().setController(game);
     }
 

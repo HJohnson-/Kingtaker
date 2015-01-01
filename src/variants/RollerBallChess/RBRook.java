@@ -23,9 +23,9 @@ public class RBRook extends ChessPiece {
     @Override
     protected boolean validInState(Location to) {
 //      in outer ring and not in the same horizontal or virtical direction
-        if(h.inOuterRing(cords) && ((cords.getX()-to.getX())!=0 && (cords.getY()-to.getY())!=0)){
+        if (h.inOuterRing(cords) && ((cords.getX() - to.getX()) != 0 && (cords.getY() - to.getY()) != 0)) {
             Location conner = h.findOuterConnerByLoc(cords);
-            return  board.clearLine(cords,conner) && board.clearLine(conner,to) && !h.isInMiddle(to);
+            return board.clearLine(cords, conner) && h.bounceableClearline(conner, to, board) && !h.isInMiddle(to);
         }
         return board.clearLine(cords, to) && !h.isInMiddle(to);
     }
@@ -35,13 +35,13 @@ public class RBRook extends ChessPiece {
         Rook r = new Rook(board, type, cords);
         List<Location> moves = new LinkedList<Location>();
         String dir = h.getClockWiseDir(cords);
-        
-        for(Location move:r.allPieceMoves()){
-            if(!h.isInMiddle(move)) {
-                if(dir.equals("U")&&(move.getY()<cords.getY()) ||
-                        dir.equals("D")&&(move.getY()>cords.getY())||
-                        dir.equals("L")&&(move.getX()<cords.getX())||
-                        dir.equals("R")&&(move.getX()>cords.getX())){
+
+        for (Location move : r.allPieceMoves()) {
+            if (!h.isInMiddle(move)) {
+                if (dir.equals("U") && (move.getY() < cords.getY()) ||
+                        dir.equals("D") && (move.getY() > cords.getY()) ||
+                        dir.equals("L") && (move.getX() < cords.getX()) ||
+                        dir.equals("R") && (move.getX() > cords.getX())) {
                     moves.add(move);
                 }
             }
@@ -49,21 +49,18 @@ public class RBRook extends ChessPiece {
 
 
         // bounce in conner
-        if(h.inOuterRing(cords)){
+        if (h.inOuterRing(cords)) {
             List<Location> pair = h.containOuterCorner(moves);
             Location firstOuterConner = pair.get(0);
             r = new Rook(board, type, firstOuterConner);
-             dir = h.getClockWiseDir(firstOuterConner);
+            dir = h.getClockWiseDir(firstOuterConner);
 
-            if(moves.contains(new Location(6,0))){
-            }
-
-            for(Location move:r.allPieceMoves()){
-                if(!h.isInMiddle(move)) {
-                    if(dir.equals("U")&&(move.getY()<cords.getY()) ||
-                            dir.equals("D")&&(move.getY()>cords.getY())||
-                            dir.equals("L")&&(move.getX()<cords.getX())||
-                            dir.equals("R")&&(move.getX()>cords.getX())){
+            for (Location move : r.allPieceMoves()) {
+                if (!h.isInMiddle(move)) {
+                    if (dir.equals("U") && (move.getY() < cords.getY()) ||
+                            dir.equals("D") && (move.getY() > cords.getY()) ||
+                            dir.equals("L") && (move.getX() < cords.getX()) ||
+                            dir.equals("R") && (move.getX() > cords.getX())) {
                         moves.add(move);
                     }
                 }
@@ -71,16 +68,16 @@ public class RBRook extends ChessPiece {
         }
 
         // move in special case in inner loop
-        if(cords.getX() == 1 && cords.getY()==6 ||cords.getX() == 0 && cords.getY()==1 ||cords.getX() == 5 && cords.getY()==0 ||cords.getX() == 6 && cords.getY()==5 ){
+        if (cords.getX() == 1 && cords.getY() == 6 || cords.getX() == 0 && cords.getY() == 1 || cords.getX() == 5 && cords.getY() == 0 || cords.getX() == 6 && cords.getY() == 5) {
             Location conner = h.findOuterConnerByLoc(cords);
             dir = h.getClockWiseDir(conner);
             r = new Rook(board, type, cords);
-            for(Location move:r.allPieceMoves()){
-                if(!h.isInMiddle(move)) {
-                    if(dir.equals("U")&&(move.getY()<cords.getY()) ||
-                            dir.equals("D")&&(move.getY()>cords.getY())||
-                            dir.equals("L")&&(move.getX()<cords.getX())||
-                            dir.equals("R")&&(move.getX()>cords.getX())){
+            for (Location move : r.allPieceMoves()) {
+                if (!h.isInMiddle(move)) {
+                    if (dir.equals("U") && (move.getY() < cords.getY()) ||
+                            dir.equals("D") && (move.getY() > cords.getY()) ||
+                            dir.equals("L") && (move.getX() < cords.getX()) ||
+                            dir.equals("R") && (move.getX() > cords.getX())) {
                         moves.add(move);
                     }
                 }
@@ -88,20 +85,20 @@ public class RBRook extends ChessPiece {
         }
 
         // add location around rook
-        Location newLoc = new Location(cords.getX()+1,cords.getY());
-        if(h.isValidedLoc(newLoc)&& !moves.contains(newLoc)){
+        Location newLoc = new Location(cords.getX() + 1, cords.getY());
+        if (h.isValidedLoc(newLoc) && !moves.contains(newLoc)) {
             moves.add(newLoc);
         }
-        newLoc = new Location(cords.getX(),cords.getY()+1);
-        if(h.isValidedLoc(newLoc)&& !moves.contains(newLoc)){
+        newLoc = new Location(cords.getX(), cords.getY() + 1);
+        if (h.isValidedLoc(newLoc) && !moves.contains(newLoc)) {
             moves.add(newLoc);
         }
-        newLoc = new Location(cords.getX()-1,cords.getY());
-        if(h.isValidedLoc(newLoc)&& !moves.contains(newLoc)){
+        newLoc = new Location(cords.getX() - 1, cords.getY());
+        if (h.isValidedLoc(newLoc) && !moves.contains(newLoc)) {
             moves.add(newLoc);
         }
-        newLoc = new Location(cords.getX(),cords.getY()-1);
-        if(h.isValidedLoc(newLoc)&& !moves.contains(newLoc)){
+        newLoc = new Location(cords.getX(), cords.getY() - 1);
+        if (h.isValidedLoc(newLoc) && !moves.contains(newLoc)) {
             moves.add(newLoc);
         }
 
@@ -122,9 +119,8 @@ public class RBRook extends ChessPiece {
     public boolean executeMove(Location targetLocation) {
 
 
-
         // graphic for bouncing rook
-        if(h.inOuterRing(cords) && (cords.getX()-targetLocation.getX())!=0 && (cords.getY()-targetLocation.getY())!=0){
+        if (h.inOuterRing(cords) && (cords.getX() - targetLocation.getX()) != 0 && (cords.getY() - targetLocation.getY()) != 0) {
             Location conner = h.findOuterConnerByLoc(cords);
 
             board.clearSpace(cords);
@@ -133,7 +129,7 @@ public class RBRook extends ChessPiece {
             if (board.doDrawing) graphics.setGoal(conner);
             if (board.doDrawing) graphics.setGoal(targetLocation);
 
-        }else {
+        } else {
 
             // graphic for non bouncing rook
             if (board.doDrawing) graphics.setGoal(targetLocation);

@@ -22,8 +22,7 @@ public class RBPawn extends ChessPiece {
 
     @Override
     protected boolean validInState(Location to) {
-        King k = new King(board, type, cords);
-        return k.validInState(to) && !h.isInMiddle(to);
+        return  h.isValidedLoc(to);
     }
 
     @Override

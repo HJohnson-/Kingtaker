@@ -10,6 +10,8 @@ import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
 import java.net.InetAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class OnlineGameLauncher extends GameLauncher {
     private InetAddress ipOpponent;
@@ -22,6 +24,8 @@ public class OnlineGameLauncher extends GameLauncher {
     private String pendingName;
     private int pendingRating;
     private InetAddress pendingIP;
+
+    private ExecutorService broadcastMoveExecutor = Executors.newSingleThreadExecutor();
 
     public OnlineGameLauncher(ChessVariant variant) {
         this.variant = variant;
@@ -64,7 +68,16 @@ public class OnlineGameLauncher extends GameLauncher {
     //remote player is told of this move. If they reject it or are unreachable,
     //the game will be converted into single player mode.
     @Override
-    public void broadcastMove(Location oldL, Location newL, String extra) {
+    public void broadcastMove(final Location oldL, final Location newL, final String extra) {
+        broadcastMoveExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                broadcastMoveInternal(oldL, newL, extra);
+            }
+        });
+    }
+
+    private void broadcastMoveInternal(Location oldL, Location newL, String extra) {
         OpponentMessageSender oms = new OpponentMessageSender(ipOpponent);
 
         StringBuilder message = new StringBuilder(
@@ -152,9 +165,10 @@ public class OnlineGameLauncher extends GameLauncher {
     //friendships, this is disguised as a "connection has been lost" error
     public void handleRemoteUserDisconnection() {
         System.out.println("Cannot connect to opponent!");
+        MessageListener.getInstance().acceptMoves = false;
         variant.game.gameMode = GameMode.SINGLE_PLAYER;
         variant.game.initialiseAI(MinimaxAI.DEFAULT_AI_LEVEL);
-        MessageListener.getInstance().acceptMoves = false;
+        variant.game.makeAIMove();
 
         (new MessageBoxAlert()).showDisconnectedOpponent(opponentName);
     }

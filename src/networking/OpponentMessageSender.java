@@ -32,7 +32,7 @@ public class OpponentMessageSender implements IMessageSender {
     //Returns true if successful, false if there were only timeouts or IO exceptions.
     public String sendMessage(String msg, boolean waitForResponse, int timeout) {
         long startTime = System.currentTimeMillis();
-        String response = ResponseCode.UNSPECIFIED_ERROR + "";
+        String response = null;
         while (System.currentTimeMillis() - startTime < timeout) {
             try {
                 Socket socket = new Socket();

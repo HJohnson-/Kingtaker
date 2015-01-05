@@ -14,7 +14,7 @@ public abstract class ChessAI {
         this.isWhite = isWhite;
     }
 
-    abstract public Location[] getBestMove(Board board);
+    abstract public Location[] getBestMove(Board board) throws InterruptedException;
 
     public double pcComplete() {
         return 0.0;
@@ -24,4 +24,5 @@ public abstract class ChessAI {
 
     public int getCompleted() { return 0; }
 
+    public abstract void reset();
 }

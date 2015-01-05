@@ -6,6 +6,8 @@ import main.GameController;
 import main.GameMode;
 import pieces.PieceDecoder;
 
+import java.util.Random;
+
 /**
  * Created by crix9 on 21/11/2014.
  */
@@ -40,7 +42,7 @@ public class Hnefataflvar extends ChessVariant {
 	public Hnefataflvar(GameMode mode) {
 		HnefataflBoard board = new HnefataflBoard();
 		board.initializeBoard();
-		game = new HnefataflController(board, getVariationID(), new HnefataflDecoder(), mode, GameController.defaultPIW);
+		game = new HnefataflController(board, getVariationID(), new HnefataflDecoder(), mode, false);
 		game.getBoard().setController(game);
 	}
 

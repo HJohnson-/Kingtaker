@@ -19,8 +19,6 @@ import java.util.concurrent.Executors;
  * Handles game logic
  */
 public class GameController {
-	public static boolean defaultPIW = false; //TODO: Ask the player what colour they want to play.
-
 	protected boolean isWhitesTurn = true; //white always starts
 	protected int currentTurn;
     protected GameResult gameResult = GameResult.IN_PROGRESS;
@@ -36,7 +34,7 @@ public class GameController {
 	public boolean animating = false;
 	public boolean promoting = false;
 
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService executorForAI = Executors.newSingleThreadExecutor();
 	private List<String> previousTurns;
     public long lastMoveTime = System.currentTimeMillis();
 
@@ -88,18 +86,25 @@ public class GameController {
     }
 
     public void initialiseAI(int difficulty) {
+        abortAI();
         this.ai = new MinimaxAI(!playerIsWhite, difficulty);
     }
 
     public void initialiseAI() {
+        abortAI();
         this.ai = new MinimaxAI(!playerIsWhite);
     }
 
     public void makeAIMove() {
         if ( (ai != null) && (isWhitesTurn != playerIsWhite)
                 && (gameMode == GameMode.SINGLE_PLAYER)) {
-            executor.submit(new DoAIMove(this));
+            executorForAI.submit(new DoAIMove(this));
         }
+    }
+
+    private void abortAI() {
+        executorForAI.shutdownNow(); //kill AI
+        executorForAI = Executors.newSingleThreadExecutor();
     }
 
 	public Map<ChessPiece, List<Location>> getAllValidMoves(boolean whitePieces) {
@@ -515,7 +520,8 @@ public class GameController {
     }
 
 	public void load(String code) {
-		int startOfValue = 4;
+        abortAI();
+        int startOfValue = 4;
 		int endOfValue = code.indexOf('~', startOfValue);
 		currentTurn = Integer.decode(code.substring(startOfValue, endOfValue));
 		isWhitesTurn = currentTurn % 2 == 1;
@@ -530,8 +536,11 @@ public class GameController {
 
     //Wait until the AI has moved before recreating it with a new difficulty.
     public void setDifficulty(int difficulty) {
-        while (AIWorking) Thread.yield();
+        abortAI();
         initialiseAI(difficulty);
+        if (!isLocalsTurn()) {
+            makeAIMove();
+        }
     }
 
     public boolean isLocalsTurn() {
@@ -550,7 +559,16 @@ public class GameController {
         public void run() {
 			while (control.animating || control.promoting) Thread.yield();
             AIWorking = true;
-            Location[] aiMove = control.ai.getBestMove(control.board);
+            Location[] aiMove = new Location[0];
+
+            try {
+                aiMove = control.ai.getBestMove(control.board);
+            } catch (InterruptedException e) {
+                System.out.println("AI Interrupted");
+                ai.reset();
+                return;
+            }
+
             control.attemptMove(aiMove[0], aiMove[1], false);
 			ChessPiece movedPiece = control.board.getPiece(aiMove[1]);
 			if (movedPiece instanceof Pawn && (movedPiece.cords.getX() == 0 || movedPiece.cords.getX() == control.board.numCols() - 1)) {

@@ -39,6 +39,11 @@ public class BasicAI extends ChessAI {
         return move.get((int) Math.floor(Math.random() * move.size()));
     }
 
+    @Override
+    public void reset() {
+
+    }
+
 
     protected int evaluateMove(Location to, Board board) {
         int score = 0;

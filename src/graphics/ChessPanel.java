@@ -505,6 +505,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
             if (timeSinceLastEvent < HIGH_SPEED_DRAW_TIME_MS ||
                     timeSinceLastDraw > MAXIMUM_DRAW_INTERVAL_MS) {
+                System.out.print("~ ");
                 drawSwingComponents();
                 repaint();
                 lastDrawTime = System.currentTimeMillis();

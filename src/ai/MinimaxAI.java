@@ -42,7 +42,7 @@ public class MinimaxAI extends ChessAI {
     }
 
     @Override
-    public Location[] getBestMove(Board board) {
+    public Location[] getBestMove(Board board) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<Pair<Location[], Integer>>> results = new LinkedList<Future<Pair<Location[], Integer>>>();
 
@@ -82,8 +82,8 @@ public class MinimaxAI extends ChessAI {
                 result = val.get();
                 completed++;
             } catch (InterruptedException e) {
-                e.printStackTrace();
-                continue;
+                executor.shutdownNow();
+                throw new InterruptedException();
             } catch (ExecutionException e) {
                 e.printStackTrace();
                 System.exit(2);
@@ -105,12 +105,18 @@ public class MinimaxAI extends ChessAI {
 
     @Override
     public int getTotal() {
-        return (int) numMoves;
+        return numMoves;
     }
 
     @Override
     public int getCompleted() {
-        return (int) completed;
+        return completed;
+    }
+
+    @Override
+    public void reset() {
+        numMoves = 1;
+        completed = 0;
     }
 
     class Searcher implements Callable<Pair<Location[], Integer>> {
@@ -138,6 +144,8 @@ public class MinimaxAI extends ChessAI {
         }
 
         private Integer doRecursion(Board b, boolean checkingWhite, int curD, int alpha, int beta) {
+            if (Thread.currentThread().isInterrupted()) return 0;
+
             GameResult gameResult = b.getController().getResult();
             if (curD <= 0 || gameResult != GameResult.IN_PROGRESS) {
                 int score = calcBoardVal(b);

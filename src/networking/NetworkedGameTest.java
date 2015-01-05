@@ -16,7 +16,7 @@ public class NetworkedGameTest {
 
         String host2 = "MERCURY";
         String host1 = "macbook2011";
-        ChessVariant variant = VariantFactory.getInstance().getVariantByID(0);
+        ChessVariant variant = VariantFactory.getInstance().getVariantByID(4);
 
         //Test requires server to be running!
         MessageListener.getInstance().acceptMoves = true;

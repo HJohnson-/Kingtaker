@@ -57,7 +57,6 @@ public class MessageListener implements Runnable {
         System.out.println("MessageListener running");
         //Run listening loop
         while (true) {
-            System.out.println("acceptMoves = " + acceptMoves);
             try {
                 //The below 3 lines are dangerous ones, as they will block
                 //until a message has been sent or the socket is closed by

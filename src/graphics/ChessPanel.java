@@ -49,6 +49,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     private final int gapBetweenCol = 10;
     private final int gapBetweenRow = 10;
     private final int gapBetweenBoard = 30;
+    protected final int BOARD_BORDER_WIDTH = 3;
     protected Paint BG_PAINT = null;
 
     /* This constructor sets up a listener to handle the user clicking on the screen.
@@ -304,6 +305,16 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         }
     }
 
+    protected void drawBorder(Graphics2D g2) {
+        int halfWidth = BOARD_BORDER_WIDTH / 2;
+        g2.setColor(Color.BLACK);
+        g2.setStroke(new BasicStroke(BOARD_BORDER_WIDTH));
+        g2.drawRect(offset.getX() - halfWidth,
+                offset.getY() - halfWidth,
+                board.numCols() * cellWidth + halfWidth * 2,
+                board.numRows() * cellHeight + halfWidth * 2);
+    }
+
     /**
      * This function takes all the pieces on the board and draws them onto the board in the correct place.
      * If a piece is currently selected, it highlights that piece and also all the squares that piece can move to.
@@ -384,6 +395,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      */
     protected void doDrawing(Graphics2D g2) {
         drawGrid(g2);
+        drawBorder(g2);
         drawPieces(g2);
         drawUI(g2);
     }

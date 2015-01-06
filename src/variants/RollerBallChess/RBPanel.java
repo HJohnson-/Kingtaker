@@ -55,4 +55,16 @@ public class RBPanel extends ChessPanel {
         drawCentreString("↻", new Location(ofX + 2 * cellWidth, ofY + 2 * cellWidth),
                 cellWidth * 3, cellHeight * 3, g2);
     }
+
+    @Override
+    protected void drawBorder(Graphics2D g2) {
+        int halfWidth = BOARD_BORDER_WIDTH / 2;
+        g2.setColor(Color.BLACK);
+        g2.setStroke(new BasicStroke(BOARD_BORDER_WIDTH));
+        g2.drawRoundRect(offset.getX() - halfWidth,
+                offset.getY() - halfWidth,
+                board.numCols() * cellWidth + halfWidth * 2,
+                board.numRows() * cellHeight + halfWidth * 2,
+                cellWidth, cellHeight);
+    }
 }

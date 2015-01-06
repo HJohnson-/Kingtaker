@@ -7,15 +7,10 @@ import main.Location;
 
 import java.awt.*;
 
-/**
- * A specific panel to draw in a basic chess board.
- */
-public class RBPanel extends ChessPanel {
-    private int cornerScale = 4;
 
-    /**
-     * For basic chess, the default constructor will be fine.
-     */
+public class RBPanel extends ChessPanel {
+    private final int CORNER_SCALE = 4;
+
     public RBPanel(Board board) {
         super(board);
     }
@@ -24,7 +19,6 @@ public class RBPanel extends ChessPanel {
     protected void drawGrid(Graphics2D g2) {
         //Draw normal grid
         super.drawGrid(g2);
-        g2.setPaint(BG_PAINT);
 
         int ofX = offset.getX();
         int ofY = offset.getY();
@@ -39,20 +33,20 @@ public class RBPanel extends ChessPanel {
 
         //Draw board corners
         int[] xPoints; int[] yPoints;
-        xPoints = new int[]{ofX, ofX, ofX + cellWidth / cornerScale};
-        yPoints = new int[]{ofY, ofY + cellHeight / cornerScale, ofY};
+        xPoints = new int[]{ofX, ofX, ofX + cellWidth / CORNER_SCALE};
+        yPoints = new int[]{ofY, ofY + cellHeight / CORNER_SCALE, ofY};
         g2.fillPolygon(xPoints, yPoints, 3);
 
-        xPoints = new int[]{lastX, lastX, lastX - cellWidth / cornerScale};
-        yPoints = new int[]{ofY, ofY + cellHeight / cornerScale, ofY};
+        xPoints = new int[]{lastX, lastX, lastX - cellWidth / CORNER_SCALE};
+        yPoints = new int[]{ofY, ofY + cellHeight / CORNER_SCALE, ofY};
         g2.fillPolygon(xPoints, yPoints, 3);
 
-        xPoints = new int[]{ofX, ofX, ofX + cellWidth / cornerScale};
-        yPoints = new int[]{lastY, lastY - cellHeight / cornerScale, lastY};
+        xPoints = new int[]{ofX, ofX, ofX + cellWidth / CORNER_SCALE};
+        yPoints = new int[]{lastY, lastY - cellHeight / CORNER_SCALE, lastY};
         g2.fillPolygon(xPoints, yPoints, 3);
 
-        xPoints = new int[]{lastX, lastX, lastX - cellWidth / cornerScale};
-        yPoints = new int[]{lastY, lastY - cellHeight / cornerScale, lastY};
+        xPoints = new int[]{lastX, lastX, lastX - cellWidth / CORNER_SCALE};
+        yPoints = new int[]{lastY, lastY - cellHeight / CORNER_SCALE, lastY};
         g2.fillPolygon(xPoints, yPoints, 3);
 
         //Draw arrow symbol in the middle to indicate direction.

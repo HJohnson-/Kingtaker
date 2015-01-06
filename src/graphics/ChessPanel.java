@@ -10,7 +10,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,6 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     private final int HIGH_SPEED_DRAW_TIME_MS = 2000;
     public Board board;
     protected ChessPiece selectedPiece = null;
-    protected int UIHeight = 100;
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
@@ -50,6 +48,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     private final int gapBetweenRow = 10;
     private final int gapBetweenBoard = 30;
     protected final int BOARD_BORDER_WIDTH = 3;
+    protected final int UI_HEIGHT = 160;
     protected Paint BG_PAINT = null;
 
     /* This constructor sets up a listener to handle the user clicking on the screen.
@@ -405,7 +404,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
      */
     public void recalculateCellSize() {
         int boardWidth = (int) getSize().getWidth() - offset.getX() * 2;
-        int boardHeight = (int) getSize().getHeight() - UIHeight - offset.getY() * 2;
+        int boardHeight = (int) getSize().getHeight() - UI_HEIGHT - offset.getY() * 2;
 
         cellWidth = Math.round(Math.min(boardHeight / board.numRows(), boardWidth / board.numCols()) / 2) * 2;
         //noinspection SuspiciousNameCombination

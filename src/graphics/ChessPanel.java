@@ -149,7 +149,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         panelAI.add(sliderAIDifficulty);
         panelAI.add(lblAIDifficultySlider);
         panelAI.setOpaque(true);
-        panelAI.setBackground(Color.GRAY);
+        panelAI.setBackground(Color.lightGray);
 
         try {
             BufferedImage img = ImageIO.read(new File("media/bg.png"));
@@ -296,43 +296,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     }
 
     protected void drawGrid(Graphics2D g2) {
-        if(board.getVariationID()!=4) {
-            for (int x = 0; x < board.numCols(); x++) {
-                for (int y = 0; y < board.numRows(); y++) {
-                    g2.setColor((x + y) % 2 == 0 ? GraphicsTools.BOARD_BLACK : GraphicsTools.BOARD_WHITE);
-                    g2.fillRect(offset.getX() + x * cellWidth, offset.getY() + y * cellHeight, cellWidth, cellHeight);
-                }
-            }
-        } else {
-            int currX, currY;
-            g2.setColor(GraphicsTools.BOARD_BLACK);
-            for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
-                for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellHeight * 2) {
-                    currX = (x - offset.getX()) / cellHeight;
-                    currY = (y - offset.getY()) / cellWidth;
-                    g2.fillRect(x, y, cellWidth, cellHeight);
-                    if ((currX != board.numRows() - 1) && currY != board.numCols() - 1)
-                        g2.fillRect(x + cellWidth, y + cellHeight, cellWidth, cellHeight);
-                }
-            }
-
-            g2.setColor(GraphicsTools.BOARD_WHITE);
-            for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
-                for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellWidth * 2) {
-                    currX = (x - offset.getX()) / cellHeight;
-                    currY = (y - offset.getY()) / cellWidth;
-                    if (currX != board.numRows() - 1)
-                        g2.fillRect(x + cellWidth, y, cellWidth, cellHeight);
-                    if (currY != board.numCols() - 1)
-                        g2.fillRect(x, y + cellHeight, cellWidth, cellHeight);
-                }
-            }
-
-            g2.setPaint(BG_PAINT);
-            for (int x = offset.getX()+2*cellWidth; x < offset.getX() + 5 * cellWidth; x += cellWidth ) {
-                for (int y = offset.getY()+2*cellWidth; y < offset.getY() + 5 * cellHeight; y += cellWidth ) {
-                    g2.fillRect(x, y, cellWidth, cellHeight);
-                }
+        for (int x = 0; x < board.numCols(); x++) {
+            for (int y = 0; y < board.numRows(); y++) {
+                g2.setColor((x + y) % 2 == 0 ? GraphicsTools.BOARD_BLACK : GraphicsTools.BOARD_WHITE);
+                g2.fillRect(offset.getX() + x * cellWidth, offset.getY() + y * cellHeight, cellWidth, cellHeight);
             }
         }
     }

@@ -50,7 +50,7 @@ public class RollerBallvar extends ChessVariant {
 
     @Override
     public boolean drawBoard() {
-        GraphicsTools.create(new BasicChessFrame(getName(), 500, 700, game.getBoard()));
+        GraphicsTools.create(new RBFrame(getName(), 500, 700, game.getBoard()));
         return true;
     }
 

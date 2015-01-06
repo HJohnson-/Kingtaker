@@ -3,6 +3,7 @@ package variants.RollerBallChess;
 import graphics.ChessPanel;
 import graphics.GraphicsTools;
 import main.Board;
+import main.Location;
 
 import java.awt.*;
 
@@ -10,6 +11,7 @@ import java.awt.*;
  * A specific panel to draw in a basic chess board.
  */
 public class RBPanel extends ChessPanel {
+    private int cornerScale = 4;
 
     /**
      * For basic chess, the default constructor will be fine.
@@ -20,36 +22,43 @@ public class RBPanel extends ChessPanel {
 
     @Override
     protected void drawGrid(Graphics2D g2) {
+        //Draw normal grid
+        super.drawGrid(g2);
+        g2.setPaint(BG_PAINT);
 
-        int currX, currY;
-        g2.setColor(GraphicsTools.BOARD_BLACK);
-        for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
-            for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellHeight * 2) {
-                currX = (x - offset.getX()) / cellHeight;
-                currY = (y - offset.getY()) / cellWidth;
-                g2.fillRect(x, y, cellWidth, cellHeight);
-                if ((currX != board.numRows() - 1) && currY != board.numCols() - 1)
-                    g2.fillRect(x + cellWidth, y + cellHeight, cellWidth, cellHeight);
-            }
-        }
+        int ofX = offset.getX();
+        int ofY = offset.getY();
+        int lastX = ofX + cellWidth * board.numCols();
+        int lastY = ofX + cellWidth * board.numCols();
 
-        g2.setColor(GraphicsTools.BOARD_WHITE);
-        for (int x = offset.getX(); x < offset.getX() + board.numRows() * cellWidth; x += cellWidth * 2) {
-            for (int y = offset.getY(); y < offset.getY() + board.numCols() * cellHeight; y += cellWidth * 2) {
-                currX = (x - offset.getX()) / cellHeight;
-                currY = (y - offset.getY()) / cellWidth;
-                if (currX != board.numRows() - 1)
-                    g2.fillRect(x + cellWidth, y, cellWidth, cellHeight);
-                if (currY != board.numCols() - 1)
-                    g2.fillRect(x, y + cellHeight, cellWidth, cellHeight);
-            }
-        }
+        //Draw centre circle
+        g2.setPaint(GraphicsTools.BOARD_BLACK.brighter());
+        g2.fillRect(ofX + 2 * cellWidth, ofY + 2 * cellWidth, cellWidth * 3, cellHeight * 3);
+        g2.setPaint(BG_PAINT);
+        g2.fillOval(ofX + 2 * cellWidth, ofY + 2 * cellWidth, cellWidth * 3, cellHeight * 3);
 
-        g2.setColor(new Color(85, 55, 29));
-        for (int x = offset.getX() + 2 * cellWidth; x < offset.getX() + 5 * cellWidth; x += cellWidth) {
-            for (int y = offset.getY() + 2 * cellWidth; y < offset.getY() + 5 * cellHeight; y += cellWidth) {
-                g2.fillRect(x, y, cellWidth, cellHeight);
-            }
-        }
+        //Draw board corners
+        int[] xPoints; int[] yPoints;
+        xPoints = new int[]{ofX, ofX, ofX + cellWidth / cornerScale};
+        yPoints = new int[]{ofY, ofY + cellHeight / cornerScale, ofY};
+        g2.fillPolygon(xPoints, yPoints, 3);
+
+        xPoints = new int[]{lastX, lastX, lastX - cellWidth / cornerScale};
+        yPoints = new int[]{ofY, ofY + cellHeight / cornerScale, ofY};
+        g2.fillPolygon(xPoints, yPoints, 3);
+
+        xPoints = new int[]{ofX, ofX, ofX + cellWidth / cornerScale};
+        yPoints = new int[]{lastY, lastY - cellHeight / cornerScale, lastY};
+        g2.fillPolygon(xPoints, yPoints, 3);
+
+        xPoints = new int[]{lastX, lastX, lastX - cellWidth / cornerScale};
+        yPoints = new int[]{lastY, lastY - cellHeight / cornerScale, lastY};
+        g2.fillPolygon(xPoints, yPoints, 3);
+
+        //Draw arrow symbol in the middle to indicate direction.
+        g2.setPaint(Color.BLACK);
+        g2.setFont(new Font("", Font.PLAIN, cellWidth * 2));
+        drawCentreString("↻", new Location(ofX + 2 * cellWidth, ofY + 2 * cellWidth),
+                cellWidth * 3, cellHeight * 3, g2);
     }
 }

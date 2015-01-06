@@ -14,9 +14,9 @@ import java.net.Socket;
  * Created by jc4512 on 23/10/14.
  */
 public class OpponentMessageSender implements IMessageSender {
-    private final int PORT = 4445;
-    private final int TIMEOUT_DEFAULT_MS = 5000;
-    private final int RETRY_WAIT_MS = 500;
+    public static final int PORT = 4445;
+    private static final int TIMEOUT_DEFAULT_MS = 5000;
+    private static final int RETRY_WAIT_MS = 500;
 
     private InetAddress inetAddress = null;
 

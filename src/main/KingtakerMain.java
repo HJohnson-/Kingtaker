@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
 public class KingtakerMain {
     public static void main(String[] args) throws Exception {
         for (int i = 0; i < 1; i++) {
-            ChessVariant v = VariantFactory.getInstance().getVariantByID(0);
+            ChessVariant v = VariantFactory.getInstance().getVariantByID(4);
             GameLauncher.currentGameLauncher = new OfflineGameLauncher(v, GameMode.SINGLE_PLAYER);
             GameLauncher.currentGameLauncher.launch();
         }

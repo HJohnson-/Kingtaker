@@ -68,18 +68,21 @@ public class MessageListener implements Runnable {
                         new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String clientMessage = clientReader.readLine();
 
-                System.out.println("MessageListener awakened");
-                System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent me: " + clientMessage);
+                //A real message or
+                //just a ping from the opponent to check my host is online?
+                if (clientMessage != null) {
+                    System.out.println("[" + socket.getInetAddress().getHostAddress() + "] sent me: " + clientMessage);
 
-                //Process message and generate an appropriate response, or none if it is junk.
-                String serverResponseMessage = processMessageAndGetResponse(socket, clientMessage);
-                if (serverResponseMessage != null) {
-                    DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
-                    clientWriter.writeBytes(serverResponseMessage + "\n");
-                    System.out.println("My response to [" + socket.getInetAddress().getHostAddress() + "]: " + serverResponseMessage);
+                    //Process message and generate an appropriate response, or none if it is junk.
+                    String serverResponseMessage = processMessageAndGetResponse(socket, clientMessage);
+                    if (serverResponseMessage != null) {
+                        DataOutputStream clientWriter = new DataOutputStream(socket.getOutputStream());
+                        clientWriter.writeBytes(serverResponseMessage + "\n");
+                        System.out.println("My response to [" + socket.getInetAddress().getHostAddress() + "]: " + serverResponseMessage);
 
-                } else {
-                    System.out.println("I do not need to respond to this message");
+                    } else {
+                        System.out.println("I do not need to respond to this message");
+                    }
                 }
 
                 clientReader.close();

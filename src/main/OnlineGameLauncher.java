@@ -9,7 +9,10 @@ import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,6 +29,8 @@ public class OnlineGameLauncher extends GameLauncher {
     private InetAddress pendingIP;
 
     private ExecutorService broadcastMoveExecutor = Executors.newSingleThreadExecutor();
+
+    private HostChecker hostChecker;
 
     public OnlineGameLauncher(ChessVariant variant) {
         this.variant = variant;
@@ -51,6 +56,7 @@ public class OnlineGameLauncher extends GameLauncher {
         MessageListener.getInstance().setGameController(variant.game);
         variant.game.getBoard().setController(variant.game);
         variant.drawBoard();
+        hostChecker = new HostChecker(ipOpponent, OpponentMessageSender.PORT);
     }
 
     @Override
@@ -125,6 +131,7 @@ public class OnlineGameLauncher extends GameLauncher {
         }
 
         MessageListener.getInstance().acceptMoves = false;
+        hostChecker.stop();
 
         ServerMessageSender sms = new ServerMessageSender();
         String response = sms.sendMessage(ClientCommandCode.REPORT_GAME_RESULT +
@@ -216,6 +223,58 @@ public class OnlineGameLauncher extends GameLauncher {
     public void reportOpponent() {
         ServerMessageSender sms = new ServerMessageSender();
         sms.sendMessage(ClientCommandCode.REPORT_PLAYER + ClientCommandCode.DEL + opponentName, false);
+    }
+
+
+    //Inner class is run in a thread. Every 5 seconds, it attempts to connect
+    //to the opponent to check it is still accessible. If not, a report is
+    //sent to the server, the user is notified and the game is transitioned
+    //to single player against AI.
+    public class HostChecker implements Runnable {
+        private final int TIMER_INTERVAL_MS = 5000;
+        private final int CONNECT_TIMEOUT_MS = 10000;
+
+        private Thread thread;
+        private InetAddress ip;
+        private int port;
+        private boolean reachable = true;
+
+        public HostChecker(InetAddress ip, int port) {
+            this.ip = ip;
+            this.port = port;
+            thread = new Thread(this);
+            thread.start();
+        }
+
+        public boolean isOnline() {
+            return reachable;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    final Socket testSocket = new Socket();
+                    testSocket.connect(new InetSocketAddress(ip, port), CONNECT_TIMEOUT_MS);
+                    testSocket.close();
+                } catch (IOException e) {
+                    reachable = false;
+                    reportOpponent();
+                    handleRemoteUserDisconnection();
+                    return;
+                }
+
+                try {
+                    Thread.sleep(TIMER_INTERVAL_MS);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        }
+
+        public void stop() {
+            thread.interrupt();
+        }
     }
 
 }

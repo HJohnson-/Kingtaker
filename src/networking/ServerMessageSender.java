@@ -34,10 +34,6 @@ public class ServerMessageSender implements IMessageSender {
         return serverAddress;
     }
 
-    public void sendMessageAsync(String msg) {
-        //TODO: implement this if needed.
-    }
-
     //Send message to server and if flag is set, await a response.
     //Note that waitForResponse = false still guarantees the packet arrived.
     public String sendMessage(String msg, boolean waitForResponse) {

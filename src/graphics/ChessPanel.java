@@ -4,12 +4,16 @@ import ai.MinimaxAI;
 import main.*;
 import pieces.ChessPiece;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -45,6 +49,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     private final int gapBetweenCol = 10;
     private final int gapBetweenRow = 10;
     private final int gapBetweenBoard = 30;
+    protected Paint BG_PAINT = null;
 
     /* This constructor sets up a listener to handle the user clicking on the screen.
     * @param board The board which information will be obtained from.
@@ -146,6 +151,17 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         panelAI.setOpaque(true);
         panelAI.setBackground(Color.GRAY);
 
+        try {
+            BufferedImage img = ImageIO.read(new File("media/bg.png"));
+            BG_PAINT = new TexturePaint(img, new Rectangle(img.getWidth(), img.getHeight()));
+        } catch (IOException e) {
+            BG_PAINT = new Color(85, 55, 29);
+//            BG_PAINT = new LinearGradientPaint(new Point2D.Double(0, 0),
+//                    new Point2D.Double(getWidth()+1, getHeight()+1),
+//                    new float[]{0.0f, 0.5f, 1.0f},
+//                    new Color[]{Color.WHITE.darker(), new Color(85, 55, 29), Color.DARK_GRAY});
+        }
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(this);
     }
@@ -245,17 +261,11 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-
-        final float[] FRACTIONS = {0.0f, 0.5f, 1.0f};
-        final Color[] BG_COLOURS = {Color.WHITE.darker(), new Color(85, 55, 29), Color.DARK_GRAY};
-        MultipleGradientPaint BG_GRADIENT = new LinearGradientPaint(new Point2D.Double(0, 0),
-                new Point2D.Double(getSize().getWidth(), getSize().getHeight()), FRACTIONS, BG_COLOURS);
-        g2.setPaint(BG_GRADIENT);
-        g2.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
+        g2.setPaint(BG_PAINT);
+        g2.fillRect(0, 0, getWidth(), getHeight());
 
         doDrawing(g2);
     }
-
     /**
      * This function draws all the UI graphics elements which are not part of the board
      * Currently, only the game result overlay.
@@ -318,7 +328,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 }
             }
 
-            g2.setColor(new Color(85, 55, 29));
+            g2.setPaint(BG_PAINT);
             for (int x = offset.getX()+2*cellWidth; x < offset.getX() + 5 * cellWidth; x += cellWidth ) {
                 for (int y = offset.getY()+2*cellWidth; y < offset.getY() + 5 * cellHeight; y += cellWidth ) {
                     g2.fillRect(x, y, cellWidth, cellHeight);

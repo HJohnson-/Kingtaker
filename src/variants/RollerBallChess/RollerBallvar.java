@@ -19,12 +19,19 @@ public class RollerBallvar extends ChessVariant {
 
     @Override
     public String getName() {
-        return "Roller Ball";
+        return "Rollerball";
     }
 
     @Override
     public String getDescription() {
-        return "Rollerball is a chess variant invented by Jean-Louis Cazaux in 1998.[1] The game was inspired by the 1975 science-fiction movie Rollerball, specifically the futuristic and violent sport (similar to Roller Derby) portrayed in the film.";
+        return "Rollerball is a chess variant invented by Jean-Louis Cazaux in 1998. " +
+                "The game was inspired by the 1975 science-fiction movie Rollerball, " +
+                "specifically the futuristic and violent sport (similar to Roller Derby) " +
+                "portrayed in the film. \n\nThe board comprises 7×7 squares with the central 3×3 " +
+                "section missing. Pieces generally move clockwise around the board. Each " +
+                "player starts with one king, one bishop, two rooks, and two pawns. " +
+                "the objective is to either checkmate the opponent's King or to move ones own " +
+                "King into the opponent King's starting position.";
     }
 
     @Override

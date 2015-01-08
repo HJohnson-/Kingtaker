@@ -106,20 +106,15 @@ abstract public class Board {
 		return true;
 	}
 
-	/**
-	 * @param from checked location on the board
-	 * @param to checked location on the board
-	 * @return true if the path from from to to include the throne (5,5), false otherwise
-	 */
+    //Returns true if l2 is a midpoint in the line from l1 to l3.
+	public boolean formsStraightLine(Location l1, Location l2, Location l3) {
 
-	public boolean goesThroughThrone(Location from, Location to) {
-
-		int horizontalMovement = to.getX().compareTo(from.getX());
-		int verticalMovement = to.getY().compareTo(from.getY());
-		for(int i = from.getX() + horizontalMovement, j = from.getY() + verticalMovement;
-			i != to.getX() || j != to.getY();
+		int horizontalMovement = l3.getX().compareTo(l1.getX());
+		int verticalMovement = l3.getY().compareTo(l1.getY());
+		for(int i = l1.getX() + horizontalMovement, j = l1.getY() + verticalMovement;
+			i != l3.getX() || j != l3.getY();
 			i += horizontalMovement, j+= verticalMovement) {
-			if(i == 5 && j == 5) {
+			if(i == l2.getX() && j == l3.getX()) {
 				return true;
 			}
 		}

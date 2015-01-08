@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by crix9 on 21/11/2014.
  */
-public class Attacker extends ChessPiece{
+public class Attacker extends ChessPiece {
 
 	public Attacker(Board board, PieceType type, Location cords) {
 		super(board, type, cords, "attacker");
@@ -24,7 +24,8 @@ public class Attacker extends ChessPiece{
 
 	@Override
 	public boolean isValidMove(Location to, boolean careAboutCheck) {
-		return validInState(to) && board.isEmptySpace(to) && !board.goesThroughThrone(cords,to);
+		return validInState(to) && board.isEmptySpace(to) &&
+                !board.formsStraightLine(cords, new Location(5,5), to);
 	}
 
 	private boolean isHostile(int row, int col) {

@@ -25,8 +25,9 @@ public class Defender extends ChessPiece {
 
 	@Override
 	public boolean isValidMove(Location to, boolean careAboutCheck) {
-		return validInState(to) && board.isEmptySpace(to)  && !board.goesThroughThrone(cords,to);
-	}
+        return validInState(to) && board.isEmptySpace(to) &&
+                !board.formsStraightLine(cords, new Location(5,5), to);
+    }
 
 	private boolean isHostile(int row, int col) {
 		return (row==0 && col==0) || (row==0 && col==10) ||

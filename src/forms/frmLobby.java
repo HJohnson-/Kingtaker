@@ -2,11 +2,11 @@ package forms;
 
 import main.ChessVariant;
 import main.GameLauncher;
-import main.VariantFactory;
 import networking.GameLobby;
 import networking.LocalUserAccount;
 import networking.NetworkingCodes.ResponseCode;
 import networking.RemoteOpenGame;
+import variants.VariantLoader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -223,7 +223,7 @@ public class frmLobby {
         tblLobbyModel.getDataVector().removeAllElements();
         tblLobbyModel.fireTableDataChanged();
         for (RemoteOpenGame game : list) {
-            ChessVariant variant = VariantFactory.getInstance().getVariantByID(game.variantId);
+            ChessVariant variant = VariantLoader.getInstance().getVariantByID(game.variantId);
             if (variant != null) {
                 //variant is installed and can be joined.
                 tblLobbyModel.addRow(new Object[]{variant.getName(), game.hostUsername, game.hostRating});

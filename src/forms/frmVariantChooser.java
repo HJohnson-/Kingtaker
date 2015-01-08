@@ -2,6 +2,8 @@ package forms;
 
 import main.*;
 import networking.GameLobby;
+import variants.BasicChess.BasicChessvar;
+import variants.VariantLoader;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -94,7 +96,10 @@ public class frmVariantChooser {
     }
 
     private void initialiseChessVariantsList() {
-        variants = VariantFactory.getInstance().getAllVariants();
+        //use this method that 'loads' java files from the current directory.
+        //variants = VariantFactory.getInstance().getAllVariants();
+        variants = VariantLoader.getInstance().getAllVariants();
+        variants.add(new BasicChessvar());
 
         for (ChessVariant variant : variants) {
             lstVariationPickerModel.addElement(variant.getName());

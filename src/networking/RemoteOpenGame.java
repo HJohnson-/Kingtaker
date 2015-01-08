@@ -3,9 +3,9 @@ package networking;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
 import main.PieceType;
-import main.VariantFactory;
 import networking.NetworkingCodes.ClientToClientCode;
 import networking.NetworkingCodes.ResponseCode;
+import variants.VariantLoader;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -58,7 +58,7 @@ public class RemoteOpenGame {
                     String boardState = fields[2];
 
                     OnlineGameLauncher launcher = new OnlineGameLauncher(
-                            VariantFactory.getInstance().getVariantByID(variantId),
+                            VariantLoader.getInstance().getVariantByID(variantId),
                             ip,
                             hostUsername,
                             hostRating

@@ -37,6 +37,7 @@ public class VariantLoader {
 
     private void loadAllVariants() {
         loadedVariants = new ArrayList<ChessVariant>();
+        loadedVariants.add(new BasicChessvar());
 
         try {
             File f = Paths.get(VARIANT_DIRECTORY).toFile();

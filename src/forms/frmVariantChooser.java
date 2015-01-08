@@ -99,7 +99,6 @@ public class frmVariantChooser {
         //use this method that 'loads' java files from the current directory.
         //variants = VariantFactory.getInstance().getAllVariants();
         variants = VariantLoader.getInstance().getAllVariants();
-        variants.add(new BasicChessvar());
 
         for (ChessVariant variant : variants) {
             lstVariationPickerModel.addElement(variant.getName());

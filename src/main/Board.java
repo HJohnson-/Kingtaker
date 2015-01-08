@@ -81,9 +81,8 @@ abstract public class Board {
 	 * @return if all spaces between to and from were empty, false if an input was invalid.
 	 */
 	public boolean clearLine(Location from, Location to) {
-		//There is a bug here, often with playing with AI. Keep these debug statements until fixed plz.
-//		System.out.println("Clearline: from = [" + from + "], to = [" + to + "]");
-//		Thread.dumpStack();
+		//TODO: This will sometimes loop forever when playing with the AI
+		//or attempting illegal moves. Solution synchronize Board!
 
 		if(!onBoard(from) || !onBoard(to)) {
 			return false;

@@ -108,11 +108,12 @@ public class frmLobby {
                 if (gameLobby.getLocalGame() == null) {
                     if (gameLobby.getUser() != null && gameLobby.getUser().isLoggedIn()) {
                         frmVariantChooser.showInstance();
+                        setBtnCreateRemoveGame(true);
                     }
                 } else {
                     gameLobby.destroyLocalGame();
+                    setBtnCreateRemoveGame(false);
                 }
-                setBtnCreateRemoveGame(gameLobby.getLocalGame() != null);
             }
         });
         btnLogin.addActionListener(new ActionListener() {

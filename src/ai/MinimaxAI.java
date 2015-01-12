@@ -146,7 +146,7 @@ public class MinimaxAI extends ChessAI {
         }
 
         private Integer doRecursion(Board b, boolean checkingWhite, int curD, int alpha, int beta) {
-            if (Thread.currentThread().isInterrupted()) return 0;
+            if (Thread.currentThread().isInterrupted()) return Integer.MIN_VALUE;
 
             GameResult gameResult = b.getController().getResult();
             if (curD <= 0 || gameResult != GameResult.IN_PROGRESS) {

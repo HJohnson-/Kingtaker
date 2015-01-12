@@ -15,7 +15,7 @@ public class GraphicsControl implements Runnable {
 
     protected Location curCords;
     protected Queue<Location> endCords;
-    protected int animationTime = 1000;
+    protected int animationTime = 500;
     public ChessPanel panel;
     ExecutorService pool = Executors.newFixedThreadPool(1);
 
@@ -115,7 +115,7 @@ public class GraphicsControl implements Runnable {
 
     @Override
     public String toString() {
-        return curCords + " -> " + endCords;
+        return curCords + " -> " + endCords + panel != null ? " NO PANEL" : "";
     }
 
 }

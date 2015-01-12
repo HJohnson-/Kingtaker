@@ -533,6 +533,7 @@ public class GameController {
 		startOfValue = endOfValue+1;
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
+        board.pieces = new ChessPiece[board.numRows()][board.numCols()];
 		board.populateFromCode(pieces, decoder);
 	}
 

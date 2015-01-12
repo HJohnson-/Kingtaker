@@ -48,13 +48,15 @@ public class MinimaxAI extends ChessAI {
 
         numMoves = 0;
 
-        for (ChessPiece piece : board.allPieces()) {
+        Board clonedBoard = board.clone();
+
+        for (ChessPiece piece : clonedBoard.allPieces()) {
             if (piece.isWhite() == isWhite) {
                 for (Location l : piece.allPieceMoves()) {
                     if (piece.isValidMove(l)) {
                         numMoves++;
                         Location[] move = {piece.cords, l};
-                        Board newBoard = board.clone();
+                        Board newBoard = clonedBoard.clone();
                         newBoard.doDrawing = false;
                         newBoard.getController().gameMode = GameMode.MULTIPLAYER_LOCAL;
                         newBoard.getController().attemptMove(piece.cords, l, false);

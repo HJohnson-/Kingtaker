@@ -79,8 +79,7 @@ public class StopWatch extends Thread {
             case MULTIPLAYER_ONLINE:
                 String localName =
                         GameLobby.getInstance().getUser().getUserString();
-                String remoteName = ((OnlineGameLauncher)
-                        GameLauncher.onlineGameLauncher).getOpponentString();
+                String remoteName = GameLauncher.onlineGameLauncher.getOpponentString();
                 wPlayerName = gc.playerIsWhite ? localName : remoteName;
                 bPlayerName = !gc.playerIsWhite ? localName : remoteName;
                 break;

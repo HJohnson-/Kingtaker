@@ -107,7 +107,7 @@ public class MessageListener implements Runnable {
                         int joinerRating = Integer.valueOf(fields[2]);
 
                         //Host will send OK message to confirm it has received the request.
-                        OnlineGameLauncher launcher = (OnlineGameLauncher) GameLauncher.onlineGameLauncher;
+                        OnlineGameLauncher launcher = GameLauncher.onlineGameLauncher;
                         launcher.considerJoinRequest(socket.getInetAddress(), joinerUsername, joinerRating);
                         return ResponseCode.OK + "";
                     } else {
@@ -129,7 +129,7 @@ public class MessageListener implements Runnable {
                         //Disconnect the game and replace opponent with AI if they are trying to cheat.
                         //or their client is funky. Also report them to the server.
                         if (!successfulMove) {
-                            OnlineGameLauncher launcher = (OnlineGameLauncher) GameLauncher.onlineGameLauncher;
+                            OnlineGameLauncher launcher = GameLauncher.onlineGameLauncher;
                             launcher.reportOpponent();
                             launcher.handleRemoteUserDisconnection();
                         }

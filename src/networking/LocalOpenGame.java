@@ -33,7 +33,7 @@ public class LocalOpenGame {
                 + ClientCommandCode.DEL + variant.getVariationID(), true);
 
         int pieceTypeCode = pieceType.ordinal();
-        launcher = (OnlineGameLauncher) GameLauncher.onlineGameLauncher;
+        launcher = GameLauncher.onlineGameLauncher;
         launcher.setUserIsWhite(pieceType == PieceType.WHITE);
         launcher.setHostedGameCode(variant.game.toCode());
         MessageListener.getInstance().hostOpenGame();

@@ -2,6 +2,7 @@ package pieces;
 
 import main.GameController;
 import main.GameLauncher;
+import main.GameMode;
 import variants.BasicChess.Bishop;
 import variants.BasicChess.Knight;
 import variants.BasicChess.Queen;
@@ -51,7 +52,8 @@ public class PawnPromotion implements Runnable {
         //Broadcast pawn promotion as a move (e.g. 0,2->0,2) with the enum
         //ordinal of the piece it was promoted to. Do not broadcast if
         //this pawn promotion occurred remotely.
-        if (promotedPiece.isWhite() == promotedPiece.board.getController().playerIsWhite) {
+        if (promotedPiece.isWhite() == promotedPiece.board.getController().playerIsWhite &&
+                promotedPiece.board.getController().gameMode == GameMode.MULTIPLAYER_ONLINE) {
             GameLauncher.onlineGameLauncher.broadcastMove(pawn.cords, pawn.cords, "" + promotablePiece.ordinal());
         }
 

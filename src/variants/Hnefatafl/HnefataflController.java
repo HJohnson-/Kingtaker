@@ -14,13 +14,11 @@ public class HnefataflController extends GameController {
 	public HnefataflController(Board board, int gameID, PieceDecoder decoder, GameMode mode, boolean playerIsWhite) {
 		super(board, gameID, decoder, mode, playerIsWhite);
 		isWhitesTurn = false;
-		currentTurn++;
 	}
 
 	public HnefataflController(Board board, PieceDecoder decoder, String boardLayoutCode, GameMode mode) {
 		super(board, decoder, boardLayoutCode, mode);
 		isWhitesTurn = false;
-		currentTurn++;
 	}
 
 	@Override
@@ -389,4 +387,11 @@ public class HnefataflController extends GameController {
 		else return !(move.getFrom().getX() != move.getTo().getX() &&
 					move.getFrom().getY() != move.getTo().getY());
 	}
+
+    //Black starts instead of white in this game, so when loading we have to change whose turn it is
+    @Override
+    public void load(String code) {
+        super.load(code);
+        isWhitesTurn = !isWhitesTurn;
+    }
 }

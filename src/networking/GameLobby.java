@@ -2,6 +2,7 @@ package networking;
 
 import forms.frmLobby;
 import main.ChessVariant;
+import main.GameMode;
 import networking.NetworkingCodes.ClientCommandCode;
 import networking.NetworkingCodes.ResponseCode;
 
@@ -108,7 +109,7 @@ public class GameLobby {
     }
 
     public void createLocalOpenGame(ChessVariant variant) {
-        localOpenGame = new LocalOpenGame(variant);
+        localOpenGame = new LocalOpenGame(variant.recreate(GameMode.MULTIPLAYER_ONLINE));
         localOpenGame.host();
 
         //Forces game lobby to be refreshed.

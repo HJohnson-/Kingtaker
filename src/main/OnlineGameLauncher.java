@@ -33,13 +33,13 @@ public class OnlineGameLauncher extends GameLauncher {
     private HostChecker hostChecker;
 
     public OnlineGameLauncher(ChessVariant variant) {
-        this.variant = variant;
+        this.variant = variant.recreate(GameMode.MULTIPLAYER_ONLINE);
         variant.game.gameMode = GameMode.MULTIPLAYER_ONLINE;
     }
 
     public OnlineGameLauncher(ChessVariant variant, InetAddress ipOpponent,
                               String opponentName, int opponentRating) {
-        this.variant = variant;
+        this.variant = variant.recreate(GameMode.MULTIPLAYER_ONLINE);
         variant.game.gameMode = GameMode.MULTIPLAYER_ONLINE;
         this.opponentName = opponentName;
         this.opponentRating = opponentRating;

@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,7 +99,7 @@ public class frmVariantChooser {
     private void initialiseChessVariantsList() {
         //use this method that 'loads' java files from the current directory.
         //variants = VariantFactory.getInstance().getAllVariants();
-        variants = VariantLoader.getInstance().getAllVariants();
+        variants = new ArrayList<ChessVariant>(VariantLoader.getInstance().getAllVariants());
         variants.add(new BasicChessvar());
 
         for (ChessVariant variant : variants) {

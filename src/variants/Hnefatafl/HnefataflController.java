@@ -16,6 +16,16 @@ public class HnefataflController extends GameController {
 		isWhitesTurn = false;
 	}
 
+	public HnefataflController(Board board, PieceDecoder decoder, String boardLayoutCode, GameMode mode) {
+		super(board, decoder, boardLayoutCode, mode);
+		isWhitesTurn = false;
+	}
+
+	@Override
+	public GameController getOnlineController(Board board, PieceDecoder decoder, String boardState, GameMode multiplayerOnline) {
+		return new HnefataflController(board, decoder, boardState, multiplayerOnline);
+	}
+
 	@Override
 	public GameController clone() {
 		HnefataflController newGame = new HnefataflController(null, gameID, decoder, gameMode, playerIsWhite);

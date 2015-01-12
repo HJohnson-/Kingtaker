@@ -81,6 +81,10 @@ public class GameController {
 		previousTurns = new ArrayList<String>();
 	}
 
+	public GameController getOnlineController(Board board, PieceDecoder decoder, String boardState, GameMode multiplayerOnline) {
+		return new GameController(board, decoder, boardState, multiplayerOnline);
+	}
+
     public ChessAI getAI() {
         return ai;
     }

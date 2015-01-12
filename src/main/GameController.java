@@ -81,6 +81,10 @@ public class GameController {
 		previousTurns = new ArrayList<String>();
 	}
 
+	public GameController getOnlineController(Board board, PieceDecoder decoder, String boardState, GameMode multiplayerOnline) {
+		return new GameController(board, decoder, boardState, multiplayerOnline);
+	}
+
     public ChessAI getAI() {
         return ai;
     }
@@ -533,6 +537,7 @@ public class GameController {
 		startOfValue = endOfValue+1;
 		endOfValue = code.indexOf('#', startOfValue);
 		String pieces = code.substring(startOfValue, endOfValue);
+        board.pieces = new ChessPiece[board.numRows()][board.numCols()];
 		board.populateFromCode(pieces, decoder);
 	}
 
@@ -577,7 +582,7 @@ public class GameController {
 				PawnPromotion pp = new PawnPromotion(movedPiece);
 				pp.promote(PromotablePiece.QUEEN);
 			}
-            //System.out.println(aiMove[0] + " -> " + aiMove[1]);
+            System.out.println(aiMove[0] + " -> " + aiMove[1]);
             AIWorking = false;
         }
 

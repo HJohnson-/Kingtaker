@@ -48,13 +48,15 @@ public class MinimaxAI extends ChessAI {
 
         numMoves = 0;
 
-        for (ChessPiece piece : board.allPieces()) {
+        Board clonedBoard = board.clone();
+
+        for (ChessPiece piece : clonedBoard.allPieces()) {
             if (piece.isWhite() == isWhite) {
                 for (Location l : piece.allPieceMoves()) {
                     if (piece.isValidMove(l)) {
                         numMoves++;
                         Location[] move = {piece.cords, l};
-                        Board newBoard = board.clone();
+                        Board newBoard = clonedBoard.clone();
                         newBoard.doDrawing = false;
                         newBoard.getController().gameMode = GameMode.MULTIPLAYER_LOCAL;
                         newBoard.getController().attemptMove(piece.cords, l, false);
@@ -144,7 +146,7 @@ public class MinimaxAI extends ChessAI {
         }
 
         private Integer doRecursion(Board b, boolean checkingWhite, int curD, int alpha, int beta) {
-            if (Thread.currentThread().isInterrupted()) return 0;
+            if (Thread.currentThread().isInterrupted()) return Integer.MIN_VALUE;
 
             GameResult gameResult = b.getController().getResult();
             if (curD <= 0 || gameResult != GameResult.IN_PROGRESS) {

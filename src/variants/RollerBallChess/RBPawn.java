@@ -29,7 +29,7 @@ public class RBPawn extends ChessPiece {
     public List<Location> allPieceMoves() {
         King k = new King(board, type, cords);
         List<Location> moves = new LinkedList<Location>();
-        String dir = h.getClockWiseDir(cords);
+        String dir = h.getClockwiseDir(cords);
 
         for (Location move : k.allPieceMoves()) {
             if (!h.isInMiddle(move)) {

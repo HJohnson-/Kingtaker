@@ -24,7 +24,7 @@ public class RBRook extends ChessPiece {
     protected boolean validInState(Location to) {
 //      in outer ring and not in the same horizontal or virtical direction
         if (h.inOuterRing(cords) && ((cords.getX() - to.getX()) != 0 && (cords.getY() - to.getY()) != 0)) {
-            Location conner = h.findOuterConnerByLoc(cords);
+            Location conner = h.findOuterCornerByLoc(cords);
             return board.clearLine(cords, conner) && h.bounceableClearline(conner, to, board) && !h.isInMiddle(to);
         }
         return board.clearLine(cords, to) && !h.isInMiddle(to);
@@ -34,7 +34,7 @@ public class RBRook extends ChessPiece {
     public List<Location> allPieceMoves() {
         Rook r = new Rook(board, type, cords);
         List<Location> moves = new LinkedList<Location>();
-        String dir = h.getClockWiseDir(cords);
+        String dir = h.getClockwiseDir(cords);
 
         for (Location move : r.allPieceMoves()) {
             if (!h.isInMiddle(move)) {
@@ -53,7 +53,7 @@ public class RBRook extends ChessPiece {
             List<Location> pair = h.containOuterCorner(moves);
             Location firstOuterConner = pair.get(0);
             r = new Rook(board, type, firstOuterConner);
-            dir = h.getClockWiseDir(firstOuterConner);
+            dir = h.getClockwiseDir(firstOuterConner);
 
             for (Location move : r.allPieceMoves()) {
                 if (!h.isInMiddle(move)) {
@@ -69,8 +69,8 @@ public class RBRook extends ChessPiece {
 
         // move in special case in inner loop
         if (cords.getX() == 1 && cords.getY() == 6 || cords.getX() == 0 && cords.getY() == 1 || cords.getX() == 5 && cords.getY() == 0 || cords.getX() == 6 && cords.getY() == 5) {
-            Location conner = h.findOuterConnerByLoc(cords);
-            dir = h.getClockWiseDir(conner);
+            Location conner = h.findOuterCornerByLoc(cords);
+            dir = h.getClockwiseDir(conner);
             r = new Rook(board, type, cords);
             for (Location move : r.allPieceMoves()) {
                 if (!h.isInMiddle(move)) {
@@ -121,7 +121,7 @@ public class RBRook extends ChessPiece {
 
         // graphic for bouncing rook
         if (h.inOuterRing(cords) && (cords.getX() - targetLocation.getX()) != 0 && (cords.getY() - targetLocation.getY()) != 0) {
-            Location conner = h.findOuterConnerByLoc(cords);
+            Location conner = h.findOuterCornerByLoc(cords);
 
             board.clearSpace(cords);
             board.placePiece(targetLocation, this);

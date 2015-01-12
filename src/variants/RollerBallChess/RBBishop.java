@@ -28,7 +28,7 @@ public class RBBishop extends ChessPiece {
 
         Bishop b = new Bishop(board, type, cords);
 
-        String dir = h.getClockWiseDir(cords);
+        String dir = h.getClockwiseDir(cords);
 
         List<Location> movesfirstBranchA = new LinkedList<Location>();
         List<Location> movesfirstBranchB = new LinkedList<Location>();
@@ -62,7 +62,7 @@ public class RBBishop extends ChessPiece {
         // bounce on edge
         for (Location boundcingLoc : bouncingLocsFirstBranch) {
             if (boundcingLoc.getX() >= 0) {
-                dir = h.getClockWiseDir(boundcingLoc);
+                dir = h.getClockwiseDir(boundcingLoc);
                 b = new Bishop(board, type, boundcingLoc);
                 for (Location move : b.allPieceMoves()) {
                     if (bouncingLocsFirstBranch.indexOf(boundcingLoc) == 0) {
@@ -91,7 +91,7 @@ public class RBBishop extends ChessPiece {
 
         Location bouncingLoc = h.findBouncingLoc(moves, cords);
 
-        String bouncedir = h.getClockWiseDir(bouncingLoc);
+        String bouncedir = h.getClockwiseDir(bouncingLoc);
 
         if (bouncedir.equals("U")) {
             if (to.getY() < bouncingLoc.getY()) {
@@ -138,7 +138,7 @@ public class RBBishop extends ChessPiece {
 
         Bishop b = new Bishop(board, type, cords);
 
-        String dir = h.getClockWiseDir(cords);
+        String dir = h.getClockwiseDir(cords);
 
         List<Location> movesfirstBranchA = new LinkedList<Location>();
         List<Location> movesfirstBranchB = new LinkedList<Location>();
@@ -172,7 +172,7 @@ public class RBBishop extends ChessPiece {
         // bounce on edge
         for (Location boundcingLoc : bouncingLocsFirstBranch) {
             if (boundcingLoc.getX() >= 0) {
-                dir = h.getClockWiseDir(boundcingLoc);
+                dir = h.getClockwiseDir(boundcingLoc);
                 b = new Bishop(board, type, boundcingLoc);
                 for (Location move : b.allPieceMoves()) {
                     if (bouncingLocsFirstBranch.indexOf(boundcingLoc) == 0) {
@@ -229,7 +229,7 @@ public class RBBishop extends ChessPiece {
 
         Bishop b = new Bishop(board, type, cords);
 
-        String dir = h.getClockWiseDir(cords);
+        String dir = h.getClockwiseDir(cords);
 
         List<Location> movesfirstBranchA = new LinkedList<Location>();
         List<Location> movesfirstBranchB = new LinkedList<Location>();
@@ -263,7 +263,7 @@ public class RBBishop extends ChessPiece {
         // bounce on edge
         for (Location boundcingLoc : bouncingLocsFirstBranch) {
             if (boundcingLoc.getX() >= 0) {
-                dir = h.getClockWiseDir(boundcingLoc);
+                dir = h.getClockwiseDir(boundcingLoc);
                 b = new Bishop(board, type, boundcingLoc);
                 for (Location move : b.allPieceMoves()) {
                     if (bouncingLocsFirstBranch.indexOf(boundcingLoc) == 0) {
@@ -294,7 +294,7 @@ public class RBBishop extends ChessPiece {
 
 
         Location bouncingLoc = h.findBouncingLoc(moves, cords);
-        String bouncedir = h.getClockWiseDir(bouncingLoc);
+        String bouncedir = h.getClockwiseDir(bouncingLoc);
 
         if (bouncedir.equals("U")) {
             if (targetLocation.getY() < bouncingLoc.getY()) {

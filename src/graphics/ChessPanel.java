@@ -89,6 +89,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                         System.currentTimeMillis() - 300 > lastStateLoad) {
                     lastStateLoad = System.currentTimeMillis();
                     lastClickTime = System.currentTimeMillis();
+                    selectedPiece = null;
                     gc.load(savedBoardCodeString);
                     recalculateCellSize();
                 }
@@ -101,6 +102,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                         System.currentTimeMillis() - 300 > lastStateLoad) {
                     lastStateLoad = System.currentTimeMillis();
                     lastClickTime = System.currentTimeMillis();
+                    selectedPiece = null;
                     gc.undo();
                     recalculateCellSize();
                 }

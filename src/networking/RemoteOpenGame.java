@@ -1,5 +1,6 @@
 package networking;
 
+import main.ChessVariant;
 import main.GameLauncher;
 import main.OnlineGameLauncher;
 import main.PieceType;
@@ -63,7 +64,9 @@ public class RemoteOpenGame {
                             hostUsername,
                             hostRating
                     );
-                    launcher.setGameBoardLayout(boardState);
+
+					ChessVariant chosenVariant = VariantLoader.getInstance().getVariantByID(variantId);
+					launcher.setGameBoardLayout(chosenVariant.game, boardState); //changed to accommodate different controller
                     launcher.setUserIsWhite(localUserIsWhite);
                     MessageListener.getInstance().acceptMoves = true;
                     MessageListener.getInstance().setRemoteAddress(ip);

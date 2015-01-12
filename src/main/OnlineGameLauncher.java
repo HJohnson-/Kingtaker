@@ -149,10 +149,10 @@ public class OnlineGameLauncher extends GameLauncher {
         }
     }
 
-    public void setGameBoardLayout(String boardState) {
-        variant.game = new GameController(variant.game.getBoard(), variant.getDecoder(), boardState, GameMode.MULTIPLAYER_ONLINE);
-        variant.game.getBoard().setController(variant.game);
-    }
+	public void setGameBoardLayout(GameController gameController, String boardState) {
+		variant.game = gameController.getOnlineController(variant.game.getBoard(), variant.getDecoder(), boardState, GameMode.MULTIPLAYER_ONLINE);
+		variant.game.getBoard().setController(variant.game);
+	}
 
     public void setOpponent(InetAddress remoteAddress, String opponentName,
                             int opponentRating) throws Exception {

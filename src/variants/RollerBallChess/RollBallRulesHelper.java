@@ -63,7 +63,7 @@ public class RollBallRulesHelper {
 
 
     // R = right, L = Left, U = Up, D = Down
-    public String getClockWiseDir(Location currentPos) {
+    public String getClockwiseDir(Location currentPos) {
         int x = currentPos.getX();
         int y = currentPos.getY();
 
@@ -146,11 +146,11 @@ public class RollBallRulesHelper {
         return returnPair;
     }
 
-    public Location findOuterConnerByLoc(Location currentLoc) {
+    public Location findOuterCornerByLoc(Location currentLoc) {
         int x = currentLoc.getX();
         int y = currentLoc.getY();
 
-        String dir = getClockWiseDir(currentLoc);
+        String dir = getClockwiseDir(currentLoc);
 
         if (dir.equals("U")) {
             return new Location(0, 0);

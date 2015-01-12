@@ -16,6 +16,16 @@ public class HnefataflController extends GameController {
 		isWhitesTurn = false;
 	}
 
+	public HnefataflController(Board board, PieceDecoder decoder, String boardLayoutCode, GameMode mode) {
+		super(board, decoder, boardLayoutCode, mode);
+		isWhitesTurn = false;
+	}
+
+	@Override
+	public GameController getOnlineController(Board board, PieceDecoder decoder, String boardState, GameMode multiplayerOnline) {
+		return new HnefataflController(board, decoder, boardState, multiplayerOnline);
+	}
+
 	@Override
 	public GameController clone() {
 		HnefataflController newGame = new HnefataflController(null, gameID, decoder, gameMode, playerIsWhite);
@@ -377,4 +387,11 @@ public class HnefataflController extends GameController {
 		else return !(move.getFrom().getX() != move.getTo().getX() &&
 					move.getFrom().getY() != move.getTo().getY());
 	}
+
+    //Black starts instead of white in this game, so when loading we have to change whose turn it is
+    @Override
+    public void load(String code) {
+        super.load(code);
+        isWhitesTurn = !isWhitesTurn;
+    }
 }

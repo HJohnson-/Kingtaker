@@ -2,7 +2,6 @@ package forms;
 
 import main.*;
 import networking.GameLobby;
-import variants.BasicChess.BasicChessvar;
 import variants.VariantLoader;
 
 import javax.swing.*;
@@ -70,10 +69,11 @@ public class frmVariantChooser {
 
                 if (GameMode.currentGameMode == GameMode.SINGLE_PLAYER ||
                         GameMode.currentGameMode == GameMode.MULTIPLAYER_LOCAL) {
-                    GameLauncher.currentGameLauncher = new OfflineGameLauncher(selectedVariant, GameMode.currentGameMode);
-                    GameLauncher.currentGameLauncher.launch();
+                    GameLauncher.lastGameLauncher = new OfflineGameLauncher(selectedVariant, GameMode.currentGameMode);
+                    GameLauncher.lastGameLauncher.launch();
                 } else if (GameMode.currentGameMode == GameMode.MULTIPLAYER_ONLINE) {
-                    GameLauncher.currentGameLauncher = new OnlineGameLauncher(selectedVariant);
+                    GameLauncher.onlineGameLauncher = new OnlineGameLauncher(selectedVariant);
+                    GameLauncher.lastGameLauncher = GameLauncher.onlineGameLauncher;
                     GameLobby.getInstance().createLocalOpenGame(selectedVariant);
                 }
 

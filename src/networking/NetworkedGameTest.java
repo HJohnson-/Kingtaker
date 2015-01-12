@@ -7,7 +7,6 @@ import variants.VariantLoader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Random;
 
 /**
  * Created by jc4512 on 09/11/14.
@@ -44,7 +43,7 @@ public class NetworkedGameTest {
         OnlineGameLauncher o = new OnlineGameLauncher(variant,
                 InetAddress.getByName(server), server, 1000);
         o.setUserIsWhite(isWhite);
-        GameLauncher.currentGameLauncher = o;
+        GameLauncher.onlineGameLauncher = o;
         frmLobby.showInstance(GameLobby.getInstance());
 
         o.launch();

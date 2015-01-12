@@ -52,7 +52,7 @@ public class PawnPromotion implements Runnable {
         //ordinal of the piece it was promoted to. Do not broadcast if
         //this pawn promotion occurred remotely.
         if (promotedPiece.isWhite() == promotedPiece.board.getController().playerIsWhite) {
-            GameLauncher.currentGameLauncher.broadcastMove(pawn.cords, pawn.cords, "" + promotablePiece.ordinal());
+            GameLauncher.onlineGameLauncher.broadcastMove(pawn.cords, pawn.cords, "" + promotablePiece.ordinal());
         }
 
         if (promotedPiece.board.doDrawing) {

@@ -1,13 +1,5 @@
 package main;
 
-import forms.frmJoinRequest;
-import variants.BasicChess.BasicBoard;
-import variants.BasicChess.BasicChessvar;
-import variants.BasicChess.BasicDecoder;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
-
 //Used for testing local games. Bypasses main menu.
 public class KingtakerMain {
     public static void main(String[] args) throws Exception {
@@ -15,8 +7,8 @@ public class KingtakerMain {
             //Alternatively, load from a jar file:
             //ChessVariant v = VariantLoader.getInstance().getVariantByID(i);
             ChessVariant v = VariantFactory.getInstance().getVariantByID(i);
-            GameLauncher.currentGameLauncher = new OfflineGameLauncher(v, GameMode.MULTIPLAYER_LOCAL);
-            GameLauncher.currentGameLauncher.launch();
+            GameLauncher.lastGameLauncher = new OfflineGameLauncher(v, GameMode.MULTIPLAYER_LOCAL);
+            GameLauncher.lastGameLauncher.launch();
         }
     }
 }

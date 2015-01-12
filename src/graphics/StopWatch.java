@@ -80,7 +80,7 @@ public class StopWatch extends Thread {
                 String localName =
                         GameLobby.getInstance().getUser().getUserString();
                 String remoteName = ((OnlineGameLauncher)
-                        GameLauncher.currentGameLauncher).getOpponentString();
+                        GameLauncher.onlineGameLauncher).getOpponentString();
                 wPlayerName = gc.playerIsWhite ? localName : remoteName;
                 bPlayerName = !gc.playerIsWhite ? localName : remoteName;
                 break;

@@ -4,7 +4,10 @@ package main;
  * Created by jc4512 on 06/11/14.
  */
 abstract public class GameLauncher {
-    public static GameLauncher currentGameLauncher; //global instance
+    //Global instances, onlineGameLauncher is used during the game
+    // and should not be overwritten.
+    public static OnlineGameLauncher onlineGameLauncher;
+    public static GameLauncher lastGameLauncher;
 
     public abstract void launch();
 

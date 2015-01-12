@@ -68,7 +68,7 @@ public class RemoteOpenGame {
                     MessageListener.getInstance().acceptMoves = true;
                     MessageListener.getInstance().setRemoteAddress(ip);
 
-                    GameLauncher.currentGameLauncher = launcher;
+                    GameLauncher.onlineGameLauncher = launcher;
                     return ResponseCode.OK;
                 } catch (Exception e) {
                     //Loading the game failed due to a malformed board state

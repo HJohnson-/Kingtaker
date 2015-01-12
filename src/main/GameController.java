@@ -189,7 +189,7 @@ public class GameController {
             }
 
             if (local && gameMode == GameMode.MULTIPLAYER_ONLINE) {
-                GameLauncher.currentGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
+                GameLauncher.onlineGameLauncher.broadcastMove(pieceLocation, targetLocation, "");
             }
 
             lastMoveTime = System.currentTimeMillis();
@@ -385,7 +385,7 @@ public class GameController {
 		else gameResult = GameResult.DRAW;
 
         if (gameMode == GameMode.MULTIPLAYER_ONLINE) {
-            GameLauncher.currentGameLauncher.broadcastEndGame();
+            GameLauncher.onlineGameLauncher.broadcastEndGame();
         }
 	}
 

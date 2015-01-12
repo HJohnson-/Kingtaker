@@ -165,7 +165,7 @@ public class frmLobby {
                     int response = gameLobby.attemptJoinGameByUsername(hostUsername);
                     if (response == ResponseCode.OK) {
                         gameLobby.close();
-                        GameLauncher.currentGameLauncher.launch();
+                        GameLauncher.onlineGameLauncher.launch();
                     } else {
                         messageBoxAlert.showGameJoinResponse(response);
                     }

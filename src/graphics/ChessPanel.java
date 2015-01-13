@@ -446,6 +446,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
                 if (!board.onBoard(l)) {
                     selectedPiece = null;
+                    selectedMoves = null;
                 } else if (selectedPiece == null) {
                     if (!board.isEmptySpace(l)) {
                         selectedPiece = board.getPiece(l);

@@ -69,6 +69,8 @@ public class PawnPromotion implements Runnable {
         } else {
             control.nextPlayersTurn();
         }
+
+        control.cacheInCheckStatus();
         promotedPiece.board.getController().promoting = false;
     }
 

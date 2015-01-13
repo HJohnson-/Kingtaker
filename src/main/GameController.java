@@ -385,6 +385,7 @@ public class GameController {
 			promotablePiece = PromotablePiece.values()[Integer.parseInt(extra)];
 			PawnPromotion pawnPromotion = new PawnPromotion(board.getPiece(oldL));
 			pawnPromotion.promote(promotablePiece);
+            cacheInCheckStatus();
             return true;
         } else {
             return attemptMove(oldL, newL, false);
@@ -465,7 +466,7 @@ public class GameController {
     }
 
     //Called in attemptMove. Caches result to pieceInCheck for ChessPanel display.
-    protected void cacheInCheckStatus() {
+    public void cacheInCheckStatus() {
         for (int player = 0; player <= 1; player++) {
             Location kingLocation = findKing(player == 0);
 

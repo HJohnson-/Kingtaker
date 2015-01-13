@@ -38,6 +38,8 @@ public class GameController {
 	private List<String> previousTurns;
     public long lastMoveTime = System.currentTimeMillis();
 
+    public ChessPiece pieceInCheck = null;
+
     public Board getBoard() {
 		return board;
 	}
@@ -175,20 +177,22 @@ public class GameController {
 			return false;
         }
 
-
 		if(local && gameMode != GameMode.MULTIPLAYER_ONLINE) {
 			previousTurns.add(toCode());
 		}
+
         //Executes move, unless the piece has a final objection (useful for some variants)
 		//If checkmate is detected, the game ends, otherwise the active player is switched.
         //If the move was executed locally, it is sent to the remote player via launcher.
         if (beingMoved.executeMove(targetLocation)) {
+            cacheInCheckStatus();
+
             if (checkMate()) {
 				endGame(false);
 			} else if (staleMate()) {
 				endGame(true);
 			} else {
-				checkForCapturedPieces(targetLocation); //No effect if not Hf
+				checkForCapturedPieces(targetLocation); //Only useful in some variants, eg Hnefatafl
                 nextPlayersTurn();
             }
 
@@ -442,15 +446,31 @@ public class GameController {
 		Location kingLocation = findKing(checkingForWhite);
 		for(List<Location> targets : getAllValidMoves(false, !checkingForWhite).values()) {
 			if(targets.contains(kingLocation)) {
+                pieceInCheck = board.getPiece(kingLocation);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean isInCheck(PieceType type) {
-		return isInCheck(type == PieceType.WHITE);
-	}
+    public boolean isInCheck(PieceType type) {
+        return isInCheck(type == PieceType.WHITE);
+    }
+
+    //Called in attemptMove. Caches result to pieceInCheck for ChessPanel display.
+    protected void cacheInCheckStatus() {
+        for (int player = 0; player <= 1; player++) {
+            Location kingLocation = findKing(player == 0);
+            for(List<Location> targets : getAllValidMoves(false, player == 0).values()) {
+                if (targets.contains(kingLocation)) {
+                    pieceInCheck = board.getPiece(kingLocation);
+                    return;
+                }
+            }
+        }
+        pieceInCheck = null;
+    }
+
 
 	/**
 	 * @param checkingForWhite if we're looking for white's king, otherwise looking for black

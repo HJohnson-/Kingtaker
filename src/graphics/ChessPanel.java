@@ -337,7 +337,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             g2.setPaint(texture);
             g2.fillRect(p.graphics.getX(), p.graphics.getY(), cellWidth, cellHeight);
 
-            //Shows all possible moves
+            //Shows all possible moves as arrows
 //            g2.setPaint(Color.BLACK);
 //            for (Location loc : p.allPieceMoves()) {
 //                if (p.isValidMove(loc)) {
@@ -352,13 +352,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
         g2.setStroke(new BasicStroke(4));
 
         GameController gc = board.getController();
-        if (gc.isInCheck(true)) {
-            Location l = gc.findKing(true);
-            g2.drawOval(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(), cellWidth, cellHeight);
-        }
-
-        if (gc.isInCheck(false)) {
-            Location l = gc.findKing(false);
+        if (gc.pieceInCheck != null) {
+            Location l = gc.pieceInCheck.cords;
             g2.drawOval(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(), cellWidth, cellHeight);
         }
 

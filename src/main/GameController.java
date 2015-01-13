@@ -165,8 +165,13 @@ public class GameController {
         //Cannot perform a move that violates the variant's rules.
         //Cannot move a black piece when it's white's turn, and vice versa.
 
-		if (!beingMoved.isValidMove(targetLocation) || !turnPlayersPiece(beingMoved)) {
-            System.out.println("Invalid move: against rules, or it is not this colours turn");
+        if (!turnPlayersPiece(beingMoved)) {
+            System.out.println("Invalid move: it is not this colour's turn.");
+            return false;
+        }
+
+		if (!beingMoved.isValidMove(targetLocation)) {
+            System.out.println("Invalid move: move is against the rules.");
             return false;
         }
 
@@ -185,6 +190,7 @@ public class GameController {
 		//If checkmate is detected, the game ends, otherwise the active player is switched.
         //If the move was executed locally, it is sent to the remote player via launcher.
         if (beingMoved.executeMove(targetLocation)) {
+
             cacheInCheckStatus();
 
             if (checkMate()) {
@@ -446,7 +452,6 @@ public class GameController {
 		Location kingLocation = findKing(checkingForWhite);
 		for(List<Location> targets : getAllValidMoves(false, !checkingForWhite).values()) {
 			if(targets.contains(kingLocation)) {
-                pieceInCheck = board.getPiece(kingLocation);
 				return true;
 			}
 		}
@@ -459,9 +464,11 @@ public class GameController {
 
     //Called in attemptMove. Caches result to pieceInCheck for ChessPanel display.
     protected void cacheInCheckStatus() {
+        System.out.println("Caching check.");
         for (int player = 0; player <= 1; player++) {
             Location kingLocation = findKing(player == 0);
-            for(List<Location> targets : getAllValidMoves(false, player == 0).values()) {
+
+            for (List<Location> targets : getAllValidMoves(false, player == 1).values()) {
                 if (targets.contains(kingLocation)) {
                     pieceInCheck = board.getPiece(kingLocation);
                     return;
@@ -559,6 +566,8 @@ public class GameController {
 		String pieces = code.substring(startOfValue, endOfValue);
         board.pieces = new ChessPiece[board.numRows()][board.numCols()];
 		board.populateFromCode(pieces, decoder);
+        pieceInCheck = null;
+        cacheInCheckStatus();
 	}
 
     //Wait until the AI has moved before recreating it with a new difficulty.

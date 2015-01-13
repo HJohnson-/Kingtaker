@@ -353,8 +353,8 @@ public abstract class ChessPanel extends JPanel implements Runnable {
 
         GameController gc = board.getController();
         if (gc.pieceInCheck != null) {
-            Location l = gc.pieceInCheck.cords;
-            g2.drawOval(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(), cellWidth, cellHeight);
+            Location l = gc.pieceInCheck.graphics.curCords;
+            g2.drawOval(l.getX(), l.getY(), cellWidth, cellHeight);
         }
 
         drawMovesForSelectedPiece(g2);

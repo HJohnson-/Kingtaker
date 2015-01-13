@@ -42,7 +42,7 @@ public class Hnefataflvar extends ChessVariant {
 	public Hnefataflvar(GameMode mode) {
 		HnefataflBoard board = new HnefataflBoard();
 		board.initializeBoard();
-		game = new HnefataflController(board, getVariationID(), new HnefataflDecoder(), mode, false);
+		game = new HnefataflController(board, getVariationID(), new HnefataflDecoder(), mode, new Random().nextBoolean());
 		game.getBoard().setController(game);
 	}
 

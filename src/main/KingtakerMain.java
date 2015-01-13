@@ -6,8 +6,8 @@ public class KingtakerMain {
         for (int i = 0; i < 5; i++) {
             //Alternatively, load from a jar file:
             //ChessVariant v = VariantLoader.getInstance().getVariantByID(i);
-            ChessVariant v = VariantFactory.getInstance().getVariantByID(i);
-            GameLauncher.lastGameLauncher = new OfflineGameLauncher(v, GameMode.MULTIPLAYER_LOCAL);
+            ChessVariant v = VariantFactory.getInstance().getVariantByID(3);
+            GameLauncher.lastGameLauncher = new OfflineGameLauncher(v, GameMode.SINGLE_PLAYER);
             GameLauncher.lastGameLauncher.launch();
         }
     }

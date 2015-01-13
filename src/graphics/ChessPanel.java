@@ -27,6 +27,7 @@ public abstract class ChessPanel extends JPanel implements Runnable {
     private final int HIGH_SPEED_DRAW_TIME_MS = 2000;
     public Board board;
     protected ChessPiece selectedPiece = null;
+    protected List<Location> selectedMoves = null;
     protected Location offset = new Location(20, 20);
     public int cellWidth;
     public int cellHeight;
@@ -371,13 +372,12 @@ public abstract class ChessPanel extends JPanel implements Runnable {
             g2.drawRect(selectedPiece.graphics.getX(), selectedPiece.graphics.getY(),
                     cellWidth, cellHeight);
 
-            List<Location> moves = gc.movesForPiece(selectedPiece, true);
             if (selectedPiece.isWhite() == gc.isWhitesTurn() && gc.isLocalsTurn()) {
                 g2.setPaint(GraphicsTools.CUR_MOVES);
             } else {
                 g2.setPaint(Color.RED.darker());
             }
-            for (Location l : moves) {
+            for (Location l : selectedMoves) {
                 g2.drawRect(l.getX() * cellWidth + offset.getX(), l.getY() * cellHeight + offset.getY(),
                         cellWidth, cellHeight);
             }
@@ -449,9 +449,10 @@ public abstract class ChessPanel extends JPanel implements Runnable {
                 } else if (selectedPiece == null) {
                     if (!board.isEmptySpace(l)) {
                         selectedPiece = board.getPiece(l);
+                        selectedMoves = board.getController().movesForPiece(selectedPiece, true);
                     }
                 } else {
-                    if (selectedPiece.allPieceMoves().contains(l)) {
+                    if (selectedMoves.contains(l)) {
                         board.getController().attemptMove(selectedPiece.cords, l, true);
                     }
                     selectedPiece = null;

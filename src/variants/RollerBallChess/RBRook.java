@@ -143,6 +143,6 @@ public class RBRook extends ChessPiece {
 
     @Override
     public RBRook clone() {
-        return new RBRook(board, type, cords);
+        return new RBRook(board, type, cords.clone());
     }
 }

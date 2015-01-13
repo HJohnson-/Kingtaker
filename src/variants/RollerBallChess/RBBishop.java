@@ -385,7 +385,7 @@ public class RBBishop extends ChessPiece {
 
     @Override
     public RBBishop clone() {
-        return new RBBishop(board, type, cords);
+        return new RBBishop(board, type, cords.clone());
     }
 
 }

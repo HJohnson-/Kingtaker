@@ -614,7 +614,7 @@ public class GameController {
 				PawnPromotion pp = new PawnPromotion(movedPiece);
 				pp.promote(PromotablePiece.QUEEN);
 			}
-            System.out.println(aiMove[0] + " -> " + aiMove[1]);
+            //System.out.println(aiMove[0] + " -> " + aiMove[1]);
             AIWorking = false;
         }
 

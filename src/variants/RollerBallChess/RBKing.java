@@ -137,7 +137,7 @@ public class RBKing extends King {
 
     @Override
     public RBKing clone() {
-        return new RBKing(board, type, cords);
+        return new RBKing(board, type, cords.clone());
     }
 
 }

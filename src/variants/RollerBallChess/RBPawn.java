@@ -56,6 +56,6 @@ public class RBPawn extends ChessPiece {
 
     @Override
     public RBPawn clone() {
-        return new RBPawn(board, type, cords);
+        return new RBPawn(board, type, cords.clone());
     }
 }

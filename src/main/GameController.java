@@ -191,7 +191,9 @@ public class GameController {
         //If the move was executed locally, it is sent to the remote player via launcher.
         if (beingMoved.executeMove(targetLocation)) {
 
-            cacheInCheckStatus();
+            if (board.doDrawing) {
+                cacheInCheckStatus();
+            }
 
             if (checkMate()) {
 				endGame(false);
@@ -464,14 +466,15 @@ public class GameController {
 
     //Called in attemptMove. Caches result to pieceInCheck for ChessPanel display.
     protected void cacheInCheckStatus() {
-        System.out.println("Caching check.");
         for (int player = 0; player <= 1; player++) {
             Location kingLocation = findKing(player == 0);
 
-            for (List<Location> targets : getAllValidMoves(false, player == 1).values()) {
-                if (targets.contains(kingLocation)) {
-                    pieceInCheck = board.getPiece(kingLocation);
-                    return;
+            if (kingLocation != null) {
+                for (List<Location> targets : getAllValidMoves(false, player == 1).values()) {
+                    if (targets.contains(kingLocation)) {
+                        pieceInCheck = board.getPiece(kingLocation);
+                        return;
+                    }
                 }
             }
         }
@@ -489,7 +492,7 @@ public class GameController {
 				return piece.cords;
 			}
 		}
-		throw new Error("No king on board");
+		return null;
 	}
 
 

@@ -53,4 +53,9 @@ public class RBPawn extends ChessPiece {
     public String getName() {
         return "RBPawn";
     }
+
+    @Override
+    public RBPawn clone() {
+        return new RBPawn(board, type, cords);
+    }
 }

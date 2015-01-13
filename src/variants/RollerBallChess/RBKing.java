@@ -88,12 +88,13 @@ public class RBKing extends King {
                     moves.add(new Location(newX, newY));
             }
             if (lastTurnMovedOn == 0) {
-                if (!h.isInMiddle(cords.getX(), cords.getY() + 2))
-                    moves.add(new Location(cords.getX(), cords.getY() + 2));
-                if (!h.isInMiddle(cords.getX(), cords.getY() - 2))
-                    moves.add(new Location(cords.getX(), cords.getY() - 2));
+                if (!h.isInMiddle(cords.getX(), cords.getY() + 2));
+                    //moves.add(new Location(cords.getX(), cords.getY() + 2));
+                if (!h.isInMiddle(cords.getX(), cords.getY() - 2));
+                    //moves.add(new Location(cords.getX(), cords.getY() - 2));
             }
         }
+
         return moves;
     }
 
@@ -132,6 +133,11 @@ public class RBKing extends King {
             if(to.getX()==3&&to.getY()==1)
                 board.getController().endGame(false);
         }
+    }
+
+    @Override
+    public RBKing clone() {
+        return new RBKing(board, type, cords);
     }
 
 }

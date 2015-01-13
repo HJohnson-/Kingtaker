@@ -54,20 +54,18 @@ public class MinimaxAI extends ChessAI {
 
         for (ChessPiece piece : clonedBoard.allPieces()) {
             if (piece.isWhite() == isWhite) {
-                for (Location l : piece.allPieceMoves()) {
-                    if (piece.isValidMove(l)) {
-                        numMoves++;
-                        Location[] move = {piece.cords, l};
-                        Board newBoard = clonedBoard.clone();
-                        newBoard.getController().gameMode = GameMode.MULTIPLAYER_LOCAL;
-                        newBoard.getController().attemptMove(piece.cords, l, false);
-                        if (piece instanceof Pawn && (piece.cords.getX() == 0 || piece.cords.getX() == newBoard.numCols() - 1)) {
-                            PawnPromotion pp = new PawnPromotion(piece);
-                            pp.promote(PromotablePiece.QUEEN);
-                        }
-                        Searcher s = new Searcher(newBoard, !isWhite, move);
-                        results.add(executor.submit(s));
+                for (Location l : board.getController().movesForPiece(piece, true)) {
+                    numMoves++;
+                    Location[] move = {piece.cords, l};
+                    Board newBoard = clonedBoard.clone();
+                    newBoard.getController().gameMode = GameMode.MULTIPLAYER_LOCAL;
+                    newBoard.getController().attemptMove(piece.cords, l, false);
+                    if (piece instanceof Pawn && (piece.cords.getX() == 0 || piece.cords.getX() == newBoard.numCols() - 1)) {
+                        PawnPromotion pp = new PawnPromotion(piece);
+                        pp.promote(PromotablePiece.QUEEN);
                     }
+                    Searcher s = new Searcher(newBoard, !isWhite, move);
+                    results.add(executor.submit(s));
                 }
             }
         }

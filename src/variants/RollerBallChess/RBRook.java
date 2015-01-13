@@ -140,4 +140,9 @@ public class RBRook extends ChessPiece {
         this.lastTurnMovedOn = board.getController().getCurrentTurn();
         return true;
     }
+
+    @Override
+    public RBRook clone() {
+        return new RBRook(board, type, cords);
+    }
 }

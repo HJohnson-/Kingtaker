@@ -41,7 +41,7 @@ public class HnefataflController extends GameController {
 	protected void checkForCapturedPieces(Location location) {
 
 		PieceType currentPlayerType = isWhitesTurn() ? PieceType.WHITE : PieceType.BLACK;
-
+		Location kingLocation = getKingLocation();
 
 		//Check whether move results in a capture of opponent's piece
 
@@ -60,7 +60,7 @@ public class HnefataflController extends GameController {
 
 				if((currentPlayerType == pieceUp2.type) ||
 						(loc2.getX()  == 0 && (loc2.getY() == 0 || loc2.getY() == 10)) || //corners are hostile and can help in capturing other pieces
-						(loc2.getX()  == 5 && loc2.getY()  == 5)) {  //throne can also be hostile
+						(loc2.getX()  == 5 && loc2.getY()  == 5 && kingLocation.getX() != 5 && kingLocation.getY() !=5)) {  //throne can also be hostile
 					getBoard().placePiece(loc, new EmptyPiece(getBoard(),null)); //piece has been captured, remove it
 				}
 			}
@@ -80,7 +80,7 @@ public class HnefataflController extends GameController {
 
 				if((currentPlayerType == pieceUp2.type) ||
 						(loc2.getX()  == 10 && (loc2.getY() == 0 || loc2.getY() == 10)) || //corners are hostile and can help in capturing other pieces
-						(loc2.getX()  == 5 && loc2.getY()  == 5)) {  //throne can also be hostile
+						(loc2.getX()  == 5 && loc2.getY()  == 5 && kingLocation.getX() != 5 && kingLocation.getY() !=5)) {  //throne can also be hostile
 					getBoard().placePiece(loc, new EmptyPiece(getBoard(),null)); //piece has been captured, remove it
 				}
 			}
@@ -101,7 +101,7 @@ public class HnefataflController extends GameController {
 
 				if(currentPlayerType == pieceUp2.type ||
 						(loc2.getY() == 0 && (loc2.getX() == 0 || loc2.getX() == 10)) ||
-						(loc2.getX()  == 5 && loc2.getY()  == 5)) {
+						(loc2.getX()  == 5 && loc2.getY()  == 5 && kingLocation.getX() != 5 && kingLocation.getY() !=5)) {
 
 					getBoard().placePiece(loc, new EmptyPiece(getBoard(),null));
 				}
@@ -123,7 +123,7 @@ public class HnefataflController extends GameController {
 
 				if(currentPlayerType == pieceUp2.type ||
 						(loc2.getY() == 10 && (loc.getX() == 0 || loc2.getX() == 10)) ||
-						(loc2.getX()  == 5 && loc2.getY()  == 5)) {
+						(loc2.getX()  == 5 && loc2.getY()  == 5 && kingLocation.getX() != 5 && kingLocation.getY() !=5)) {
 					getBoard().placePiece(loc, new EmptyPiece(getBoard(),null));
 				}
 			}
